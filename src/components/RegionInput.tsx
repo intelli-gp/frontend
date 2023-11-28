@@ -18,7 +18,7 @@ function MobileInput(): JSX.Element {
   };
 
   return (
-    <div className='flex flex-col flex-wrap p-1 bg-green-400 max-w-xs'>
+    <div className='flex flex-col flex-wrap max-w-xs'>
     <div className='flex place-items-center	'>
       <label >
         <PhoneInput
