@@ -3,14 +3,9 @@ import { useState } from 'react'
 import './App.css'
 import Button from './components/Button'
 import MobileInput from './components/RegionInput'
-// Initialization for ES Users
-import {
-  Datepicker,
-  Input,
-  initTE,
-} from "tw-elements";
 
-initTE({ Datepicker, Input });
+import DateInput from './components/DateInput';
+
 function App() {
   const [count, setCount] = useState(0)
 
@@ -29,7 +24,7 @@ function App() {
           Create
         </Button>
      <MobileInput/>
-  
+  <DateInput/>
       </div>
     </>
   )
