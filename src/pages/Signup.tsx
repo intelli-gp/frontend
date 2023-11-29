@@ -3,30 +3,7 @@ import { Link } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 
 import Button from '../components/Button';
-
-type InputProps = {
-    label: string;
-    value: string;
-    onChange: React.ChangeEventHandler<HTMLInputElement>;
-};
-
-function Input({ label, value, onChange }: InputProps) {
-    return (
-        <div className="flex flex-col gap-2">
-            <label htmlFor="email" className="font-bold">
-                {label}:
-            </label>
-            <input
-                className="rounded border border-slate-500 p-2"
-                type="email"
-                placeholder={label}
-                id="email"
-                value={value}
-                onChange={onChange}
-            />
-        </div>
-    );
-}
+import Input from '../components/Input'
 
 export default function SignupPage() {
     const [fname, setFname] = useState<string>('');
@@ -41,9 +18,11 @@ export default function SignupPage() {
     return (
         <div className="flex flex-col justify-center items-center w-3/5">
             <form className="flex flex-col gap-4 w-[25rem]">
+                
                 <h1 className="text-5xl text-neutral-600 font-black text-center py-10">
                     Create Account
                 </h1>
+
                 <div className="flex gap-2 w-full justify-between">
                     <Input
                         label="First Name"
@@ -63,26 +42,24 @@ export default function SignupPage() {
                     onChange={(e) => setEmail(e.target.value)}
                 />
 
-                <div className="flex flex-col gap-2">
-                    <label htmlFor="bdate" className="font-bold">
-                        Birth Date:
-                    </label>
-                    <input
-                        id="bdate"
-                        type="date"
-                        className="rounded border border-slate-500 p-2 hover:cursor-pointer"
-                        value={bdate}
-                        onChange={(e) => setBdate(e.target.value)}
-                    />
-                </div>
+                <Input
+                    value={bdate}
+                    type="date"
+                    label="Birth Date"
+                    onChange={(e) => {
+                        setBdate(e.target.value);
+                    }}
+                />
 
                 <div className="flex gap-2 w-full justify-between">
                     <Input
+                        type="password"
                         label="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <Input
+                        type="password"
                         label="Confirm Password"
                         value={confPassword}
                         onChange={(e) => setConfPassword(e.target.value)}
