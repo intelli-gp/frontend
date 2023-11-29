@@ -1,23 +1,19 @@
-import { useState } from 'react';
-
+import { Route, Routes } from 'react-router-dom';
+import SignupPage from './pages/Signup';
+import LoginPage from './pages/Login';
+import HomePage from './pages/Home';
 import './App.css';
-import Button from './components/Button';
-import MobileInput from './components/RegionInput';
-
-import DateInput from './components/DateInput';
+import AuthTemplatePage from './pages/Auth';
 
 function App() {
-    const [count, setCount] = useState(0);
-
     return (
-        <div>
-            <Button>Create</Button>
-            <Button select="primary500" styles={'hover:bg-pink-700'}>
-                Create
-            </Button>
-            <MobileInput />
-            <DateInput />
-        </div>
+        <Routes>
+            <Route index element={<HomePage />} />
+            <Route path="auth" element={<AuthTemplatePage />}>
+                <Route path="login" element={<LoginPage />} />
+                <Route path="signup" element={<SignupPage />} />
+            </Route>
+        </Routes>
     );
 }
 
