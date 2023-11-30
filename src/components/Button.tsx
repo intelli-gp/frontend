@@ -14,11 +14,10 @@ type choice =
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode;
-    type?: ButtonType;
+    type: ButtonType;
     select?: choice;
     rounded?: boolean;
     loading?: boolean;
-    styles?: string;
     className?: string;
     outline?: boolean;
 }
@@ -29,40 +28,45 @@ function Button({
     select = 'primary',
     rounded = true,
     loading = false,
-    styles = '',
     className,
-    outline = false,
+    outline,
     ...rest
 }: ButtonProps): JSX.Element {
     const classes = classNames(
         className,
-        `${styles}   focus:ring-0 focus:outline-none font-medium text-sm px-5 py-2.5 text-center inline-flex items-center me-2 mb-2 h-8 `,
+        `focus:ring-0 focus:outline-none font-medium text-sm px-5 py-2.5 text-center inline-flex items-center me-2 mb-2 h-8 `,
         {
             'opacity-80': loading,
             'bg-indigo-900 hover:bg-indigo-900/90 text-white':
-                select === 'primary',
+                select === 'primary' && !outline,
             'bg-indigo-700 hover:bg-indigo-700/90 text-white':
-                select === 'primary700',
+                select === 'primary700' && !outline,
             'bg-indigo-500 hover:bg-indigo-500/90 text-white':
-                select === 'primary500',
-            'bg-secondary hover:secondary/90 text-txt': select === 'secondary',
-            'bg-green-500 text-white': select === 'success',
-            'bg-yellow-400 text-white': select === 'warning',
-            'hover:bg-red-500/90 bg-red-500 text-white': select === 'danger',
+                select === 'primary500' && !outline,
+            'bg-secondary hover:secondary/90 text-txt':
+                select === 'secondary' && !outline,
+            'bg-green-500 hover:bg-green-500/90 text-white':
+                select === 'success' && !outline,
+            'bg-yellow-400 hover:bg-yellow-500/90 text-white':
+                select === 'warning' && !outline,
+            'bg-red-500 hover:bg-red-500/90 text-white':
+                select === 'danger' && !outline,
             rounded: rounded,
-            'border-indigo-900 text-indigo-900':
+            'border-2 border-indigo-900 text-indigo-900':
                 outline && select === 'primary',
-            'border-secondary text-secondary':
+            'border-2 border-secondary text-secondary':
                 outline && select === 'secondary',
-            'border-green-500  text-green-500': outline && select === 'success',
-            'border-yellow-400 text-yellow-400':
+            'border-2 border-green-500   text-green-500':
+                outline && select === 'success',
+            'border-2 border-yellow-400 text-yellow-400':
                 outline && select === 'warning',
-            'border-red-500 text-red-500': outline && select === 'danger',
+            'border-2 border-red-500 text-red-500':
+                outline && select === 'danger',
         },
     );
 
     return (
-        <button disabled={loading} className={classes} {...rest}>
+        <button disabled={loading} className={classes} type={type} {...rest}>
             {loading ? <GoSync className="animate-spin" /> : children}
         </button>
     );
