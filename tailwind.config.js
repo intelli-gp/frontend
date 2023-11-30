@@ -9,15 +9,15 @@ export default {
                 outline: '#615C7F',
             },
         },
-        screens:{
-            '3xl' : '1920px',
-            '2xl' : '1536px',
-            'xl' : '1280px',
-            'lg' : '1024px',
-            'md' : '768px',
-            'sm' : '640px',
-            'xs' : '425px'
-        }
+        screens: {
+            '3xl': '1920px',
+            '2xl': '1536px',
+            xl: '1280px',
+            lg: '1024px',
+            md: '768px',
+            sm: '640px',
+            xs: '425px',
+        },
     },
     plugins: [],
 };
