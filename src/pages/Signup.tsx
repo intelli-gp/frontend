@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 
 import Button from '../components/Button';
-import Input from '../components/Input'
+import Input from '../components/Input';
+import RegionInput from '../components/RegionInput';
 
 export default function SignupPage() {
     const [fname, setFname] = useState<string>('');
@@ -18,7 +19,6 @@ export default function SignupPage() {
     return (
         <div className="flex flex-col justify-center items-center w-3/5">
             <form className="flex flex-col gap-4 w-[25rem]">
-                
                 <h1 className="text-5xl text-neutral-600 font-black text-center py-10">
                     Create Account
                 </h1>
@@ -50,7 +50,7 @@ export default function SignupPage() {
                         setBdate(e.target.value);
                     }}
                 />
-
+                <RegionInput />
                 <div className="flex gap-2 w-full justify-between">
                     <Input
                         type="password"
