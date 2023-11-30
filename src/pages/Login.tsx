@@ -69,7 +69,7 @@ export default function LoginPage() {
                 <FcGoogle />
                 Login with google
             </Button>
-            
+
             <p className="flex gap-2 justify-center">
                 Don't have an account?
                 <Link to="/auth/signup">Create one</Link>
