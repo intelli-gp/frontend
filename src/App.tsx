@@ -13,7 +13,10 @@ function App() {
             <Route path="auth" element={<AuthTemplatePage />}>
                 <Route path="login" element={<LoginPage />} />
                 <Route path="signup" element={<SignupPage />} />
-                <Route path="forget-password" element={<ForgetPasswordPage/>} />
+                <Route
+                    path="forget-password"
+                    element={<ForgetPasswordPage />}
+                />
             </Route>
         </Routes>
     );

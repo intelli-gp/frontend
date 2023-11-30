@@ -50,7 +50,7 @@ export default function SignupPage() {
                         setBdate(e.target.value);
                     }}
                 />
-                
+
                 <PhoneNumberInput
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}

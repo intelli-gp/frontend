@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import Input from '../components/Input';
 import Button from '../components/Button';
-import { FaEnvelope } from "react-icons/fa";
-
+import { FaEnvelope } from 'react-icons/fa';
 
 export default function ForgetPasswordPage() {
     const [email, setEmail] = useState<string>('');
@@ -32,8 +31,8 @@ export default function ForgetPasswordPage() {
                         className="h-auto text-md text-center font-bold w-full gap-2"
                         type="submit"
                         rounded
-                    >   
-                        <FaEnvelope/>
+                    >
+                        <FaEnvelope />
                         Email me a recovery link
                     </Button>
                 </div>
