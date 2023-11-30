@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'lato';
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'lato';
 }
 
 a {
-  color: #6366F1;
+    color: #6366f1;
 }
