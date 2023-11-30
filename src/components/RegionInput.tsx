@@ -18,18 +18,30 @@ function MobileInput(): JSX.Element {
     };
 
     return (
-        <div className="flex flex-col flex-wrap max-w-xs">
-            <div className="flex place-items-center	">
-                <label>
+        <div className="flex flex-col  gap-2">
+            <label htmlFor="Phone Number" className="font-bold">
+                Phone Number:
+            </label>
+            <div className="flex">
+                <div className="flex w-full">
                     <PhoneInput
                         country="eg"
+                        inputStyle={{
+                            width: '100%',
+                            height: '43.6px',
+                            borderColor: '#64748b',
+                        }}
+                        buttonStyle={{
+                            height: '43.6px',
+                            borderColor: '#64748b',
+                        }}
                         value={phoneNumber}
                         onChange={handleChange}
                         inputProps={{
                             required: true,
                         }}
                     />
-                </label>
+                </div>
             </div>
             {!valid && (
                 <p className="text-xs text-txt">
