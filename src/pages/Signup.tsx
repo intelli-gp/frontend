@@ -4,20 +4,20 @@ import { FcGoogle } from 'react-icons/fc';
 
 import Button from '../components/Button';
 import Input from '../components/Input';
-import RegionInput from '../components/PhoneNumberInput';
+import PhoneNumberInput from '../components/PhoneNumberInput';
 
 export default function SignupPage() {
     const [fname, setFname] = useState<string>('');
     const [lname, setLname] = useState<string>('');
     const [email, setEmail] = useState<string>('');
-    // const [phone, setPhone] = useState<string>('');
+    const [phone, setPhone] = useState<string>('');
     const [bdate, setBdate] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confPassword, setConfPassword] = useState<string>('');
     const [terms, setTerms] = useState<boolean>(false);
 
     return (
-        <div className="flex flex-col justify-center items-center w-3/5">
+        <div className="flex flex-col justify-center items-center w-full lg:w-3/5">
             <form className="flex flex-col gap-4 w-[25rem]">
                 <h1 className="text-5xl text-neutral-600 font-black text-center py-10">
                     Create Account
@@ -50,7 +50,12 @@ export default function SignupPage() {
                         setBdate(e.target.value);
                     }}
                 />
-                <RegionInput />
+                
+                <PhoneNumberInput
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                />
+
                 <div className="flex gap-2 w-full justify-between">
                     <Input
                         type="password"
