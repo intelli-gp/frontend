@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 
-function MobileInput(): JSX.Element {
+function PhoneNumberInput(): JSX.Element {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [valid, setValid] = useState(true);
 
@@ -52,4 +52,4 @@ function MobileInput(): JSX.Element {
     );
 }
 
-export default MobileInput;
+export default PhoneNumberInput;
