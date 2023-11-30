@@ -12,7 +12,7 @@ export default function Input({ label, value, type, onChange }: InputProps) {
                 {label}:
             </label>
             <input
-                className="rounded border border-slate-500 p-2"
+                className="rounded border border-slate-500 p-2 min-w-0"
                 type={type ?? 'text'}
                 placeholder={label}
                 id={label}
