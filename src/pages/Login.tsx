@@ -51,7 +51,7 @@ export default function LoginPage() {
                     />
                     <label htmlFor="rememberMe">Remember me.</label>
                 </div>
-                <Link to="./forget-password">Forget your password?</Link>
+                <Link to="/auth/forget-password">Forget your password?</Link>
             </div>
 
             <Button
