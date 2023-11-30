@@ -1,20 +1,28 @@
-import { useState } from 'react';
-import PhoneInput from 'react-phone-input-2';
+import { ChangeEvent, useState } from 'react';
+import PhoneInput, { CountryData } from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 
-function PhoneNumberInput(): JSX.Element {
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [valid, setValid] = useState(true);
+type PhoneInputProps = {
+    value: string;
+    onChange: React.ChangeEventHandler<HTMLInputElement>;
+};
 
-    const handleChange = (value: string): void => {
-        setPhoneNumber(value);
-        setValid(validatePhoneNumber(value));
-    };
+function PhoneNumberInput({ value, onChange }: PhoneInputProps): JSX.Element {
+    const [valid, setValid] = useState(true);
 
     const validatePhoneNumber = (phoneNumber: string): boolean => {
         const phoneNumberPattern = /^\+?[1-9]\d{1,14}$/;
-
         return phoneNumberPattern.test(phoneNumber);
+    };
+
+    const handleChange = (
+        value: string,
+        data: CountryData,
+        e: ChangeEvent<HTMLInputElement>,
+        formattedValue: string,
+    ) => {
+        setValid(validatePhoneNumber(value));
+        onChange(e);
     };
 
     return (
@@ -29,13 +37,15 @@ function PhoneNumberInput(): JSX.Element {
                         inputStyle={{
                             width: '100%',
                             height: '43.6px',
+                            fontWeight: 'normal',
+                            fontFamily: 'Lato',
                             borderColor: '#64748b',
                         }}
                         buttonStyle={{
                             height: '43.6px',
                             borderColor: '#64748b',
                         }}
-                        value={phoneNumber}
+                        value={value}
                         onChange={handleChange}
                         inputProps={{
                             required: true,
@@ -44,7 +54,7 @@ function PhoneNumberInput(): JSX.Element {
                 </div>
             </div>
             {!valid && (
-                <p className="text-xs text-txt">
+                <p className="text-xs text-red-700">
                     Please enter a valid phone number.
                 </p>
             )}
