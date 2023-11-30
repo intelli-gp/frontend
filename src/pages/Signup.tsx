@@ -4,7 +4,7 @@ import { FcGoogle } from 'react-icons/fc';
 
 import Button from '../components/Button';
 import Input from '../components/Input';
-import RegionInput from '../components/RegionInput';
+import RegionInput from '../components/PhoneNumberInput';
 
 export default function SignupPage() {
     const [fname, setFname] = useState<string>('');
