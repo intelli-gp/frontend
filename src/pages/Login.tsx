@@ -9,18 +9,19 @@ import { changeEmail, changePassword, changeRememberMe, reset } from '../store';
 
 export default function LoginPage() {
     const dispatch = useDispatch();
-    const {email, password, rememberMe} = useSelector((state : RootState) => state['login-form']);
-
+    const { email, password, rememberMe } = useSelector(
+        (state: RootState) => state['login-form'],
+    );
 
     const handleLoginClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault()
-        dispatch(reset())
-        console.log(email, password, rememberMe)
+        e.preventDefault();
+        dispatch(reset());
+        console.log(email, password, rememberMe);
     };
 
-    const handleGoogleLoginClick = (e:  React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault()
-        dispatch(reset())
+    const handleGoogleLoginClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        dispatch(reset());
     };
 
     return (
@@ -34,7 +35,7 @@ export default function LoginPage() {
                 value={email}
                 label="Email"
                 onChange={(e) => {
-                    dispatch(changeEmail((e.target.value)))
+                    dispatch(changeEmail(e.target.value));
                 }}
             />
 
