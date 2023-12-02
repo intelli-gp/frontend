@@ -1,18 +1,27 @@
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 
 import Button from '../components/Button';
 import Input from '../components/Input';
+import { RootState } from '../store';
+import { changeEmail, changePassword, changeRememberMe, reset } from '../store';
 
 export default function LoginPage() {
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [rememberMe, setRememberMe] = useState<boolean>(false);
+    const dispatch = useDispatch();
+    const {email, password, rememberMe} = useSelector((state : RootState) => state['login-form']);
 
-    // const handleLoginClick = () => {};
 
-    // const handleGoogleLoginClick = () => {};
+    const handleLoginClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        dispatch(reset())
+        console.log(email, password, rememberMe)
+    };
+
+    const handleGoogleLoginClick = (e:  React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        dispatch(reset())
+    };
 
     return (
         <form className="flex flex-col gap-4 w-[25rem]">
@@ -25,7 +34,7 @@ export default function LoginPage() {
                 value={email}
                 label="Email"
                 onChange={(e) => {
-                    setEmail(e.target.value);
+                    dispatch(changeEmail((e.target.value)))
                 }}
             />
 
@@ -34,7 +43,7 @@ export default function LoginPage() {
                 value={password}
                 label="Password"
                 onChange={(e) => {
-                    setPassword(e.target.value);
+                    dispatch(changePassword(e.target.value));
                 }}
             />
 
@@ -46,7 +55,7 @@ export default function LoginPage() {
                         id="rememberMe"
                         checked={rememberMe}
                         onChange={(e) => {
-                            setRememberMe(e.target.checked);
+                            dispatch(changeRememberMe(e.target.checked));
                         }}
                     />
                     <label htmlFor="rememberMe">Remember me.</label>
@@ -57,6 +66,7 @@ export default function LoginPage() {
             <Button
                 select="primary700"
                 type="submit"
+                onClick={handleLoginClick}
                 className="flex items-center justify-center gap-2 text-lg h-auto py-2 w-full"
             >
                 Login
@@ -64,6 +74,7 @@ export default function LoginPage() {
 
             <Button
                 type="submit"
+                onClick={handleGoogleLoginClick}
                 className="flex items-center justify-center gap-2 text-lg h-auto py-2 w-full"
             >
                 <FcGoogle />
