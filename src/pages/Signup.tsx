@@ -1,85 +1,157 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    signupFormReset,
+    changeSignupBirthDate,
+    changeSignupConfirmPassword,
+    changeSignupEmail,
+    changeSignupFirstName,
+    changeSignupLastName,
+    changeSignupPassword,
+    changeSignupPhone,
+    changeTermsOfServiceAgreement,
+} from '../store';
 
 import Button from '../components/Button';
 import Input from '../components/Input';
 import PhoneNumberInput from '../components/PhoneNumberInput';
+import { RootState } from '../store/index';
 
 export default function SignupPage() {
-    const [fname, setFname] = useState<string>('');
-    const [lname, setLname] = useState<string>('');
-    const [email, setEmail] = useState<string>('');
-    const [phone, setPhone] = useState<string>('');
-    const [bdate, setBdate] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [confPassword, setConfPassword] = useState<string>('');
-    const [terms, setTerms] = useState<boolean>(false);
+    const dispatch = useDispatch();
+    const {
+        firstName,
+        lastName,
+        email,
+        phone,
+        birthDate,
+        password,
+        confirmPassword,
+        termsOfServiceAgreement,
+    } = useSelector((state: RootState) => state['signup-form']);
+
+    const handleCreateAccountWithGoogle = async () => {
+        // TODO: Handle create account
+        console.log({
+            firstName,
+            lastName,
+            email,
+            phone,
+            birthDate,
+            password,
+            confirmPassword,
+            termsOfServiceAgreement,
+        });
+    };
+
+    const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        // TODO: Handle create account
+        console.log({
+            firstName,
+            lastName,
+            email,
+            phone,
+            birthDate,
+            password,
+            confirmPassword,
+            termsOfServiceAgreement,
+        });
+        dispatch(signupFormReset());
+    };
 
     return (
         <div className="flex flex-col justify-center items-center w-full lg:w-3/5">
-            <form className="flex flex-col gap-4 w-[25rem]">
+            <form
+                className="flex flex-col gap-4 w-[25rem]"
+                onSubmit={handleSubmitForm}
+            >
                 <h1 className="text-5xl text-neutral-600 font-black text-center py-10">
                     Create Account
                 </h1>
 
                 <div className="flex gap-2 w-full justify-between">
                     <Input
+                        required
                         label="First Name"
-                        value={fname}
-                        onChange={(e) => setFname(e.target.value)}
+                        value={firstName}
+                        onChange={(e) =>
+                            dispatch(changeSignupFirstName(e.target.value))
+                        }
                     />
                     <Input
+                        required
                         label="Last Name"
-                        value={lname}
-                        onChange={(e) => setLname(e.target.value)}
+                        value={lastName}
+                        onChange={(e) =>
+                            dispatch(changeSignupLastName(e.target.value))
+                        }
                     />
                 </div>
 
                 <Input
+                    required
                     label="Email"
+                    type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) =>
+                        dispatch(changeSignupEmail(e.target.value))
+                    }
                 />
 
                 <Input
-                    value={bdate}
+                    required
+                    value={birthDate}
                     type="date"
                     label="Birth Date"
-                    onChange={(e) => {
-                        setBdate(e.target.value);
-                    }}
+                    onChange={(e) =>
+                        dispatch(changeSignupBirthDate(e.target.value))
+                    }
                 />
 
                 <PhoneNumberInput
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    onChange={(e) =>
+                        dispatch(changeSignupPhone(e.target.value))
+                    }
                 />
 
                 <div className="flex gap-2 w-full justify-between">
                     <Input
+                        required
                         type="password"
                         label="Password"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) =>
+                            dispatch(changeSignupPassword(e.target.value))
+                        }
                     />
                     <Input
+                        required
                         type="password"
                         label="Confirm Password"
-                        value={confPassword}
-                        onChange={(e) => setConfPassword(e.target.value)}
+                        value={confirmPassword}
+                        onChange={(e) =>
+                            dispatch(
+                                changeSignupConfirmPassword(e.target.value),
+                            )
+                        }
                     />
                 </div>
 
                 <div className="flex items-center gap-2">
                     <input
+                        required
                         className="accent-indigo-800 w-4 h-4"
                         type="checkbox"
                         id="terms&conditions"
-                        checked={terms}
-                        onChange={(e) => {
-                            setTerms(e.target.checked);
-                        }}
+                        checked={termsOfServiceAgreement}
+                        onChange={(e) =>
+                            dispatch(
+                                changeTermsOfServiceAgreement(e.target.checked),
+                            )
+                        }
                     />
                     <label htmlFor="terms&conditions">
                         I agree to the{' '}
@@ -100,6 +172,7 @@ export default function SignupPage() {
                 <Button
                     type="submit"
                     className="flex items-center justify-center gap-2 text-lg h-auto py-2 w-full"
+                    onClick={handleCreateAccountWithGoogle}
                 >
                     <FcGoogle />
                     Sign up with google
