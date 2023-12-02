@@ -1,55 +1,64 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const signupFormSlice = createSlice({
     name: 'signup-form',
     initialState: {
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        birthDate: "",
-        password: "",
-        confirmPassword: "",
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        birthDate: '',
+        password: '',
+        confirmPassword: '',
         termsOfServiceAgreement: false,
     },
     reducers: {
         changeSignupFirstName(state, action) {
-            state.firstName = action.payload
+            state.firstName = action.payload;
         },
         changeSignupLastName(state, action) {
-            state.lastName = action.payload
+            state.lastName = action.payload;
         },
         changeSignupEmail(state, action) {
-            state.email = action.payload
+            state.email = action.payload;
         },
         changeSignupPhone(state, action) {
-            state.phone = action.payload
+            state.phone = action.payload;
         },
         changeSignupBirthDate(state, action) {
-            state.birthDate = action.payload
+            state.birthDate = action.payload;
         },
         changeSignupPassword(state, action) {
-            state.password = action.payload
+            state.password = action.payload;
         },
         changeSignupConfirmPassword(state, action) {
-            state.confirmPassword = action.payload
+            state.confirmPassword = action.payload;
         },
         changeTermsOfServiceAgreement(state, action) {
-            state.termsOfServiceAgreement = action.payload
+            state.termsOfServiceAgreement = action.payload;
         },
         signupFormReset(state) {
-            state.firstName = ""
-            state.lastName = ""
-            state.email = ""
-            state.phone = ""
-            state.birthDate = ""
-            state.password = ""
-            state.confirmPassword = ""
-            state.termsOfServiceAgreement = false
+            state.firstName = '';
+            state.lastName = '';
+            state.email = '';
+            state.phone = '';
+            state.birthDate = '';
+            state.password = '';
+            state.confirmPassword = '';
+            state.termsOfServiceAgreement = false;
         },
-    }
+    },
 });
 
-
-export const singupFormReducer = signupFormSlice.reducer
-export const {changeSignupBirthDate, changeSignupConfirmPassword, changeSignupEmail, changeSignupFirstName, changeSignupLastName, changeSignupPassword, changeSignupPhone, changeTermsOfServiceAgreement, signupFormReset} = signupFormSlice.actions
+export const singupFormReducer = signupFormSlice.reducer;
+export const {
+    changeSignupBirthDate,
+    changeSignupConfirmPassword,
+    changeSignupEmail,
+    changeSignupFirstName,
+    changeSignupLastName,
+    changeSignupPassword,
+    changeSignupPhone,
+    changeTermsOfServiceAgreement,
+    signupFormReset,
+} = signupFormSlice.actions;
