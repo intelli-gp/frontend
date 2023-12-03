@@ -62,7 +62,7 @@ export default function SignupPage() {
     };
 
     return (
-        <div className="flex flex-col justify-center items-center w-full lg:w-3/5">
+        <div className="flex flex-col justify-center items-center w-full lg:w-3/5 py-8">
             <form
                 className="flex flex-col gap-4 w-[25rem]"
                 onSubmit={handleSubmitForm}
