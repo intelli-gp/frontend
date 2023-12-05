@@ -12,6 +12,7 @@ import {
     changeSignupPhone,
     changeTermsOfServiceAgreement,
 } from '../store';
+import { useAddUserMutation } from '../store';
 
 import Button from '../components/Button';
 import Input from '../components/Input';
@@ -30,25 +31,15 @@ export default function SignupPage() {
         confirmPassword,
         termsOfServiceAgreement,
     } = useSelector((state: RootState) => state['signup-form']);
+    const [addUser, addUserResult] = useAddUserMutation();
 
     const handleCreateAccountWithGoogle = async () => {
         // TODO: Handle create account
-        console.log({
-            firstName,
-            lastName,
-            email,
-            phone,
-            birthDate,
-            password,
-            confirmPassword,
-            termsOfServiceAgreement,
-        });
     };
 
     const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // TODO: Handle create account
-        console.log({
+        const user = {
             firstName,
             lastName,
             email,
@@ -56,9 +47,16 @@ export default function SignupPage() {
             birthDate,
             password,
             confirmPassword,
-            termsOfServiceAgreement,
-        });
-        dispatch(signupFormReset());
+        };
+
+        addUser(user)
+            .unwrap()
+            .then(() => {
+                console.log(addUserResult);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
 
     return (
@@ -170,7 +168,7 @@ export default function SignupPage() {
                 </Button>
 
                 <Button
-                    type="submit"
+                    type="button"
                     className="flex items-center justify-center gap-2 text-lg h-auto py-2 w-full"
                     onClick={handleCreateAccountWithGoogle}
                 >
