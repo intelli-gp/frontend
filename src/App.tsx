@@ -2,11 +2,11 @@ import { Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, setToken } from './store';
 
-import SignupPage from './pages/Signup';
-import LoginPage from './pages/Login';
+import SignupPage from './pages/auth/Signup';
+import LoginPage from './pages/auth/Login';
 import HomePage from './pages/Home';
-import AuthTemplatePage from './pages/Auth';
-import ForgetPasswordPage from './pages/ForgetPassword';
+import AuthTemplatePage from './pages/templates/Auth';
+import ForgetPasswordPage from './pages/auth/ForgetPassword';
 import ProtectedPage from './components/ProtectedPage';
 
 import './App.css';
@@ -42,5 +42,5 @@ function App() {
         </Routes>
     );
 }
-  
+
 export default App;

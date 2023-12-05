@@ -11,13 +11,13 @@ import {
     changeSignupPassword,
     changeSignupPhone,
     changeTermsOfServiceAgreement,
-} from '../store';
-import { useAddUserMutation } from '../store';
+} from '../../store';
+import { useAddUserMutation } from '../../store';
 
-import Button from '../components/Button';
-import Input from '../components/Input';
-import PhoneNumberInput from '../components/PhoneNumberInput';
-import { RootState } from '../store/index';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import PhoneNumberInput from '../../components/PhoneNumberInput';
+import { RootState } from '../../store/index';
 
 export default function SignupPage() {
     const dispatch = useDispatch();
