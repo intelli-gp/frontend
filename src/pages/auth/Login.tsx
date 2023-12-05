@@ -2,10 +2,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 
-import Button from '../components/Button';
-import Input from '../components/Input';
-import { RootState } from '../store';
-import { changeEmail, changePassword, changeRememberMe, reset } from '../store';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import { RootState } from '../../store';
+import {
+    changeEmail,
+    changePassword,
+    changeRememberMe,
+    reset,
+} from '../../store';
 
 export default function LoginPage() {
     const dispatch = useDispatch();
