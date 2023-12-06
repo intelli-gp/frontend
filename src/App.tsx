@@ -8,6 +8,7 @@ import HomePage from './pages/Home';
 import AuthTemplatePage from './pages/templates/Auth';
 import ForgetPasswordPage from './pages/auth/ForgetPassword';
 import ProtectedPage from './components/ProtectedPage';
+import LoggedInTemplatePage from './pages/templates/LoggedIn';
 
 import './App.css';
 
@@ -35,6 +36,7 @@ function App() {
                     element={<ForgetPasswordPage />}
                 />
             </Route>
+            <Route path='logged-in' element={<LoggedInTemplatePage />}/>
             <Route
                 path="secret"
                 element={<ProtectedPage element={<LoginPage />} />}
