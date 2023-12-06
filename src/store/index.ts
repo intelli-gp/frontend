@@ -36,4 +36,4 @@ export {
 } from './apis/userApi';
 
 // for dev purposes
-window.store = store;
+(window as any).store = store;
