@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
-import illustration from '../assets/imgs/login-signup-illustration.svg';
+import illustration from '../../assets/imgs/login-signup-illustration.svg';
 
 export default function AuthTemplatePage() {
     return (
