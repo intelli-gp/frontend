@@ -1,4 +1,4 @@
-import React, { ReactNode, ButtonHTMLAttributes } from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 import classNames from 'classnames';
 import { GoSync } from 'react-icons/go';
 type ButtonType = 'button' | 'submit' | 'reset' | undefined;
