@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    signupFormReset,
     changeSignupBirthDate,
     changeSignupConfirmPassword,
     changeSignupEmail,

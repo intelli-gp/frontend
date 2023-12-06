@@ -1,11 +1,10 @@
-import { useState } from 'react';
 
 function DateInput(): JSX.Element {
-    const [inputValue, setInputValue] = useState('');
+    // const [inputValue, setInputValue] = useState('');
 
-    const handleChange = (value: string): void => {
-        setInputValue(value);
-    };
+    // const handleChange = (value: string): void => {
+    //     setInputValue(value);
+    // };
 
     return (
         <div className="relative mb-3">
