@@ -9,6 +9,10 @@
     font-family: 'Lato', sans-serif;
 }
 
+#root {
+    min-height: 100vh;
+}
+
 a {
     color: #6366f1;
 }
@@ -30,5 +34,26 @@ a {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
+    background: #312e81;
+}
+
+/* width */
+.side-nav-links::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+.side-nav-links::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+.side-nav-links::-webkit-scrollbar-thumb {
+    background: #eef2ff88;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+.side-nav-links::-webkit-scrollbar-thumb:hover {
     background: #312e81;
 }
