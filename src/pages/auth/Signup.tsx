@@ -9,6 +9,7 @@ import {
     changeSignupLastName,
     changeSignupPassword,
     changeSignupPhone,
+    changeSignupUsername,
     changeTermsOfServiceAgreement,
 } from '../../store';
 import { useAddUserMutation } from '../../store';
@@ -23,6 +24,7 @@ export default function SignupPage() {
     const {
         firstName,
         lastName,
+        username,
         email,
         phone,
         birthDate,
@@ -39,22 +41,25 @@ export default function SignupPage() {
     const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const user = {
-            firstName,
-            lastName,
+            fname: firstName,
+            lname: lastName,
+            dob: birthDate,
+            username,
             email,
             phone,
-            birthDate,
             password,
-            confirmPassword,
         };
 
         addUser(user)
             .unwrap()
-            .then(() => {
-                console.log(addUserResult);
+            .then((res) => {
+                console.log(res);
             })
             .catch((err) => {
                 console.log(err);
+            })
+            .finally(() => {
+                console.log(addUserResult);
             });
     };
 
@@ -86,6 +91,16 @@ export default function SignupPage() {
                         }
                     />
                 </div>
+
+                <Input
+                    required
+                    label="Username"
+                    type="text"
+                    value={username}
+                    onChange={(e) =>
+                        dispatch(changeSignupUsername(e.target.value))
+                    }
+                />
 
                 <Input
                     required

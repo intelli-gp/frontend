@@ -5,6 +5,7 @@ const signupFormSlice = createSlice({
     initialState: {
         firstName: '',
         lastName: '',
+        username: '',
         email: '',
         phone: '',
         birthDate: '',
@@ -18,6 +19,9 @@ const signupFormSlice = createSlice({
         },
         changeSignupLastName(state, action) {
             state.lastName = action.payload;
+        },
+        changeSignupUsername(state, action) {
+            state.username = action.payload;
         },
         changeSignupEmail(state, action) {
             state.email = action.payload;
@@ -54,6 +58,7 @@ export const singupFormReducer = signupFormSlice.reducer;
 export const {
     changeSignupBirthDate,
     changeSignupConfirmPassword,
+    changeSignupUsername,
     changeSignupEmail,
     changeSignupFirstName,
     changeSignupLastName,
