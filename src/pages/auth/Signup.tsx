@@ -12,12 +12,13 @@ import {
     changeSignupUsername,
     changeTermsOfServiceAgreement,
 } from '../../store';
-import { useAddUserMutation } from '../../store';
+import { useSignUpMutation } from '../../store';
 
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import PhoneNumberInput from '../../components/PhoneNumberInput';
 import { RootState } from '../../store/index';
+import { User } from '../../types/user';
 
 export default function SignupPage() {
     const dispatch = useDispatch();
@@ -32,7 +33,7 @@ export default function SignupPage() {
         confirmPassword,
         termsOfServiceAgreement,
     } = useSelector((state: RootState) => state['signup-form']);
-    const [addUser, addUserResult] = useAddUserMutation();
+    const [signUp, signUpResult] = useSignUpMutation();
 
     const handleCreateAccountWithGoogle = async () => {
         // TODO: Handle create account
@@ -40,7 +41,7 @@ export default function SignupPage() {
 
     const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const user = {
+        const user: Partial<User> = {
             fname: firstName,
             lname: lastName,
             dob: birthDate,
@@ -50,7 +51,7 @@ export default function SignupPage() {
             password,
         };
 
-        addUser(user)
+        signUp(user)
             .unwrap()
             .then((res) => {
                 console.log(res);
@@ -59,7 +60,7 @@ export default function SignupPage() {
                 console.log(err);
             })
             .finally(() => {
-                console.log(addUserResult);
+                console.log(signUpResult);
             });
     };
 
