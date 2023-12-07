@@ -1,10 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { userApi } from './apis/userApi';
-import { loginFormReducer } from './slices/login-form';
-import { singupFormReducer } from './slices/signup-form';
-import { checkAuthenticated } from './middlewares/checkAuthenticated';
-import { authReducer } from './slices/auth';
+import { appApi } from './apis/appApi';
+import { loginFormReducer } from './slices/login-form.slice';
+import { singupFormReducer } from './slices/signup-form.slice';
+import { authReducer } from './slices/auth.slice';
 
 export type RootState = ReturnType<typeof store.getState>;
 
@@ -13,27 +12,22 @@ const store = configureStore({
         'login-form': loginFormReducer,
         'signup-form': singupFormReducer,
         auth: authReducer,
-        [userApi.reducerPath]: userApi.reducer,
+        [appApi.reducerPath]: appApi.reducer,
     },
     middleware: (getDefaultMiddleware) => {
-        return getDefaultMiddleware()
-            .concat(userApi.middleware)
-            .concat(checkAuthenticated);
+        return getDefaultMiddleware().concat(appApi.middleware);
     },
 });
 
 setupListeners(store.dispatch);
 
 export { store };
-export * from './slices/login-form';
-export * from './slices/signup-form';
-export * from './slices/auth';
+export * from './slices/login-form.slice';
+export * from './slices/signup-form.slice';
+export * from './slices/auth.slice';
 export {
     useFetchUserQuery,
-    useAddUserMutation,
+    useSignUpMutation,
     useUpdateUserMutation,
     useLoginUserMutation,
-} from './apis/userApi';
-
-// for dev purposes
-(window as any).store = store;
+} from './apis';
