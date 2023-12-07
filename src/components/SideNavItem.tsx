@@ -34,7 +34,7 @@ export default function SideNavItem({
     return (
         <Link className={className} onClick={onClick} to={path}>
             <div className="flex items-center justify-between">
-                <div className='flex gap-4 items-center'>
+                <div className="flex gap-4 items-center">
                     {icon}
                     {text}
                 </div>
@@ -47,13 +47,14 @@ export default function SideNavItem({
 
             {extended && (
                 <div className="flex flex-col gap-2">
-                    {subItems?.map((link) => {
+                    {subItems?.map((item) => {
                         return (
                             <Link
+                                key={item}
+                                to={item}
                                 className="flex w-full text-white text-sm rounded p-2 pl-10 hover:bg-indigo-100/20"
-                                to={link}
                             >
-                                {link}
+                                {item}
                             </Link>
                         );
                     })}
