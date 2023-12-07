@@ -1,45 +1,38 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { User, UserCredentials } from '../../types/user';
+import { Response } from '../../types/response';
 const userApi = createApi({
     reducerPath: 'user',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:3333',
+        baseUrl: 'http://localhost:3333/api',
     }),
     tagTypes: ['user'],
     endpoints(builder) {
         return {
-            fetchUser: builder.query({
-                providesTags: (_result, _error, user) => [
-                    { type: 'user', id: user.id },
+            fetchUser: builder.query<Response, number>({
+                providesTags: (_result, _error, userId) => [
+                    { type: 'user', id: userId },
                 ],
-                query: (user) => {
+                query: (userId) => {
                     return {
                         url: '/users',
                         method: 'GET',
                         params: {
-                            userId: user.id,
+                            userId,
                         },
                     };
                 },
             }),
-            addUser: builder.mutation({
+            addUser: builder.mutation<Response, User>({
                 query: (user) => {
                     return {
-                        url: '/users',
+                        url: 'auth/signup',
                         method: 'POST',
                         body: user,
                     };
                 },
             }),
-            loginUser: builder.mutation({
-                query: (user) => {
-                    return {
-                        url: '/users',
-                        method: "POST",
-                        body: user,
-                    }
-                }
-            }),
-            updateUser: builder.mutation({
+            updateUser: builder.mutation<Response, Partial<User>>({
                 invalidatesTags: (_result, _error, user) => {
                     return [{ type: 'user', id: user.id }];
                 },
@@ -54,10 +47,31 @@ const userApi = createApi({
                     };
                 },
             }),
+            loginUser: builder.mutation<Response, UserCredentials>({
+                query: (user) => {
+                    return {
+                        url: '/auth/login',
+                        method: 'POST',
+                        body: user,
+                    };
+                },
+            }),
+            fetchRefreshToken: builder.mutation<Response, undefined>({
+                query: () => {
+                    return {
+                        url: '/auth/refresh',
+                        method: 'POST',
+                    };
+                },
+            }),
         };
     },
 });
 
 export { userApi };
-export const { useFetchUserQuery, useAddUserMutation, useUpdateUserMutation, useLoginUserMutation } =
-    userApi;
+export const {
+    useFetchUserQuery,
+    useAddUserMutation,
+    useUpdateUserMutation,
+    useLoginUserMutation,
+} = userApi;
