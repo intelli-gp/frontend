@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { faker } from '@faker-js/faker';
 
 import { HiMiniUserGroup } from 'react-icons/hi2';
@@ -12,12 +13,13 @@ import { IoPersonSharp } from 'react-icons/io5';
 import { MdLogout } from 'react-icons/md';
 
 import SideNavItem from './SideNavItem';
+import { resetToken } from '../store';
 
 type PopupUserMenuLinkPropType = {
     text: string;
     icon?: JSX.Element;
     path: string;
-};
+} & Record<string, any>;
 
 export default function SideNav() {
     const [links, setLinks] = useState([
@@ -93,6 +95,7 @@ export default function SideNav() {
         },
     ]);
     const [menuActive, setMenuActive] = useState(false);
+    const dispatch = useDispatch();
 
     const screenClickHandler = () => {
         setMenuActive(false);
@@ -131,6 +134,10 @@ export default function SideNav() {
         );
     };
 
+    const handleLogout = () => {
+        dispatch(resetToken());
+    };
+
     return (
         <aside className=" bg-indigo-900 sticky w-[300px] h-screen max-h-screen flex flex-col left-0 px-2 py-6 justify-between gap-4 overflow-y-hidden">
             <div className="side-nav-links min-h-0">
@@ -149,9 +156,7 @@ export default function SideNav() {
                             path={link.path}
                             text={link.text}
                             active={link.active}
-                            onClick={() => {
-                                handleSideLinkClick(link.id);
-                            }}
+                            onClick={() => handleSideLinkClick(link.id)}
                         />
                     ))}
                 </div>
@@ -171,9 +176,10 @@ export default function SideNav() {
                             icon={<IoIosSettings />}
                         />
                         <PopupUserMenuLink
+                            onClick={handleLogout}
                             text="Logout"
                             icon={<MdLogout />}
-                            path="/auth/login"
+                            path="/"
                         />
                     </div>
                 )}
@@ -196,10 +202,15 @@ export default function SideNav() {
     );
 }
 
-function PopupUserMenuLink({ text, icon, path }: PopupUserMenuLinkPropType) {
+function PopupUserMenuLink({
+    text,
+    icon,
+    path,
+    ...other
+}: PopupUserMenuLinkPropType) {
     return (
-        <Link to={path}>
-            <div className="flex  items-center gap-2 font-bold text-sm hover:bg-indigo-200 py-2 px-4 rounded-xl text-center text-indigo-800 select-none">
+        <Link to={path} {...other}>
+            <div className="flex items-center gap-2 font-bold text-sm hover:bg-indigo-200 py-2 px-4 rounded-xl text-center text-indigo-800 select-none">
                 {icon}
                 {text}
             </div>
