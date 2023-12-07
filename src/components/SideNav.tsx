@@ -13,7 +13,7 @@ import { IoPersonSharp } from 'react-icons/io5';
 import { MdLogout } from 'react-icons/md';
 
 import SideNavItem from './SideNavItem';
-import { resetToken } from '../store';
+import { clearCredentials } from '../store';
 
 type PopupUserMenuLinkPropType = {
     text: string;
@@ -135,7 +135,7 @@ export default function SideNav() {
     };
 
     const handleLogout = () => {
-        dispatch(resetToken());
+        dispatch(clearCredentials());
     };
 
     return (
