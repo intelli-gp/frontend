@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setToken } from './store';
+import { RootState, setCredentials } from './store';
 
 import SignupPage from './pages/auth/Signup';
 import LoginPage from './pages/auth/Login';
@@ -14,14 +14,18 @@ import './App.css';
 
 function App() {
     const dispatch = useDispatch();
-    const { token } = useSelector((state: RootState) => {
-        return state.auth;
-    });
+    const { token } = useSelector((state: RootState) => state.auth);
 
     if (!token) {
         let savedToken = window.localStorage.getItem('token');
+        let user = window.localStorage.getItem('user');
         if (savedToken) {
-            dispatch(setToken(savedToken));
+            dispatch(
+                setCredentials({
+                    token: savedToken,
+                    user: JSON.parse(user as string),
+                }),
+            );
         }
     }
 
@@ -36,10 +40,9 @@ function App() {
                     element={<ForgetPasswordPage />}
                 />
             </Route>
-            <Route path='logged-in' element={<LoggedInTemplatePage />}/>
             <Route
-                path="secret"
-                element={<ProtectedPage element={<LoginPage />} />}
+                path="logged-in"
+                element={<ProtectedPage element={<LoggedInTemplatePage />} />}
             />
         </Routes>
     );
