@@ -13,7 +13,7 @@ export const authApi = appApi.injectEndpoints({
                 };
             },
         }),
-        signUp: builder.mutation<Response, Partial<User>>({
+        signUpUser: builder.mutation<Response, Partial<User>>({
             query: (user) => {
                 return {
                     url: 'auth/signup',
@@ -22,7 +22,13 @@ export const authApi = appApi.injectEndpoints({
                 };
             },
         }),
+        logoutUser: builder.mutation<Response, void>({
+            query: () => ({
+                url: '/auth/logout',
+                method: 'POST',
+            }),
+        }),
     }),
 });
 
-export const { useLoginUserMutation, useSignUpMutation } = authApi;
+export const { useLoginUserMutation, useSignUpUserMutation, useLogoutUserMutation } = authApi;
