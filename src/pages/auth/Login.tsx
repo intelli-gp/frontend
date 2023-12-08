@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 
 import Button from '../../components/Button';
@@ -18,14 +18,41 @@ import { Response } from '../../types/response';
 
 export default function LoginPage() {
     const dispatch = useDispatch();
-
+    const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-
-    const { email, password, rememberMe } = useSelector(
-        (state: RootState) => state['login-form'],
+    const { email, password, rememberMe, isAuthenticated } = useSelector(
+        (state: RootState) => {
+            return {
+                ...state['login-form'],
+                ...state['auth'],
+            };
+        },
     );
-
     const [loginUser, { isLoading }] = useLoginUserMutation();
+
+    // Redirect to logged-in page if user is already logged in
+    useEffect(() => {
+        if (isAuthenticated) {
+            console.log(isAuthenticated);
+            navigate('/logged-in');
+        }
+    }, [isAuthenticated]);
+
+    // Google oauth
+    useEffect(() => {
+        const token = searchParams.get('token');
+        if (token) {
+            const user = JSON.parse(searchParams.get('user') as string);
+            setSearchParams({}, { replace: true });
+            dispatch(
+                setCredentials({
+                    token,
+                    user,
+                }),
+            );
+            navigate('/app/study-planner');
+        }
+    }, []);
 
     const handleSubmitLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -59,7 +86,7 @@ export default function LoginPage() {
             className="flex flex-col gap-4 w-[25rem]"
             onSubmit={handleSubmitLogin}
         >
-            <h1 className="text-5xl text-neutral-600 font-black text-center py-10">
+            <h1 className="text-5xl text-neutral-600 font-black text-center py-10 tracking-tight">
                 Welcome Back!
             </h1>
 
@@ -98,13 +125,16 @@ export default function LoginPage() {
             <Button
                 select="primary700"
                 type="submit"
-                className="flex items-center justify-center gap-2 text-lg h-12 w-full"
+                className="flex items-center justify-center gap-2 text-lg h-auto py-2 w-full"
                 loading={isLoading}
             >
                 Login
             </Button>
 
-            <Button type="button" className=" text-lg h-12 w-full">
+            <Button
+                type="button"
+                className="flex items-center justify-center gap-2 text-lg h-auto py-2 w-full"
+            >
                 <a
                     href="http://localhost:3333/api/auth/login/google"
                     className="flex items-center justify-center gap-2 text-white"
