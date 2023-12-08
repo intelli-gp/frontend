@@ -5,7 +5,7 @@ export default function HomePage() {
         <nav className="flex gap-4 p-4 ">
             <Link to="/auth/login">Login</Link>
             <Link to="/auth/signup">Signup</Link>
-            <Link to="/logged-in">LoggedIn</Link>
+            <Link to="/app">App</Link>
         </nav>
     );
 }

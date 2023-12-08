@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { faker } from '@faker-js/faker';
 
 import { HiMiniUserGroup } from 'react-icons/hi2';
@@ -24,25 +24,25 @@ type PopupUserMenuLinkPropType = {
 export default function SideNav() {
     const [links, setLinks] = useState([
         {
-            icon: <LuListTodo />,
-            extendable: false,
-            path: '/logged-in',
-            text: 'Study Planner',
-            active: false,
-            id: 1,
-        },
-        {
             icon: <LuSearch />,
             extendable: false,
-            path: '/logged-in',
+            path: '/app',
             text: 'Search',
             active: false,
             id: 2,
         },
         {
+            icon: <LuListTodo />,
+            extendable: false,
+            path: '/app/study-planner',
+            text: 'Study Planner',
+            active: false,
+            id: 1,
+        },
+        {
             icon: <HiMiniUserGroup />,
             extendable: true,
-            path: '/logged-in',
+            path: '/app',
             text: 'Chat Groups',
             active: false,
             id: 3,
@@ -52,7 +52,7 @@ export default function SideNav() {
         {
             icon: <BsFillPostcardFill />,
             extendable: true,
-            path: '/logged-in',
+            path: '/app',
             text: 'Articles',
             active: false,
             id: 4,
@@ -62,7 +62,7 @@ export default function SideNav() {
         {
             icon: <GiBookshelf />,
             extendable: true,
-            path: '/logged-in',
+            path: '/app',
             text: 'Courses',
             active: false,
             id: 5,
@@ -72,7 +72,7 @@ export default function SideNav() {
         {
             icon: <FaHandsHelping />,
             extendable: false,
-            path: '/logged-in',
+            path: '/app',
             text: 'AI helper',
             active: false,
             id: 6,
@@ -80,7 +80,7 @@ export default function SideNav() {
         {
             icon: <GiRobotGolem />,
             extendable: false,
-            path: '/logged-in',
+            path: '/app',
             text: 'AI Service',
             active: false,
             id: 7,
@@ -88,7 +88,7 @@ export default function SideNav() {
         {
             icon: <GiUpgrade />,
             extendable: false,
-            path: '/logged-in',
+            path: '/app',
             text: 'Upgrade',
             active: false,
             id: 8,
@@ -96,7 +96,7 @@ export default function SideNav() {
     ]);
     const [menuActive, setMenuActive] = useState(false);
     const dispatch = useDispatch();
-
+    const user = useSelector((state: any) => state.auth.user);
     const screenClickHandler = () => {
         setMenuActive(false);
     };
@@ -167,12 +167,12 @@ export default function SideNav() {
                     <div className="absolute bottom-[110%] bg-indigo-100 text-indigo-900 flex flex-col p-2 rounded-xl">
                         <PopupUserMenuLink
                             text="Profile"
-                            path="/logged-in"
+                            path="/app"
                             icon={<IoPersonSharp />}
                         />
                         <PopupUserMenuLink
                             text="Settings"
-                            path="/logged-in"
+                            path="/app"
                             icon={<IoIosSettings />}
                         />
                         <PopupUserMenuLink
@@ -184,7 +184,7 @@ export default function SideNav() {
                     </div>
                 )}
                 <div
-                    className="rounded-full bg-indigo-100/20 hover:bg-indigo-100/30 flex justify-between items-center text-white text-base h-14 pl-4 pr-6 hover:cursor-pointer w-4/5"
+                    className="rounded-full bg-indigo-100/20 hover:bg-indigo-100/30 flex justify-between items-center text-white text-base h-14 pl-4 pr-8 hover:cursor-pointer w-4/5"
                     onClick={(e) => {
                         e.stopPropagation();
                         setMenuActive(!menuActive);
@@ -195,7 +195,7 @@ export default function SideNav() {
                         alt="profile pic"
                         className="w-10 h-10 rounded-full"
                     />
-                    <p className="select-none"> username </p>
+                    <p className="select-none"> {user.username} </p>
                 </div>
             </div>
         </aside>
