@@ -25,9 +25,4 @@ export { store };
 export * from './slices/login-form.slice';
 export * from './slices/signup-form.slice';
 export * from './slices/auth.slice';
-export {
-    useFetchUserQuery,
-    useSignUpMutation,
-    useUpdateUserMutation,
-    useLoginUserMutation,
-} from './apis';
+export * from './apis';

@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { faker } from '@faker-js/faker';
+import { useLogoutUserMutation } from '../store';
 
 import { HiMiniUserGroup } from 'react-icons/hi2';
 import { LuSearch, LuListTodo } from 'react-icons/lu';
@@ -11,6 +11,7 @@ import { GiRobotGolem, GiUpgrade, GiBookshelf } from 'react-icons/gi';
 import { IoIosSettings } from 'react-icons/io';
 import { IoPersonSharp } from 'react-icons/io5';
 import { MdLogout } from 'react-icons/md';
+import defaultUserImage from '../assets/imgs/user.jpg';
 
 import SideNavItem from './SideNavItem';
 import { clearCredentials } from '../store';
@@ -97,20 +98,15 @@ export default function SideNav() {
     const [menuActive, setMenuActive] = useState(false);
     const dispatch = useDispatch();
     const user = useSelector((state: any) => state.auth.user);
-    const screenClickHandler = () => {
-        setMenuActive(false);
-    };
+    const [logoutUser, { isLoading }] = useLogoutUserMutation();
+
+    const screenClickHandler = () => setMenuActive(false);
 
     useEffect(() => {
         window.addEventListener('click', screenClickHandler);
         return () => {
             window.removeEventListener('click', screenClickHandler);
         };
-    }, []);
-
-    // TODO: remove this
-    const fakeProfilePic = useMemo(() => {
-        return faker.image.urlLoremFlickr({ category: 'people' });
     }, []);
 
     const handleSideLinkClick = (id: number) => {
@@ -134,7 +130,8 @@ export default function SideNav() {
         );
     };
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        await logoutUser().unwrap();
         dispatch(clearCredentials());
     };
 
@@ -191,7 +188,7 @@ export default function SideNav() {
                     }}
                 >
                     <img
-                        src={fakeProfilePic}
+                        src={defaultUserImage}
                         alt="profile pic"
                         className="w-10 h-10 rounded-full"
                     />
