@@ -41,7 +41,7 @@ export default function LoginPage() {
                         user: data.user,
                     }),
                 );
-                navigate('/logged-in');
+                navigate('/app/study-planner');
                 dispatch(reset());
             } else {
                 console.log(
