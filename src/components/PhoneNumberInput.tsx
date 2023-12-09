@@ -4,14 +4,14 @@ import 'react-phone-input-2/lib/style.css';
 
 type PhoneInputProps = {
     value: string;
-    onChange: React.ChangeEventHandler<HTMLInputElement>;
+    onChange: (value: string) => void;
 };
 
 function PhoneNumberInput({ value, onChange }: PhoneInputProps): JSX.Element {
     const [valid, setValid] = useState(true);
 
     const validatePhoneNumber = (phoneNumber: string): boolean => {
-        const phoneNumberPattern = /^\+?[1-9]\d{1,14}$/;
+        const phoneNumberPattern = /^[1-9]\d{1,14}$/;
         return phoneNumberPattern.test(phoneNumber);
     };
 
@@ -22,7 +22,7 @@ function PhoneNumberInput({ value, onChange }: PhoneInputProps): JSX.Element {
         _formattedValue: string,
     ) => {
         setValid(validatePhoneNumber(value));
-        onChange(e);
+        onChange(value);
     };
 
     return (
@@ -50,6 +50,7 @@ function PhoneNumberInput({ value, onChange }: PhoneInputProps): JSX.Element {
                         inputProps={{
                             required: true,
                         }}
+                        defaultMask="... ... ... ...."
                     />
                 </div>
             </div>
