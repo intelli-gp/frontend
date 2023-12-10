@@ -30,14 +30,13 @@ export const authApi = appApi.injectEndpoints({
         }),
         resetPassword: builder.query<Response, string>({
             query: (email: string) => ({
-                url: '/auth/reset-password',
+                url: `/auth/reset-password/${email}`,
                 method: 'GET',
-                params: { email },
             }),
         }),
-        resetPasswordConfirm: builder.mutation<Response, string>({
-            query: (password: string) => ({
-                url: '/auth/reset-password',
+        resetPasswordConfirm: builder.mutation<Response, any>({
+            query: ({ password, email, token }) => ({
+                url: `/auth/reset-password/${email}/${token}`,
                 method: 'POST',
                 body: { password },
             }),
@@ -50,5 +49,5 @@ export const {
     useSignUpUserMutation,
     useLogoutUserMutation,
     useLazyResetPasswordQuery,
-    useResetPasswordConfirmMutation
+    useResetPasswordConfirmMutation,
 } = authApi;
