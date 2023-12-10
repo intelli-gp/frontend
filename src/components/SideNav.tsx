@@ -181,7 +181,7 @@ export default function SideNav() {
                     </div>
                 )}
                 <div
-                    className="rounded-full bg-indigo-100/20 hover:bg-indigo-100/30 flex justify-between items-center text-white text-base h-14 pl-4 pr-8 hover:cursor-pointer w-4/5"
+                    className="rounded-full bg-indigo-100/20 hover:bg-indigo-100/30 flex gap-2 justify-between items-center text-white text-sm font-bold py-2 pl-2 pr-6 hover:cursor-pointer w-3/4"
                     onClick={(e) => {
                         e.stopPropagation();
                         setMenuActive(!menuActive);
@@ -192,7 +192,7 @@ export default function SideNav() {
                         alt="profile pic"
                         className="w-10 h-10 rounded-full"
                     />
-                    <p className="select-none"> {user.username} </p>
+                    <p className="select-none text-ellipsis overflow-hidden whitespace-nowrap"> {user.username} </p>
                 </div>
             </div>
         </aside>
