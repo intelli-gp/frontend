@@ -98,7 +98,7 @@ export default function SideNav() {
     const [menuActive, setMenuActive] = useState(false);
     const dispatch = useDispatch();
     const user = useSelector((state: any) => state.auth.user);
-    const [logoutUser, { isLoading }] = useLogoutUserMutation();
+    const [logoutUser] = useLogoutUserMutation();
 
     const screenClickHandler = () => setMenuActive(false);
 

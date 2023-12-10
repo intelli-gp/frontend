@@ -18,7 +18,7 @@ function PhoneNumberInput({ value, onChange }: PhoneInputProps): JSX.Element {
     const handleChange = (
         value: string,
         _data: CountryData,
-        e: ChangeEvent<HTMLInputElement>,
+        _e: ChangeEvent<HTMLInputElement>,
         _formattedValue: string,
     ) => {
         setValid(validatePhoneNumber(value));
