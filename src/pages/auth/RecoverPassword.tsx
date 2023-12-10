@@ -2,15 +2,18 @@ import { useState } from 'react';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { MdLockReset } from 'react-icons/md';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useResetPasswordConfirmMutation } from '../../store';
+import { IoChevronBack } from 'react-icons/io5';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 const RecoverPassword = () => {
     const [newPassword, setNewPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [matchError, setMatchError] = useState<string>('');
     const [searchParams] = useSearchParams();
-    const [resetPassword, { isLoading }] = useResetPasswordConfirmMutation();
+    const [resetPassword, { isLoading, isSuccess, isError, error }] =
+        useResetPasswordConfirmMutation();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -32,7 +35,7 @@ const RecoverPassword = () => {
                 Recover password
             </h1>
 
-            <div className="flex flex-col border rounded-md py-4 px-8 gap-2 border-slate-300">
+            <main className="flex flex-col border rounded-md p-8 gap-2 border-slate-300">
                 <h2 className="text-2xl font-bold text-neutral-600">
                     Creating you new password
                 </h2>
@@ -69,7 +72,28 @@ const RecoverPassword = () => {
                         Set new password
                     </Button>
                 </div>
-            </div>
+
+                {isError && (
+                    <p className="text-sm text-red-600 text-center font-bold">
+                        {(error as FetchBaseQueryError).status === 400 &&
+                            `This link has expired.`}
+                    </p>
+                )}
+
+                {isSuccess && (
+                    <p className="text-sm text-green-600 text-center font-bold">
+                        Your password has been reset successfully.
+                    </p>
+                )}
+
+                <Link
+                    to="/auth/login"
+                    className="flex flex-row gap-2 justify-center items-center text-sm mt-4"
+                >
+                    <IoChevronBack />
+                    Back to login
+                </Link>
+            </main>
         </form>
     );
 };

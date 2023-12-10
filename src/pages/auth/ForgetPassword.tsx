@@ -4,6 +4,8 @@ import Button from '../../components/Button';
 import { FaEnvelope } from 'react-icons/fa';
 import { useLazyResetPasswordQuery } from '../../store';
 import { Response } from '../../types/response';
+import { IoChevronBack } from 'react-icons/io5';
+import { Link } from 'react-router-dom';
 
 export default function ForgetPasswordPage() {
     const [email, setEmail] = useState<string>('');
@@ -24,7 +26,7 @@ export default function ForgetPasswordPage() {
             <h1 className="text-5xl text-neutral-600 font-black text-center py-8 tracking-tight">
                 Forget password
             </h1>
-            <main className="flex flex-col border rounded-md py-8 px-8 gap-2 border-slate-300">
+            <main className="flex flex-col border rounded-md p-8 gap-2 border-slate-300">
                 <h2 className="text-2xl font-bold text-neutral-600">
                     Recover your password
                 </h2>
@@ -54,7 +56,7 @@ export default function ForgetPasswordPage() {
 
                 {isError && (
                     <p className="text-sm text-red-500 text-center">
-                        {(error as Response).data}
+                        {JSON.stringify((error as Response).data)}
                     </p>
                 )}
 
@@ -63,6 +65,14 @@ export default function ForgetPasswordPage() {
                         An email has been sent.
                     </p>
                 )}
+
+                <Link
+                    to="/auth/login"
+                    className="flex flex-row gap-2 justify-center items-center text-sm mt-4"
+                >
+                    <IoChevronBack />
+                    Back to login
+                </Link>
             </main>
         </form>
     );
