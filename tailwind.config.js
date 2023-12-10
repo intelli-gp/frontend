@@ -7,6 +7,7 @@ export default {
                 secondary: '#f1ee63',
                 txt: '#271F4B',
                 outline: '#615C7F',
+                bgColor: '#FAFBFF',
             },
         },
         screens: {
