@@ -26,7 +26,7 @@ const baseQueryWithRefresh = async (
     let result = await baseQuery(args, api, extraOptions);
     console.log('inside baseQueryWithRefresh the result is: ', result);
 
-    if (result?.error?.status === 401) {
+    if ([401, 403].includes(result?.error?.status as number)) {
         const refreshResult = await baseQuery(
             { url: '/auth/refresh', method: 'POST' },
             api,
