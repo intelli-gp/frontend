@@ -43,7 +43,7 @@ function Button({
                 select === 'primary700' && !outline,
             'bg-indigo-500 hover:bg-indigo-500/90 text-white':
                 select === 'primary500' && !outline,
-            'bg-secondary hover:secondary/90 text-txt':
+            'bg-secondary font-bold text-txt':
                 select === 'secondary' && !outline,
             'bg-green-500 hover:bg-green-500/90 text-white':
                 select === 'success' && !outline,
@@ -62,6 +62,7 @@ function Button({
                 outline && select === 'warning',
             'border-2 border-red-500 text-red-500':
                 outline && select === 'danger',
+            'border-2 border-white text-white': outline,
         },
     );
 
