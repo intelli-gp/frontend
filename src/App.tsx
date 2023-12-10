@@ -10,7 +10,7 @@ import ForgetPasswordPage from './pages/auth/ForgetPassword';
 import ProtectedPage from './components/ProtectedPage';
 import LoggedInTemplatePage from './pages/templates/LoggedIn';
 import RecoverPassword from './pages/auth/RecoverPassword';
-
+import LandingPage from './pages/LandingPage';
 import './App.css';
 
 function App() {
@@ -42,10 +42,12 @@ function App() {
                 />
                 <Route path="reset-password" element={<RecoverPassword />} />
             </Route>
+            <Route path="logged-in" element={<LoggedInTemplatePage />} />
             <Route
                 path="app"
                 element={<ProtectedPage element={<LoggedInTemplatePage />} />}
             />
+            <Route path="landingPage" element={<LandingPage />} />
         </Routes>
     );
 }
