@@ -8,7 +8,7 @@ import { Response } from '../../types/response';
 export default function ForgetPasswordPage() {
     const [email, setEmail] = useState<string>('');
 
-    const [trigger, { isError, error, isSuccess, isFetching, data }] =
+    const [trigger, { isError, error, isSuccess, isFetching }] =
         useLazyResetPasswordQuery();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
