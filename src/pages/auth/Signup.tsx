@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -11,14 +11,15 @@ import {
     changeSignupPhone,
     changeSignupUsername,
     changeTermsOfServiceAgreement,
+    useSignUpUserMutation,
 } from '../../store';
-import { useSignUpMutation } from '../../store';
 
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import PhoneNumberInput from '../../components/PhoneNumberInput';
 import { RootState } from '../../store/index';
 import { User } from '../../types/user';
+import { useEffect } from 'react';
 
 export default function SignupPage() {
     const dispatch = useDispatch();
@@ -33,13 +34,25 @@ export default function SignupPage() {
         confirmPassword,
         termsOfServiceAgreement,
     } = useSelector((state: RootState) => state['signup-form']);
-    const [signUp, signUpResult] = useSignUpMutation();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [signUp, { isLoading }] = useSignUpUserMutation();
+    const navigate = useNavigate();
 
-    const handleCreateAccountWithGoogle = async () => {
-        // TODO: Handle create account
-    };
+    // Google oauth
+    useEffect(() => {
+        const user = searchParams.get('userData');
+        if (user) {
+            setSearchParams({}, { replace: true });
+            const userData = JSON.parse(user);
+            const [fname, ...lname] = userData.full_name.split(' ');
+            dispatch(changeSignupEmail(userData.email));
+            dispatch(changeSignupUsername(userData.username));
+            dispatch(changeSignupFirstName(fname));
+            dispatch(changeSignupLastName(lname.join(' ')));
+        }
+    }, []);
 
-    const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const user: Partial<User> = {
             fname: firstName,
@@ -47,30 +60,26 @@ export default function SignupPage() {
             dob: birthDate,
             username,
             email,
-            phone,
+            phoneNumber: `+${phone}`,
             password,
         };
 
-        signUp(user)
-            .unwrap()
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-            .finally(() => {
-                console.log(signUpResult);
-            });
+        try {
+            const result = await signUp(user).unwrap();
+            console.log(result);
+            navigate('/app');
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     return (
         <div className="flex flex-col justify-center items-center w-full lg:w-3/5 py-8">
             <form
-                className="flex flex-col gap-4 w-[25rem]"
+                className="flex flex-col gap-2 w-[25rem]"
                 onSubmit={handleSubmitForm}
             >
-                <h1 className="text-5xl text-neutral-600 font-black text-center py-10">
+                <h1 className="text-5xl text-neutral-600 font-black text-center py-10 tracking-tight">
                     Create Account
                 </h1>
 
@@ -125,9 +134,7 @@ export default function SignupPage() {
 
                 <PhoneNumberInput
                     value={phone}
-                    onChange={(e) =>
-                        dispatch(changeSignupPhone(e.target.value))
-                    }
+                    onChange={(value) => dispatch(changeSignupPhone(value))}
                 />
 
                 <div className="flex gap-2 w-full justify-between">
@@ -153,7 +160,7 @@ export default function SignupPage() {
                     />
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 my-4">
                     <input
                         required
                         className="accent-indigo-800 w-4 h-4"
@@ -178,6 +185,7 @@ export default function SignupPage() {
                     select="primary700"
                     type="submit"
                     className="flex items-center justify-center gap-2 text-lg h-auto py-2 w-full"
+                    loading={isLoading}
                 >
                     Create
                 </Button>
@@ -185,10 +193,14 @@ export default function SignupPage() {
                 <Button
                     type="button"
                     className="flex items-center justify-center gap-2 text-lg h-auto py-2 w-full"
-                    onClick={handleCreateAccountWithGoogle}
                 >
-                    <FcGoogle />
-                    Sign up with google
+                    <a
+                        href="http://localhost:3333/api/auth/login/google"
+                        className="flex items-center justify-center gap-2 text-white"
+                    >
+                        <FcGoogle className="p-[1px] rounded-full bg-white box-content" />
+                        Sign up with google
+                    </a>
                 </Button>
 
                 <p className="flex gap-2 justify-center my-3">
