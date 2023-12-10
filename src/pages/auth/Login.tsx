@@ -30,11 +30,11 @@ export default function LoginPage() {
     );
     const [loginUser, { isLoading }] = useLoginUserMutation();
 
-    // Redirect to logged-in page if user is already logged in
+    // Redirect to app page if user is already logged in
     useEffect(() => {
         if (isAuthenticated) {
             console.log(isAuthenticated);
-            navigate('/logged-in');
+            navigate('/app');
         }
     }, [isAuthenticated]);
 
