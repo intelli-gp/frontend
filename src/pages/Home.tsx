@@ -7,6 +7,7 @@ export default function HomePage() {
             <Link to="/auth/signup">Signup</Link>
             <Link to="/secret">Secret</Link>
             <Link to="/logged-in">Side-nav</Link>
+            <Link to="/landingPage">Landing Page</Link>
         </nav>
     );
 }
