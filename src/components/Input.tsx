@@ -4,6 +4,7 @@ type InputProps = {
     onChange: React.ChangeEventHandler<HTMLInputElement>;
     type?: string;
     required?: boolean;
+    error?: string;
 };
 
 export default function Input({
@@ -12,6 +13,7 @@ export default function Input({
     type,
     onChange,
     required,
+    error,
 }: InputProps) {
     return (
         <div className="flex flex-col gap-2">
@@ -27,6 +29,7 @@ export default function Input({
                 onChange={onChange}
                 required={required ?? false}
             />
+            {error && <span className="text-red-600 text-sm">{error}</span>}
         </div>
     );
 }
