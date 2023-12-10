@@ -33,7 +33,6 @@ export default function LoginPage() {
     // Redirect to app page if user is already logged in
     useEffect(() => {
         if (isAuthenticated) {
-            console.log(isAuthenticated);
             navigate('/app');
         }
     }, [isAuthenticated]);

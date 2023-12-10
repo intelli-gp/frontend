@@ -11,6 +11,7 @@ import {
     changeSignupPhone,
     changeSignupUsername,
     changeTermsOfServiceAgreement,
+    setCredentials,
     useSignUpUserMutation,
 } from '../../store';
 
@@ -66,7 +67,10 @@ export default function SignupPage() {
 
         try {
             const result = await signUp(user).unwrap();
-            console.log(result);
+            const { access_token, user: loggedInUser } = result.data;
+            dispatch(
+                setCredentials({ token: access_token, user: loggedInUser }),
+            );
             navigate('/app');
         } catch (err) {
             console.log(err);
