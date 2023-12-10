@@ -41,7 +41,7 @@ const signupFormSlice = createSlice({
         changeTermsOfServiceAgreement(state, action) {
             state.termsOfServiceAgreement = action.payload;
         },
-        signupFormReset(state) {
+        resetSignupForm(state) {
             state.firstName = '';
             state.lastName = '';
             state.email = '';
@@ -65,5 +65,5 @@ export const {
     changeSignupPassword,
     changeSignupPhone,
     changeTermsOfServiceAgreement,
-    signupFormReset,
+    resetSignupForm,
 } = signupFormSlice.actions;
