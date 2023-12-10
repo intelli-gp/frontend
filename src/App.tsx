@@ -9,6 +9,7 @@ import AuthTemplatePage from './pages/templates/Auth';
 import ForgetPasswordPage from './pages/auth/ForgetPassword';
 import ProtectedPage from './components/ProtectedPage';
 import LoggedInTemplatePage from './pages/templates/LoggedIn';
+import RecoverPassword from './pages/auth/RecoverPassword';
 
 import './App.css';
 
@@ -39,9 +40,10 @@ function App() {
                     path="forget-password"
                     element={<ForgetPasswordPage />}
                 />
+                <Route path="reset-password" element={<RecoverPassword />} />
             </Route>
             <Route
-                path="logged-in"
+                path="app"
                 element={<ProtectedPage element={<LoggedInTemplatePage />} />}
             />
         </Routes>
