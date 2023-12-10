@@ -34,7 +34,7 @@ export default function SideNavItem({
     return (
         <Link className={className} onClick={onClick} to={path}>
             <div className="flex items-center justify-between">
-                <div className='flex gap-4 items-center'>
+                <div className="flex gap-4 items-center">
                     {icon}
                     {text}
                 </div>

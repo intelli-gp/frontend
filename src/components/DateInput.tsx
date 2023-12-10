@@ -1,4 +1,3 @@
-
 function DateInput(): JSX.Element {
     // const [inputValue, setInputValue] = useState('');
 
