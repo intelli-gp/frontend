@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
@@ -31,14 +31,14 @@ export default function LoginPage() {
     const [loginUser, { isLoading }] = useLoginUserMutation();
 
     // Redirect to app page if user is already logged in
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (isAuthenticated) {
             navigate('/app');
         }
     }, [isAuthenticated]);
 
     // Google oauth
-    useEffect(() => {
+    useLayoutEffect(() => {
         const token = searchParams.get('token');
         if (token) {
             const user = JSON.parse(searchParams.get('user') as string);
