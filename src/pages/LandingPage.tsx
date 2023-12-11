@@ -14,9 +14,137 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { CiLogin } from "react-icons/ci";
 import { IoPersonOutline } from "react-icons/io5";
-import Nav from '../components/Nav';
 
+function Nav() {
+    const [navbarOpen, setmenuOpen] = useState(false);
+    const handleNav = () => {
+        setmenuOpen(!navbarOpen);
+    };
+    const className = classNames(
+        'fixed left-0 top-0 w-[55%] h-screen md:hidden ease-in bg-indigo-50 py-6 shadow-lg shadow-indigo-400/5 ',
+        {
+            '': navbarOpen,
+            hidden: !navbarOpen,
+        },
+    );
+    return (
+        <nav className="absolute sticky left-0 top-0 z-50  h-[53px]  bg-txt w-full backdrop-blur">
+            <div className="mx-auto max-w-7xl px-6 2xl:px-16 flex justify-between items-center h-full flex-wrap">
+                <div className="w-1/6">
+                    <div className="w-2/6">
+                        <a href="#">
+                            <img src="" alt="logo" className="w-full" />
+                        </a>
+                    </div>
+                </div>
+                <div className="md:visible invisible md:flex md:w-3/6 w-0">
+                    <ul className="flex px-1 ">
+                        <li>
+                            <a
+                                href="#"
+                                className="text-sm font-medium text-white  lg:text-base ml-10 "
+                            >
+                                Home
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="#"
+                                className="text-sm font-medium text-white  lg:text-base ml-10"
+                            >
+                                About
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="#"
+                                className="text-sm font-medium text-white  lg:text-base ml-10"
+                            >
+                                Features
+                            </a>
+                        </li>
 
+                        <li>
+                            <a
+                                href="#"
+                                className="text-sm font-medium text-white  lg:text-base ml-10"
+                            >
+                                Pricing
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div className="flex w-2/6 pt-2 justify-center">
+                    <Link to="/auth/signup" className='md:visible invisible'>
+                        <Button
+                            select="primary"
+                            type="button"
+                            className="flex items-center justify-center text-sm h-auto py-[4px] w-5/6 border-2 border-indigo-900 lg:mx-5 rounded-md"
+                        >
+                            Signup
+                        </Button>
+                    </Link>
+                    <Link to="/auth/login" className='md:visible invisible'>
+                        <Button
+                            type="button"
+                            outline={true}
+                            className="flex items-center justify-center text-sm h-auto py-[4px] w-5/6 lg:mx-5 rounded-lg"
+                        >
+                            Login
+                        </Button>
+                    </Link>
+                    <div
+                        onClick={handleNav}
+                        id="navbarToggler"
+                        className="md:hidden mx-auto"
+                    >
+                        <AiOutlineMenu size={25} color="#fff" />
+                    </div>
+                </div>
+            </div>
+            <div className={className}>
+                <div className='flex w-full items-center justify-end px-6'>
+                    <div onClick={handleNav}
+                        className='cursor-pointer'
+                    >
+                        <AiOutlineClose size={25} />
+                    </div>
+                </div>
+                <ul className="flex flex-col w-full font-medium mt-4  ">
+                    <hr className="my-0 border-slate-200" />
+                    <li>
+                        <a href="#" className="block py-2 px-10 hover:bg-indigo-900 hover:text-white text-txt" >Home</a>
+                    </li>
+                    <hr className="my-0 border-slate-200" />
+
+                    <li>
+                        <a href="#" className="block py-2 px-10 hover:bg-indigo-900 hover:text-white text-txt">Features</a>
+                    </li>
+                    <hr className="my-0 border-slate-200" />
+
+                    <li>
+                        <a href="#" className="block py-2 px-10 hover:bg-indigo-900 hover:text-white text-txt">About</a>
+                    </li>
+                    <hr className="my-0 border-slate-200" />
+
+                    <li>
+                        <a href="#" className="block py-2 px-10 hover:bg-indigo-900 hover:text-white text-txt">Pricing</a>
+                    </li>
+                    <hr className="my-0 border-slate-200" />
+
+                    <li>
+                        <Link to="/auth/signup" className="block py-2 px-10 hover:bg-indigo-900 hover:text-white text-txt flex items-center gap-2"><IoPersonOutline size={14} />Sign up</Link>
+                    </li>
+                    <hr className="my-0 border-slate-200" />
+
+                    <li>
+                        <Link to="/auth/login" className="block py-2 px-10 hover:bg-indigo-900 hover:text-white text-txt flex items-center gap-2"><CiLogin size={15} />Log in</Link>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    );
+}
 
 
 function BlogSection() {
