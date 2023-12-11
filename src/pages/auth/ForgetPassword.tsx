@@ -1,17 +1,26 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { FaEnvelope } from 'react-icons/fa';
 import { useLazyResetPasswordQuery } from '../../store';
-import { Response } from '../../types/response';
 import { IoChevronBack } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
+import { errorToast, successToast } from '../../utils/toasts';
 
 export default function ForgetPasswordPage() {
     const [email, setEmail] = useState<string>('');
 
-    const [trigger, { isError, error, isSuccess, isFetching }] =
+    const [trigger, { isFetching, isSuccess, isError, error }] =
         useLazyResetPasswordQuery();
+
+    useEffect(() => {
+        if (isSuccess) {
+            successToast('An email has been sent.');
+        }
+        if (isError) {
+            errorToast(JSON.stringify(error));
+        }
+    }, [isError, isSuccess]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -53,18 +62,6 @@ export default function ForgetPasswordPage() {
                         Email me a recovery link
                     </Button>
                 </div>
-
-                {isError && (
-                    <p className="text-sm text-red-500 text-center">
-                        {JSON.stringify((error as Response).data)}
-                    </p>
-                )}
-
-                {isSuccess && (
-                    <p className="text-sm text-green-600 text-center font-bold">
-                        An email has been sent.
-                    </p>
-                )}
 
                 <Link
                     to="/auth/login"
