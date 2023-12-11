@@ -1,19 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { MdLockReset } from 'react-icons/md';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useResetPasswordConfirmMutation } from '../../store';
 import { IoChevronBack } from 'react-icons/io5';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { errorToast, successToast } from '../../utils/toasts';
 
 const RecoverPassword = () => {
     const [newPassword, setNewPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [matchError, setMatchError] = useState<string>('');
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const [resetPassword, { isLoading, isSuccess, isError, error }] =
         useResetPasswordConfirmMutation();
+
+    useEffect(() => {
+        if (isSuccess) {
+            successToast('An email has been sent.');
+            setSearchParams({}, { replace: true });
+            setNewPassword('');
+            setConfirmPassword('');
+        }
+        if (isError) {
+            errorToast(JSON.stringify(error));
+        }
+    }, [isError, isSuccess]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -72,19 +84,6 @@ const RecoverPassword = () => {
                         Set new password
                     </Button>
                 </div>
-
-                {isError && (
-                    <p className="text-sm text-red-600 text-center font-bold">
-                        {(error as FetchBaseQueryError).status === 400 &&
-                            `This link has expired.`}
-                    </p>
-                )}
-
-                {isSuccess && (
-                    <p className="text-sm text-green-600 text-center font-bold">
-                        Your password has been reset successfully.
-                    </p>
-                )}
 
                 <Link
                     to="/auth/login"
