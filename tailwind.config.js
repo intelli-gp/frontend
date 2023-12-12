@@ -5,9 +5,12 @@ export default {
         extend: {
             colors: {
                 secondary: '#f1ee63',
-                txt: '#271F4B',
+                txt: '#0D062D',
                 outline: '#615C7F',
                 bgColor: '#FAFBFF',
+            },
+            backgroundImage: {
+                hero: "url('/src/assets/img/Hero-illustration.svg')",
             },
         },
         screens: {
