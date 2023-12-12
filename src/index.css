@@ -58,3 +58,8 @@ a {
 .side-nav-links::-webkit-scrollbar-thumb:hover {
     background: #312e81;
 }
+.slick-prev:before,
+.slick-next:before {
+    color: #312e81 !important;
+    min-width: 14rem !important;
+}
