@@ -83,7 +83,7 @@ export default function Feedback() {
                         ))}
                     </div>
                     <div className="flex  absolute bottom-5 left-1/2 z-30 space-x-3 -translate-x-1/2">
-                        {slideIndicators.map((indicator, index) => (
+                        {slideIndicators.map((index) => (
                             <button
                                 key={index}
                                 type="button"
