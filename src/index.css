@@ -63,3 +63,16 @@ a {
     color: #312e81 !important;
     min-width: 14rem !important;
 }
+
+@media (min-width: 640px) {
+    .background {
+        background-image: url(./assets/imgs/Hero-illustration.svg);
+        background-position: center center;
+
+        background-repeat: no-repeat;
+        height: auto;
+        max-width: 95%;
+
+        background-size: contain;
+    }
+}
