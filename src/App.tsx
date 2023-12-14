@@ -4,14 +4,12 @@ import { RootState, setCredentials } from './store';
 
 import SignupPage from './pages/auth/Signup';
 import LoginPage from './pages/auth/Login';
-import HomePage from './pages/Home';
 import AuthTemplatePage from './pages/templates/Auth';
 import ForgetPasswordPage from './pages/auth/ForgetPassword';
 import ProtectedPage from './components/ProtectedPage';
 import LoggedInTemplatePage from './pages/templates/LoggedIn';
 import RecoverPassword from './pages/auth/RecoverPassword';
-import LandingPage from './pages/LandingPage';
-import './App.css';
+import HomePage from './pages/home';
 
 function App() {
     const dispatch = useDispatch();
@@ -42,12 +40,11 @@ function App() {
                 />
                 <Route path="reset-password" element={<RecoverPassword />} />
             </Route>
-            <Route path="logged-in" element={<LoggedInTemplatePage />} />
+
             <Route
                 path="app"
                 element={<ProtectedPage element={<LoggedInTemplatePage />} />}
             />
-            <Route path="landingPage" element={<LandingPage />} />
         </Routes>
     );
 }
