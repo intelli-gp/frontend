@@ -1,63 +1,40 @@
-import Feedback from '../components/Feedback';
-import Hero from '../assets/imgs/Hero-illustration.svg';
+import icons from '../assets/imgs/icons.svg';
 import Section2img from '../assets/imgs/about-illustration1.svg';
 import StudyPlanner from '../assets/imgs/studyPlanner-illustration.svg';
 import ChatBot from '../assets/imgs/chatBot-illustration.svg';
+import Star from '../assets/imgs/star.svg';
 import Courses from '../assets/imgs/courses-illustration.svg';
 import StudyGroup from '../assets/imgs/studyGroup-illustration.svg';
 import Button from '../components/Button';
 import Feature from '../components/Feature';
 import SingleBlog from '../components/SingleBlog';
-import { useState, Component } from 'react';
+import { useState, useMemo } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { CiLogin } from 'react-icons/ci';
-import { IoPersonOutline } from 'react-icons/io5';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-class SimpleSlider extends Component {
-    render() {
-        const settings = {
-            dots: true,
-            infinite: true,
-            speed: 500,
-            slidesToShow: 1,
-            slidesToScroll: 1,
-        };
-        return (
-            <div className="w-3/6 ">
-                <Slider {...settings}>
-                    <div className="pt-14 px-6">
-                        <Feedback />
-                    </div>
-                    <div className="pt-14 px-6">
-                        <Feedback />
-                    </div>
-                    <div className="pt-14 px-6">
-                        <Feedback />
-                    </div>
-                </Slider>
-            </div>
-        );
-    }
-}
-
+import {
+    IoPersonOutline,
+    IoChevronBackOutline,
+    IoChevronForwardOutline,
+} from 'react-icons/io5';
+import { faker } from '@faker-js/faker';
 function Nav() {
     const [navbarOpen, setmenuOpen] = useState(false);
     const handleNav = () => {
         setmenuOpen(!navbarOpen);
     };
     const className = classNames(
-        'fixed left-0 top-0 w-[55%] h-screen md:hidden ease-in bg-indigo-50 py-6 shadow-lg shadow-indigo-400/5 ',
+        'fixed right-0 top-0 w-[55%] h-screen md:hidden ease-in bg-indigo-50 py-6 shadow-lg shadow-indigo-400/5 ',
         {
             '': navbarOpen,
             hidden: !navbarOpen,
         },
     );
+    const menuItems = ['Home', 'About', 'Features', 'Pricing'];
+
     return (
-        <nav className="absolute sticky left-0 top-0 z-50  h-[53px]  bg-txt w-full backdrop-blur">
+        <nav className=" sticky left-0 top-0 z-50  h-[53px]  bg-txt w-full backdrop-blur">
             <div className="mx-auto max-w-7xl px-6 2xl:px-16 flex justify-between items-center h-full flex-wrap">
                 <div className="w-1/6">
                     <div className="w-2/6">
@@ -66,45 +43,22 @@ function Nav() {
                         </a>
                     </div>
                 </div>
-                <div className="md:visible invisible md:flex md:w-3/6 w-0">
+                <div className="hidden md:flex md:w-3/6 w-0 ">
                     <ul className="flex px-1 ">
-                        <li>
-                            <a
-                                href="#"
-                                className="text-sm font-medium text-white  lg:text-base ml-10 "
-                            >
-                                Home
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="#"
-                                className="text-sm font-medium text-white  lg:text-base ml-10"
-                            >
-                                About
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                href="#"
-                                className="text-sm font-medium text-white  lg:text-base ml-10"
-                            >
-                                Features
-                            </a>
-                        </li>
-
-                        <li>
-                            <a
-                                href="#"
-                                className="text-sm font-medium text-white  lg:text-base ml-10"
-                            >
-                                Pricing
-                            </a>
-                        </li>
+                        {menuItems.map((item) => (
+                            <li>
+                                <a
+                                    href="#"
+                                    className="text-sm font-medium text-white lg:text-base ml-10"
+                                >
+                                    {item}
+                                </a>
+                            </li>
+                        ))}
                     </ul>
                 </div>
-                <div className="flex w-2/6 pt-2 justify-center">
-                    <Link to="/auth/signup" className="md:visible invisible">
+                <div className="flex w-2/6 pt-2 md:justify-center  justify-end">
+                    <Link to="/auth/signup" className="md:flex hidden">
                         <Button
                             select="primary"
                             type="button"
@@ -113,7 +67,7 @@ function Nav() {
                             Signup
                         </Button>
                     </Link>
-                    <Link to="/auth/login" className="md:visible invisible">
+                    <Link to="/auth/login" className="md:flex hidden">
                         <Button
                             type="button"
                             outline={true}
@@ -125,7 +79,7 @@ function Nav() {
                     <div
                         onClick={handleNav}
                         id="navbarToggler"
-                        className="md:hidden mx-auto"
+                        className="md:hidden"
                     >
                         <AiOutlineMenu size={25} color="#fff" />
                     </div>
@@ -138,58 +92,29 @@ function Nav() {
                     </div>
                 </div>
                 <ul className="flex flex-col w-full font-medium mt-4  ">
-                    <hr className="my-0 border-slate-200" />
-                    <li>
-                        <a
-                            href="#"
-                            className="block py-2 px-10 hover:bg-indigo-900 hover:text-white text-txt"
-                        >
-                            Home
-                        </a>
-                    </li>
-                    <hr className="my-0 border-slate-200" />
-
-                    <li>
-                        <a
-                            href="#"
-                            className="block py-2 px-10 hover:bg-indigo-900 hover:text-white text-txt"
-                        >
-                            Features
-                        </a>
-                    </li>
-                    <hr className="my-0 border-slate-200" />
-                    <li>
-                        <a
-                            href="#"
-                            className="block py-2 px-10 hover:bg-indigo-900 hover:text-white text-txt"
-                        >
-                            About
-                        </a>
-                    </li>
-                    <hr className="my-0 border-slate-200" />
-                    <li>
-                        <a
-                            href="#"
-                            className="block py-2 px-10 hover:bg-indigo-900 hover:text-white text-txt"
-                        >
-                            Pricing
-                        </a>
-                    </li>
-                    <hr className="my-0 border-slate-200" />
+                    {menuItems.map((item) => (
+                        <li>
+                            <a
+                                href="#"
+                                className="block border-b-[1px] border-slate-200 py-2 px-10 hover:bg-indigo-900 hover:text-white text-txt"
+                            >
+                                {item}
+                            </a>
+                        </li>
+                    ))}
                     <li>
                         <Link
                             to="/auth/signup"
-                            className="block py-2 px-10 hover:bg-indigo-900 hover:text-white text-txt flex items-center gap-2"
+                            className="block py-2   border-b-[1px] border-slate-200  px-10 hover:bg-indigo-900 hover:text-white text-txt flex items-center gap-2"
                         >
                             <IoPersonOutline size={14} />
                             Sign up
                         </Link>
                     </li>
-                    <hr className="my-0 border-slate-200" />
                     <li>
                         <Link
                             to="/auth/login"
-                            className="block py-2 px-10 hover:bg-indigo-900 hover:text-white text-txt flex items-center gap-2"
+                            className="block py-2   border-b-[1px] border-slate-200 px-10 hover:bg-indigo-900 hover:text-white text-txt flex items-center gap-2"
                         >
                             <CiLogin size={15} />
                             Log in
@@ -203,14 +128,14 @@ function Nav() {
 
 function BlogSection() {
     return (
-        <section className="py-5 w-full bg-bgColor  lg:h-screen ">
-            <div className="mx-auto w-full px-8 md:px-3 flex flex-col justify-center items-center">
-                <div className="mb-5 sm:mb-10">
+        <section className="py-12 md:py-8  w-full bg-bgColor  flex justify-center items-center">
+            <div className="md:mx-auto mx-[1rem] w-full px-8 md:px-3 flex flex-col justify-center items-center">
+                <div className="mb-5 sm:mb-12 sm:mt-5">
                     <h1 className="text-2xl font-bold text-txt md:text-3xl">
                         From Our Latest Blogs
                     </h1>
                 </div>
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-0 w-[80%]">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3  lg:gap-x-6  w-[92%] xl:w-[80%] sm:gap-x-6  place-items-center place-content-center">
                     <SingleBlog />
                     <SingleBlog />
                     <SingleBlog />
@@ -219,138 +144,165 @@ function BlogSection() {
         </section>
     );
 }
+
+function Feedback() {
+    const fakeProfilePic = useMemo(() => {
+        return faker.image.urlLoremFlickr({ category: 'people' });
+    }, []);
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const slideIndicators = [0, 1, 2];
+    const person = [
+        {
+            name: 'Jane Smith',
+            rate: 5,
+            feedback: 'I love using this website it is very helpful.',
+        },
+        {
+            name: 'Simon Adams',
+            rate: 4.4,
+            feedback:
+                'Outstanding! I am amazed by the attention to detail. Highly recommended.',
+        },
+        {
+            name: 'Jeffry Brad',
+            rate: 3.8,
+            feedback: 'Not bad.',
+        },
+    ];
+
+    const changeSlide = (index: number) => {
+        setCurrentIndex((index + person.length) % person.length);
+    };
+
+    return (
+        <div className="lg:w-4/6 w-5/6">
+            <div
+                id="default-carousel"
+                className="relative mb-4 mt-4 ml-4"
+                data-carousel="static"
+            >
+                <div className="overflow-hidden relative h-auto rounded-lg ">
+                    {person.map((item, index) => (
+                        <div
+                            key={index}
+                            className={`duration-700 ease-in-out w-full my-[4rem] ${
+                                index === currentIndex ? '' : 'hidden'
+                            }`}
+                            data-carousel-item
+                        >
+                            <div className="flex flex-col items-center justify-center bg-indigo-900   group shadow-lg text-white rounded-3xl md:px-[10rem] sm:py-[9rem] h-[260px] w-full ">
+                                <div className="flex flex-col gap-6 items-center justify-center">
+                                    <img
+                                        src={fakeProfilePic}
+                                        alt="profile pic"
+                                        className="md:w-[80px] md:h-[80px] w-[50px] h-[50px] rounded-full"
+                                    />
+                                    <div className="relative flex flex-col gap-4 items-center justify-center">
+                                        <div className="flex gap-2">
+                                            <h1 className="text-lg sm:text-xl lg:text-2xl">
+                                                {item.name}
+                                            </h1>
+                                            <div className="flex items-center pl-6">
+                                                <img
+                                                    src={Star}
+                                                    alt="star"
+                                                    className="h-5 w-5"
+                                                />
+                                                <p className="ms-2 mt-1 text-sm font-semibold text-white md:text-lg ml-2">
+                                                    {item.rate}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <p className="lg:text-md text-slate-300 text-center text-sm">
+                                            "{item.feedback}"
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <div className="flex  absolute bottom-5 left-1/2 z-30 space-x-3 -translate-x-1/2">
+                    {slideIndicators.map((indicator, index) => (
+                        <button
+                            key={index}
+                            type="button"
+                            className={`w-3 h-3 rounded-full mt-6 ${
+                                index === currentIndex
+                                    ? 'bg-indigo-600'
+                                    : 'bg-gray-300'
+                            }`}
+                            aria-current={
+                                index === currentIndex ? 'true' : 'false'
+                            }
+                            aria-label={`Slide ${index + 1}`}
+                            data-carousel-slide-to={index}
+                            onClick={() => changeSlide(index)}
+                        ></button>
+                    ))}
+                </div>
+
+                <button
+                    type="button"
+                    className="flex absolute top-0 right-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none"
+                    data-carousel-next
+                    onClick={() => changeSlide(currentIndex + 1)}
+                >
+                    <span className="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-gray-800/30  hover:bg-gray-800/50">
+                        <IoChevronForwardOutline
+                            className="w-6 h-6 rounded-full sm:w-8 sm:h-8 ml-1  "
+                            color="white"
+                        />
+                        <span className="hidden">Next</span>
+                    </span>
+                </button>
+                <button
+                    type="button"
+                    className="flex absolute top-0 left-0  justify-center items-center px-4 h-full cursor-pointer group "
+                    data-carousel-prev
+                    onClick={() => changeSlide(currentIndex - 1)}
+                >
+                    <span className="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-gray-800/30  hover:bg-gray-800/50">
+                        <IoChevronBackOutline
+                            className="w-6 h-6 rounded-full sm:w-8 sm:h-8 mr-1"
+                            color="white"
+                        />
+                        <span className="hidden">Previous</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    );
+}
 function Footer() {
+    const menuItems = ['Blogs', 'About', 'Services', 'Projects'];
     return (
         <footer className="bg-txt">
             <div className="relative mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 lg:pt-24 grid grid-cols-1 gap-4 content-between">
                 <div className="lg:flex lg:items-end lg:justify-end">
                     <ul className=" flex flex-wrap justify-center gap-6 md:gap-8 lg:mt-0 lg:justify-end lg:gap-12">
-                        <li>
-                            <a
-                                className="text-gray-200 transition hover:text-gray-200/75"
-                                href="/"
-                            >
-                                About
-                            </a>
-                        </li>
-
-                        <li>
-                            <a
-                                className="text-gray-200 transition hover:text-gray-200/75"
-                                href="/"
-                            >
-                                Services
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                className="text-gray-200 transition hover:text-gray-200/75"
-                                href="/"
-                            >
-                                Projects
-                            </a>
-                        </li>
-
-                        <li>
-                            <a
-                                className="text-gray-200 transition hover:text-gray-200/75"
-                                href="/"
-                            >
-                                Blog
-                            </a>
-                        </li>
+                        {menuItems.map((item) => (
+                            <li>
+                                <a
+                                    className="text-gray-200 transition hover:text-gray-200/75"
+                                    href="/"
+                                >
+                                    {item}
+                                </a>
+                            </li>
+                        ))}
                     </ul>
                 </div>
                 <div className="container pt-9 md:flex justify-between mt-10">
-                    <p className="mt-12 text-center text-sm text-gray-200 lg:text-right">
+                    <p className="mt-[5rem] text-center text-sm text-gray-200 lg:text-right">
                         Copyright &copy; 2022. All rights reserved.
                     </p>
-                    <div className="mt-12 flex justify-center">
-                        <a
-                            href="#!"
-                            className="mr-9 text-neutral-800 dark:text-neutral-200"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
-                            </svg>
-                        </a>
-                        <a
-                            href="#!"
-                            className="mr-9 text-neutral-800 dark:text-neutral-200"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
-                            </svg>
-                        </a>
-                        <a
-                            href="#!"
-                            className="mr-9 text-neutral-800 dark:text-neutral-200"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    d="M7 11v2.4h3.97c-.16 1.029-1.2 3.02-3.97 3.02-2.39 0-4.34-1.979-4.34-4.42 0-2.44 1.95-4.42 4.34-4.42 1.36 0 2.27.58 2.79 1.08l1.9-1.83c-1.22-1.14-2.8-1.83-4.69-1.83-3.87 0-7 3.13-7 7s3.13 7 7 7c4.04 0 6.721-2.84 6.721-6.84 0-.46-.051-.81-.111-1.16h-6.61zm0 0 17 2h-3v3h-2v-3h-3v-2h3v-3h2v3h3v2z"
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
-                                />
-                            </svg>
-                        </a>
-                        <a
-                            href="#!"
-                            className="mr-9 text-neutral-800 dark:text-neutral-200"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                            </svg>
-                        </a>
-                        <a
-                            href="#!"
-                            className="mr-9 text-neutral-800 dark:text-neutral-200"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z" />
-                            </svg>
-                        </a>
-                        <a
-                            href="#!"
-                            className="text-neutral-800 dark:text-neutral-200"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                            </svg>
-                        </a>
+                    <div className="mt-[5rem]  flex justify-center">
+                        <img src={icons} />
                     </div>
                 </div>
-
                 <div className="mt-4 flex items-center space-x-4 sm:mt-0"></div>
             </div>
         </footer>
@@ -360,21 +312,17 @@ function LandingPage() {
     return (
         <div className="bg-red-300">
             <Nav />
-            <div className=" flex flex-col  justify-center items-center bg-white ">
-                <section className="bg-bgColor   sm:h-screen w-full  flex  justify-center ">
-                    <div className="flex w-full h-[90v]  py-5   justify-center sm:justify-between ">
-                        <img
-                            className="w-full absolute h-[90%] sm:visible invisible"
-                            src={Hero}
-                        />
-                        <div className="lg:pl-[5.2rem] lg:ml-10 sm:pl-[2.5rem]  pt-[5rem]  sm:w-3/6 w-5/6">
-                            <h1 className="font-bold 3xl:text-5xl  mx-auto md:mx-0 lg:text-4xl sm:text-2xl xs:text-3xl text-txt sm:text-left text-center  max-w-[400px] ">
+            <div className=" flex flex-col  justify-center items-center bg-white  height:calc(100vh - nav-height)">
+                <section className="bg-bgColor  h-screen lg:max-h-[100vw] max-h-[60vw]  w-full  flex  justify-center">
+                    <div className="flex w-full h-full py-5 justify-center items-center sm:justify-start sm:items-start background">
+                        <div className=" flex flex-col  justify-center items-center sm:items-start sm:w-3/6 w-5/6 sm:pl-[4rem] pb-4 pt-[4rem] sm:absolute  lg:top-[18%] xl:left-[10%]">
+                            <h1 className="font-bold  lg:text-4xl sm:text-2xl text-2xl xs:text-3xl text-txt sm:text-left text-center  max-w-[520px] ">
                                 Turn Your Ambition Into
                                 <br />
                                 Success Story.
                             </h1>
                             <br />
-                            <p className="text-slate-500 mb-8 max-w-[500px]  lg:text-sm sm:text-[12px] xs:text-[16px]  sm:text-left text-center">
+                            <p className="text-slate-500 mb-8 max-w-[500px]  lg:text-lg  sm:text-[12px] xs:text-[16px]  sm:text-left text-center">
                                 In our student platform, we designed features to
                                 support and enhance your educational journey,
                                 enabling you to thrive academically. Join us
@@ -384,9 +332,9 @@ function LandingPage() {
                     </div>
                 </section>
 
-                <section className=" bg-white  md:h-screen w-full">
+                <section className=" py-12 w-full">
                     <div className="mx-auto w-5/6 px-10 ">
-                        <div className="md:flex md:justify-center md:items-center gap-4 ">
+                        <div className="md:flex md:justify-center md:items-center gap-4 md:gap-8">
                             <div className="mt-6 flex justify-center md:mt-0 md:w-5/12">
                                 <img
                                     src={Section2img}
@@ -394,7 +342,7 @@ function LandingPage() {
                                     className="max-h-[500px] md:max-h-max"
                                 />
                             </div>
-                            <div className="md:w-6/12 md:p-12 py-14 w-full   sm:text-left text-center">
+                            <div className="md:w-5/12 lg:p-12 md:px-0 py-14 w-full   sm:text-left text-center">
                                 <div className="mb-2 sm:mb-10">
                                     <h1 className=" font-bold text-txt text-2xl sm:text-2xl">
                                         AI-Powered Service
@@ -407,7 +355,6 @@ function LandingPage() {
                                     favorite professor's style, enhancing your
                                     understanding and engagement.
                                 </p>
-
                                 <Button
                                     type="button"
                                     select="secondary"
@@ -419,8 +366,8 @@ function LandingPage() {
                         </div>
                     </div>
                 </section>
-                <section className=" bg-white  flex justify-center  lg:h-screen w-full md:py-6 py-8">
-                    <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 xl:gap-8 max-w-[85%] h-[85%] ">
+                <section className=" flex justify-center m-auto   w-full md:my-[5rem] my-4 p-6 sm:py-0 ">
+                    <div className="grid gap-12 grid-cols-1 md:grid-cols-2 w-full xl:w-[85%] sm:p-6 md:p-10 ">
                         <Feature
                             color="bg-indigo-300"
                             imgURL={StudyPlanner}
@@ -433,21 +380,21 @@ function LandingPage() {
                         />
                         <Feature
                             color="bg-indigo-900"
-                            imgURL={ChatBot}
-                            title="Chatbot Helper"
-                            para="Get instant assistance and guidance for your
-                   academic queries and challenges through our
-                   chatbot helper."
+                            imgURL={Courses}
+                            title="Courses Recommendations"
+                            para=" Receive tailored course recommendations based on
+                   your academic interests, ensuring you make the
+                   most informed choices."
                             additionalClass="text-white"
                             typoStyles="w-[60%]"
                         />
                         <Feature
                             color="bg-indigo-900"
-                            imgURL={Courses}
-                            title="Courses Recommendations"
-                            para=" Receive tailored course recommendations based on
-                   your academic interests, ensuring you make the
-                   most informed choices for your education."
+                            imgURL={ChatBot}
+                            title="Chatbot Helper"
+                            para="Get instant assistance and guidance for your
+                   academic queries and challenges through our
+                   chatbot helper."
                             additionalClass="text-white"
                             typoStyles="w-[60%]"
                         />
@@ -464,8 +411,8 @@ function LandingPage() {
                     </div>
                 </section>
                 <BlogSection />
-                <div className="py-5 w-full bg-bgColor  lg:h-screen flex justify-center">
-                    <SimpleSlider />
+                <div className="py-12 sm:w-[90%] w-full px-4  flex justify-center">
+                    <Feedback />
                 </div>
             </div>
             <Footer />
