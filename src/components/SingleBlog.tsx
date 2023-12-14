@@ -6,12 +6,8 @@ export default function SingleBlog() {
         return faker.image.urlLoremFlickr({ category: 'people' });
     }, []);
     return (
-        <div className="w-[90%] rounded-t-xl duration-200 hover:scale-95 max-h-[500px] shadow-md shadow-indigo-500/10 m-3">
-            <img
-                src={Blogt}
-                alt="blog img"
-                className="w-full overflow-hidden rounded-t-xl "
-            />
+        <div className="w-full rounded-t-xl duration-200 flex flex-col  hover:scale-95 max-h-[480px] shadow-md shadow-indigo-500/10 mb-6">
+            <img src={Blogt} alt="blog img" className="w-full rounded-t-xl " />
             <div className="px-5 pb-5 rounded-b-xl">
                 <div className="flex flex-col gap-2">
                     <div>
