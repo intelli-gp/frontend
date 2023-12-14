@@ -19,10 +19,10 @@ export default function Feature({
 }: FeactureProps) {
     const stylee = classNames(
         color,
-        'h-auto max-h-[800px] flex flex-wrap cursor-pointer space-between gap-x-2 flex-row items-stretch rounded-2xl py-4 px-8 shadow-md shadow-indigo-500/10',
+        ' min-h-[220px] max-h-[250px] flex flex-wrap cursor-pointer space-between gap-x-2 flex-row items-stretch rounded-2xl py-4 px-8 shadow-md shadow-indigo-500/10',
     );
-    const titleStyle = `mb-1 text-[24px] ${additionalClass}`;
-    const paraStyle = `text-sm pt-3  ${additionalClass}`;
+    const titleStyle = `mb-1 lg:text-[24px] text-[24px] md:text-[20px]  ${additionalClass}`;
+    const paraStyle = `lg:text-sm text-sm md:text-xs  pt-3  ${additionalClass}`;
     const imgStyle = `max-h-full w-full   `;
     const typoStyle = `flex flex-col justify-center   ${typoStyles}`;
     return (
@@ -31,7 +31,7 @@ export default function Feature({
                 <h2 className={titleStyle}>{title}</h2>
                 <p className={paraStyle}>{para}</p>
             </div>
-            <div className="flex  w-2/6 justify-center">
+            <div className="flex  w-[35%] justify-center">
                 <img src={imgURL} alt={title} className={imgStyle} />
             </div>
         </div>
