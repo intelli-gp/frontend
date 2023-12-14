@@ -42,7 +42,7 @@ export default function SingleBlog() {
                         adipiscing turpis nibh massa ornare fames lobortis
                         accumsan.
                     </a>
-                    <hr className="my-0 border-slate-100" />
+                    <hr className="my-0 border-slate-200" />
                     <div className="flex">
                         <img
                             src={fakeProfilePic}
