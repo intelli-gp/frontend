@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
@@ -15,6 +15,7 @@ import {
     useLoginUserMutation,
 } from '../../store';
 import { Response } from '../../types/response';
+import { errorToast } from '../../utils/toasts';
 
 export default function LoginPage() {
     const dispatch = useDispatch();
@@ -28,7 +29,13 @@ export default function LoginPage() {
             };
         },
     );
-    const [loginUser, { isLoading }] = useLoginUserMutation();
+    const [loginUser, { isLoading, isError}] = useLoginUserMutation();
+
+    useEffect(() => {
+        if(isError){
+            errorToast("Invalid email or password.")
+        }
+    }, [isError])
 
     // Redirect to app page if user is already logged in
     useLayoutEffect(() => {
@@ -124,7 +131,7 @@ export default function LoginPage() {
             <Button
                 select="primary700"
                 type="submit"
-                className="flex items-center justify-center gap-2 text-lg h-auto py-2 w-full"
+                className="flex items-center justify-center gap-2 text-lg h-11 py-2 w-full"
                 loading={isLoading}
             >
                 Login
@@ -132,7 +139,7 @@ export default function LoginPage() {
 
             <Button
                 type="button"
-                className="flex items-center justify-center gap-2 text-lg h-auto py-2 w-full"
+                className="flex items-center justify-center gap-2 text-lg h-11 py-2 w-full"
             >
                 <a
                     href="http://localhost:3333/api/auth/login/google"

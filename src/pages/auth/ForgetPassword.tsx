@@ -7,25 +7,35 @@ import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { useLazyResetPasswordQuery } from '../../store';
 import { errorToast, successToast } from '../../utils/toasts';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 export default function ForgetPasswordPage() {
     const [email, setEmail] = useState<string>('');
 
-    const [trigger, { isFetching, isSuccess, isError, error }] =
+    const [resetPassword, { isFetching, isSuccess, isError, error}] =
         useLazyResetPasswordQuery();
 
     useEffect(() => {
         if (isSuccess) {
             successToast('An email has been sent.');
         }
-        if (isError) {
-            errorToast(JSON.stringify(error));
-        }
+        else if (isError) {
+            let errorMessage = 'Error occurred';
+            switch((error as FetchBaseQueryError).status){
+                case 404: 
+                    errorMessage = 'This email is not registered.';
+                    break;
+                case 500:
+                    errorMessage = 'Error from server side, try again later.'
+                    break;
+            }
+            errorToast(errorMessage);
+        }   
     }, [isError, isSuccess]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        await trigger(email).unwrap();
+        resetPassword(email);
     };
 
     return (
@@ -54,7 +64,7 @@ export default function ForgetPasswordPage() {
                         onChange={(e) => setEmail(e.target.value)}
                     />
                     <Button
-                        className="h-auto text-md text-center font-bold w-full gap-2"
+                        className="h-10 text-base text-center font-bold w-full gap-2"
                         type="submit"
                         rounded
                         loading={isFetching}

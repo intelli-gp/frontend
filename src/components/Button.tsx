@@ -35,7 +35,7 @@ function Button({
 }: ButtonProps): JSX.Element {
     const classes = classNames(
         className,
-        `focus:ring-0 focus:outline-none font-medium px-5 py-2.5 text-center inline-flex items-center justify-center me-2 mb-2 h-8 `,
+        `focus:ring-0 focus:outline-none font-medium px-6 py-2 text-center inline-flex items-center justify-center me-2 mb-2`,
         {
             'opacity-80': loading,
             'bg-indigo-900 hover:bg-indigo-900/90 text-white':
