@@ -1,5 +1,5 @@
-import { appApi } from './appApi';
 import { User } from '../../types/user';
+import { appApi } from './appApi';
 
 const userApi = appApi.injectEndpoints({
     endpoints: (builder) => ({

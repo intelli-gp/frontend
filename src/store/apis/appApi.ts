@@ -3,11 +3,12 @@ import {
     createApi,
     fetchBaseQuery,
 } from '@reduxjs/toolkit/query/react';
-import { Response } from '../../types/response';
+
 import { RootState, clearCredentials, setCredentials } from '..';
+import { Response } from '../../types/response';
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: 'http://localhost:3333/api',
+    baseUrl: `${import.meta.env.VITE_BACKEND}/api`,
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
         const token = (getState() as RootState).auth.token;

@@ -1,9 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
+
 import { appApi } from './apis/appApi';
+import { authReducer } from './slices/auth.slice';
 import { loginFormReducer } from './slices/login-form.slice';
 import { singupFormReducer } from './slices/signup-form.slice';
-import { authReducer } from './slices/auth.slice';
 
 export type RootState = ReturnType<typeof store.getState>;
 

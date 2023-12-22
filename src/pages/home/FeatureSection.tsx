@@ -1,10 +1,11 @@
+import Section2img from '../../assets/imgs/about-illustration1.svg';
+import ChatBot from '../../assets/imgs/chatBot-illustration.svg';
 import Courses from '../../assets/imgs/courses-illustration.svg';
 import StudyGroup from '../../assets/imgs/studyGroup-illustration.svg';
+import StudyPlanner from '../../assets/imgs/studyPlanner-illustration.svg';
 import Button from '../../components/Button';
 import Feature from '../../components/Feature';
-import Section2img from '../../assets/imgs/about-illustration1.svg';
-import StudyPlanner from '../../assets/imgs/studyPlanner-illustration.svg';
-import ChatBot from '../../assets/imgs/chatBot-illustration.svg';
+
 export default function FeatureSection() {
     return (
         <>

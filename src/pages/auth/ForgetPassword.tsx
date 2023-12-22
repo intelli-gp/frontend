@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import Input from '../../components/Input';
-import Button from '../../components/Button';
 import { FaEnvelope } from 'react-icons/fa';
-import { useLazyResetPasswordQuery } from '../../store';
 import { IoChevronBack } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
+
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import { useLazyResetPasswordQuery } from '../../store';
 import { errorToast, successToast } from '../../utils/toasts';
 
 export default function ForgetPasswordPage() {

@@ -1,6 +1,6 @@
+import { Response } from '../../types/response';
 import { User, UserCredentials } from '../../types/user';
 import { appApi } from './appApi';
-import { Response } from '../../types/response';
 
 export const authApi = appApi.injectEndpoints({
     endpoints: (builder) => ({

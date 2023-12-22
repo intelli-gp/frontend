@@ -1,6 +1,6 @@
 import classNames from 'classnames';
+import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
 import { Link } from 'react-router-dom';
-import { IoIosArrowDown, IoIosArrowBack } from 'react-icons/io';
 
 type SideNavItemPropType = {
     icon: JSX.Element;
