@@ -1,6 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { useMemo } from 'react';
+
 import Blogt from '../assets/imgs/comp.svg';
+
 export default function SingleBlog() {
     const fakeProfilePic = useMemo(() => {
         return faker.image.urlLoremFlickr({ category: 'people' });

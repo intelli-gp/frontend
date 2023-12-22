@@ -1,9 +1,10 @@
-import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
-import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-import { CiLogin } from 'react-icons/ci';
 import { useState } from 'react';
+import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
+import { CiLogin } from 'react-icons/ci';
 import { IoPersonOutline } from 'react-icons/io5';
+import { Link } from 'react-router-dom';
+
 import Button from '../../components/Button';
 
 export default function Nav() {

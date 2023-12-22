@@ -1,6 +1,7 @@
-import React, { ButtonHTMLAttributes } from 'react';
 import classNames from 'classnames';
+import React, { ButtonHTMLAttributes } from 'react';
 import { GoSync } from 'react-icons/go';
+
 type ButtonType = 'button' | 'submit' | 'reset' | undefined;
 
 type choice =

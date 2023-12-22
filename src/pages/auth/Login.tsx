@@ -1,18 +1,18 @@
 import React, { useLayoutEffect } from 'react';
+import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { FcGoogle } from 'react-icons/fc';
 
 import Button from '../../components/Button';
 import Input from '../../components/Input';
-import { RootState } from '../../store';
 import {
+    RootState,
     changeEmail,
     changePassword,
     changeRememberMe,
-    useLoginUserMutation,
-    setCredentials,
     reset,
+    setCredentials,
+    useLoginUserMutation,
 } from '../../store';
 import { Response } from '../../types/response';
 

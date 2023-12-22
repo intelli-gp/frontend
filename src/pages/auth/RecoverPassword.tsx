@@ -1,30 +1,35 @@
 import { useEffect, useState } from 'react';
-import Input from '../../components/Input';
-import Button from '../../components/Button';
+import { IoChevronBack } from 'react-icons/io5';
 import { MdLockReset } from 'react-icons/md';
 import { Link, useSearchParams } from 'react-router-dom';
-import { useResetPasswordConfirmMutation } from '../../store';
-import { IoChevronBack } from 'react-icons/io5';
+
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import { reset, useResetPasswordConfirmMutation } from '../../store';
 import { errorToast, successToast } from '../../utils/toasts';
 
 const RecoverPassword = () => {
-    const [newPassword, setNewPassword] = useState<string>('');
-    const [confirmPassword, setConfirmPassword] = useState<string>('');
-    const [matchError, setMatchError] = useState<string>('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [matchError, setMatchError] = useState('');
     const [searchParams, setSearchParams] = useSearchParams();
-    const [resetPassword, { isLoading, isSuccess, isError, error }] =
-        useResetPasswordConfirmMutation();
+    const [
+        resetPassword,
+        { isLoading, isSuccess, isError, reset: resetMutation },
+    ] = useResetPasswordConfirmMutation();
 
     useEffect(() => {
         if (isSuccess) {
-            successToast('An email has been sent.');
+            successToast(
+                'Your password has been reset.\nPlease login again using the new password.',
+            );
             setSearchParams({}, { replace: true });
             setNewPassword('');
             setConfirmPassword('');
+        } else if (isError) {
+            errorToast('An error occurred. Please try again.');
         }
-        if (isError) {
-            errorToast(JSON.stringify(error));
-        }
+        resetMutation();
     }, [isError, isSuccess]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

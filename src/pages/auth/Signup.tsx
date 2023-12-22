@@ -1,6 +1,11 @@
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useEffect } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import PhoneNumberInput from '../../components/PhoneNumberInput';
 import {
     changeSignupBirthDate,
     changeSignupConfirmPassword,
@@ -14,13 +19,8 @@ import {
     setCredentials,
     useSignUpUserMutation,
 } from '../../store';
-
-import Button from '../../components/Button';
-import Input from '../../components/Input';
-import PhoneNumberInput from '../../components/PhoneNumberInput';
 import { RootState } from '../../store/index';
 import { User } from '../../types/user';
-import { useEffect } from 'react';
 
 export default function SignupPage() {
     const dispatch = useDispatch();

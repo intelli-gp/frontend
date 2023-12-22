@@ -1,20 +1,18 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLogoutUserMutation } from '../store';
-
-import { HiMiniUserGroup } from 'react-icons/hi2';
-import { LuSearch, LuListTodo } from 'react-icons/lu';
 import { BsFillPostcardFill } from 'react-icons/bs';
 import { FaHandsHelping } from 'react-icons/fa';
-import { GiRobotGolem, GiUpgrade, GiBookshelf } from 'react-icons/gi';
+import { GiBookshelf, GiRobotGolem, GiUpgrade } from 'react-icons/gi';
+import { HiMiniUserGroup } from 'react-icons/hi2';
 import { IoIosSettings } from 'react-icons/io';
 import { IoPersonSharp } from 'react-icons/io5';
+import { LuListTodo, LuSearch } from 'react-icons/lu';
 import { MdLogout } from 'react-icons/md';
-import defaultUserImage from '../assets/imgs/user.jpg';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
+import defaultUserImage from '../assets/imgs/user.jpg';
+import { clearCredentials, useLogoutUserMutation } from '../store';
 import SideNavItem from './SideNavItem';
-import { clearCredentials } from '../store';
 
 type PopupUserMenuLinkPropType = {
     text: string;
@@ -192,7 +190,10 @@ export default function SideNav() {
                         alt="profile pic"
                         className="w-10 h-10 rounded-full"
                     />
-                    <p className="select-none text-ellipsis overflow-hidden whitespace-nowrap"> {user.username} </p>
+                    <p className="select-none text-ellipsis overflow-hidden whitespace-nowrap">
+                        {' '}
+                        {user.username}{' '}
+                    </p>
                 </div>
             </div>
         </aside>

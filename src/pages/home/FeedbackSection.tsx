@@ -1,7 +1,9 @@
-import { useState, useMemo } from 'react';
-import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
 import { faker } from '@faker-js/faker';
+import { useMemo, useState } from 'react';
+import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
+
 import Star from '../../assets/imgs/star.svg';
+
 export default function Feedback() {
     const fakeProfilePic = useMemo(() => {
         return faker.image.urlLoremFlickr({ category: 'people' });

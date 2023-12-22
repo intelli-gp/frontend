@@ -1,15 +1,15 @@
-import { Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, setCredentials } from './store';
+import { Route, Routes } from 'react-router-dom';
 
-import SignupPage from './pages/auth/Signup';
-import LoginPage from './pages/auth/Login';
-import AuthTemplatePage from './pages/templates/Auth';
-import ForgetPasswordPage from './pages/auth/ForgetPassword';
 import ProtectedPage from './components/ProtectedPage';
-import LoggedInTemplatePage from './pages/templates/LoggedIn';
+import ForgetPasswordPage from './pages/auth/ForgetPassword';
+import LoginPage from './pages/auth/Login';
 import RecoverPassword from './pages/auth/RecoverPassword';
+import SignupPage from './pages/auth/Signup';
 import HomePage from './pages/home';
+import AuthTemplatePage from './pages/templates/Auth';
+import LoggedInTemplatePage from './pages/templates/LoggedIn';
+import { RootState, setCredentials } from './store';
 
 function App() {
     const dispatch = useDispatch();
