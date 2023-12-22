@@ -29,6 +29,7 @@ const RecoverPassword = () => {
         } else if (isError) {
             errorToast('An error occurred. Please try again.');
         }
+        reset();
         resetMutation();
     }, [isError, isSuccess]);
 
