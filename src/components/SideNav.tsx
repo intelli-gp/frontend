@@ -40,33 +40,27 @@ export default function SideNav() {
         },
         {
             icon: <HiMiniUserGroup />,
-            extendable: true,
+            extendable: false,
             path: '/app',
             text: 'Chat Groups',
             active: false,
             id: 3,
-            extended: false,
-            subItems: ['Group 1', 'Group 2', 'Group 3'],
         },
         {
             icon: <BsFillPostcardFill />,
-            extendable: true,
+            extendable: false,
             path: '/app',
             text: 'Articles',
             active: false,
             id: 4,
-            extended: false,
-            subItems: ['Article1', 'Article2'],
         },
         {
             icon: <GiBookshelf />,
-            extendable: true,
+            extendable: false,
             path: '/app',
             text: 'Courses',
             active: false,
             id: 5,
-            extended: false,
-            subItems: ['Course1', 'Course2'],
         },
         {
             icon: <FaHandsHelping />,
@@ -186,7 +180,7 @@ export default function SideNav() {
                     }}
                 >
                     <img
-                        src={defaultUserImage}
+                        src={user.image ?? defaultUserImage}
                         alt="profile pic"
                         className="w-10 h-10 rounded-full"
                     />
