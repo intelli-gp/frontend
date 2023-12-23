@@ -24,7 +24,7 @@ export default function AuthTemplatePage() {
                     />
                 </div>
             </div>
-            <div className="flex flex-col justify-center items-center w-3/5">
+            <div className="flex flex-col justify-center items-center xs:w-full lg:w-3/5">
                 <Outlet />
             </div>
         </div>
