@@ -4,14 +4,18 @@ import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { CiLogin } from 'react-icons/ci';
 import { IoPersonOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
+import { IoPersonSharp } from "react-icons/io5";
+import { MdLogin } from "react-icons/md";
 
 import Button from '../../components/Button';
 
 export default function Nav() {
-    const [navbarOpen, setmenuOpen] = useState(false);
+    const [navbarOpen, setMenuOpen] = useState(false);
+
     const handleNav = () => {
-        setmenuOpen(!navbarOpen);
+        setMenuOpen(!navbarOpen);
     };
+
     const className = classNames(
         'fixed right-0 top-0 w-[55%] h-screen md:hidden ease-in bg-indigo-50 py-6 shadow-lg shadow-indigo-400/5 ',
         {
@@ -19,60 +23,64 @@ export default function Nav() {
             hidden: !navbarOpen,
         },
     );
+
     const menuItems = ['Home', 'About', 'Features', 'Pricing'];
 
     return (
-        <nav className=" sticky left-0 top-0 z-50  h-[53px]  bg-txt w-full backdrop-blur">
-            <div className="mx-auto max-w-7xl px-6 2xl:px-16 flex justify-between items-center h-full flex-wrap">
-                <div className="w-1/6">
-                    <div className="w-2/6">
-                        <a href="#">
-                            <img src="" alt="logo" className="w-full" />
-                        </a>
+        <nav className=" sticky left-0 top-0 z-50 bg-txt w-full backdrop-blur py-3">
+            <div className="px-16 flex justify-between items-center h-full flex-wrap">
+                <Link to="/" className="font-black text-white text-4xl">
+                    LoremIpsum
+                </Link>
+
+                <div className='flex gap-16 items-center'>
+                    <div className="hidden md:flex">
+                        <ul className="flex px-1 ">
+                            {menuItems.map((item) => (
+                                <li>
+                                    <a
+                                        href="#"
+                                        className="text-sm font-medium text-white lg:text-base ml-10"
+                                    >
+                                        {item}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
-                </div>
-                <div className="hidden md:flex md:w-3/6 w-0 ">
-                    <ul className="flex px-1 ">
-                        {menuItems.map((item) => (
-                            <li>
-                                <a
-                                    href="#"
-                                    className="text-sm font-medium text-white lg:text-base ml-10"
-                                >
-                                    {item}
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <div className="flex w-2/6 pt-2 md:justify-center  justify-end">
-                    <Link to="/auth/signup" className="md:flex hidden">
-                        <Button
-                            select="primary"
-                            type="button"
-                            className="flex items-center justify-center text-sm h-auto py-[4px] w-5/6 border-2 border-indigo-900 lg:mx-5 rounded-md"
+
+                    <div className="flex gap-6 items-center">
+                        <Link to="/auth/signup" className="md:flex hidden">
+                            <Button
+                                select="primary"
+                                type="button"
+                                className="text-sm !px-8 border-indigo-900 border-2 rounded-lg gap-2"
+                            >
+                            <IoPersonSharp size={14} />
+                                Signup
+                            </Button>
+                        </Link>
+                        <Link to="/auth/login" className="md:flex hidden">
+                            <Button
+                                type="button"
+                                outline={true}
+                                className="text-sm text-white border-white !px-8 rounded-lg gap-2"
+                            >
+                                <MdLogin size={15} />
+                                Login
+                            </Button>
+                        </Link>
+                        <div
+                            onClick={handleNav}
+                            id="navbarToggler"
+                            className="md:hidden"
                         >
-                            Signup
-                        </Button>
-                    </Link>
-                    <Link to="/auth/login" className="md:flex hidden">
-                        <Button
-                            type="button"
-                            outline={true}
-                            className="flex items-center justify-center text-sm h-auto py-[4px] w-5/6 lg:mx-5 rounded-lg"
-                        >
-                            Login
-                        </Button>
-                    </Link>
-                    <div
-                        onClick={handleNav}
-                        id="navbarToggler"
-                        className="md:hidden"
-                    >
-                        <AiOutlineMenu size={25} color="#fff" />
+                            <AiOutlineMenu size={25} color="#fff" />
+                        </div>
                     </div>
                 </div>
             </div>
+
             <div className={className}>
                 <div className="flex w-full items-center justify-end px-6">
                     <div onClick={handleNav} className="cursor-pointer">

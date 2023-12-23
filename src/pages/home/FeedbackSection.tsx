@@ -36,7 +36,7 @@ export default function Feedback() {
     };
 
     return (
-        <div className="py-12 sm:w-[90%] w-full px-4  flex justify-center">
+        <section className="py-12 sm:w-[90%] w-full px-4 flex items-center justify-center min-h-[calc(100vh-64px)]">
             <div className="lg:w-4/6 w-5/6">
                 <div
                     id="default-carousel"
@@ -134,6 +134,6 @@ export default function Feedback() {
                     </button>
                 </div>
             </div>
-        </div>
+        </section>
     );
 }
