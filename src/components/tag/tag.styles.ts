@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 
-export const TagContainer = styled.div<{ size?: string }>`
+export const TagContainer = styled.div<{ size?: string; deletable?: boolean }>`
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
     gap: 0.5rem;
-    padding: 0.2rem 0.2rem 0.2rem 1rem;
+    padding: ${({ deletable }) =>
+        deletable ? '0.2rem 0.2rem 0.2rem 1rem' : '0.3rem 1rem'};
     border-radius: 10000px;
     font-size: ${({ size }) => {
         switch (size) {
@@ -44,6 +45,9 @@ export const Page = styled.div`
     min-height: 100vh;
     padding: 4rem;
     position: relative;
+    display: flex;
+    gap: 3rem;
+    flex-direction: column;
 
     @media (max-width: 768px) {
         padding: 4rem 2rem;
@@ -52,4 +56,3 @@ export const Page = styled.div`
         padding: 4rem 1rem;
     }
 `;
-
