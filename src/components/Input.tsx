@@ -3,6 +3,7 @@ type InputProps = {
     value: string;
     onChange: React.ChangeEventHandler<HTMLInputElement>;
     type?: string;
+    placeholder?: string;
     required?: boolean;
     error?: string;
 };
@@ -11,6 +12,7 @@ export default function Input({
     label,
     value,
     type,
+    placeholder,
     onChange,
     required,
     error,
@@ -21,9 +23,9 @@ export default function Input({
                 {label}:
             </label>
             <input
-                className="rounded border border-slate-500 p-2 min-w-0"
+                className="rounded border border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2"
                 type={type ?? 'text'}
-                placeholder={label}
+                placeholder={placeholder ?? label}
                 id={label}
                 value={value}
                 onChange={onChange}
