@@ -4,14 +4,21 @@ import { DeleteTagButton, TagContainer } from './tag.styles';
 
 type TagProps = {
     text: string;
-    deletable: boolean;
+    deletable?: boolean;
     size?: string;
-    deleteHandler: React.MouseEventHandler;
+    deleteHandler?: React.MouseEventHandler;
+    clickHandler?: React.MouseEventHandler;
 };
 
-const Tag = ({ text, deletable, size, deleteHandler }: TagProps) => {
+const Tag = ({
+    text,
+    deletable,
+    size,
+    deleteHandler,
+    clickHandler,
+}: TagProps) => {
     return (
-        <TagContainer size={size}>
+        <TagContainer size={size} deletable={deletable} onClick={clickHandler}>
             {text}
             {deletable && (
                 <DeleteTagButton onClick={deleteHandler} title="Delete">
