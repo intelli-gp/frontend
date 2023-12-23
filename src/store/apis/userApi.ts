@@ -25,11 +25,8 @@ const userApi = appApi.injectEndpoints({
             query: (user) => {
                 return {
                     method: 'PATCH',
-                    url: '/users',
+                    url: `/users/update/${user.id}`,
                     body: user,
-                    params: {
-                        userId: user.id,
-                    },
                 };
             },
         }),
