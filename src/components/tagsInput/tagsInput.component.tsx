@@ -1,7 +1,8 @@
 import Fuse from 'fuse.js';
 import { kebabCase } from 'lodash';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 
+import { useGetSuggestedTagsQuery } from '../../store';
 import { infoToast, warningToast } from '../../utils/toasts';
 import Button from '../Button';
 import Input from '../Input';
@@ -29,9 +30,12 @@ const TagsInput = ({
     const [typing, setTyping] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const [filteredTags, setFilteredTags] = useState(availableTags);
-    const [suggestedTags, setSuggestedTags] = useState(
-        availableTags.slice(0, 10),
-    );
+    let {
+        data: suggestedTagsRes,
+        isLoading,
+        isError,
+    } = useGetSuggestedTagsQuery(10);
+    const [suggestedTags, setSuggestedTags] = useState<string[]>([]);
 
     const handleUserTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTyping(e.target.value);
@@ -75,7 +79,7 @@ const TagsInput = ({
     const clickSuggestedTag = (e: React.MouseEvent) => {
         const tag = (e.target as HTMLElement).innerText;
         if (selectedTags.includes(tag)) {
-            infoToast('This tag is already selected', 'bottom-center');
+            infoToast('This tag is already selected', 'top-right');
             return;
         }
         addTagToSelected(tag);
@@ -106,6 +110,12 @@ const TagsInput = ({
             document.removeEventListener('click', closeDropdown);
         };
     }, []);
+
+    useLayoutEffect(() => {
+        if (!isLoading && !isError) {
+            setSuggestedTags(suggestedTagsRes?.data || []);
+        }
+    }, [suggestedTagsRes]);
 
     return (
         <div className="xl:w-[500px] md:w-[400px] xs:w-[350px] flex flex-col gap-6">
