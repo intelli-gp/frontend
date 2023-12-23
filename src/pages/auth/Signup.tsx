@@ -21,9 +21,12 @@ import {
 } from '../../store';
 import { RootState } from '../../store/index';
 import { User } from '../../types/user';
+import { errorToast } from '../../utils/toasts';
 
 export default function SignupPage() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const {
         firstName,
         lastName,
@@ -36,8 +39,16 @@ export default function SignupPage() {
         termsOfServiceAgreement,
     } = useSelector((state: RootState) => state['signup-form']);
     const [searchParams, setSearchParams] = useSearchParams();
-    const [signUp, { isLoading }] = useSignUpUserMutation();
-    const navigate = useNavigate();
+    const [signUp, { isLoading, isError, error, reset: resetMutation }] =
+        useSignUpUserMutation();
+
+    // Error handling
+    useEffect(() => {
+        if (isError) {
+            errorToast(JSON.stringify(error));
+            resetMutation();
+        }
+    }, [isError]);
 
     // Google oauth
     useEffect(() => {
@@ -71,7 +82,7 @@ export default function SignupPage() {
             dispatch(
                 setCredentials({ token: access_token, user: loggedInUser }),
             );
-            navigate('/app');
+            navigate('/auth/interests');
         } catch (err) {
             console.log(err);
         }
@@ -199,7 +210,9 @@ export default function SignupPage() {
                     className="flex items-center justify-center gap-2 text-lg h-auto py-2 w-full"
                 >
                     <a
-                        href="http://localhost:3333/api/auth/login/google"
+                        href={`${
+                            import.meta.env.VITE_BACKEND
+                        }/api/auth/login/google`}
                         className="flex items-center justify-center gap-2 text-white"
                     >
                         <FcGoogle className="p-[1px] rounded-full bg-white box-content" />
