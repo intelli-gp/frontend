@@ -9,7 +9,7 @@ function HomePage() {
     return (
         <div>
             <Nav />
-            <div className=" flex flex-col  justify-center items-center bg-white   h-[calc(100vh - 53px)]">
+            <div className=" flex flex-col  justify-center items-center bg-white   h-[calc(100vh - 64px)]">
                 <Hero />
                 <FeatureSection />
                 <BlogSection />
