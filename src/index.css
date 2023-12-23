@@ -31,6 +31,7 @@ a {
 /* Handle */
 ::-webkit-scrollbar-thumb {
     background: #3730a3;
+    border-radius: 10px;
 }
 
 /* Handle on hover */
@@ -50,7 +51,7 @@ a {
 
 /* Handle */
 .side-nav-links::-webkit-scrollbar-thumb {
-    background: #eef2ff88;
+    background: #56669c88;
     border-radius: 10px;
 }
 
