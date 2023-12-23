@@ -20,8 +20,19 @@ type PopupUserMenuLinkPropType = {
     path: string;
 } & Record<string, any>;
 
+type SideNavLinkType = {
+    icon: JSX.Element;
+    extendable: boolean;
+    path: string;
+    text: string;
+    active: boolean;
+    extended?: boolean;
+    subItems?: string[];
+    id: number;
+};
+
 export default function SideNav() {
-    const [links, setLinks] = useState([
+    const [links, setLinks] = useState<SideNavLinkType[]>([
         {
             icon: <LuSearch />,
             extendable: false,
