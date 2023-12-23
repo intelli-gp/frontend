@@ -6,6 +6,7 @@ import ForgetPasswordPage from './pages/auth/ForgetPassword';
 import LoginPage from './pages/auth/Login';
 import RecoverPassword from './pages/auth/RecoverPassword';
 import SignupPage from './pages/auth/Signup';
+import InterestsPage from './pages/auth/interests/interests.page';
 import HomePage from './pages/home';
 import AuthTemplatePage from './pages/templates/Auth';
 import LoggedInTemplatePage from './pages/templates/LoggedIn';
@@ -34,6 +35,7 @@ function App() {
             <Route path="auth" element={<AuthTemplatePage />}>
                 <Route path="login" element={<LoginPage />} />
                 <Route path="signup" element={<SignupPage />} />
+                <Route path="interests" element={<InterestsPage />} />
                 <Route
                     path="forget-password"
                     element={<ForgetPasswordPage />}
@@ -44,7 +46,9 @@ function App() {
             <Route
                 path="app"
                 element={<ProtectedPage element={<LoggedInTemplatePage />} />}
-            />
+            >
+                {/* Protected Routes */}
+            </Route>
         </Routes>
     );
 }
