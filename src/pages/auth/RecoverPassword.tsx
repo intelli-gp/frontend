@@ -81,7 +81,7 @@ const RecoverPassword = () => {
                         }}
                     />
                     <Button
-                        className="h-auto text-md text-center font-bold w-full gap-2"
+                        className="!h-11 text-md text-center font-bold w-full gap-2"
                         type="submit"
                         loading={isLoading}
                         rounded

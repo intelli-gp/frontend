@@ -9,9 +9,9 @@ import Feature from '../../components/Feature';
 export default function FeatureSection() {
     return (
         <>
-            <section className=" py-12 w-full flex items-center">
+            <section className=" py-12 w-full flex items-center my-8">
                 <div className="mx-auto w-5/6 px-10 ">
-                    <div className="md:flex md:justify-center md:items-center gap-4 md:gap-8">
+                    <div className="md:flex md:justify-center md:items-center gap-4 md:gap-16">
                         <div className="mt-6 flex justify-center md:mt-0 md:w-5/12">
                             <img
                                 src={Section2img}
@@ -43,6 +43,7 @@ export default function FeatureSection() {
                     </div>
                 </div>
             </section>
+            
             <section className=" flex justify-center m-auto w-full md:my-[5rem] my-4 p-6 sm:py-0 ">
                 <div className="grid gap-12 grid-cols-1 md:grid-cols-2 w-full xl:w-[85%] sm:p-6 md:p-10 content-center">
                     <Feature

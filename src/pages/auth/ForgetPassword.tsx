@@ -60,11 +60,12 @@ export default function ForgetPasswordPage() {
                         required
                         type="email"
                         label="Your Email (Must be registered)"
+                        placeholder='Enter your email'
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
                     <Button
-                        className="h-10 text-base text-center font-bold w-full gap-2"
+                        className="!h-11 text-base text-center font-bold w-full gap-2"
                         type="submit"
                         rounded
                         loading={isFetching}
