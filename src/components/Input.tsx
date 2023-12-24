@@ -6,7 +6,7 @@ type InputProps = {
     placeholder?: string;
     required?: boolean;
     error?: string;
-};
+} & Record<string, any>;
 
 export default function Input({
     label,
@@ -14,8 +14,8 @@ export default function Input({
     type,
     placeholder,
     onChange,
-    required,
     error,
+    ...other
 }: InputProps) {
     return (
         <div className="flex flex-col gap-2">
@@ -29,7 +29,7 @@ export default function Input({
                 id={label}
                 value={value}
                 onChange={onChange}
-                required={required ?? false}
+                {...other}
             />
             {error && <span className="text-red-600 text-sm">{error}</span>}
         </div>

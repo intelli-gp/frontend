@@ -123,6 +123,7 @@ const TagsInput = ({
                 <Input
                     label="Select at least 3 tags"
                     value={typing}
+                    autoComplete="off"
                     onChange={handleUserTyping}
                     placeholder="software, programming, web-development, ..."
                 />
