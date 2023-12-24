@@ -28,7 +28,7 @@ export default function Nav() {
 
     return (
         <nav className=" sticky left-0 top-0 z-50 bg-txt w-full backdrop-blur py-3">
-            <div className="px-16 flex justify-between items-center h-full flex-wrap">
+            <div className="px-8 lg:px-16 flex justify-between items-center h-full flex-wrap">
                 <Link to="/" className="font-black text-white text-4xl">
                     LoremIpsum
                 </Link>
@@ -101,7 +101,7 @@ export default function Nav() {
                     <li>
                         <Link
                             to="/auth/signup"
-                            className="block py-2   border-b-[1px] border-slate-200  px-10 hover:bg-indigo-900 hover:text-white text-txt flex items-center gap-2"
+                            className="py-2   border-b-[1px] border-slate-200  px-10 hover:bg-indigo-900 hover:text-white text-txt flex items-center gap-2"
                         >
                             <IoPersonOutline size={14} />
                             Sign up
@@ -110,7 +110,7 @@ export default function Nav() {
                     <li>
                         <Link
                             to="/auth/login"
-                            className="block py-2   border-b-[1px] border-slate-200 px-10 hover:bg-indigo-900 hover:text-white text-txt flex items-center gap-2"
+                            className="py-2   border-b-[1px] border-slate-200 px-10 hover:bg-indigo-900 hover:text-white text-txt flex items-center gap-2"
                         >
                             <CiLogin size={15} />
                             Log in

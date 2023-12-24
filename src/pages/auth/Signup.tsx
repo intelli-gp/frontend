@@ -103,17 +103,17 @@ export default function SignupPage() {
                         required
                         label="First Name"
                         value={firstName}
-                        onChange={(e) =>
-                            dispatch(changeSignupFirstName(e.target.value))
-                        }
+                        onChange={(e) => {
+                            dispatch(changeSignupFirstName(e.target.value));
+                        }}
                     />
                     <Input
                         required
                         label="Last Name"
                         value={lastName}
-                        onChange={(e) =>
-                            dispatch(changeSignupLastName(e.target.value))
-                        }
+                        onChange={(e) => {
+                            dispatch(changeSignupLastName(e.target.value));
+                        }}
                     />
                 </div>
 
@@ -122,9 +122,9 @@ export default function SignupPage() {
                     label="Username"
                     type="text"
                     value={username}
-                    onChange={(e) =>
-                        dispatch(changeSignupUsername(e.target.value))
-                    }
+                    onChange={(e) => {
+                        dispatch(changeSignupUsername(e.target.value));
+                    }}
                 />
 
                 <Input
@@ -132,9 +132,9 @@ export default function SignupPage() {
                     label="Email"
                     type="email"
                     value={email}
-                    onChange={(e) =>
-                        dispatch(changeSignupEmail(e.target.value))
-                    }
+                    onChange={(e) => {
+                        dispatch(changeSignupEmail(e.target.value));
+                    }}
                 />
 
                 <Input
@@ -142,14 +142,16 @@ export default function SignupPage() {
                     value={birthDate}
                     type="date"
                     label="Birth Date"
-                    onChange={(e) =>
-                        dispatch(changeSignupBirthDate(e.target.value))
-                    }
+                    onChange={(e) => {
+                        dispatch(changeSignupBirthDate(e.target.value));
+                    }}
                 />
 
                 <PhoneNumberInput
                     value={phone}
-                    onChange={(value) => dispatch(changeSignupPhone(value))}
+                    onChange={(value) => {
+                        dispatch(changeSignupPhone(value));
+                    }}
                 />
 
                 <div className="flex gap-2 w-full justify-between">
@@ -158,20 +160,20 @@ export default function SignupPage() {
                         type="password"
                         label="Password"
                         value={password}
-                        onChange={(e) =>
-                            dispatch(changeSignupPassword(e.target.value))
-                        }
+                        onChange={(e) => {
+                            dispatch(changeSignupPassword(e.target.value));
+                        }}
                     />
                     <Input
                         required
                         type="password"
                         label="Confirm Password"
                         value={confirmPassword}
-                        onChange={(e) =>
+                        onChange={(e) => {
                             dispatch(
                                 changeSignupConfirmPassword(e.target.value),
-                            )
-                        }
+                            );
+                        }}
                     />
                 </div>
 
@@ -182,11 +184,11 @@ export default function SignupPage() {
                         type="checkbox"
                         id="terms&conditions"
                         checked={termsOfServiceAgreement}
-                        onChange={(e) =>
+                        onChange={(e) => {
                             dispatch(
                                 changeTermsOfServiceAgreement(e.target.checked),
-                            )
-                        }
+                            );
+                        }}
                     />
                     <label htmlFor="terms&conditions">
                         I agree to the{' '}
@@ -196,29 +198,31 @@ export default function SignupPage() {
                     </label>
                 </div>
 
-                <Button
-                    select="primary700"
-                    type="submit"
-                    className="flex items-center justify-center gap-2 text-lg h-auto py-2 w-full"
-                    loading={isLoading}
-                >
-                    Create
-                </Button>
-
-                <Button
-                    type="button"
-                    className="flex items-center justify-center gap-2 text-lg h-auto py-2 w-full"
-                >
-                    <a
-                        href={`${
-                            import.meta.env.VITE_BACKEND
-                        }/api/auth/login/google`}
-                        className="flex items-center justify-center gap-2 text-white"
+                <div className="flex flex-col gap-4">
+                    <Button
+                        select="primary700"
+                        type="submit"
+                        className="flex items-center justify-center gap-2 text-lg h-11 py-2 w-full"
+                        loading={isLoading}
                     >
-                        <FcGoogle className="p-[1px] rounded-full bg-white box-content" />
-                        Sign up with google
-                    </a>
-                </Button>
+                        Create
+                    </Button>
+
+                    <Button
+                        type="button"
+                        className="flex items-center justify-center gap-2 text-lg h-11 py-2 w-full"
+                    >
+                        <a
+                            href={`${
+                                import.meta.env.VITE_BACKEND
+                            }/api/auth/login/google`}
+                            className="flex items-center justify-center gap-2 text-white"
+                        >
+                            <FcGoogle className="p-[1px] rounded-full bg-white box-content" />
+                            Sign up with google
+                        </a>
+                    </Button>
+                </div>
 
                 <p className="flex gap-2 justify-center my-3">
                     Already has an account?
