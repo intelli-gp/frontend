@@ -8,9 +8,9 @@ import RecoverPassword from './pages/auth/RecoverPassword';
 import SignupPage from './pages/auth/Signup';
 import InterestsPage from './pages/auth/interests/interests.page';
 import HomePage from './pages/home';
+import StudyPlanner from './pages/study-planner/StudyPlanner';
 import AuthTemplatePage from './pages/templates/Auth';
 import LoggedInTemplatePage from './pages/templates/LoggedIn';
-import StudyPlanner from './pages/study-planner/StudyPlanner';
 import { RootState, setCredentials } from './store';
 
 function App() {
@@ -44,11 +44,8 @@ function App() {
                 <Route path="reset-password" element={<RecoverPassword />} />
             </Route>
 
-            <Route
-                path="app"
-                element={<LoggedInTemplatePage />}
-            >
-                <Route path="study-planner" element={<StudyPlanner/>}/>
+            <Route path="app" element={<LoggedInTemplatePage />}>
+                <Route path="study-planner" element={<StudyPlanner />} />
             </Route>
         </Routes>
     );

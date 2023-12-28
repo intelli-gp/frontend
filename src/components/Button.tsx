@@ -12,7 +12,7 @@ type choice =
     | 'danger'
     | 'primary700'
     | 'primary500'
-    |'primary300';
+    | 'primary300';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode;
@@ -46,7 +46,7 @@ function Button({
             'bg-indigo-500 hover:bg-indigo-500/90 ':
                 select === 'primary500' && !outline,
             'bg-indigo-300 hover:bg-indigo-300/90 ':
-            select === 'primary300' && !outline,
+                select === 'primary300' && !outline,
             'bg-secondary font-bold text-txt':
                 select === 'secondary' && !outline,
             'bg-green-500 hover:bg-green-500/90 text-white':

@@ -1,34 +1,32 @@
-
 .rbc-time-view .rbc-row:first-child {
-    font-size:1rem;
-    min-height: 3rem!important;
-    flex-grow: 3!important;
+    font-size: 1rem;
+    min-height: 3rem !important;
+    flex-grow: 3 !important;
 }
-.rbc-header{
+.rbc-header {
     padding-top: 10px;
-    color: #1B2547;
+    color: #1b2547;
     border-bottom: 0px solid !important;
-    font-size:large;
+    font-size: large;
     font-weight: 400;
 }
-.rbc-header+.rbc-today{
-    color:#312E81;
+.rbc-header + .rbc-today {
+    color: #312e81;
 }
-.rbc-label{
-    color: #868E96;
-
+.rbc-label {
+    color: #868e96;
 }
 .rbc-allday-cell {
-    visibility: hidden!important;
-    height: 0!important;
+    visibility: hidden !important;
+    height: 0 !important;
 }
-.rbc-time-header-gutter{
+.rbc-time-header-gutter {
     border-style: solid;
 
     border-width: 0 !important;
 }
-.rbc-today{
-    background-color: #E9EAFD;
+.rbc-today {
+    background-color: #e9eafd;
 }
 
 .rbc-event {
@@ -38,24 +36,23 @@
     background-color: transparent !important;
     z-index: 2;
     position: relative;
-  }
-  
-  .rbc-background-event {
+}
+
+.rbc-background-event {
     padding: 0px !important;
     border-radius: 0px !important;
     border: none !important;
     background-color: transparent !important;
-  }
-  
-  .rbc-event-label {
+}
+
+.rbc-event-label {
     display: none !important;
-  }
-  
-  .rbc-events-container {
+}
+
+.rbc-events-container {
     width: 100% !important;
     display: flex;
     justify-content: center;
     justify-items: center;
-   align-items: center;
+    align-items: center;
 }
-  

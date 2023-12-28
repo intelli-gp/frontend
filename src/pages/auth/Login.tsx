@@ -29,13 +29,13 @@ export default function LoginPage() {
             };
         },
     );
-    const [loginUser, { isLoading, isError}] = useLoginUserMutation();
+    const [loginUser, { isLoading, isError }] = useLoginUserMutation();
 
     useEffect(() => {
-        if(isError){
-            errorToast("Invalid email or password.")
+        if (isError) {
+            errorToast('Invalid email or password.');
         }
-    }, [isError])
+    }, [isError]);
 
     // Redirect to app page if user is already logged in
     useLayoutEffect(() => {

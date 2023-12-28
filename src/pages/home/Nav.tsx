@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { CiLogin } from 'react-icons/ci';
 import { IoPersonOutline } from 'react-icons/io5';
+import { IoPersonSharp } from 'react-icons/io5';
+import { MdLogin } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-import { IoPersonSharp } from "react-icons/io5";
-import { MdLogin } from "react-icons/md";
 
 import Button from '../../components/Button';
 
@@ -33,7 +33,7 @@ export default function Nav() {
                     LoremIpsum
                 </Link>
 
-                <div className='flex gap-16 items-center'>
+                <div className="flex gap-16 items-center">
                     <div className="hidden md:flex">
                         <ul className="flex px-1 ">
                             {menuItems.map((item) => (
@@ -56,7 +56,7 @@ export default function Nav() {
                                 type="button"
                                 className="text-sm !px-8 border-indigo-900 border-2 rounded-lg gap-2"
                             >
-                            <IoPersonSharp size={14} />
+                                <IoPersonSharp size={14} />
                                 Signup
                             </Button>
                         </Link>

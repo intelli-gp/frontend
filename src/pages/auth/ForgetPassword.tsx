@@ -1,3 +1,4 @@
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
 import { FaEnvelope } from 'react-icons/fa';
 import { IoChevronBack } from 'react-icons/io5';
@@ -7,30 +8,28 @@ import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { useLazyResetPasswordQuery } from '../../store';
 import { errorToast, successToast } from '../../utils/toasts';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 export default function ForgetPasswordPage() {
     const [email, setEmail] = useState<string>('');
 
-    const [resetPassword, { isFetching, isSuccess, isError, error}] =
+    const [resetPassword, { isFetching, isSuccess, isError, error }] =
         useLazyResetPasswordQuery();
 
     useEffect(() => {
         if (isSuccess) {
             successToast('An email has been sent.');
-        }
-        else if (isError) {
+        } else if (isError) {
             let errorMessage = 'Error occurred';
-            switch((error as FetchBaseQueryError).status){
-                case 404: 
+            switch ((error as FetchBaseQueryError).status) {
+                case 404:
                     errorMessage = 'This email is not registered.';
                     break;
                 case 500:
-                    errorMessage = 'Error from server side, try again later.'
+                    errorMessage = 'Error from server side, try again later.';
                     break;
             }
             errorToast(errorMessage);
-        }   
+        }
     }, [isError, isSuccess]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -60,7 +59,7 @@ export default function ForgetPasswordPage() {
                         required
                         type="email"
                         label="Your Email (Must be registered)"
-                        placeholder='Enter your email'
+                        placeholder="Enter your email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />

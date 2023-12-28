@@ -13,7 +13,6 @@ type SideNavItemPropType = {
     onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
-
 export default function SideNavItem({
     icon,
     extendable,

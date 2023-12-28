@@ -1,9 +1,9 @@
 import React from 'react';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import ReactDOM from 'react-dom/client';
 import { Toaster } from 'react-hot-toast';
 import { Provider } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
-import "react-big-calendar/lib/css/react-big-calendar.css";
 
 import App from './App.tsx';
 import './index.css';

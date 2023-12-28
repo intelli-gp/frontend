@@ -43,7 +43,7 @@ export default function FeatureSection() {
                     </div>
                 </div>
             </section>
-            
+
             <section className=" flex justify-center m-auto w-full md:my-[5rem] my-4 p-6 sm:py-0 ">
                 <div className="grid gap-12 grid-cols-1 md:grid-cols-2 w-full xl:w-[85%] sm:p-6 md:p-10 content-center">
                     <Feature
