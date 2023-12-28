@@ -10,6 +10,7 @@ import InterestsPage from './pages/auth/interests/interests.page';
 import HomePage from './pages/home';
 import AuthTemplatePage from './pages/templates/Auth';
 import LoggedInTemplatePage from './pages/templates/LoggedIn';
+import StudyPlanner from './pages/study-planner/StudyPlanner';
 import { RootState, setCredentials } from './store';
 
 function App() {
@@ -45,9 +46,9 @@ function App() {
 
             <Route
                 path="app"
-                element={<ProtectedPage element={<LoggedInTemplatePage />} />}
+                element={<LoggedInTemplatePage />}
             >
-                {/* Protected Routes */}
+                <Route path="study-planner" element={<StudyPlanner/>}/>
             </Route>
         </Routes>
     );
