@@ -46,10 +46,6 @@ const CustomToolbar = (props: ToolbarProps) => {
         props.onNavigate(Navigate.NEXT);
     };
 
-    const goToToday = () => {
-        props.onNavigate(Navigate.TODAY);
-    };
-
     const viewFunctions = [goToWeekView, goToDayView, goToMonthView];
     const [currentViewIndex, setCurrentView] = useState(0)
     function cycleView() {
@@ -123,7 +119,7 @@ export const Calendar = (props: Omit<CalendarProps, 'localizer'>) => {
                     const data = event?.data;
                     if (data?.appointment)
                         return (
-                            <TaskBox>
+                            <TaskBox courseName='Physics'>
                                 <p className="text-xs text-[#0369A1]">
                                     {data.appointment.start} -{' '}
                                     {data.appointment.end}

@@ -83,7 +83,7 @@ export default function StudyPlanner() {
                   <div className="flex items-left w-full pb-2">
                   <p className="text-xs ">Due Today:</p>
                   </div>
-                  <TaskBox/>
+                  <TaskBox courseName='Math |' taskTitle='Assignment'/>
                   </TasksContainer>
                   </div>
             </div>
