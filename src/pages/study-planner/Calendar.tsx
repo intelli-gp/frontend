@@ -9,9 +9,11 @@ import {
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 
 import { EVENTS } from './Calendar.Constants';
-import './Calendar.styles.css';
 import TaskBox from './TaskBox';
 import { useState } from 'react';
+
+import './Calendar.styles.css';
+
 
 const formats = {
     weekdayFormat: 'ddd',
@@ -104,11 +106,7 @@ const CustomToolbar = (props: ToolbarProps) => {
 };
 
 export const Calendar = (props: Omit<CalendarProps, 'localizer'>) => {
-    // const appointments = EVENTS?.map((appointment: { start: Date; end: Date; }) => ({
-    //   start: new Date(appointment.start),
-    //   end: new Date(appointment.end),
-    //   data: { appointment },
-    // }));
+
     return (
         <BigCalendar
             popup
@@ -117,7 +115,7 @@ export const Calendar = (props: Omit<CalendarProps, 'localizer'>) => {
             formats={formats}
             localizer={localizer}
             defaultView={'week'}
-            max={moment('2023-12-24T23:00:00').toDate()}
+            max={moment('2023-12-24T23:59:00').toDate()}
             min={moment('2023-12-24T08:00:00').toDate()}
             components={{
                 toolbar: CustomToolbar,
