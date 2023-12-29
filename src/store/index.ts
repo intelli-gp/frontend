@@ -25,5 +25,6 @@ setupListeners(store.dispatch);
 export { store };
 export * from './slices/login-form.slice';
 export * from './slices/signup-form.slice';
+export * from './slices/task-form.slice';
 export * from './slices/auth.slice';
 export * from './apis';
