@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
-import ProtectedPage from './components/ProtectedPage';
 import ForgetPasswordPage from './pages/auth/ForgetPassword';
 import LoginPage from './pages/auth/Login';
 import RecoverPassword from './pages/auth/RecoverPassword';
