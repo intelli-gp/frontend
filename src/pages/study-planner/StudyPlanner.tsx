@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Button from '../../components/Button';
 import { Calendar } from './Calendar';
 import { Modal } from '../../components/modal/Modal';
-import { ModalContent } from './study-planner.styles';
+import { ModalContent, TasksContainer } from './study-planner.styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { GoDash } from "react-icons/go";
 import {
@@ -14,13 +14,13 @@ import {
     changeTaskDueStart,
     changeTaskDueEnd,
 } from '../../store';
-import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../store/index';
 import Input from '../../components/Input';
 import '../../index.css'
+import TaskBox from './TaskBox';
+import { Task } from '../../types/event';
 export default function StudyPlanner() {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const {
         title,
         description,
@@ -30,7 +30,24 @@ export default function StudyPlanner() {
         due_end,
 
     } = useSelector((state: RootState) => state['task-form']);
+    const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const task: Partial<Task> = {
+            title: title,
+            description: description,
+            color: color,
+            due_date:due_date,
+            due_start: due_start,
+            due_end: due_end,
+        };
 
+        try {
+            console.log(task)
+            setShowModal(false)
+        } catch (err) {
+            console.log(err);
+        }
+    };
     const [showModal, setShowModal] = useState(false);
     const openModal = () => {
         setShowModal((prev) => !prev);
@@ -39,11 +56,11 @@ export default function StudyPlanner() {
         <div className="flex justify-between h-[100vh]">
             <div className=" basis-4/5 h-full flex-col justify-between  justify-items-stretch	">
                 <div className="h-[15vh]">
-                    <h1 className="px-[5rem] py-8 text-5xl underline  font-semibold underline-offset-[1rem] text-indigo-900 ">
+                    <h1 className="px-[5rem] py-8 lg:text-5xl text-4xl underline  font-semibold underline-offset-[1rem] text-indigo-900 ">
                         Study Planner
                     </h1>
                 </div>
-                <div className=" h-[85vh] w-[98%] flex justify-items-right justify-center">
+                <div className=" h-[85vh] w-[100%] flex justify-items-right justify-center">
                     <Calendar className="w-[100%]" />
                 </div>
             </div>
@@ -61,28 +78,19 @@ export default function StudyPlanner() {
                         Generate a plan
                     </Button>
                 </div>
-                <div>
                     <div className="flex flex-col mt-8 items-center justify-center w-full ">
-                        <div className="flex flex-col items-center justify-center w-full border border-[1px] h-[160px] rounded-md">
-                            <div className="flex items-left w-[90%] pb-2">
-                                <p className="text-xs ">Due Today:</p>
-                            </div>
-                            <div className="bg-[#DBEAF2] h-[100px] w-[90%] flex flex-row justify-left items-left rounded-md border-l-8 border-[#0369A1] p-2">
-                                <p className="text-xs text-[#0369A1]">
-                                    Math |{' '}
-                                    <span className="text-xs text-[#0369A1] opacity-50">
-                                        Assignment
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                   <TasksContainer>
+                  <div className="flex items-left w-full pb-2">
+                  <p className="text-xs ">Due Today:</p>
+                  </div>
+                  <TaskBox/>
+                  </TasksContainer>
+                  </div>
             </div>
             <Modal showModal={showModal} setShowModal={setShowModal} >
                 <ModalContent>
                     <h1 className="text-2xl text-txt">Add Task</h1>
-                    <form>
+                    <form onSubmit={handleSubmitForm}>
                         <div className="flex w-full justify-between pt-[6px]">
                             <Input
                                 required
