@@ -53,8 +53,7 @@
     width: 100% !important;
     display: flex;
     z-index: 6 !important;
-
 }
-.rbc-timeslot-group{
-    min-height:60px!important;
+.rbc-timeslot-group {
+    min-height: 60px !important;
 }

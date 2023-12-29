@@ -6,9 +6,12 @@ interface ModalProps {
     showModal: boolean;
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
     children: React.ReactNode;
-
 }
-export const Modal: React.FC<ModalProps> = ({ showModal, setShowModal,children }) => {
+export const Modal: React.FC<ModalProps> = ({
+    showModal,
+    setShowModal,
+    children,
+}) => {
     const modalRef = useRef<HTMLDivElement>(null);
 
     const closeModal = (e: React.MouseEvent<HTMLElement>) => {

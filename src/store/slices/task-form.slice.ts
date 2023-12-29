@@ -9,7 +9,6 @@ const taskFormSlice = createSlice({
         due_date: '',
         due_start: '13:00',
         due_end: '14:00',
-
     },
     reducers: {
         changeTaskTitle(state, action) {
@@ -35,8 +34,8 @@ const taskFormSlice = createSlice({
             state.description = '';
             state.color = '#00ff00';
             state.due_date = '';
-            state.due_start= '13:00';
-            state.due_end='14:00';
+            state.due_start = '13:00';
+            state.due_end = '14:00';
         },
     },
 });

@@ -1,49 +1,43 @@
 import { useState } from 'react';
+import { GoDash } from 'react-icons/go';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '../../components/Button';
-import { Calendar } from './Calendar';
+import Input from '../../components/Input';
 import { Modal } from '../../components/modal/Modal';
-import { ModalContent, TasksContainer } from './study-planner.styles';
-import { useDispatch, useSelector } from 'react-redux';
-import { GoDash } from "react-icons/go";
+import '../../index.css';
 import {
-    changeTaskTitle,
-    changeTaskDescription,
     changeTaskColor,
+    changeTaskDescription,
     changeTaskDueDate,
-    changeTaskDueStart,
     changeTaskDueEnd,
+    changeTaskDueStart,
+    changeTaskTitle,
 } from '../../store';
 import { RootState } from '../../store/index';
-import Input from '../../components/Input';
-import '../../index.css'
-import TaskBox from './TaskBox';
 import { Task } from '../../types/event';
+import { Calendar } from './Calendar';
+import TaskBox from './TaskBox';
+import { ModalContent, TasksContainer } from './study-planner.styles';
+
 export default function StudyPlanner() {
     const dispatch = useDispatch();
-    const {
-        title,
-        description,
-        color,
-        due_date,
-        due_start,
-        due_end,
-
-    } = useSelector((state: RootState) => state['task-form']);
+    const { title, description, color, due_date, due_start, due_end } =
+        useSelector((state: RootState) => state['task-form']);
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const task: Partial<Task> = {
             title: title,
             description: description,
             color: color,
-            due_date:due_date,
+            due_date: due_date,
             due_start: due_start,
             due_end: due_end,
         };
 
         try {
-            console.log(task)
-            setShowModal(false)
+            console.log(task);
+            setShowModal(false);
         } catch (err) {
             console.log(err);
         }
@@ -78,16 +72,16 @@ export default function StudyPlanner() {
                         Generate a plan
                     </Button>
                 </div>
-                    <div className="flex flex-col mt-8 items-center justify-center w-full ">
-                   <TasksContainer>
-                  <div className="flex items-left w-full pb-2">
-                  <p className="text-xs ">Due Today:</p>
-                  </div>
-                  <TaskBox courseName='Math |' taskTitle='Assignment'/>
-                  </TasksContainer>
-                  </div>
+                <div className="flex flex-col mt-8 items-center justify-center w-full ">
+                    <TasksContainer>
+                        <div className="flex items-left w-full pb-2">
+                            <p className="text-xs ">Due Today:</p>
+                        </div>
+                        <TaskBox courseName="Math |" taskTitle="Assignment" />
+                    </TasksContainer>
+                </div>
             </div>
-            <Modal showModal={showModal} setShowModal={setShowModal} >
+            <Modal showModal={showModal} setShowModal={setShowModal}>
                 <ModalContent>
                     <h1 className="text-2xl text-txt">Add Task</h1>
                     <form onSubmit={handleSubmitForm}>
@@ -102,91 +96,101 @@ export default function StudyPlanner() {
                                     dispatch(changeTaskTitle(e.target.value));
                                 }}
                             />
-                            <div className='w-1/2 flex flex-col justify-between'>
-                            <label htmlFor='color' className="font-bold">
-                                Select color:
-                            </label>
-                            <input
-                                required
-                                id="color" 
-                                type='color'
-                                className="rounded border  border-slate-400 p-2 w-full h-[49px] bg-white focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2"
-                                value={color}
-                                onChange={(e) => {
-                                    dispatch(changeTaskColor(e.target.value));
-                                }}
-                            />
+                            <div className="w-1/2 flex flex-col justify-between">
+                                <label htmlFor="color" className="font-bold">
+                                    Select color:
+                                </label>
+                                <input
+                                    required
+                                    id="color"
+                                    type="color"
+                                    className="rounded border  border-slate-400 p-2 w-full h-[49px] bg-white focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2"
+                                    value={color}
+                                    onChange={(e) => {
+                                        dispatch(
+                                            changeTaskColor(e.target.value),
+                                        );
+                                    }}
+                                />
                             </div>
                         </div>
                         <div className="flex w-full justify-between pt-[6px]">
-                        <div className='w-1/2 flex flex-col justify-between'>
-                            <label htmlFor='date' className="font-bold">
-                            Due date:
-                            </label>
-                            <input
-                                required
-                                className="rounded border border-slate-400 p-2 w-[80%] focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2"
-                                type ='date'
-                                value={due_date}
-                                onChange={(e) => {
-                                    dispatch(changeTaskDueDate(e.target.value));
-                                }}
-                            />
+                            <div className="w-1/2 flex flex-col justify-between">
+                                <label htmlFor="date" className="font-bold">
+                                    Due date:
+                                </label>
+                                <input
+                                    required
+                                    className="rounded border border-slate-400 p-2 w-[80%] focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2"
+                                    type="date"
+                                    value={due_date}
+                                    onChange={(e) => {
+                                        dispatch(
+                                            changeTaskDueDate(e.target.value),
+                                        );
+                                    }}
+                                />
                             </div>
-                            <div className='flex flex-row justify-between pt-9 gap-3 w-1/2'>
+                            <div className="flex flex-row justify-between pt-9 gap-3 w-1/2">
                                 <input
                                     type="time"
                                     className="rounded border border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2"
                                     value={due_start}
                                     onChange={(e) => {
-                                        dispatch(changeTaskDueStart(e.target.value));
+                                        dispatch(
+                                            changeTaskDueStart(e.target.value),
+                                        );
                                     }}
                                 />
-                                <span className='text-xl pt-3'><GoDash/></span>
+                                <span className="text-xl pt-3">
+                                    <GoDash />
+                                </span>
                                 <input
                                     type="time"
                                     className="rounded border border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2"
                                     value={due_end}
                                     onChange={(e) => {
-                                        dispatch(changeTaskDueEnd(e.target.value));
+                                        dispatch(
+                                            changeTaskDueEnd(e.target.value),
+                                        );
                                     }}
                                 />
                             </div>
                         </div>
                         <div className="flex flex-col gap-2 pt-[6px]">
-                        <label htmlFor='description' className="font-bold">
+                            <label htmlFor="description" className="font-bold">
                                 Description:
-                        </label>
-                        <textarea
+                            </label>
+                            <textarea
                                 required
                                 className="rounded border border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2"
                                 value={description}
                                 onChange={(e) => {
-                                    dispatch(changeTaskDescription(e.target.value));
+                                    dispatch(
+                                        changeTaskDescription(e.target.value),
+                                    );
                                 }}
-                                placeholder='Enter description...' 
+                                placeholder="Enter description..."
                                 maxLength={1000}
                                 cols={33}
                                 rows={4}
                             />
                         </div>
                         <div className="w-full flex flex-row gap-4 justify-end items-end pt-3">
-                        <Button type="submit" select="primary">
-                            Create
-                        </Button>
-                        <Button
-                            type="button"
-                            outline={true}
-                            onClick={() => setShowModal(false)}
-                        >
-                            Cancel
-                        </Button>
-                    </div>
+                            <Button type="submit" select="primary">
+                                Create
+                            </Button>
+                            <Button
+                                type="button"
+                                outline={true}
+                                onClick={() => setShowModal(false)}
+                            >
+                                Cancel
+                            </Button>
+                        </div>
                     </form>
-                    
                 </ModalContent>
             </Modal>
         </div>
     );
 }
-

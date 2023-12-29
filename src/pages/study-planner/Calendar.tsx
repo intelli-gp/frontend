@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { useState } from 'react';
 import {
     Calendar as BigCalendar,
     CalendarProps,
@@ -9,11 +10,8 @@ import {
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 
 import { EVENTS } from './Calendar.Constants';
-import TaskBox from './TaskBox';
-import { useState } from 'react';
-
 import './Calendar.styles.css';
-
+import TaskBox from './TaskBox';
 
 const formats = {
     weekdayFormat: 'ddd',
@@ -47,12 +45,11 @@ const CustomToolbar = (props: ToolbarProps) => {
     };
 
     const viewFunctions = [goToWeekView, goToDayView, goToMonthView];
-    const [currentViewIndex, setCurrentView] = useState(0)
+    const [currentViewIndex, setCurrentView] = useState(0);
     function cycleView() {
         const currentView = viewFunctions[currentViewIndex];
         currentView();
         setCurrentView((currentViewIndex + 1) % viewFunctions.length);
-
     }
     return (
         <div className="flex flex-column justify-between">
@@ -73,7 +70,8 @@ const CustomToolbar = (props: ToolbarProps) => {
                     <label className="text-3xl text-indigo-900 font-light">
                         {moment(props.date).format('YYYY ')}
                     </label>
-                </div>)}
+                </div>
+            )}
 
             <div className="flex flex-row justify-end items-center	justify-items-center w-1/5 pt-[2px]">
                 <div className="flex flex-row px-4 justify-items-center ">
@@ -87,7 +85,7 @@ const CustomToolbar = (props: ToolbarProps) => {
                         onClick={cycleView}
                         className="w-[50%] bg-indigo-900 text-white  text-sm p-[5px] "
                     >
-                        {viewState.charAt(0).toUpperCase()+viewState.slice(1)}
+                        {viewState.charAt(0).toUpperCase() + viewState.slice(1)}
                     </button>
                     <button
                         onClick={goToNext}
@@ -102,7 +100,6 @@ const CustomToolbar = (props: ToolbarProps) => {
 };
 
 export const Calendar = (props: Omit<CalendarProps, 'localizer'>) => {
-
     return (
         <BigCalendar
             popup
@@ -119,7 +116,7 @@ export const Calendar = (props: Omit<CalendarProps, 'localizer'>) => {
                     const data = event?.data;
                     if (data?.appointment)
                         return (
-                            <TaskBox courseName='Physics'>
+                            <TaskBox courseName="Physics">
                                 <p className="text-xs text-[#0369A1]">
                                     {data.appointment.start} -{' '}
                                     {data.appointment.end}

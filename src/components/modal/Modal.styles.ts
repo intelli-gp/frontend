@@ -20,5 +20,3 @@ export const ModalWrapper = styled.div<{ showModal: boolean }>`
     border-radius: 10px;
     padding: 2.5rem;
 `;
-
-
