@@ -52,7 +52,9 @@
 .rbc-events-container {
     width: 100% !important;
     display: flex;
-    justify-content: center;
-    justify-items: center;
-    align-items: center;
+    z-index: 6 !important;
+
+}
+.rbc-timeslot-group{
+    min-height:60px!important;
 }
