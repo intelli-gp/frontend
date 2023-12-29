@@ -77,3 +77,6 @@ body::-webkit-scrollbar-thumb:hover {
         background-size: contain;
     }
 }
+input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
