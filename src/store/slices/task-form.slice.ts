@@ -5,9 +5,11 @@ const taskFormSlice = createSlice({
     initialState: {
         title: '',
         description: '',
-        color: '',
+        color: '#00ff00',
         due_date: '',
-        due_time: '',
+        due_start: '13:00',
+        due_end: '14:00',
+
     },
     reducers: {
         changeTaskTitle(state, action) {
@@ -22,15 +24,19 @@ const taskFormSlice = createSlice({
         changeTaskDueDate(state, action) {
             state.due_date = action.payload;
         },
-        changeTaskDueTime(state, action) {
-            state.due_time = action.payload;
+        changeTaskDueStart(state, action) {
+            state.due_start = action.payload;
+        },
+        changeTaskDueEnd(state, action) {
+            state.due_end = action.payload;
         },
         resetTaskFrom(state) {
             state.title = '';
             state.description = '';
-            state.color = '';
+            state.color = '#00ff00';
             state.due_date = '';
-            state.due_time = '';
+            state.due_start= '13:00';
+            state.due_end='14:00';
         },
     },
 });
@@ -41,6 +47,7 @@ export const {
     changeTaskDescription,
     changeTaskColor,
     changeTaskDueDate,
-    changeTaskDueTime,
+    changeTaskDueStart,
+    changeTaskDueEnd,
     resetTaskFrom,
 } = taskFormSlice.actions;
