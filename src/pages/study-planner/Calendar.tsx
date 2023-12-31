@@ -117,14 +117,14 @@ export const Calendar = (props: Omit<CalendarProps, 'localizer'>) => {
                 toolbar: CustomToolbar,
                 event: ({ event }: { event: any }) => {
                     const data = event?.data;
-                    if (data?.appointment)
+                    if (data?.task)
                         return (
-                            <TaskBox courseName="Physics">
-                                <p className="text-xs text-[#0369A1]">
-                                    {data.appointment.start} -{' '}
-                                    {data.appointment.end}
-                                </p>
-                            </TaskBox>
+                            <TaskBox
+                                title="Physics"
+                                start={data.task.start + ' - '}
+                                end={data.task.end}
+                                color="#0369A1"
+                            />
                         );
 
                     return null;

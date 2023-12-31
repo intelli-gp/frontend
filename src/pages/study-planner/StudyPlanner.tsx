@@ -54,10 +54,11 @@ export default function StudyPlanner() {
                             <p className="text-xs ">Due Today:</p>
                         </div>
                         <TaskBox
-                            courseName="Math |"
-                            taskTitle="Assignment"
+                            title="Math |"
+                            status="Pending"
                             description="Submit problem set"
                             due_date="Due: March 21, 2:30"
+                            color="#8B5BF5"
                         />
                     </TasksContainer>
                 </div>
