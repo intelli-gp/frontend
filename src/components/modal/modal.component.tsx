@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
+import { Background, ModalWrapper } from './model.styles';
 
-import { Background, ModalWrapper } from './Modal.styles';
 
 interface ModalProps {
     showModal: boolean;
@@ -24,7 +24,7 @@ export const Modal: React.FC<ModalProps> = ({
         <>
             {showModal ? (
                 <Background onClick={closeModal} ref={modalRef}>
-                    <ModalWrapper showModal={showModal}>
+                    <ModalWrapper>
                         {children}
                     </ModalWrapper>
                 </Background>
