@@ -1,5 +1,6 @@
 import { GoDash } from 'react-icons/go';
 import { useDispatch, useSelector } from 'react-redux';
+
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { Modal } from '../../components/modal/modal.component';
@@ -13,8 +14,8 @@ import {
 } from '../../store';
 import { RootState } from '../../store/index';
 import { Task } from '../../types/event';
-import { ModalContent } from './study-planner.styles';
 import './Calendar.styles.css';
+import { ModalContent } from './study-planner.styles';
 
 interface ModalProps {
     showModal: boolean;
@@ -51,7 +52,9 @@ export const AddTaskModal: React.FC<ModalProps> = ({
         <div className="flex justify-between h-[100vh]">
             <Modal showModal={showModal} setShowModal={setShowModal}>
                 <ModalContent>
-                    <h1 className="text-3xl font-semibold text-txt">Add Task</h1>
+                    <h1 className="text-3xl font-semibold text-txt">
+                        Add Task
+                    </h1>
                     <form onSubmit={handleSubmitForm}>
                         <div className="flex w-full justify-between pt-[6px] gap-6">
                             <div className="w-1/2">
@@ -61,12 +64,13 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                                     type="text"
                                     value={title}
                                     onChange={(e) => {
-                                        dispatch(changeTaskTitle(e.target.value));
+                                        dispatch(
+                                            changeTaskTitle(e.target.value),
+                                        );
                                     }}
                                 />
                             </div>
                             <div className="w-1/2">
-
                                 <Input
                                     required
                                     label="Select color"
@@ -146,14 +150,14 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                                 type="button"
                                 outline={true}
                                 onClick={() => setShowModal(false)}
-                                className='w-1/5 border-white'
+                                className="w-1/5 border-white"
                             >
                                 Cancel
                             </Button>
                             <Button
                                 type="submit"
                                 select="primary"
-                                className='w-2/5'
+                                className="w-2/5"
                             >
                                 Create
                             </Button>
@@ -163,4 +167,4 @@ export const AddTaskModal: React.FC<ModalProps> = ({
             </Modal>
         </div>
     );
-}
+};

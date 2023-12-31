@@ -9,7 +9,7 @@ export const Background = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    inset:0;
+    inset: 0;
 `;
 
 export const ModalWrapper = styled.div`
