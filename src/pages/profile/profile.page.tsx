@@ -4,16 +4,19 @@ import { FaPhoneAlt } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
 import { IoMdPin } from 'react-icons/io';
 
+import cameraImage from '../../assets/imgs/camera.png';
+import coverImageCamera from '../../assets/imgs/coverImageCamera.png';
 import defaultCoverImage from '../../assets/imgs/defaultCover.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
-import cameraImage from '../../assets/imgs/camera.png';
 import Button from '../../components/Button';
 import UserItem from '../../components/userItem/user-item.component';
 import WideBlogPost from '../../components/wideBlogPost/wide-blog-post.component';
 import {
     MainContainer,
     PageContainer,
-    ProfilePictureOverlay,
+    PageHeader,
+    PictureOverlay,
+    ProfilePictureContainer,
     UserDataContainer,
 } from '../../pages/profile/profile.styles';
 import {
@@ -113,30 +116,37 @@ const ProfilePage = () => {
 
     return (
         <PageContainer>
-            <header>
+            <PageHeader>
                 <CoverImageContainer>
+                    <PictureOverlay
+                        src={coverImageCamera}
+                        title="Edit cover image"
+                        className="!rounded-none"
+                    />
                     <CoverImage src={defaultCoverImage} />
-                    <UserDataContainer>
-                        <ProfilePicture src={defaultUserImage} />
-                        <ProfilePictureOverlay src={cameraImage} title="Edit profile picture"/>
-                        <div className="flex flex-col justify-between h-[75px] p-2">
-                            <h1 className="text-3xl font-semibold">
-                                Ahmed Ali
-                            </h1>
-                            <p className="text-gray-500">@ahmedali</p>
-                        </div>
-                    </UserDataContainer>
-                    <Button
-                        select="warning"
-                        type="button"
-                        title="Edit profile"
-                        className="absolute right-[1%] bottom-4 gap-2 border-2 rounded-lg !text-[#172554] text-sm !px-4"
-                    >
-                        Edit profile
-                        <FiEdit size={18} />
-                    </Button>
                 </CoverImageContainer>
-            </header>
+                <UserDataContainer>
+                    <ProfilePictureContainer>
+                        <ProfilePicture src={defaultUserImage} />
+                        <PictureOverlay
+                            src={cameraImage}
+                            title="Edit profile picture"
+                        />
+                    </ProfilePictureContainer>
+                    <div className="flex flex-col justify-between h-[75px] p-2">
+                        <h1 className="text-3xl font-semibold">Ahmed Ali</h1>
+                        <p className="text-gray-500">@ahmedali</p>
+                    </div>
+                </UserDataContainer>
+                <Button
+                    select="warning"
+                    type="button"
+                    title="Edit profile"
+                    className="absolute right-2 top-2 gap-2 !text-[#172554] text-sm !p-4 rounded-full"
+                >
+                    <FiEdit size={18} />
+                </Button>
+            </PageHeader>
 
             <MainContainer>
                 <AboutSection>
@@ -194,7 +204,6 @@ const ProfilePage = () => {
                         ))}
                     </ul>
                 </YouMayNowSection>
-
             </MainContainer>
         </PageContainer>
     );
