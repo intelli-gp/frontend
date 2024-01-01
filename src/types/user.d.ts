@@ -3,6 +3,7 @@ export type User = {
     name: string;
     email: string;
     password: string;
+    imageUrl: string;
 } & Record<string, any>;
 
 export type UserCredentials = {
