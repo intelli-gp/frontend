@@ -9,6 +9,7 @@ import { IoIosSettings } from 'react-icons/io';
 import { IoPersonSharp } from 'react-icons/io5';
 import { LuListTodo, LuSearch } from 'react-icons/lu';
 import { MdLogout } from 'react-icons/md';
+import { TiThMenu } from 'react-icons/ti';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -16,7 +17,6 @@ import defaultUserImage from '../assets/imgs/user.jpg';
 import { clearCredentials, useLogoutUserMutation } from '../store';
 import Button from './Button';
 import SideNavItem from './SideNavItem';
-import { TiThMenu } from "react-icons/ti";
 
 type PopupUserMenuLinkPropType = {
     text: string;
@@ -253,7 +253,7 @@ export default function SideNav() {
             </aside>
             <Button
                 type="button"
-                select='primary700'
+                select="primary700"
                 className="absolute top-2 left-2 text-white z-10 lg:hidden rounded-full !p-4"
                 onClick={openSideNav}
             >

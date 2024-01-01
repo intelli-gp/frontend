@@ -1,4 +1,5 @@
 import { capitalize } from 'lodash';
+import { Link } from 'react-router-dom';
 
 import { User } from '../../types/user';
 import Button from '../Button';
@@ -7,7 +8,6 @@ import {
     UserItemImage,
     UserItemUsername,
 } from './user-item.styles';
-import { Link } from 'react-router-dom';
 
 type UserItemProps = {
     action: string;
@@ -26,7 +26,7 @@ const UserItem = ({
         <UserItemContainer>
             <UserItemImage src={imageUrl} alt="user profile" />
             <div>
-                <Link to={'#'} className='text-indigo-950'>
+                <Link to={'#'} className="text-indigo-950">
                     {fname} {lname}
                 </Link>
                 <UserItemUsername>@{username}</UserItemUsername>
