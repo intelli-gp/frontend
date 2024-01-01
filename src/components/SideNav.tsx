@@ -139,7 +139,7 @@ export default function SideNav() {
     };
 
     return (
-        <aside className=" bg-indigo-900 sticky w-[300px] h-screen max-h-screen flex flex-col left-0 px-2 py-6 justify-between gap-4 overflow-y-hidden">
+        <aside className=" bg-indigo-900 sticky w-[300px] h-screen max-h-screen flex flex-col left-0 top-0 px-2 py-6 justify-between gap-4 overflow-y-hidden">
             <div className="side-nav-links min-h-0">
                 <h1 className="font-black text-white text-4xl text-center sticky top-0 pb-8 min-h-0">
                     LoremIpsum
@@ -167,12 +167,12 @@ export default function SideNav() {
                     <div className="absolute bottom-[110%] bg-indigo-100 text-indigo-900 flex flex-col p-2 rounded-xl">
                         <PopupUserMenuLink
                             text="Profile"
-                            path="/app"
+                            path="/app/profile"
                             icon={<IoPersonSharp />}
                         />
                         <PopupUserMenuLink
                             text="Settings"
-                            path="/app"
+                            path="/app/settings"
                             icon={<IoIosSettings />}
                         />
                         <PopupUserMenuLink
