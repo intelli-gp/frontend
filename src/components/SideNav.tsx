@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import classNames from 'classnames';
+import React, { useEffect, useRef, useState } from 'react';
 import { BsFillPostcardFill } from 'react-icons/bs';
 import { FaHandsHelping } from 'react-icons/fa';
+import { FiMenu } from 'react-icons/fi';
 import { GiBookshelf, GiRobotGolem, GiUpgrade } from 'react-icons/gi';
 import { HiMiniUserGroup } from 'react-icons/hi2';
 import { IoIosSettings } from 'react-icons/io';
@@ -12,7 +14,9 @@ import { Link } from 'react-router-dom';
 
 import defaultUserImage from '../assets/imgs/user.jpg';
 import { clearCredentials, useLogoutUserMutation } from '../store';
+import Button from './Button';
 import SideNavItem from './SideNavItem';
+import { TiThMenu } from "react-icons/ti";
 
 type PopupUserMenuLinkPropType = {
     text: string;
@@ -98,12 +102,30 @@ export default function SideNav() {
             id: 8,
         },
     ]);
+
     const [menuActive, setMenuActive] = useState(false);
+
+    /**
+     * This is for mobile view only. To handle the side nav open and close
+     */
+    const [sideNavOpen, setSideNavOpen] = useState(false);
+    const sideNavRef = useRef<HTMLElement>(null);
+
     const dispatch = useDispatch();
     const user = useSelector((state: any) => state.auth.user);
+
     const [logoutUser] = useLogoutUserMutation();
 
-    const screenClickHandler = () => setMenuActive(false);
+    const screenClickHandler = (e: MouseEvent) => {
+        setMenuActive(false);
+        /**
+         * This is for mobile view only. If the click is not on the side nav
+         * then close the side nav.
+         */
+        if (sideNavRef.current !== (e.target as HTMLElement)) {
+            setSideNavOpen(false);
+        }
+    };
 
     useEffect(() => {
         window.addEventListener('click', screenClickHandler);
@@ -111,6 +133,18 @@ export default function SideNav() {
             window.removeEventListener('click', screenClickHandler);
         };
     }, []);
+
+    /**
+     * This is for mobile view only. To handle the side nav open and close
+     * and to prevent the body from scrolling when the side nav is open.
+     */
+    useEffect(() => {
+        if (sideNavOpen) {
+            document.body.classList.add('overflow-hidden');
+        } else {
+            document.body.classList.remove('overflow-hidden');
+        }
+    }, [sideNavOpen]);
 
     const handleSideLinkClick = (id: number) => {
         setLinks(
@@ -138,70 +172,94 @@ export default function SideNav() {
         dispatch(clearCredentials());
     };
 
+    // This is for mobile view only.
+    const openSideNav = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.nativeEvent.stopImmediatePropagation();
+        setSideNavOpen(true);
+    };
+
+    const sideNavClassNames = classNames(
+        'bg-indigo-900  w-[300px] h-screen max-h-screen flex flex-col fixed lg:sticky top-0 px-2 py-6 justify-between gap-4 overflow-y-hidden z-20',
+        'transition-all duration-500 linear',
+        {
+            'left-[-100%]': !sideNavOpen,
+            'left-0': sideNavOpen,
+        },
+    );
+
     return (
-        <aside className=" bg-indigo-900 sticky w-[300px] h-screen max-h-screen flex flex-col left-0 top-0 px-2 py-6 justify-between gap-4 overflow-y-hidden">
-            <div className="side-nav-links min-h-0">
-                <h1 className="font-black text-white text-4xl text-center sticky top-0 pb-8 min-h-0">
-                    LoremIpsum
-                </h1>
+        <>
+            <aside className={sideNavClassNames} ref={sideNavRef}>
+                <div className="side-nav-links min-h-0">
+                    <h1 className="font-black text-white text-4xl text-center sticky top-0 pb-8 min-h-0">
+                        LoremIpsum
+                    </h1>
 
-                <div className="flex flex-col gap-2 overflow-y-scroll max-h-[70vh] side-nav-links px-2">
-                    {links.map((link) => (
-                        <SideNavItem
-                            key={link.text}
-                            icon={link.icon}
-                            extendable={link.extendable}
-                            extended={link.extended}
-                            subItems={link.subItems}
-                            path={link.path}
-                            text={link.text}
-                            active={link.active}
-                            onClick={() => handleSideLinkClick(link.id)}
-                        />
-                    ))}
-                </div>
-            </div>
-
-            <div className="relative flex justify-center">
-                {menuActive && (
-                    <div className="absolute bottom-[110%] bg-indigo-100 text-indigo-900 flex flex-col p-2 rounded-xl">
-                        <PopupUserMenuLink
-                            text="Profile"
-                            path="/app/profile"
-                            icon={<IoPersonSharp />}
-                        />
-                        <PopupUserMenuLink
-                            text="Settings"
-                            path="/app/settings"
-                            icon={<IoIosSettings />}
-                        />
-                        <PopupUserMenuLink
-                            onClick={handleLogout}
-                            text="Logout"
-                            icon={<MdLogout />}
-                            path="/"
-                        />
+                    <div className="flex flex-col gap-2 overflow-y-scroll max-h-[70vh] side-nav-links px-2">
+                        {links.map((link) => (
+                            <SideNavItem
+                                key={link.text}
+                                icon={link.icon}
+                                extendable={link.extendable}
+                                extended={link.extended}
+                                subItems={link.subItems}
+                                path={link.path}
+                                text={link.text}
+                                active={link.active}
+                                onClick={() => handleSideLinkClick(link.id)}
+                            />
+                        ))}
                     </div>
-                )}
-                <div
-                    className="rounded-full bg-indigo-100/20 hover:bg-indigo-100/30 flex gap-2 justify-between items-center text-white text-sm font-bold py-2 pl-2 pr-6 hover:cursor-pointer w-3/4"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        setMenuActive(!menuActive);
-                    }}
-                >
-                    <img
-                        src={user.image ?? defaultUserImage}
-                        alt="profile pic"
-                        className="w-10 h-10 rounded-full"
-                    />
-                    <p className="select-none text-ellipsis overflow-hidden whitespace-nowrap">
-                        {' '}
-                        {user.username}{' '}
-                    </p>
                 </div>
-            </div>
-        </aside>
+
+                <div className="relative flex justify-center">
+                    {menuActive && (
+                        <div className="absolute bottom-[110%] bg-indigo-100 text-indigo-900 flex flex-col p-2 rounded-xl">
+                            <PopupUserMenuLink
+                                text="Profile"
+                                path="/app/profile"
+                                icon={<IoPersonSharp />}
+                            />
+                            <PopupUserMenuLink
+                                text="Settings"
+                                path="/app/settings"
+                                icon={<IoIosSettings />}
+                            />
+                            <PopupUserMenuLink
+                                onClick={handleLogout}
+                                text="Logout"
+                                icon={<MdLogout />}
+                                path="/"
+                            />
+                        </div>
+                    )}
+                    <div
+                        className="rounded-full bg-indigo-100/20 hover:bg-indigo-100/30 flex gap-2 justify-between items-center text-white text-sm font-bold py-2 pl-2 pr-6 hover:cursor-pointer w-3/4"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setMenuActive(!menuActive);
+                        }}
+                    >
+                        <img
+                            src={user.image ?? defaultUserImage}
+                            alt="profile pic"
+                            className="w-10 h-10 rounded-full"
+                        />
+                        <p className="select-none text-ellipsis overflow-hidden whitespace-nowrap">
+                            {user.username}
+                        </p>
+                    </div>
+                </div>
+            </aside>
+            <Button
+                type="button"
+                select='primary700'
+                className="absolute top-2 left-2 text-white z-10 lg:hidden rounded-full !p-4"
+                onClick={openSideNav}
+            >
+                <FiMenu size={24} />
+            </Button>
+        </>
     );
 }
 
