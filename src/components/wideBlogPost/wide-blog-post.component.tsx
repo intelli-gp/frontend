@@ -31,7 +31,8 @@ const WideBlogPost = ({
                 <h1 className="text-xl font-semibold">{title}</h1>
                 <BlogTextContent>{content}</BlogTextContent>
                 <BlogFooter>
-                    {tags.slice(0,3).map((tag) => (
+                    <span className='text-xs opacity-60'>{new Date(createdAt).toDateString()}</span>
+                    {tags.slice(0, 3).map((tag) => (
                         <Tag text={tag} size="small" />
                     ))}
                 </BlogFooter>

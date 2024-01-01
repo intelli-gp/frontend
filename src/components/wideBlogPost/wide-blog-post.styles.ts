@@ -38,10 +38,11 @@ export const BlogContentContainer = styled.main`
 `;
 
 export const BlogTextContent = styled.p`
+    padding-right: 1rem;
     font-size: 0.8rem;
     color: #333;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 `;
@@ -54,9 +55,9 @@ export const BlogFooter = styled.footer`
 
 export const BlogThumbnail = styled.img`
     max-width: 30%;
+    max-height: calc(${parseInt(blogHeight)}px - 50px);
     object-fit: cover;
     border: none;
     border-radius: 10px;
-    max-height: ${blogHeight};
     aspect-ratio: 5/4;
 `;
