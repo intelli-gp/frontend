@@ -3,7 +3,7 @@ import { GoDash } from 'react-icons/go';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '../../components/Button';
-import Input from '../../components/Input';
+import { InputWithLabel } from '../../components/Input';
 import { Modal } from '../../components/modal/Modal';
 import '../../index.css';
 import {
@@ -86,7 +86,7 @@ export default function StudyPlanner() {
                     <h1 className="text-2xl text-txt">Add Task</h1>
                     <form onSubmit={handleSubmitForm}>
                         <div className="flex w-full justify-between pt-[6px]">
-                            <Input
+                            <InputWithLabel
                                 required
                                 label="Task name"
                                 className="rounded border  border-slate-400 p-2  focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2"

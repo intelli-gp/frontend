@@ -5,7 +5,7 @@ import { IoChevronBack } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 
 import Button from '../../components/Button';
-import Input from '../../components/Input';
+import {InputWithLabel} from '../../components/Input';
 import { useLazyResetPasswordQuery } from '../../store';
 import { errorToast, successToast } from '../../utils/toasts';
 
@@ -55,7 +55,7 @@ export default function ForgetPasswordPage() {
                 </p>
 
                 <div className="flex flex-col gap-6 mt-6">
-                    <Input
+                    <InputWithLabel
                         required
                         type="email"
                         label="Your Email (Must be registered)"

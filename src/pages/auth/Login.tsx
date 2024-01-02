@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import Button from '../../components/Button';
-import Input from '../../components/Input';
+import {InputWithLabel} from '../../components/Input';
 import {
     RootState,
     changeEmail,
@@ -96,7 +96,7 @@ export default function LoginPage() {
                 Welcome Back!
             </h1>
 
-            <Input
+            <InputWithLabel
                 required
                 type="email"
                 value={email}
@@ -104,7 +104,7 @@ export default function LoginPage() {
                 onChange={(e) => dispatch(changeEmail(e.target.value))}
             />
 
-            <Input
+            <InputWithLabel
                 required
                 type="password"
                 value={password}

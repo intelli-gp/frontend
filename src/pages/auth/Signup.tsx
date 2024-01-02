@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import Button from '../../components/Button';
-import Input from '../../components/Input';
+import {InputWithLabel} from '../../components/Input';
 import PhoneNumberInput from '../../components/PhoneNumberInput';
 import {
     changeSignupBirthDate,
@@ -99,7 +99,7 @@ export default function SignupPage() {
                 </h1>
 
                 <div className="flex gap-2 w-full justify-between">
-                    <Input
+                    <InputWithLabel
                         required
                         label="First Name"
                         value={firstName}
@@ -107,7 +107,7 @@ export default function SignupPage() {
                             dispatch(changeSignupFirstName(e.target.value));
                         }}
                     />
-                    <Input
+                    <InputWithLabel
                         required
                         label="Last Name"
                         value={lastName}
@@ -117,7 +117,7 @@ export default function SignupPage() {
                     />
                 </div>
 
-                <Input
+                <InputWithLabel
                     required
                     label="Username"
                     type="text"
@@ -127,7 +127,7 @@ export default function SignupPage() {
                     }}
                 />
 
-                <Input
+                <InputWithLabel
                     required
                     label="Email"
                     type="email"
@@ -137,7 +137,7 @@ export default function SignupPage() {
                     }}
                 />
 
-                <Input
+                <InputWithLabel
                     required
                     value={birthDate}
                     type="date"
@@ -155,7 +155,7 @@ export default function SignupPage() {
                 />
 
                 <div className="flex gap-2 w-full justify-between">
-                    <Input
+                    <InputWithLabel
                         required
                         type="password"
                         label="Password"
@@ -164,7 +164,7 @@ export default function SignupPage() {
                             dispatch(changeSignupPassword(e.target.value));
                         }}
                     />
-                    <Input
+                    <InputWithLabel
                         required
                         type="password"
                         label="Confirm Password"

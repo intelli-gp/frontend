@@ -4,7 +4,7 @@ import { MdLockReset } from 'react-icons/md';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import Button from '../../components/Button';
-import Input from '../../components/Input';
+import {InputWithLabel} from '../../components/Input';
 import { reset, useResetPasswordConfirmMutation } from '../../store';
 import { errorToast, successToast } from '../../utils/toasts';
 
@@ -60,13 +60,13 @@ const RecoverPassword = () => {
                 <hr />
 
                 <div className="flex flex-col gap-6 mt-4">
-                    <Input
+                    <InputWithLabel
                         type="password"
                         label="New password"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                     />
-                    <Input
+                    <InputWithLabel
                         type="password"
                         label="Confirm password"
                         value={confirmPassword}
