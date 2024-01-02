@@ -14,7 +14,9 @@ type choice =
     | 'primary500'
     | 'primary300';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps
+    extends ButtonHTMLAttributes<HTMLButtonElement>,
+        Record<string, unknown> {
     children: React.ReactNode;
     type: ButtonType;
     select?: choice;
