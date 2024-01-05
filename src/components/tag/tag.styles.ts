@@ -21,8 +21,14 @@ export const TagContainer = styled.div<{ size?: string; deletable?: boolean }>`
                 return '1rem';
         }
     }};
-    background-color: #c7d2fe;
+    background-color: var(--indigo-200);
     cursor: pointer;
+    
+    &:hover {
+        background-color: #1e40af;
+        color: white;
+        box-shadow: rgb(30, 64, 175, 0.5) 0px 1px 4px;
+    }
 `;
 
 export const DeleteTagButton = styled.button`
@@ -31,11 +37,11 @@ export const DeleteTagButton = styled.button`
     justify-content: center;
     border-radius: 10000px;
     padding: 0.2rem 0.5rem;
-    color: #312e81;
+    color: var(--indigo-900);
     background-color: #eef2ff;
     font-weight: bolder;
 
     &:hover {
-        background-color: #e0e7ff;
+        background-color: var(--indigo-100);
     }
 `;
