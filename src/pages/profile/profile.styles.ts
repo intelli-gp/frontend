@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-const bgColor = '#eef2ff';
-
 export const PageContainer = styled.div`
     width: 100%;
     max-width: 1920px;
@@ -13,20 +11,18 @@ export const PageContainer = styled.div`
 
 export const PageHeader = styled.header`
     width: 100%;
-    height: 300px;
-    background-color: ${bgColor};
+    background-color: var(--indigo-50);
     position: relative;
 `;
 
 export const CoverImageContainer = styled.div`
     position: relative;
     width: 100%;
-    height: 75%;
 `;
 
 export const CoverImage = styled.img`
     width: 100%;
-    height: 100%;
+    max-height: 200px;
     object-fit: cover;
     border: none;
 `;
@@ -35,6 +31,10 @@ export const ProfilePictureContainer = styled.div`
     position: relative;
     width: 150px;
     height: 150px;
+    @media (max-width: 768px) {
+        width: 120px;
+        height: 120px;
+    }
 `;
 
 export const ProfilePicture = styled.img`
@@ -42,7 +42,7 @@ export const ProfilePicture = styled.img`
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    box-shadow: var(--black-shadow);
 `;
 
 export const PictureOverlay = styled(ProfilePicture)`
@@ -61,20 +61,23 @@ export const PictureOverlay = styled(ProfilePicture)`
 
 export const UserDataContainer = styled.div`
     display: flex;
-    position: absolute;
     align-items: center;
+    max-height: 75px;
+    padding: 0 4rem;
     gap: 1.5rem;
-    bottom: -37.5px;
-    left: 5rem;
+    background: var(--gradient-50);
     @media (max-width: 768px) {
-        left: 0;
-        width: 100%;
+        padding: 0 2rem;
         gap: 1rem;
-        justify-content: center;
+    }
+    @media (max-width: 500px) {
+        padding: 0 1rem;
+        gap: 0.5rem;
     }
 `;
 
 export const MainContainer = styled.main`
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
     grid-auto-rows: auto;
@@ -87,13 +90,15 @@ export const MainContainer = styled.main`
     }
     @media (max-width: 768px) {
         grid-template-columns: 1fr;
+        padding: 0 0.5rem;
     }
 `;
 
 export const AboutSection = styled.section`
+    background: var(--gradient-50);
     width: 100%;
     grid-column: 1;
-    background-color: ${bgColor};
+    background-color: var(--indigo-50);
     border-radius: 10px;
     padding: 1.5rem;
     display: flex;
@@ -124,9 +129,10 @@ export const AboutListItem = styled.li`
 `;
 
 export const MainSection = styled.section`
+    background: var(--gradient-50);
     grid-column: 2;
     width: 100%;
-    background-color: ${bgColor};
+    background-color: var(--indigo-50);
     border-radius: 10px;
     padding: 1.5rem;
     display: flex;
@@ -139,6 +145,7 @@ export const MainSection = styled.section`
     @media (max-width: 768px) {
         grid-column: 1;
         grid-row: 3;
+        padding: 1.5rem 0.5rem;
     }
 `;
 
@@ -146,15 +153,16 @@ export const MainSectionHeader = styled.header`
     display: flex;
     align-items: center;
     gap: 2rem;
+    margin-bottom: 1rem;
 `;
 
 export const MainSectionHeaderTab = styled.button<{ isActive: boolean }>`
     padding: 0.1rem 0.5rem;
     border-bottom: ${(props) =>
-        props.isActive ? '3px solid #4338ca' : 'none'};
+        props.isActive ? '3px solid var(--indigo-700)' : 'none'};
     font-weight: ${(props) => (props.isActive ? 'bold' : 'normal')};
-    color: ${(props) =>
-        props.isActive ? '#4338ca' : 'rgb(67, 56, 202, 0.5);'};
+    color: var(--indigo-700);
+    opacity: ${(props) => (props.isActive ? '1' : '0.75')};
 `;
 
 export const MainSectionContent = styled.div`
@@ -174,9 +182,10 @@ export const EmptyContent = styled.div`
 `;
 
 export const YouMayNowSection = styled.section`
+    background: var(--gradient-50);
     grid-column: 3;
     width: 100%;
-    background-color: ${bgColor};
+    background-color: var(--indigo-50);
     border-radius: 10px;
     padding: 1.5rem;
     display: flex;

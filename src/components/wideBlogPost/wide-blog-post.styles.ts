@@ -1,20 +1,22 @@
 import styled from 'styled-components';
 
-const blogHeight = '300px';
-
 export const BlogContainer = styled.article`
-    width: 100%;
+    margin: 0 auto;
+    width: min(1000px, 100%);
+    flex: 1;
     background-color: white;
     border-radius: 10px;
-    padding: 1rem 1.5rem;
+    padding: 1.5rem 2rem;
     display: flex;
     gap: 1rem;
     justify-content: space-between;
     align-items: center;
-    height: ${blogHeight};
     &:hover {
         cursor: pointer;
         background-color: #f8f9fa;
+    }
+    @media (max-width: 768px) {
+        padding: 1rem 1.5rem;
     }
 `;
 
@@ -25,13 +27,14 @@ export const AuthorData = styled.header`
 `;
 
 export const AuthorPicture = styled.img`
-    width: 48px;
-    height: 48px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     object-fit: cover;
 `;
 
 export const BlogContentContainer = styled.main`
+    width: 100%;
     display: flex;
     gap: 1.5rem;
     flex-direction: column;
@@ -45,6 +48,9 @@ export const BlogTextContent = styled.p`
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    @media (max-width: 500px) {
+        display: none;
+    }
 `;
 
 export const BlogFooter = styled.footer`
@@ -54,10 +60,11 @@ export const BlogFooter = styled.footer`
 `;
 
 export const BlogThumbnail = styled.img`
-    max-width: 30%;
-    max-height: calc(${parseInt(blogHeight)}px - 50px);
+    max-width: 120px;
     object-fit: cover;
     border: none;
-    border-radius: 10px;
-    aspect-ratio: 5/4;
+    aspect-ratio: 1/1;
+    @media (max-width: 768px) {
+        max-width: 80px;
+    }
 `;

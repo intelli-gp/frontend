@@ -14,6 +14,18 @@
     --indigo-800: #3730a3;
     --indigo-900: #312e81;
     --indigo-950: #0d062d;
+
+    --gray-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
+    --black-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    --tag-shadow:  rgb(30, 64, 175, 0.5) 0px 1px 4px;
+    
+    --gradient-50: linear-gradient(var(--indigo-50), rgba(199, 210, 254, 0.5));
+    --gradient-75: linear-gradient(var(--indigo-50), rgba(199, 210, 254, 0.75));
+    --gradient-75-top: linear-gradient(
+        to top,
+        var(--indigo-50),
+        rgba(199, 210, 254, 0.75)
+    );
 }
 
 * {

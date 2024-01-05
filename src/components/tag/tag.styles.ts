@@ -27,7 +27,7 @@ export const TagContainer = styled.div<{ size?: string; deletable?: boolean }>`
     &:hover {
         background-color: #1e40af;
         color: white;
-        box-shadow: rgb(30, 64, 175, 0.5) 0px 1px 4px;
+        box-shadow: var(--tag-shadow)
     }
 `;
 

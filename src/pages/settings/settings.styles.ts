@@ -2,8 +2,6 @@ import styled from 'styled-components';
 
 import Button from '../../components/Button';
 
-const bgColor = '#eef2ff';
-
 export const PageContainer = styled.div`
     width: 100%;
     max-width: 1200px;
@@ -24,7 +22,7 @@ export const PageHeader = styled.header`
     align-items: center;
     justify-content: center;
     gap: 4rem;
-    background: linear-gradient(to top, ${bgColor}, rgba(199, 210, 254, 0.75));
+    background: var(--gradient-75-top);
     padding: 4rem 2rem;
     border-radius: 10px;
     position: relative;
@@ -44,7 +42,7 @@ export const ProfilePicture = styled.img`
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    box-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
+    box-shadow: var(--gray-shadow);
 `;
 
 export const PictureOverlay = styled(ProfilePicture)`
@@ -63,8 +61,9 @@ export const PictureOverlay = styled(ProfilePicture)`
 
 export const EditButton = styled(Button)<{ editing: boolean }>`
     align-self: end;
-    padding: ${({ editing }) => !editing && '1rem'};
-    border-radius: ${({ editing }) => !editing && '1000px'};
+    padding: ${({ editing }) => (editing ? '0.5rem 2rem' : '1rem')};
+    border-radius: ${({ editing }) => (editing ? '20px' : '1000px')};
     font-size: 1rem;
     color: #334155;
+    gap: 0.5rem;
 `;
