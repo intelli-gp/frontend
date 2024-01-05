@@ -254,10 +254,10 @@ export default function SideNav() {
             <Button
                 type="button"
                 select="primary700"
-                className="absolute top-2 left-2 text-white z-10 lg:hidden rounded-full !p-4"
+                className="absolute top-0 left-0 text-white z-10 lg:hidden rounded-none rounded-br-lg !p-2"
                 onClick={openSideNav}
             >
-                <FiMenu size={24} />
+                <FiMenu size={32} />
             </Button>
         </>
     );

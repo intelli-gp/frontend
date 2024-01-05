@@ -39,10 +39,10 @@ export default function ForgetPasswordPage() {
 
     return (
         <form
-            className="flex flex-col gap-4 w-[25rem] py-8"
+            className="flex flex-col gap-4 3xs:w-[20rem] md:!w-[25rem] py-8"
             onSubmit={handleSubmit}
         >
-            <h1 className="text-5xl text-neutral-600 font-black text-center py-8 tracking-tight">
+            <h1 className="text-5xl 3xs:max-md:text-[2.5rem] text-neutral-600 font-black text-center py-8 tracking-tight">
                 Forget password
             </h1>
             <main className="flex flex-col border rounded-md p-8 gap-2 border-slate-300">

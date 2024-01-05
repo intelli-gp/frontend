@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import Button from '../../components/Button';
-import {InputWithLabel} from '../../components/Input';
+import { InputWithLabel } from '../../components/Input';
 import {
     RootState,
     changeEmail,
@@ -89,10 +89,10 @@ export default function LoginPage() {
 
     return (
         <form
-            className="flex flex-col gap-4 w-[25rem]"
+            className="flex flex-col gap-4 3xs:w-[20rem] md:!w-[25rem]"
             onSubmit={handleSubmitLogin}
         >
-            <h1 className="text-5xl text-neutral-600 font-black text-center py-10 tracking-tight">
+            <h1 className="text-5xl 3xs:max-md:text-[2.5rem] text-neutral-600 font-black text-center py-10 tracking-tight">
                 Welcome Back!
             </h1>
 

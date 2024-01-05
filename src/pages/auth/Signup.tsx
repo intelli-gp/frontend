@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import Button from '../../components/Button';
-import {InputWithLabel} from '../../components/Input';
+import { InputWithLabel } from '../../components/Input';
 import PhoneNumberInput from '../../components/PhoneNumberInput';
 import {
     changeSignupBirthDate,
@@ -91,14 +91,14 @@ export default function SignupPage() {
     return (
         <div className="flex flex-col justify-center items-center w-full lg:w-3/5 py-8">
             <form
-                className="flex flex-col gap-2 w-[25rem]"
+                className="flex flex-col gap-2 3xs:w-[20rem] md:!w-[25rem]"
                 onSubmit={handleSubmitForm}
             >
-                <h1 className="text-5xl text-neutral-600 font-black text-center py-10 tracking-tight">
+                <h1 className="text-5xl 3xs:max-md:text-[2.5rem] text-neutral-600 font-black text-center py-10 tracking-tight">
                     Create Account
                 </h1>
 
-                <div className="flex gap-2 w-full justify-between">
+                <div className="flex gap-2 w-full justify-between 3xs:max-md:flex-col">
                     <InputWithLabel
                         required
                         label="First Name"
@@ -154,7 +154,7 @@ export default function SignupPage() {
                     }}
                 />
 
-                <div className="flex gap-2 w-full justify-between">
+                <div className="flex gap-2 w-full justify-between 3xs:max-md:flex-col">
                     <InputWithLabel
                         required
                         type="password"
