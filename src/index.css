@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --indigo-50: #eef2ff;
+    --indigo-100: #e0e7ff;
+    --indigo-200: #c7d2fe;
+    --indigo-300: #a5b4fc;
+    --indigo-400: #818cf8;
+    --indigo-500: #6366f1;
+    --indigo-600: #4f46e5;
+    --indigo-700: #4338ca;
+    --indigo-800: #3730a3;
+    --indigo-900: #312e81;
+    --indigo-950: #0d062d;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -19,7 +33,7 @@ a {
 
 /* width */
 body::-webkit-scrollbar {
-    width: 10px;
+    width: 7px;
 }
 
 /* Track */
@@ -30,13 +44,7 @@ body::-webkit-scrollbar-track {
 
 /* Handle */
 body::-webkit-scrollbar-thumb {
-    background: #3730a3;
-    border-radius: 10px;
-}
-
-/* Handle on hover */
-body::-webkit-scrollbar-thumb:hover {
-    background: #312e81;
+    background: var(--indigo-900);
 }
 
 /* width */
