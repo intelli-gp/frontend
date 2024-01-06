@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { ChangeEvent, useEffect, useLayoutEffect } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
@@ -92,7 +92,7 @@ export default function LoginPage() {
             className="flex flex-col gap-4 3xs:w-[20rem] md:!w-[25rem]"
             onSubmit={handleSubmitLogin}
         >
-            <h1 className="text-5xl 3xs:max-md:text-[2.5rem] text-neutral-600 font-black text-center py-10 tracking-tight">
+            <h1 className="text-5xl 3xs:max-md:text-[2.5rem] text-slate-600 font-black text-center py-10 tracking-tight">
                 Welcome Back!
             </h1>
 
@@ -101,7 +101,9 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 label="Email"
-                onChange={(e) => dispatch(changeEmail(e.target.value))}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    dispatch(changeEmail(e.target.value))
+                }
             />
 
             <InputWithLabel
@@ -109,7 +111,9 @@ export default function LoginPage() {
                 type="password"
                 value={password}
                 label="Password"
-                onChange={(e) => dispatch(changePassword(e.target.value))}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    dispatch(changePassword(e.target.value))
+                }
             />
 
             <div className="flex justify-between items-center">
