@@ -11,11 +11,13 @@ export const TagContainer = styled.div<{ size?: string; deletable?: boolean }>`
     border-radius: 10000px;
     font-size: ${({ size }) => {
         switch (size) {
-            case 'small':
+            case 'xs':
+                return '0.6rem';
+            case 'sm':
                 return '0.8rem';
-            case 'medium':
+            case 'md':
                 return '1rem';
-            case 'large':
+            case 'lg':
                 return '1.2rem';
             default:
                 return '1rem';
@@ -23,11 +25,11 @@ export const TagContainer = styled.div<{ size?: string; deletable?: boolean }>`
     }};
     background-color: var(--indigo-200);
     cursor: pointer;
-    
+
     &:hover {
         background-color: #1e40af;
         color: white;
-        box-shadow: var(--tag-shadow)
+        box-shadow: var(--tag-shadow);
     }
 `;
 
