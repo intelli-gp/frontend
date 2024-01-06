@@ -1,10 +1,21 @@
 import classNames from 'classnames';
 
-import { SerializedInput } from '../types/serialized-input';
+import {
+    SerializedCustomInput,
+    SerializedInput,
+} from '../types/serialized-input';
+
+type InputsGridProps = {
+    inputs: Partial<SerializedCustomInput>[];
+};
 
 const commonStyles =
-    'rounded border border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2';
+    'rounded border border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 text-slate-700';
 
+/**
+ * This is an actual input or textarea element with a label wrapped by a div.
+ * Also, it has an error message you can pass in.
+ */
 export const InputWithLabel = ({
     label,
     value,
@@ -19,10 +30,13 @@ export const InputWithLabel = ({
         '!outline-red-600 border-red-600': error,
     });
 
-    const wrapperClasses = classNames('flex flex-col gap-2', wrapperClassName);
+    const wrapperClasses = classNames('flex flex-col gap-1', wrapperClassName);
     return (
         <div className={wrapperClasses}>
-            <label htmlFor={label.toLowerCase()} className="font-bold">
+            <label
+                htmlFor={label.toLowerCase()}
+                className="font-bold text-slate-700"
+            >
                 {label}:
             </label>
             {multiline ? (
@@ -49,6 +63,10 @@ export const InputWithLabel = ({
     );
 };
 
+/**
+ * This is an actual input or textarea element `without` a label  and wrapped by a div.
+ * Also, it has an error message you can pass in.
+ */
 export const InputWithoutLabel = ({
     value,
     error,
@@ -75,27 +93,30 @@ export const InputWithoutLabel = ({
     );
 };
 
-type InputsGridProps = {
-    inputs: Partial<SerializedInput>[];
-};
-
+/**
+ * This is a grid of inputs. It takes an array of inputs and renders them in a grid.
+ */
 export const InputsGrid = ({ inputs }: InputsGridProps) => {
     return (
         <div className="grid grid-col-4 lg:grid-cols-5 gap-y-4 g-x-1 items-center">
-            {inputs.map(({ label, ...other }) => (
+            {inputs.map(({ label, custom, customComponent, ...other }) => (
                 <>
                     <label
                         htmlFor={label?.toLowerCase()}
-                        className="col-start-1"
+                        className="col-start-1 max-w-[90%] text-slate-700"
                     >
                         {label}
                     </label>
-                    <InputWithoutLabel
-                        key={label}
-                        id={label?.toLowerCase()}
-                        wrapperClassName="col-start-2 col-span-3"
-                        {...other}
-                    />
+                    <div className="col-start-2 col-span-3" key={label}>
+                        {custom ? (
+                            customComponent
+                        ) : (
+                            <InputWithoutLabel
+                                id={label?.toLowerCase()}
+                                {...other}
+                            />
+                        )}
+                    </div>
                 </>
             ))}
         </div>
