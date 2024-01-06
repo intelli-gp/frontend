@@ -21,8 +21,7 @@ export const AccordionHeader = styled.header<{ isOpen?: boolean }>`
 
 export const AccordionContent = styled.main`
     padding: 2rem;
-    font-size: 1.2rem;
-    line-height: 1.5;
+    font-size: 1rem;
     color: #4b5563;
     display: flex;
     flex-direction: column;

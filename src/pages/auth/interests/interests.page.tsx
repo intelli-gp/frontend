@@ -47,10 +47,10 @@ const InterestsPage = () => {
     return (
         <Page>
             <header>
-                <h1 className="text-5xl text-neutral-600 font-black text-center tracking-tight pb-1">
+                <h1 className="text-5xl 3xs:max-md:text-[2.5rem] text-slate-600 font-black text-center tracking-tight pb-1">
                     Add your interests
                 </h1>
-                <h3 className="text-lg text-neutral-600 text-center">
+                <h3 className="text-lg text-slate-600 text-center">
                     Help us to customize your feed
                 </h3>
             </header>

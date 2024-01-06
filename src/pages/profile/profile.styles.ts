@@ -95,6 +95,7 @@ export const MainContainer = styled.main`
 `;
 
 export const AboutSection = styled.section`
+    color: var(--slate-700);
     background: var(--gradient-50);
     width: 100%;
     grid-column: 1;
@@ -117,7 +118,7 @@ export const AboutSection = styled.section`
 export const AboutList = styled.ul`
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.8rem;
 `;
 
 export const AboutListItem = styled.li`
@@ -125,7 +126,7 @@ export const AboutListItem = styled.li`
     margin-bottom: 10px;
     display: flex;
     align-items: center;
-    gap: 0.5em;
+    gap: 1rem;
 `;
 
 export const MainSection = styled.section`

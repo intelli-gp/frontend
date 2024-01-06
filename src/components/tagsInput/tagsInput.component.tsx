@@ -118,7 +118,7 @@ const TagsInput = ({
     }, [suggestedTagsRes]);
 
     return (
-        <div className="xl:w-[500px] md:w-[400px] xs:w-[350px] flex flex-col gap-6">
+        <div className="3xs:w-[20rem] md:!w-[25rem] flex flex-col gap-6">
             <TypingSection>
                 <InputWithLabel
                     label="Select at least 3 tags"
@@ -143,7 +143,7 @@ const TagsInput = ({
                     {suggestedTags.map((tag) => (
                         <Tag
                             key={tag}
-                            size="small"
+                            size="sm"
                             text={tag}
                             clickHandler={clickSuggestedTag}
                         />
@@ -157,7 +157,7 @@ const TagsInput = ({
                     {selectedTags.map((tag) => (
                         <Tag
                             key={tag}
-                            size="small"
+                            size="sm"
                             text={tag}
                             deletable={true}
                             deleteHandler={() => {
