@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect } from 'react';
+import { ChangeEvent, useEffect, useLayoutEffect } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
@@ -20,7 +20,7 @@ import {
     useSignUpUserMutation,
 } from '../../store';
 import { RootState } from '../../store/index';
-import { User } from '../../types/user';
+import { UserToSend } from '../../types/user';
 import { errorToast } from '../../utils/toasts';
 
 export default function SignupPage() {
@@ -51,7 +51,7 @@ export default function SignupPage() {
     }, [isError]);
 
     // Google oauth
-    useEffect(() => {
+    useLayoutEffect(() => {
         const user = searchParams.get('userData');
         if (user) {
             setSearchParams({}, { replace: true });
@@ -66,9 +66,8 @@ export default function SignupPage() {
 
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const user: Partial<User> = {
-            fname: firstName,
-            lname: lastName,
+        const user: Partial<UserToSend> = {
+            fullName: firstName + ' ' + lastName,
             dob: birthDate,
             username,
             email,

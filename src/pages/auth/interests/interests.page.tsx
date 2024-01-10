@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '../../../components/Button';
 import TagsInput from '../../../components/tagsInput/tagsInput.component';
 import { FooterButtons } from '../../../components/tagsInput/tagsInput.styles';
-import { useUpdateUserMutation } from '../../../store';
+import {
+    RootState,
+    setCredentials,
+    useUpdateUserMutation,
+} from '../../../store';
 import { useGetAllTagsQuery } from '../../../store';
 import { errorToast } from '../../../utils/toasts';
 import { Page } from './interests.styles';
@@ -12,8 +17,9 @@ import { Page } from './interests.styles';
 const InterestsPage = () => {
     const { data: getTagsRes } = useGetAllTagsQuery(undefined);
     const tags = getTagsRes?.data || [];
-
+    const token = useSelector((state: RootState) => state.auth.token);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [updateUser, { isLoading, error, isError, isSuccess }] =
         useUpdateUserMutation();
@@ -36,12 +42,23 @@ const InterestsPage = () => {
         setSelectedTags([...selectedTags, tag]);
     };
 
-    const handleContinue = () => {
+    const handleContinue = async () => {
         if (selectedTags.length < 3) {
             errorToast('Please select at least 3 tags', 'top-right');
             return;
         }
-        updateUser({ interests: selectedTags });
+        const {
+            data: { updatedUser },
+        } = await updateUser({
+            addedInterests: selectedTags,
+            removedInterests: [],
+        }).unwrap();
+        dispatch(
+            setCredentials({
+                user: updatedUser,
+                token,
+            }),
+        );
     };
 
     return (
