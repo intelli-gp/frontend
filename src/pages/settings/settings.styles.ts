@@ -18,16 +18,16 @@ export const PageContainer = styled.div`
 
 export const PageHeader = styled.header`
     width: 100%;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
     align-items: center;
-    justify-content: center;
-    gap: 4rem;
+    gap: 2rem;
     background: var(--gradient-75-top);
     padding: 4rem 2rem;
     border-radius: 10px;
     position: relative;
     @media (max-width: 768px) {
-        flex-direction: column;
+        grid-template-columns: 1fr;
     }
 `;
 
