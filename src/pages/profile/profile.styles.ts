@@ -7,6 +7,7 @@ export const PageContainer = styled.div`
     flex-direction: column;
     gap: 1.25rem;
     margin: 0 auto;
+    margin-bottom: 1.25rem;
 `;
 
 export const PageHeader = styled.header`

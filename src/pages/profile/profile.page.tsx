@@ -3,6 +3,8 @@ import { FaBirthdayCake, FaEnvelope } from 'react-icons/fa';
 import { FaPhoneAlt } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
 import { IoMdPin } from 'react-icons/io';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import cameraImage from '../../assets/imgs/camera.png';
 import coverImageCamera from '../../assets/imgs/coverImageCamera.png';
@@ -19,6 +21,8 @@ import {
     ProfilePictureContainer,
     UserDataContainer,
 } from '../../pages/profile/profile.styles';
+import { RootState } from '../../store';
+import { User } from '../../types/user';
 import {
     AboutList,
     AboutListItem,
@@ -41,6 +45,9 @@ const ProfilePage = () => {
         { title: 'Followers', isActive: false, label: 'followers' },
         { title: 'Following', isActive: false, label: 'following' },
     ]);
+    const navigate = useNavigate();
+
+    const user = useSelector((state: RootState) => state.auth.user) as User;
 
     const [posts] = useState<any[]>([
         {
@@ -70,8 +77,10 @@ const ProfilePage = () => {
             tags: ['tag1', 'tag2', 'tag3'],
         },
     ]);
-    const [followers] = useState<any[]>([]);
-    const [following] = useState<any[]>([]);
+
+    const [_followers] = useState<any[]>([]);
+    const [_following] = useState<any[]>([]);
+
     const [youMayKnow] = useState<any[]>([
         {
             fname: 'Ahmed',
@@ -125,42 +134,47 @@ const ProfilePage = () => {
                     />
                     <CoverImage src={defaultCoverImage} />
                 </CoverImageContainer>
+
                 <UserDataContainer>
                     <ProfilePictureContainer>
-                        <ProfilePicture src={defaultUserImage} />
+                        <ProfilePicture src={user.image ?? defaultUserImage} />
                         <PictureOverlay
                             src={cameraImage}
                             title="Edit profile picture"
                         />
                     </ProfilePictureContainer>
                     <div className="flex flex-col justify-between h-[75px] p-2">
-                        <h1 className="text-3xl font-semibold">Ahmed Ali</h1>
-                        <p className="text-gray-500">@ahmedali</p>
+                        <h1 className="font-semibold text-slate-600 overflow-hidden whitespace-nowrap text-ellipsis 3xs:max-w-[7ch] 3xs:text-2xl md:max-w-full md:text-3xl ">
+                            {user.full_name}
+                        </h1>
+                        <p className="text-slate-500">@{user.username}</p>
                     </div>
+                    <Button
+                        select="warning"
+                        type="button"
+                        title="Edit profile"
+                        className="ml-auto gap-2 !text-[#172554] !p-4 rounded-full"
+                        onClick={() => navigate('/app/settings')}
+                    >
+                        <FiEdit size={18} />
+                    </Button>
                 </UserDataContainer>
-                <Button
-                    select="warning"
-                    type="button"
-                    title="Edit profile"
-                    className="absolute right-2 top-2 gap-2 !text-[#172554] text-sm !p-4 rounded-full"
-                >
-                    <FiEdit size={18} />
-                </Button>
             </PageHeader>
 
             <MainContainer>
                 <AboutSection>
-                    <h1 className="text-xl font-semibold">About</h1>
+                    <h1 className="text-xl font-semibold text-slate-600">
+                        About
+                    </h1>
                     <hr />
                     <p className="text-gray-500">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Nihil, voluptates.
+                        {user.bio ?? 'This user has no bio.'}
                     </p>
                     <hr />
                     <AboutList>
                         <AboutListItem>
                             <FaBirthdayCake />
-                            August 12, 1999
+                            {new Date(user.dob).toLocaleDateString()}
                         </AboutListItem>
                         <AboutListItem>
                             <IoMdPin />
@@ -168,11 +182,11 @@ const ProfilePage = () => {
                         </AboutListItem>
                         <AboutListItem>
                             <FaEnvelope />
-                            test@123.com
+                            {user.email}
                         </AboutListItem>
                         <AboutListItem>
                             <FaPhoneAlt />
-                            +201234567890
+                            {user.phone_number}
                         </AboutListItem>
                     </AboutList>
                 </AboutSection>
@@ -196,7 +210,9 @@ const ProfilePage = () => {
                 </MainSection>
 
                 <YouMayNowSection>
-                    <h1 className="text-xl font-semibold">You may know</h1>
+                    <h1 className="text-xl font-semibold text-slate-600">
+                        You may know
+                    </h1>
                     <hr />
                     <ul className="flex flex-col gap-4 ">
                         {youMayKnow.map((user) => (
