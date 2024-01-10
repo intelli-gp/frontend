@@ -1,4 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+import { User } from '../../types/user';
+
+type StoredCredentials = {
+    token: string;
+    user: Readonly<Partial<User>>;
+    isAuthenticated?: boolean;
+};
 
 const authSlice = createSlice({
     name: 'auth',
@@ -8,7 +16,7 @@ const authSlice = createSlice({
         user: {},
     },
     reducers: {
-        setCredentials(state, action) {
+        setCredentials(state, action: PayloadAction<StoredCredentials>) {
             const { user, token } = action.payload;
             window.localStorage.setItem('token', token);
             window.localStorage.setItem('user', JSON.stringify(user));

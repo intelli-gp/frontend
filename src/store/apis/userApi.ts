@@ -1,4 +1,5 @@
-import { User } from '../../types/user';
+import { Response } from '../../types/response';
+import { UserToSend } from '../../types/user';
 import { appApi } from './appApi';
 
 const userApi = appApi.injectEndpoints({
@@ -18,7 +19,7 @@ const userApi = appApi.injectEndpoints({
             },
         }),
 
-        updateUser: builder.mutation<Response, Partial<User>>({
+        updateUser: builder.mutation<Response, Partial<UserToSend>>({
             invalidatesTags: (_result, _error, user) => {
                 return [{ type: 'user', id: user.id }];
             },
