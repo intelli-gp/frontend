@@ -10,7 +10,7 @@ type InputsGridProps = {
 };
 
 const commonStyles =
-    'rounded border border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 text-slate-700';
+    'rounded border border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-1 text-[var(--gray-700)]';
 
 /**
  * This is an actual input or textarea element with a label wrapped by a div.
@@ -35,7 +35,7 @@ export const InputWithLabel = ({
         <div className={wrapperClasses}>
             <label
                 htmlFor={label.toLowerCase()}
-                className="font-bold text-slate-700"
+                className="font-bold text-[var(--gray-700)]"
             >
                 {label}:
             </label>
