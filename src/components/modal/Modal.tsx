@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import ReactDOM from 'react-dom';
 
 import { Background, ModalWrapper } from './Modal.styles';
 
@@ -7,11 +8,7 @@ interface ModalProps {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
     children: React.ReactNode;
 }
-export const Modal: React.FC<ModalProps> = ({
-    showModal,
-    setShowModal,
-    children,
-}) => {
+export const Modal = ({ showModal, setShowModal, children }: ModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
 
     const closeModal = (e: React.MouseEvent<HTMLElement>) => {
@@ -20,15 +17,16 @@ export const Modal: React.FC<ModalProps> = ({
         }
     };
 
-    return (
+    return ReactDOM.createPortal(
         <>
-            {showModal ? (
+            {showModal && (
                 <Background onClick={closeModal} ref={modalRef}>
                     <ModalWrapper showModal={showModal}>
                         {children}
                     </ModalWrapper>
                 </Background>
-            ) : null}
-        </>
+            )}
+        </>,
+        document.getElementById('modal-container')!,
     );
 };
