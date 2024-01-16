@@ -119,6 +119,3 @@ body::-webkit-scrollbar-thumb {
         background-size: contain;
     }
 }
-input[type='time']::-webkit-calendar-picker-indicator {
-    display: none;
-}

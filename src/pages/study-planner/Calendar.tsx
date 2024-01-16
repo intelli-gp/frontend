@@ -9,6 +9,7 @@ import {
 } from 'react-big-calendar';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 
+import '../../index.css';
 import { EVENTS } from './Calendar.Constants';
 import './Calendar.styles.css';
 import TaskBox from './TaskBox';
@@ -52,29 +53,31 @@ const CustomToolbar = (props: ToolbarProps) => {
         setCurrentView((currentViewIndex + 1) % viewFunctions.length);
     }
     return (
-        <div className="flex flex-column justify-between">
-            {viewState == 'day' ? (
-                <div className="flex flex-row gap-3 py-5 pl-[9%] items-center">
-                    <label className="text-3xl text-indigo-900 font-semibold">
-                        {moment(props.date).format('DD ')}
-                    </label>
-                    <label className="text-3xl text-indigo-900 font-normal">
-                        {moment(props.date).format('dddd ')}
-                    </label>
-                </div>
-            ) : (
-                <div className="flex flex-row gap-3 py-5 pl-[9%] items-center">
-                    <label className="text-3xl text-indigo-900 font-semibold">
-                        {moment(props.date).format('MMMM ')}
-                    </label>
-                    <label className="text-3xl text-indigo-900 font-light">
-                        {moment(props.date).format('YYYY ')}
-                    </label>
-                </div>
-            )}
+        <div className="flex flex-column justify-between pt-[5rem]">
+            <div className="flex flex-row gap-3 pb-4  w-2/5 justify-center ">
+                {viewState == 'day' ? (
+                    <>
+                        <label className="text-4xl text-indigo-900 font-semibold">
+                            {moment(props.date).format('DD ')}
+                        </label>
+                        <label className="text-4xl text-indigo-900 font-normal">
+                            {moment(props.date).format('dddd ')}
+                        </label>
+                    </>
+                ) : (
+                    <>
+                        <label className="text-4xl text-indigo-900 font-semibold">
+                            {moment(props.date).format('MMMM ')}
+                        </label>
+                        <label className="text-4xl text-indigo-900 font-light">
+                            {moment(props.date).format('YYYY ')}
+                        </label>
+                    </>
+                )}
+            </div>
 
-            <div className="flex flex-row justify-end items-center	justify-items-center w-1/5 pt-[2px]">
-                <div className="flex flex-row px-4 justify-items-center ">
+            <div className="flex flex-row justify-end items-center	justify-items-center w-1/5 ">
+                <div className="flex flex-row justify-items-center ">
                     <button
                         onClick={goToBack}
                         className="w-1/4 bg-indigo-900 rounded-l-lg border-r-[1px] border-white flex p-[8px]  flex-row justify-center items-center"
@@ -114,14 +117,14 @@ export const Calendar = (props: Omit<CalendarProps, 'localizer'>) => {
                 toolbar: CustomToolbar,
                 event: ({ event }: { event: any }) => {
                     const data = event?.data;
-                    if (data?.appointment)
+                    if (data?.task)
                         return (
-                            <TaskBox courseName="Physics">
-                                <p className="text-xs text-[#0369A1]">
-                                    {data.appointment.start} -{' '}
-                                    {data.appointment.end}
-                                </p>
-                            </TaskBox>
+                            <TaskBox
+                                title="Physics"
+                                start={data.task.start + ' - '}
+                                end={data.task.end}
+                                color="#0369A1"
+                            />
                         );
 
                     return null;

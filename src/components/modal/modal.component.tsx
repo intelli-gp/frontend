@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import ReactDOM from 'react-dom';
 
-import { Background, ModalWrapper } from './Modal.styles';
+import { Background, ModalWrapper } from './model.styles';
 
 interface ModalProps {
     showModal: boolean;
@@ -21,9 +21,7 @@ export const Modal = ({ showModal, setShowModal, children }: ModalProps) => {
         <>
             {showModal && (
                 <Background onClick={closeModal} ref={modalRef}>
-                    <ModalWrapper showModal={showModal}>
-                        {children}
-                    </ModalWrapper>
+                    <ModalWrapper>{children}</ModalWrapper>
                 </Background>
             )}
         </>,
