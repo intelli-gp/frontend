@@ -23,23 +23,32 @@ const WideBlogPost = ({
             <BlogContentContainer>
                 <AuthorData>
                     <AuthorPicture
-                        src={author.imageUrl}
+                        src={author.image}
                         alt="user profile picture"
                     />
-                    {author.fname + ' ' + author.lname}
-                </AuthorData>
-                <h1 className="text-xl font-semibold">{title}</h1>
-                <BlogTextContent>{content}</BlogTextContent>
-                <BlogFooter>
-                    <span className="text-xs opacity-60">
+                    {author.full_name}
+                    <span className="text-xs opacity-50"> • </span>
+                    <span className="text-xs opacity-70">
                         {new Date(createdAt).toDateString()}
                     </span>
+                </AuthorData>
+
+                <div className="flex justify-between gap-4">
+                    <div className="flex flex-col gap-4">
+                        <h1 className="text-xl font-semibold text-slate-700">
+                            {title}
+                        </h1>
+                        <BlogTextContent>{content}</BlogTextContent>
+                    </div>
+                    <BlogThumbnail src={coverImageUrl} alt={'thumbnail'} />
+                </div>
+
+                <BlogFooter>
                     {tags.slice(0, 3).map((tag) => (
-                        <Tag text={tag} size="small" />
+                        <Tag text={tag} size="sm" />
                     ))}
                 </BlogFooter>
             </BlogContentContainer>
-            <BlogThumbnail src={coverImageUrl} alt={'thumbnail'} />
         </BlogContainer>
     );
 };

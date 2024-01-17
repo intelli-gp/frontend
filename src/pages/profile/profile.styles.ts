@@ -33,8 +33,8 @@ export const ProfilePictureContainer = styled.div`
     width: 150px;
     height: 150px;
     @media (max-width: 768px) {
-        width: 120px;
-        height: 120px;
+        width: 100px;
+        height: 100px;
     }
 `;
 
@@ -96,7 +96,7 @@ export const MainContainer = styled.main`
 `;
 
 export const AboutSection = styled.section`
-    color: var(--slate-700);
+    color: var(--gray-800);
     background: var(--gradient-50);
     width: 100%;
     grid-column: 1;

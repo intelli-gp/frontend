@@ -22,6 +22,7 @@ import {
     UserDataContainer,
 } from '../../pages/profile/profile.styles';
 import { RootState } from '../../store';
+import { Blog } from '../../types/blog';
 import { User } from '../../types/user';
 import {
     AboutList,
@@ -49,34 +50,7 @@ const ProfilePage = () => {
 
     const user = useSelector((state: RootState) => state.auth.user) as User;
 
-    const [posts] = useState<any[]>([
-        {
-            author: {
-                fname: 'Ahmed',
-                lname: 'Ali',
-                imageUrl: defaultUserImage,
-            },
-            title: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-            content:
-                'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, voluptates. Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, voluptates. Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, voluptates. Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, voluptates. Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, voluptates.',
-            coverImageUrl: defaultCoverImage,
-            createdAt: new Date().toISOString(),
-            tags: ['tag1', 'tag2', 'tag3'],
-        },
-        {
-            author: {
-                fname: 'Ahmed',
-                lname: 'Ali',
-                imageUrl: defaultUserImage,
-            },
-            title: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-            content:
-                'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, voluptates.',
-            coverImageUrl: defaultCoverImage,
-            createdAt: new Date().toISOString(),
-            tags: ['tag1', 'tag2', 'tag3'],
-        },
-    ]);
+    const [posts] = useState<Blog[]>([]);
 
     const [_followers] = useState<any[]>([]);
     const [_following] = useState<any[]>([]);
@@ -144,10 +118,12 @@ const ProfilePage = () => {
                         />
                     </ProfilePictureContainer>
                     <div className="flex flex-col justify-between h-[75px] p-2">
-                        <h1 className="font-semibold text-slate-600 overflow-hidden whitespace-nowrap text-ellipsis 3xs:max-w-[7ch] 3xs:text-2xl md:max-w-full md:text-3xl ">
+                        <h1 className="font-semibold text-[var(--gray-700)] overflow-hidden whitespace-nowrap text-ellipsis 3xs:max-w-[7ch] 3xs:text-2xl md:max-w-full md:text-3xl ">
                             {user.full_name}
                         </h1>
-                        <p className="text-slate-500">@{user.username}</p>
+                        <p className="text-[var(--gray-600)]">
+                            @{user.username}
+                        </p>
                     </div>
                     <Button
                         select="warning"
@@ -163,11 +139,11 @@ const ProfilePage = () => {
 
             <MainContainer>
                 <AboutSection>
-                    <h1 className="text-xl font-semibold text-slate-600">
+                    <h1 className="text-xl font-bold text-[var(--gray-700)]">
                         About
                     </h1>
                     <hr />
-                    <p className="text-gray-500">
+                    <p className="text-[var(--gray-700)]">
                         {user.bio ?? 'This user has no bio.'}
                     </p>
                     <hr />
@@ -210,7 +186,7 @@ const ProfilePage = () => {
                 </MainSection>
 
                 <YouMayNowSection>
-                    <h1 className="text-xl font-semibold text-slate-600">
+                    <h1 className="text-xl font-semibold text-[var(--gray-700)]">
                         You may know
                     </h1>
                     <hr />
