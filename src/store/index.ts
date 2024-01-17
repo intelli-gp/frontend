@@ -6,6 +6,7 @@ import { authReducer } from './slices/auth.slice';
 import { loginFormReducer } from './slices/login-form.slice';
 import { singupFormReducer } from './slices/signup-form.slice';
 import { taskFormReducer } from './slices/task-form.slice';
+import { articleCreatorReducer } from './slices/article-creator.slice';
 
 export type RootState = ReturnType<typeof store.getState>;
 
@@ -14,6 +15,7 @@ const store = configureStore({
         'login-form': loginFormReducer,
         'signup-form': singupFormReducer,
         'task-form': taskFormReducer,
+        'article-creator': articleCreatorReducer,
         auth: authReducer,
         [appApi.reducerPath]: appApi.reducer,
     },
@@ -29,4 +31,6 @@ export * from './slices/login-form.slice';
 export * from './slices/signup-form.slice';
 export * from './slices/task-form.slice';
 export * from './slices/auth.slice';
+export * from './slices/article-creator.slice'
 export * from './apis';
+

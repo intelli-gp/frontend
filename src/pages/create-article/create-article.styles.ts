@@ -1,0 +1,57 @@
+import styled from 'styled-components';
+
+import Button from '../../components/Button';
+
+export const PageContainer = styled.div`
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+
+    @media(max-width: 500px) {
+        padding: 4rem 1rem;
+    }
+`;
+
+export const ArticleCoverImageContainer = styled.div`
+    width: 100%;
+    position: relative;
+`;
+
+export const ArticleCoverImage = styled.img`
+    width: 100%;
+    min-height: 250px;
+    max-height: 400px;
+    object-fit: cover;
+    cursor: pointer;
+`;
+
+export const EditButton = styled(Button)`
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 1rem;
+    color: var(--gray-800);
+    padding: 0.5rem;
+    border-radius: 0;
+`;
+
+export const ArticleTitleInput = styled.input`
+    font-size: 2rem;
+    font-weight: 700;
+    border: none;
+    border-bottom: 2px solid var(--gray-500);
+    padding: 0.5rem 0;
+    width: 100%;
+    outline: none;
+    color: var(--gray-700);
+`;
+
+export const SectionContainer = styled.div`
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+`;

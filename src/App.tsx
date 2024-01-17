@@ -6,6 +6,7 @@ import LoginPage from './pages/auth/Login';
 import RecoverPassword from './pages/auth/RecoverPassword';
 import SignupPage from './pages/auth/Signup';
 import InterestsPage from './pages/auth/interests/interests.page';
+import CreateArticlePage from './pages/create-article/create-article.page';
 import HomePage from './pages/home';
 import ProfilePage from './pages/profile/profile.page';
 import { SettingsPage } from './pages/settings/settings.page';
@@ -49,6 +50,7 @@ function App() {
                 <Route path="profile" element={<ProfilePage />} />
                 <Route path="study-planner" element={<StudyPlanner />} />
                 <Route path="settings" element={<SettingsPage />} />
+                <Route path="articles/create" element={<CreateArticlePage />} />
             </Route>
         </Routes>
     );

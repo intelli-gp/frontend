@@ -8,3 +8,9 @@ export type Blog = {
     createdAt: string;
     tags: string[];
 };
+
+export type BlogSection = {
+    id: number;
+    type: 'markdown' | 'image';
+    value: string;
+};
