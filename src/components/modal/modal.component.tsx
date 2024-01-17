@@ -4,14 +4,14 @@ import ReactDOM from 'react-dom';
 import { Background, ModalWrapper } from './model.styles';
 
 interface ModalProps {
-    showModal: boolean;
-    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+    isOpen: boolean;
+    setIsOpen: (show: boolean) => void;
     children: React.ReactNode;
     className?: string;
 }
 export const Modal = ({
-    showModal,
-    setShowModal,
+    isOpen,
+    setIsOpen,
     children,
     className,
 }: ModalProps) => {
@@ -19,21 +19,21 @@ export const Modal = ({
 
     const closeModal = (e: React.MouseEvent<HTMLElement>) => {
         if (modalRef.current === e.target) {
-            setShowModal(false);
+            setIsOpen(false);
         }
     };
 
     useEffect(() => {
-        if (showModal) {
+        if (isOpen) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'unset';
         }
-    }, [showModal]);
+    }, [isOpen]);
 
     return ReactDOM.createPortal(
         <>
-            {showModal && (
+            {isOpen && (
                 <Background onClick={closeModal} ref={modalRef}>
                     <ModalWrapper className={className ?? ''}>
                         {children}
