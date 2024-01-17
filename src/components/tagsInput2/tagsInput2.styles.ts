@@ -19,34 +19,41 @@ export const TagsContainer = styled.div<{ disabled?: boolean }>`
     }
 
     &:focus-within {
-        outline: 2px solid var(--indigo-700);
+        outline: 1px solid var(--indigo-700);
     }
 `;
 
 export const Dropdown = styled.div`
     border-radius: 5px;
-    width: 100%;
+    max-width: min(400px, 100%);
     display: flex;
     background-color: var(--indigo-50);
     flex-direction: column;
     position: absolute;
     top: 110%;
     left: 0;
-    box-shadow: var(--gray-shadow);
+    box-shadow:
+        rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
+        rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
     padding: 0.5rem;
+    z-index: 100;
 `;
 
 export const TagListItem = styled.li`
     color: var(--indigo-900);
-    font-weight: bold;
-    border-radius: 5px;
+    font-weight: 500;
     display: flex;
     align-items: center;
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
     cursor: pointer;
-
+    border-bottom: 1px solid var(--gray-300);
     &:hover {
+        border-bottom-color: transparent;
+        border-radius: 5px;
         background-color: var(--indigo-100);
+    }
+    &:last-child {
+        border-bottom: none;
     }
 `;

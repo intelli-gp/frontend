@@ -10,6 +10,7 @@ type TagsInput2Props = {
     availableTags: string[];
     selectedTags: string[];
     disabled?: boolean;
+    wrapperClassName?: string;
 };
 
 const TagsInput2 = ({
@@ -17,32 +18,33 @@ const TagsInput2 = ({
     availableTags,
     selectedTags,
     disabled,
+    wrapperClassName,
 }: TagsInput2Props) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const [typing, setTyping] = useState('');
     const [filteredTags, setFilteredTags] = useState(availableTags);
     const [isOpen, setIsOpen] = useState(false);
 
+    const handleEnterPressed = (e: unknown) => {
+        if ((e as KeyboardEvent).key === 'Enter') {
+            (e as KeyboardEvent).preventDefault();
+            updateSelectedTags([...selectedTags, _.kebabCase(typing)]);
+            setTyping('');
+        }
+    };
+
     useEffect(() => {
         document.addEventListener('click', closeDropdown);
-        inputRef.current?.addEventListener('keydown', handleEnterPressed);
+        const input = inputRef.current;
+        input!.addEventListener<'keydown'>('keydown', handleEnterPressed);
         return () => {
             document.removeEventListener('click', closeDropdown);
-            inputRef.current?.removeEventListener(
+            inputRef.current?.removeEventListener<'keydown'>(
                 'keydown',
                 handleEnterPressed,
             );
         };
     });
-
-    const handleEnterPressed = (e: KeyboardEvent) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            updateSelectedTags([...selectedTags, _.kebabCase(typing)]);
-            setTyping('');
-        } else {
-        }
-    };
 
     const handleUserTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTyping(e.target.value);
@@ -76,6 +78,7 @@ const TagsInput2 = ({
                 inputRef.current?.focus();
             }}
             disabled={disabled}
+            className={wrapperClassName}
         >
             {selectedTags?.map((tag) => (
                 <Tag
@@ -98,6 +101,8 @@ const TagsInput2 = ({
                 className="flex-1"
                 onChange={handleUserTyping}
                 value={typing}
+                id="tags-input-2"
+                placeholder={`Type a tag name and press "Enter"`}
             />
             {isOpen && (
                 <Dropdown>

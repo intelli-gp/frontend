@@ -31,6 +31,8 @@ export const TagContainer = styled.div<{ size?: string; deletable?: boolean }>`
         color: white;
         box-shadow: var(--tag-shadow);
     }
+
+    transition: background-color linear 100ms;
 `;
 
 export const DeleteTagButton = styled.button`
