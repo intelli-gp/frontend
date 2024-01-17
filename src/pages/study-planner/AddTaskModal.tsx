@@ -1,3 +1,4 @@
+import { ChangeEvent } from 'react';
 import { GoDash } from 'react-icons/go';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -50,7 +51,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
 
     return (
         <div className="flex justify-between h-[100vh]">
-            <Modal showModal={showModal} setShowModal={setShowModal}>
+            <Modal isOpen={showModal} setIsOpen={setShowModal}>
                 <ModalContent>
                     <h1 className="text-3xl font-semibold text-txt mb-6">
                         Add Task
@@ -63,7 +64,9 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                                     label="Task name"
                                     type="text"
                                     value={title}
-                                    onChange={(e) => {
+                                    onChange={(
+                                        e: ChangeEvent<HTMLInputElement>,
+                                    ) => {
                                         dispatch(
                                             changeTaskTitle(e.target.value),
                                         );
@@ -78,7 +81,9 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                                     className="rounded border  border-slate-400 p-2 w-full h-[49px] bg-white focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2"
                                     type="color"
                                     value={color}
-                                    onChange={(e) => {
+                                    onChange={(
+                                        e: ChangeEvent<HTMLInputElement>,
+                                    ) => {
                                         dispatch(
                                             changeTaskColor(e.target.value),
                                         );
@@ -93,7 +98,9 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                                     value={due_date}
                                     type="date"
                                     label="Due date"
-                                    onChange={(e) => {
+                                    onChange={(
+                                        e: ChangeEvent<HTMLInputElement>,
+                                    ) => {
                                         dispatch(
                                             changeTaskDueDate(e.target.value),
                                         );
