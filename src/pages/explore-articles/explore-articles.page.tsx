@@ -3,7 +3,7 @@ import { LuSearch } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 
 import Button from '../../components/Button';
-import WideBlogPost from '../../components/wideBlogPost/wide-blog-post.component';
+import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
 import { useGetArticlesQuery } from '../../store';
 import { ReceivedArticle } from '../../types/article';
 import { Response } from '../../types/response';
@@ -30,7 +30,7 @@ const ExploreArticlesPage = () => {
                 </Link>
             </div>
             {articles.map((article: ReceivedArticle) => {
-                return <WideBlogPost {...article} />;
+                return <WideArticleItem {...article} />;
             })}
         </PageContainer>
     );
