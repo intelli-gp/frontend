@@ -4,6 +4,7 @@ import { FaPlus } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
 import { IoSend } from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import defaultCover from '../../assets/imgs/blogDefaultCover.png';
 import Button from '../../components/Button';
@@ -31,7 +32,9 @@ import {
     ArticleSectionType,
     ArticleToSend,
 } from '../../types/article.d';
+import { Response } from '../../types/response';
 import { errorToast, successToast } from '../../utils/toasts';
+import { wait } from '../../utils/wait';
 import {
     AddSectionItem,
     AddSectionMenu,
@@ -46,6 +49,8 @@ import {
 const CreateArticlePage = () => {
     const [addSectionMenuIsOpen, setAddSectionMenuIsOpen] = useState(false);
 
+    const navigate = useNavigate();
+
     const coverImageRef = useRef<HTMLInputElement>(null);
     const addSectionButtonRef = useRef<HTMLDivElement>(null);
 
@@ -58,6 +63,7 @@ const CreateArticlePage = () => {
             isError: isArticleCreateError,
             isLoading: isArticleCreating,
             error: articleCreateError,
+            data: createdArticle,
         },
     ] = useCreateArticleMutation();
 
@@ -167,16 +173,7 @@ const CreateArticlePage = () => {
         }
 
         article.sections = sectionsToSend;
-
-        console.log(
-            "All images uploaded successfully! Let's create the article",
-        );
-        console.log('sections to send: ', sectionsToSend);
-        console.log('article', article);
-
         await createArticle(article as ArticleToSend).unwrap();
-
-        console.log('Article created successfully!');
     };
 
     useEffect(() => {
@@ -197,6 +194,13 @@ const CreateArticlePage = () => {
         }
         if (isArticleCreatedSuccessfully) {
             successToast('Article created successfully!');
+            wait(1000).then(() => {
+                navigate(
+                    `/app/articles/${
+                        (createdArticle as unknown as Response).data.ID
+                    }`,
+                );
+            });
         }
     }, [isArticleCreatedSuccessfully, isArticleCreateError]);
 
