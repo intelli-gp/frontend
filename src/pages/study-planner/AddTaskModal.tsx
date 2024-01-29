@@ -52,14 +52,13 @@ export const AddTaskModal: React.FC<ModalProps> = ({
             title: title,
             description: description,
             color: color,
-            due_end: new Date(due_date + 'T' + due_end).toISOString(),
+            due_end: due_date + 'T' + due_end,
             due_date: due_date,
-            due_start: new Date(due_date + 'T' + due_start).toISOString(),
+            due_start: due_date + 'T' + due_start,
             status: status,
         };
 
         try {
-            console.log(result);
             addTask(task);
             setShowModal(false);
             setTitle('');

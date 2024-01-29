@@ -20,7 +20,7 @@ const hexToRgb = (hex: string | undefined) => {
     return `${r}, ${g}, ${b}`;
 };
 export const TaskBoxContainer = styled.div`
-    border-color:'#0369a1';
+    border-color: '#0369a1';
     background-color: rgba(${() => hexToRgb('#0369a1')}, 0.2);
     display: flex;
     flex-direction: column;
@@ -29,12 +29,12 @@ export const TaskBoxContainer = styled.div`
     width: 98%;
     border-style: solid;
     border-width: 0 0 0 6px;
-    border-color: #0369a1;    
+    border-color: #0369a1;
     border-radius: 6px;
     padding: 10px;
     height: 100px;
     p {
-        color: '#0369a1'};
+        color: '#0369a1';
     }
 `;
 
@@ -44,7 +44,7 @@ export const TasksContainer = styled.div`
     align-items: center;
     justify-content: center;
 
-    gap:12px;
+    gap: 12px;
     width: 100%;
     padding: 0.3rem;
 `;

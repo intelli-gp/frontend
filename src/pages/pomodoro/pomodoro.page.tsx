@@ -1,4 +1,4 @@
-import usePomodoroTimer from '../../../../../New folder/backend/src/hooks/pomodoroTimer/pomodoroTimer.hook';
+import usePomodoroTimer from '../../hooks/pomodoroTimer.hook';
 import {
     CenterElement,
     ControlButton,
