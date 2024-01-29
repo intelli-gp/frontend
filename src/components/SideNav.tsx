@@ -9,7 +9,6 @@ import { IoIosSettings } from 'react-icons/io';
 import { IoPersonSharp } from 'react-icons/io5';
 import { LuListTodo, LuSearch } from 'react-icons/lu';
 import { MdLogout } from 'react-icons/md';
-import { TiThMenu } from 'react-icons/ti';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -64,7 +63,7 @@ export default function SideNav() {
         {
             icon: <BsFillPostcardFill />,
             extendable: false,
-            path: '/app',
+            path: '/app/articles',
             text: 'Articles',
             active: false,
             id: 4,
@@ -168,8 +167,8 @@ export default function SideNav() {
     };
 
     const handleLogout = async () => {
-        await logoutUser().unwrap();
         dispatch(clearCredentials());
+        await logoutUser().unwrap();
     };
 
     // This is for mobile view only.

@@ -55,7 +55,7 @@ export const SettingsPage = () => {
     const [email, setEmail] = useState(storedUser.email ?? '');
     const [phone, setPhone] = useState(storedUser.phone_number);
     const [birthDate, setBirthDate] = useState(
-        new Date(storedUser.dob).toISOString().split('T')[0] ?? '',
+        new Date(storedUser.dob ?? Date.now()).toISOString().split('T')[0],
     );
     const [bio, setBio] = useState(storedUser.bio);
     const [interests, setInterests] = useState(storedUser.user_tag);

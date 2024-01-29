@@ -22,7 +22,7 @@ import {
     UserDataContainer,
 } from '../../pages/profile/profile.styles';
 import { RootState } from '../../store';
-import { Blog } from '../../types/blog';
+import { Blog } from '../../types/article.d';
 import { User } from '../../types/user';
 import {
     AboutList,

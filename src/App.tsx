@@ -13,7 +13,9 @@ import { SettingsPage } from './pages/settings/settings.page';
 import StudyPlanner from './pages/study-planner/StudyPlanner';
 import AuthTemplatePage from './pages/templates/Auth';
 import LoggedInTemplatePage from './pages/templates/LoggedIn';
+import ViewArticlePage from './pages/view-article/view-article.page';
 import { RootState, setCredentials } from './store';
+import ExploreArticlesPage from './pages/explore-articles/explore-articles.page';
 
 function App() {
     const dispatch = useDispatch();
@@ -50,6 +52,11 @@ function App() {
                 <Route path="profile" element={<ProfilePage />} />
                 <Route path="study-planner" element={<StudyPlanner />} />
                 <Route path="settings" element={<SettingsPage />} />
+                <Route path="articles" element={<ExploreArticlesPage />} />
+                <Route
+                    path="articles/:articleId"
+                    element={<ViewArticlePage />}
+                />
                 <Route path="articles/create" element={<CreateArticlePage />} />
             </Route>
         </Routes>
