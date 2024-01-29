@@ -3,15 +3,15 @@ import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { useDispatch } from 'react-redux';
 
-import defaultSectionImage from '../../assets/imgs/coverImageCamera.png';
+import defaultSectionImage from '../../assets/imgs/camera2.png';
 import { SectionContainer } from '../../pages/create-article/create-article.styles';
 import { changeArticleSectionValue, setSectionToBeDeleted } from '../../store';
-import { BlogSection } from '../../types/blog';
-import { ImageSection } from './article-image-section.styles';
+import { ArticleSection } from '../../types/article.d';
 import Button from '../Button';
+import { ImageSection } from './article-image-section.styles';
 
 type ImageUploadSectionProps = {
-    section: BlogSection;
+    section: ArticleSection;
 };
 
 export const ImageUploadSection = ({ section }: ImageUploadSectionProps) => {
@@ -21,13 +21,16 @@ export const ImageUploadSection = ({ section }: ImageUploadSectionProps) => {
     const { value: imageSrc, id } = section;
 
     const handleImageSelection = (e: ChangeEvent<HTMLInputElement>) => {
-        const newImageSrc = URL.createObjectURL(e.target.files![0]);
-        dispatch(
-            changeArticleSectionValue({
-                targetSectionId: id,
-                newValue: newImageSrc,
-            }),
-        );
+        const reader = new FileReader();
+        reader.onload = () => {
+            dispatch(
+                changeArticleSectionValue({
+                    targetSectionId: id!,
+                    newValue: reader.result as string,
+                }),
+            );
+        };
+        reader.readAsDataURL(e.target.files![0]);
     };
 
     const openFileInput = () => {
@@ -36,7 +39,7 @@ export const ImageUploadSection = ({ section }: ImageUploadSectionProps) => {
 
     return (
         <SectionContainer>
-            <div className="absolute top-0 right-0 z-30 ">
+            <div className="absolute top-0 right-0 z-30">
                 <Button
                     type="button"
                     select="warning"
@@ -52,7 +55,7 @@ export const ImageUploadSection = ({ section }: ImageUploadSectionProps) => {
                     title="Delete this section"
                     className="z-30 !p-2 rounded-none"
                     onClick={() => {
-                        dispatch(setSectionToBeDeleted(section.id));
+                        dispatch(setSectionToBeDeleted(section.id!));
                     }}
                 >
                     <RiDeleteBinLine size={14} />
