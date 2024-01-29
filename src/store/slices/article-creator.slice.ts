@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { BlogSection } from '../../types/blog';
+import { ArticleSection, ArticleSectionType } from '../../types/article.d';
 
 const initialState = {
     cover: '',
@@ -9,15 +9,15 @@ const initialState = {
     sections: [
         {
             id: 1,
-            type: 'markdown',
+            contentType: ArticleSectionType.Markdown,
             value: '',
         },
         {
             id: 2,
-            type: 'image',
+            contentType: ArticleSectionType.Image,
             value: '',
         },
-    ] as BlogSection[],
+    ] as ArticleSection[],
     sectionToBeDeletedId: -1,
     deleteSectionModalIsOpen: false,
 };
@@ -46,10 +46,10 @@ const articleCreatorSlice = createSlice({
             state.sectionToBeDeletedId = -1;
             state.deleteSectionModalIsOpen = false;
         },
-        addArticleSection(state, action: PayloadAction<'image' | 'markdown'>) {
+        addArticleSection(state, action: PayloadAction<ArticleSectionType>) {
             state.sections.push({
                 id: Math.floor(Math.random() * 10e9),
-                type: action.payload,
+                contentType: action.payload as ArticleSectionType,
                 value: '',
             });
         },
