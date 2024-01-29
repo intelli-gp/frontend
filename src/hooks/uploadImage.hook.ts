@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { compressImage } from '../utils/compressImage';
+
 export const useUploadImage = () => {
     const [isLoading, setIsLoading] = useState(false);
 
@@ -7,7 +9,9 @@ export const useUploadImage = () => {
         setIsLoading(false);
     };
 
-    const trigger = async (image: string | Blob) => {
+    const trigger = async (image: string | File) => {
+        image = await compressImage(image);
+
         const formData = new FormData();
         formData.append('file', image);
         formData.append('upload_preset', 'Mujedd');
