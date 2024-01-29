@@ -12,7 +12,7 @@ import defaultCoverImage from '../../assets/imgs/defaultCover.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import Button from '../../components/Button';
 import UserItem from '../../components/userItem/user-item.component';
-import WideBlogPost from '../../components/wideBlogPost/wide-blog-post.component';
+import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
 import {
     MainContainer,
     PageContainer,
@@ -22,7 +22,7 @@ import {
     UserDataContainer,
 } from '../../pages/profile/profile.styles';
 import { RootState } from '../../store';
-import { Blog } from '../../types/article.d';
+import { ReceivedArticle } from '../../types/article.d';
 import { User } from '../../types/user';
 import {
     AboutList,
@@ -50,7 +50,7 @@ const ProfilePage = () => {
 
     const user = useSelector((state: RootState) => state.auth.user) as User;
 
-    const [posts] = useState<Blog[]>([]);
+    const [posts] = useState<ReceivedArticle[]>([]);
 
     const [_followers] = useState<any[]>([]);
     const [_following] = useState<any[]>([]);
@@ -83,7 +83,7 @@ const ProfilePage = () => {
     ]);
 
     const mainContent = () => {
-        return posts.map((post) => <WideBlogPost {...post} />);
+        return posts.map((post) => <WideArticleItem {...post} />);
     };
 
     const handleMainSectionHeaderTabClick = (index: number) => {
