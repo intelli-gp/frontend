@@ -10,9 +10,8 @@ import {
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 
 import '../../index.css';
-import { EVENTS } from './Calendar.Constants';
+import { useFetchTasksQuery } from '../../store';
 import './Calendar.styles.css';
-import TaskBox from './TaskBox';
 
 const formats = {
     weekdayFormat: 'ddd',
@@ -48,20 +47,20 @@ const CustomToolbar = (props: ToolbarProps) => {
     const viewFunctions = [goToWeekView, goToDayView, goToMonthView];
     const [currentViewIndex, setCurrentView] = useState(0);
     function cycleView() {
+        setCurrentView((currentViewIndex + 1) % viewFunctions.length);
         const currentView = viewFunctions[currentViewIndex];
         currentView();
-        setCurrentView((currentViewIndex + 1) % viewFunctions.length);
     }
     return (
         <div className="flex flex-column justify-between pt-[5rem]">
-            <div className="flex flex-row gap-3 pb-4  w-2/5 justify-center ">
+            <div className="flex flex-row gap-3 pb-4  w-2/5 px-2">
                 {viewState == 'day' ? (
                     <>
                         <label className="text-4xl text-indigo-900 font-semibold">
                             {moment(props.date).format('DD ')}
                         </label>
                         <label className="text-4xl text-indigo-900 font-normal">
-                            {moment(props.date).format('dddd ')}
+                            {moment(props.date).format('dddd')}
                         </label>
                     </>
                 ) : (
@@ -103,6 +102,50 @@ const CustomToolbar = (props: ToolbarProps) => {
 };
 
 export const Calendar = (props: Omit<CalendarProps, 'localizer'>) => {
+    const { data: getTasks, error, isLoading } = useFetchTasksQuery(undefined);
+    const tasks = getTasks?.data || [];
+    let EVENTS: any[] = [];
+    function convertToTime(dateString: string): string {
+        let date = new Date(dateString);
+        let hours = date.getUTCHours();
+        let minutes = date.getUTCMinutes();
+
+        let period = 'AM';
+        if (hours >= 12) {
+            period = 'PM';
+            if (hours > 12) hours -= 12;
+        } else if (hours === 0) {
+            hours = 12;
+        }
+        let minutesStr = minutes < 10 ? '0' + minutes : '' + minutes;
+        return `${hours}:${minutesStr} ${period}`;
+    }
+    if (isLoading) {
+    } else if (error) {
+    } else {
+        EVENTS = tasks?.map(
+            (task: {
+                ID: any;
+                Title: string | undefined;
+                Status: string | undefined;
+                Description: string | undefined;
+                StartDate: string;
+                DueDate: string;
+            }) => ({
+                start: moment(task.StartDate).toDate(),
+                end: moment(task.DueDate).toDate(),
+                data: {
+                    task: {
+                        id: task.ID,
+                        status: task.Status,
+                        courseName: task.Title,
+                        start: convertToTime(task.StartDate),
+                        end: convertToTime(task.DueDate),
+                    },
+                },
+            }),
+        );
+    }
     return (
         <BigCalendar
             popup
@@ -119,12 +162,17 @@ export const Calendar = (props: Omit<CalendarProps, 'localizer'>) => {
                     const data = event?.data;
                     if (data?.task)
                         return (
-                            <TaskBox
-                                title="Physics"
-                                start={data.task.start + ' - '}
-                                end={data.task.end}
-                                color="#0369A1"
-                            />
+                            <div className='bg-[#DBEAF2] border-l-[6px]	border-[#0369A1] p-2 rounded-[6px] h-full w-[96%]'>
+                                <div className="flex flex-col justify-between items-left ">
+                                    <p className="text-[10px] text-[#0369A1] pb-[4px] font-bold">
+                                        <span>{data.task.start + ' - '}</span>
+                                        <span>{data.task.end}</span>
+                                    </p>
+                                    <p className="text-xs text-[#0369A1] font-bold">
+                                    {data.task.courseName}
+                                    </p>
+                                </div>
+                            </div>
                         );
 
                     return null;

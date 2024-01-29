@@ -2,10 +2,12 @@ import styled from 'styled-components';
 
 export const ModalContent = styled.div`
     display: flex;
+    height: 550px;
     flex-direction: column;
     justify-content: space-between;
     align-items: left;
     line-height: 1.8;
+    padding: 1rem;
     color: #141414;
 `;
 const hexToRgb = (hex: string | undefined) => {
@@ -18,10 +20,8 @@ const hexToRgb = (hex: string | undefined) => {
     return `${r}, ${g}, ${b}`;
 };
 export const TaskBoxContainer = styled.div`
-    border-color: ${(props) => props.color};
-    background-color: rgba(${(props) => hexToRgb(props.color)}, 0.2);
-    height: 100%;
-    min-height: 50px;
+    border-color:'#0369a1';
+    background-color: rgba(${() => hexToRgb('#0369a1')}, 0.2);
     display: flex;
     flex-direction: column;
     justify-content: start;
@@ -29,11 +29,12 @@ export const TaskBoxContainer = styled.div`
     width: 98%;
     border-style: solid;
     border-width: 0 0 0 6px;
-    padding: 10px;
+    border-color: #0369a1;    
     border-radius: 6px;
-
+    padding: 10px;
+    height: 100px;
     p {
-        color: ${(props) => props.color || '#0369a1'};
+        color: '#0369a1'};
     }
 `;
 
@@ -42,9 +43,8 @@ export const TasksContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    gap:12px;
     width: 100%;
-    border: 1px solid #e0e0e0;
-    min-height: 158px;
-    border-radius: 0.375rem;
-    padding: 0.5rem;
+    padding: 0.3rem;
 `;

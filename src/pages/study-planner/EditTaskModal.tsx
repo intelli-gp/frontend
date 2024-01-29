@@ -1,135 +1,136 @@
-import { ChangeEvent, useState } from 'react';
 import { GoDash } from 'react-icons/go';
-
 import Button from '../../components/Button';
-import { InputWithLabel } from '../../components/Input';
-import { Modal } from '../../components/modal/modal.component';
-import { useAddTasksMutation } from '../../store';
+import Input from '../../components/Input';
+import { useEditTaskMutation,useRemoveTaskMutation } from '../../store';
 import { Task } from '../../types/event';
-import './Calendar.styles.css';
 import { ModalContent } from './study-planner.styles';
+import { useEffect, useState } from 'react';
+interface TaskProps {
+    id?:any;
+    title?: string;
+    status?: string;
+    description?: string;
+    due_date?: string ;
+    start?: string;
+    end?: string;
+    color?: string;
+    DueDate?:string;
+    StartDate?:string;
 
-interface ModalProps {
-    showModal: boolean;
-    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
-// type Status = {
-//     icon: JSX.Element;
-//     status: string;
-// };
-export const AddTaskModal: React.FC<ModalProps> = ({
-    showModal,
-    setShowModal,
-}) => {
-    let currentDate = new Date().toJSON().slice(0, 10);
-    // const statuses: Status[] = [
-    //     {
-    //       icon: <></>,
-    //       status: "In Progress",
-    //     },
-    //     {
-    //       icon:<> </>,
-    //       status: "Hold",
-    //     },
-    //     {
-    //       icon: <></>,
-    //       status: "Done",
-    //     },
-    //   ];
+interface ModalProps {
+    task: TaskProps;
+}
+
+export const EditTaskModal: React.FC<ModalProps> = ({  task }) => {
+
+    const id=task.id;
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [color, setColor] = useState('#0369a1');
-    const [due_date, setDueDate] = useState(currentDate);
-    const [due_start, setDueStart] = useState('13:00');
-    const [due_end, setDueEnd] = useState('14:00');
+    const [color, setColor] = useState('#000ff3');
+    const [due_date, setDueDate] = useState('');
+    const [due_start, setDueStart] = useState('00:00');
+    const [due_end, setDueEnd] = useState('00:00');
     const [status, setStatus] = useState('');
 
-    const [addTask, result] = useAddTasksMutation();
+    useEffect(() => {
+        setTitle(task?.title ? task.title.replace("|", "") : '');
+        setDescription(task?.description || '');
+        setColor(task?.color || '#000ff3');
+        setDueDate(task?.DueDate ? task?.DueDate.slice(0, 10) : '');
+        setDueStart(task?.StartDate ? task?.StartDate.slice(11, 16) : '');
+        setDueEnd(task?.DueDate ? task?.DueDate.slice(11, 16) : '');
+        setStatus(task?.status || '');
+    }, [task]);
 
-    const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const [removeTask, t] = useRemoveTaskMutation();
+    const [addTask, a] = useEditTaskMutation();
+
+    
+    const handleDelete = ()=> {
+        
         const task: Partial<Task> = {
+            id: id,
             title: title,
             description: description,
             color: color,
-            due_end: new Date(due_date + 'T' + due_end).toISOString(),
+            due_end:  due_date+'T'+due_end,
             due_date: due_date,
-            due_start: new Date(due_date + 'T' + due_start).toISOString(),
-            status: status,
+            due_start: due_date+'T'+due_start,
+            status:status,
+
         };
 
         try {
-            console.log(result);
-            addTask(task);
-            setShowModal(false);
-            setTitle('');
-            setDescription('');
-            setDueDate(currentDate);
-            setDueStart('13:00');
-            setDueEnd('14:00');
-            setColor('#0369a1');
-            setStatus('');
+            console.log(t);
+            removeTask(task as Task);
         } catch (err) {
             console.log(err);
         }
     };
+    const handleSubmitForm = ()=> {
+        
+        const task: Partial<Task> = {
+            id: id,
+            title: title,
+            description: description,
+            color: color,
+            due_end:  due_date+'T'+due_end,
+            due_date: due_date,
+            due_start: due_date+'T'+due_start,
+            status:status,
+
+        };
+        console.log(a)
+            addTask(task as Task);
+    };
 
     return (
+         // TODO: Solve the bug of useref.
         <div className="flex justify-between h-[100vh]">
-            <Modal isOpen={showModal} setIsOpen={setShowModal}>
+            <>
                 <ModalContent>
-                    <h1 className="text-3xl font-semibold text-txt">
-                        {' '}
-                        Add Task{' '}
-                    </h1>
-                    <form onSubmit={handleSubmitForm}>
-                        <div className="w-full">
-                            <InputWithLabel
-                                required
-                                label="Task name"
-                                type="text"
-                                value={title}
-                                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                    setTitle(e.target?.value)
-                                }
-                            />
-                        </div>
+                    <h1 className="text-3xl font-semibold text-txt"> Edit Task </h1>
+                    <>
+                    <div className="w-full">
+                                <Input
+                                    required
+                                    label="Task name"
+                                    type="text"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                />
+                            </div>
                         <div className="flex w-full justify-between pt-[6px] gap-6">
                             <div className="w-1/2">
-                                <InputWithLabel
+                                <Input
                                     required
                                     label="Status"
                                     type="text"
                                     value={status}
-                                    onChange={(
-                                        e: ChangeEvent<HTMLInputElement>,
-                                    ) => setStatus(e.target.value)}
+                                    onChange={(e) => setStatus(e.target.value)}
                                 />
                             </div>
                             <div className="w-1/2">
-                                <InputWithLabel
+                                <Input
                                     required
                                     label="Select color"
                                     id="color"
                                     className="rounded border  border-slate-400 p-2 w-full h-[49px] bg-white focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2"
                                     type="color"
                                     value={color}
-                                    onChange={(
-                                        e: ChangeEvent<HTMLInputElement>,
-                                    ) => setColor(e.target.value)}
+                                    onChange={(e) => setColor(e.target.value)}
                                 />
                             </div>
                         </div>
                         <div className="flex w-full justify-between pt-[6px] gap-6">
                             <div className="w-1/2 flex flex-col justify-between">
-                                <InputWithLabel
+                                <Input
                                     required
                                     value={due_date}
                                     type="date"
                                     label="Due date"
-                                    onChange={(
-                                        e: ChangeEvent<HTMLInputElement>,
-                                    ) => setDueDate(e.target.value)}
+                                    onChange={(e) => setDueDate(e.target.value)}
                                 />
                             </div>
                             <div className="flex flex-row justify-between pt-9 w-1/2">
@@ -137,9 +138,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                                     type="time"
                                     className="rounded border border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 mr-1"
                                     value={due_start}
-                                    onChange={(e) =>
-                                        setDueStart(e.target.value)
-                                    }
+                                    onChange={(e) => setDueStart(e.target.value)}
                                 />
                                 <span className="text-xl pt-3">
                                     <GoDash />
@@ -168,25 +167,17 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                             />
                         </div>
                         <div className="w-full flex flex-row gap-4 justify-end items-end pt-5">
-                            <Button
-                                type="button"
-                                outline={true}
-                                onClick={() => setShowModal(false)}
-                                className="w-1/5 border-white"
-                            >
-                                Cancel
+                           <Button type="button" select="primary" className="w-[25%] border-2 border-indigo-900 " onClick={handleSubmitForm}>
+                                Save
                             </Button>
-                            <Button
-                                type="submit"
-                                select="primary"
-                                className="w-2/5"
-                            >
-                                Create
+                            <Button type="button" select='danger' outline={true} onClick={handleDelete} className="w-[25%]">
+                                Delete
                             </Button>
+
                         </div>
-                    </form>
+                    </>
                 </ModalContent>
-            </Modal>
+            </>
         </div>
-    );
+    )
 };

@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { BsFillPostcardFill } from 'react-icons/bs';
 import { FaHandsHelping } from 'react-icons/fa';
 import { FiMenu } from 'react-icons/fi';
-import { GiBookshelf, GiRobotGolem, GiUpgrade } from 'react-icons/gi';
+import { GiBookshelf, GiRobotGolem, GiTomato, GiUpgrade } from 'react-icons/gi';
 import { HiMiniUserGroup } from 'react-icons/hi2';
 import { IoIosSettings } from 'react-icons/io';
 import { IoPersonSharp } from 'react-icons/io5';
@@ -100,6 +100,14 @@ export default function SideNav() {
             active: false,
             id: 8,
         },
+        {
+            icon:<GiTomato/>,
+            extendable:false,
+            path:'/app/pomodoro',
+            text:'Pomodoro',
+            active:false,
+            id:9
+        }
     ]);
 
     const [menuActive, setMenuActive] = useState(false);
