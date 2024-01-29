@@ -4,10 +4,12 @@ import { FiPlus } from 'react-icons/fi';
 import { IoShareSocial } from 'react-icons/io5';
 import { SlOptions } from 'react-icons/sl';
 import { useParams } from 'react-router-dom';
+import { GridLoader } from 'react-spinners';
 
 import defaultCoverImage from '../../assets/imgs/defaultCover.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import Button from '../../components/Button';
+import Spinner from '../../components/Spinner';
 import { TagContainer } from '../../components/tag/tag.styles';
 import { useGetArticleQuery } from '../../store';
 import { ArticleSectionType, ReceivedArticle } from '../../types/article.d';
@@ -27,14 +29,17 @@ import {
 
 const ViewArticlePage = () => {
     const { articleId } = useParams();
+
     if (!articleId) {
         return <div>Article not found</div>;
     }
 
-    const { data } = useGetArticleQuery(parseInt(articleId));
+    const { data, isLoading } = useGetArticleQuery(parseInt(articleId));
     const article: ReceivedArticle = (data as unknown as Response)?.data;
 
-    return (
+    return isLoading ? (
+        <Spinner />
+    ) : (
         <PageContainer>
             <ArticleCoverImageContainer>
                 <ArticleCoverImage

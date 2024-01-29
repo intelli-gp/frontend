@@ -13,6 +13,7 @@ export type ArticleSection = {
 
 // Receive from server
 export type ReceivedArticle = {
+    ID: number;
     author: Partial<UserToSend>;
     coverImageUrl: string;
     tags: string[];

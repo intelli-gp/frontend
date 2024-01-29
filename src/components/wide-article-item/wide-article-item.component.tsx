@@ -10,15 +10,20 @@ import {
     AuthorPicture,
 } from './wide-article-item.styles';
 
+type WideArticleItemProps = ReceivedArticle & {
+    onClick?: React.MouseEventHandler<HTMLDivElement>;
+};
+
 const WideArticleItem = ({
     author,
     coverImageUrl,
     tags,
     title,
     updatedAt,
-}: ReceivedArticle) => {
+    onClick,
+}: WideArticleItemProps) => {
     return (
-        <ArticleContainer>
+        <ArticleContainer onClick={onClick}>
             <ArticleContentContainer>
                 <AuthorData>
                     <AuthorPicture
@@ -37,14 +42,14 @@ const WideArticleItem = ({
                         <h1 className="text-2xl font-black text-slate-700">
                             {title}
                         </h1>
+                        <ArticleFooter>
+                            {tags
+                                ?.slice(0, 3)
+                                .map((tag) => <Tag text={tag} size="xs" />)}
+                        </ArticleFooter>
                     </div>
                     <ArticleThumbnail src={coverImageUrl} alt={'thumbnail'} />
                 </div>
-                <ArticleFooter>
-                    {tags
-                        ?.slice(0, 3)
-                        .map((tag) => <Tag text={tag} size="xs" />)}
-                </ArticleFooter>
             </ArticleContentContainer>
         </ArticleContainer>
     );

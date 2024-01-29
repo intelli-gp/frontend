@@ -1,6 +1,6 @@
 import { FaPlus } from 'react-icons/fa';
 import { LuSearch } from 'react-icons/lu';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Button from '../../components/Button';
 import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
@@ -8,11 +8,15 @@ import { useGetArticlesQuery } from '../../store';
 import { ReceivedArticle } from '../../types/article';
 import { Response } from '../../types/response';
 import { PageContainer, SearchBarContainer } from './explore-articles.styles';
+import Spinner from '../../components/Spinner';
 
 const ExploreArticlesPage = () => {
-    const { data } = useGetArticlesQuery();
+    const navigate = useNavigate();
+    const { data, isLoading } = useGetArticlesQuery();
     const articles = (data as unknown as Response)?.data ?? [];
-    return (
+    return isLoading ? (
+        <Spinner />
+    ) : (
         <PageContainer>
             <div className="flex w-full items-center gap-2">
                 <SearchBarContainer>
@@ -30,7 +34,12 @@ const ExploreArticlesPage = () => {
                 </Link>
             </div>
             {articles.map((article: ReceivedArticle) => {
-                return <WideArticleItem {...article} />;
+                return (
+                    <WideArticleItem
+                        {...article}
+                        onClick={() => navigate(`/app/articles/${article.ID}`)}
+                    />
+                );
             })}
         </PageContainer>
     );
