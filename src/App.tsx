@@ -6,6 +6,7 @@ import LoginPage from './pages/auth/Login';
 import RecoverPassword from './pages/auth/RecoverPassword';
 import SignupPage from './pages/auth/Signup';
 import InterestsPage from './pages/auth/interests/interests.page';
+import PomodoroPage from './pages/pomodoro/pomodoro.page';
 import HomePage from './pages/home';
 import StudyPlanner from './pages/study-planner/StudyPlanner';
 import AuthTemplatePage from './pages/templates/Auth';
@@ -45,6 +46,7 @@ function App() {
 
             <Route path="app" element={<LoggedInTemplatePage />}>
                 <Route path="study-planner" element={<StudyPlanner />} />
+                <Route path="pomodoro" element={<PomodoroPage />} />
             </Route>
         </Routes>
     );
