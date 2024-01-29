@@ -63,3 +63,6 @@
 input[type='time']::-webkit-calendar-picker-indicator {
     display: none;
 }
+.rbc-current-time-indicator {
+    background-color: #312e81 !important;
+}

@@ -19,7 +19,6 @@ export const Modal: React.FC<ModalProps> = ({
             setShowModal(false);
         }
     };
-
     return (
         <>
             {showModal ? (
