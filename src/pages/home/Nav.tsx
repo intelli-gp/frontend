@@ -7,6 +7,7 @@ import { IoPersonSharp } from 'react-icons/io5';
 import { MdLogin } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
+import Logo1 from '../../assets/imgs/logo.png';
 import Button from '../../components/Button';
 
 export default function Nav() {
@@ -29,8 +30,8 @@ export default function Nav() {
     return (
         <nav className=" sticky left-0 top-0 z-50 bg-txt w-full backdrop-blur py-3">
             <div className="px-8 lg:px-16 flex justify-between items-center h-full flex-wrap">
-                <Link to="/" className="font-black text-white text-4xl">
-                    LoremIpsum
+                <Link to="/" className="w-[130px] h-auto">
+                    <img src={Logo1} />
                 </Link>
 
                 <div className="flex gap-16 items-center">
