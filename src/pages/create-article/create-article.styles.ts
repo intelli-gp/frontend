@@ -10,7 +10,7 @@ export const PageContainer = styled.div`
     flex-direction: column;
     gap: 3rem;
 
-    @media(max-width: 500px) {
+    @media (max-width: 500px) {
         padding: 4rem 1rem;
     }
 `;
@@ -54,4 +54,33 @@ export const SectionContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+`;
+
+export const AddSectionMenu = styled.div`
+    border-radius: 10px;
+    display: flex;
+    background-color: var(--indigo-100);
+    flex-direction: column;
+    position: absolute;
+    height: fit-content;
+    bottom: 100%;
+    right: 120%;
+    box-shadow: var(--black-shadow);
+    padding: 0.5rem;
+`;
+
+export const AddSectionItem = styled.li`
+    color: var(--indigo-800);
+    font-weight: bold;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    &:last-child {
+        border-bottom: none;
+    }
+    &:hover {
+        background-color: var(--indigo-200);
+    }
 `;
