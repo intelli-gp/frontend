@@ -56,26 +56,26 @@ const CustomToolbar = (props: ToolbarProps) => {
             <div className="flex flex-row gap-3 pb-4  w-2/5 px-2">
                 {viewState == 'day' ? (
                     <>
-                        <label className="text-4xl text-indigo-900 font-semibold">
+                        <label className="lg:text-4xl text-2xl text-indigo-900 font-semibold">
                             {moment(props.date).format('DD ')}
                         </label>
-                        <label className="text-4xl text-indigo-900 font-normal">
+                        <label className="lg:text-4xl text-2xl text-indigo-900 font-normal">
                             {moment(props.date).format('dddd')}
                         </label>
                     </>
                 ) : (
                     <>
-                        <label className="text-4xl text-indigo-900 font-semibold">
+                        <label className="lg:text-4xl text-2xl text-indigo-900 font-semibold">
                             {moment(props.date).format('MMMM ')}
                         </label>
-                        <label className="text-4xl text-indigo-900 font-light">
+                        <label className="lg:text-4xl text-2xl text-indigo-900 font-light">
                             {moment(props.date).format('YYYY ')}
                         </label>
                     </>
                 )}
             </div>
 
-            <div className="flex flex-row justify-end items-center	justify-items-center w-1/5 ">
+            <div className="flex flex-row justify-end items-center	justify-items-center lg:w-1/5 w-[10%] lg:mb-0 mb-4 ">
                 <div className="flex flex-row justify-items-center ">
                     <button
                         onClick={goToBack}
@@ -85,7 +85,7 @@ const CustomToolbar = (props: ToolbarProps) => {
                     </button>
                     <button
                         onClick={cycleView}
-                        className="w-[50%] bg-indigo-900 text-white  text-sm p-[5px] "
+                        className="w-[50%] bg-indigo-900 text-white text-xs md:text-sm p-[5px] "
                     >
                         {viewState.charAt(0).toUpperCase() + viewState.slice(1)}
                     </button>

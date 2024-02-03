@@ -46,6 +46,7 @@ export const InputWithLabel = ({
                     id={label.toLowerCase()}
                     value={value}
                     onChange={onChange}
+                    {...other}
                 />
             ) : (
                 <input

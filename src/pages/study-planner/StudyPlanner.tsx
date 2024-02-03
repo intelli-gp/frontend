@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { IoMdSearch } from 'react-icons/io';
 import { RiRobot2Line } from 'react-icons/ri';
+import { GoPlus } from "react-icons/go";
+
 
 import Button from '../../components/Button';
 import { useFetchTasksQuery } from '../../store';
@@ -9,6 +11,7 @@ import { Calendar } from './Calendar';
 import './Calendar.styles.css';
 import TaskBox from './TaskBox';
 import { TasksContainer } from './study-planner.styles';
+import { EditTaskModal } from './EditTaskModal';
 
 export default function StudyPlanner() {
     const [showModal, setShowModal] = useState(false);
@@ -16,10 +19,14 @@ export default function StudyPlanner() {
         setShowModal((prev) => !prev);
     };
 
-
     const { data: getTasks, error, isLoading } = useFetchTasksQuery(undefined);
     const tasks = getTasks?.data || [];
-
+    const [id, setID] = useState(0);
+    const [editShow, setEdit] = useState(false);
+    const handleEdit = (ID:number) => {
+     setID(ID);
+     setEdit((prev) => !prev);
+    }
     let content;
     if (isLoading) {
         content = <div>Loading...</div>;
@@ -50,7 +57,7 @@ export default function StudyPlanner() {
                 }
                 const time = formatTimestamp(tasks.DueDate);
                 return (
-                    <div className="w-full">
+                    <div className="w-full" onClick={() => handleEdit(tasks.ID)}>
                         <TaskBox
                             key={tasks.ID}
                             id={tasks.ID}
@@ -69,25 +76,28 @@ export default function StudyPlanner() {
 
     return (
         <div className="flex justify-between h-[100vh] xl:flex-row flex-col">
-            <div className=" h-[100vh] basis-4/5 w-[100%%] flex justify-items-right justify-center">
-                <Calendar className="w-[95%]" />
-                {/* <div className="flex-row gap-3 justify-items-b justify-center w-full flex lg:hidden">
-                    <Button
-                        select="primary300"
-                        type="button"
-                        onClick={openModal}
-                    >
-                        + Add a task
-                    </Button>
-
-                    <Button
-                        select="primary"
-                        className="flex flex-row gap-2 lg-text-md"
-                        type="button"
-                    >
-                        <RiRobot2Line size="16" color="white" /> Generate a plan
-                    </Button>
-                </div> */}
+            <div className=" h-[100vh] lg:basis-4/5 w-[100%%] flex justify-items-right justify-center">
+                <Calendar className="w-[95%] h-full" />
+                <div className="flex-col gap-3 absolute justify-center  w-[3.8rem] bottom-0 right-0 m-6 flex lg:hidden">
+                <Button
+                     select="primary300"S
+                     type="button"
+                    className="!p-4 rounded-full justify-center"
+                    onClick={(e: unknown) => {
+                        (e as MouseEvent).stopPropagation();
+                        openModal();
+                    }}
+                >
+                <GoPlus size="28" color="#0D062D" />
+                </Button>
+                <Button
+                    select="primary"
+                    type="button"
+                    className="!p-4 rounded-full items-center justify-center"
+                >
+                 <RiRobot2Line size="24" color="white" />   
+                </Button>
+                </div>
             </div>
             <div className=" basis-1/5 h-full flex-col border-l-2 border-slate-200 p-8 lg:flex hidden">
                 <div className="flex-col flex gap-3 justify-items-center justify-center w-full">
@@ -122,7 +132,8 @@ export default function StudyPlanner() {
                     <TasksContainer>{content}</TasksContainer>
                 </div>
             </div>
-            <AddTaskModal showModal={showModal} setShowModal={setShowModal} />
+            {editShow && <EditTaskModal showModal={editShow} setShowModal={setEdit} ID={id}/>}
+           <AddTaskModal showModal={showModal} setShowModal={setShowModal} />
         </div>
     );
 }
