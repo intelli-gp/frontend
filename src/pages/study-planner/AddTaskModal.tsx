@@ -168,18 +168,15 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                             </div>
                         </div>
                         <div className="flex flex-col gap-2 pt-[6px]">
-                            <label htmlFor="description" className="font-bold">
-                                Description:
-                            </label>
-                            <textarea
-                                required
-                                className="rounded border border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                placeholder="Enter description..."
-                                maxLength={1000}
-                                cols={33}
-                                rows={4}
+                        <InputWithLabel
+                              label='Description'
+                              value={description}
+                              onChange={(e: { target: { value: any; }; }) => setDescription(e.target.value)}
+                              multiline='true'
+                              placeholder="Enter description..."
+                              maxLength={1000}
+                              cols={33}
+                              rows={4}
                             />
                         </div>
                         <div className="w-full flex flex-row gap-4 justify-end items-end pt-5">
