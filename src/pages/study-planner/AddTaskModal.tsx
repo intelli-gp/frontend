@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { GoDash } from 'react-icons/go';
 
 import Button from '../../components/Button';
@@ -8,6 +8,7 @@ import { useAddTasksMutation } from '../../store';
 import { Task } from '../../types/event';
 import './Calendar.styles.css';
 import { ModalContent } from './study-planner.styles';
+import { errorToast, successToast } from '../../utils/toasts';
 
 interface ModalProps {
     showModal: boolean;
@@ -44,22 +45,39 @@ export const AddTaskModal: React.FC<ModalProps> = ({
     const [due_end, setDueEnd] = useState('14:00');
     const [status, setStatus] = useState('');
 
-    const [addTask, result] = useAddTasksMutation();
+
+    const [
+        createTask,
+        {
+            isSuccess: isTaskCreatedSuccessfully,
+            isError: isTaskCreateError,
+            isLoading: isTaskCreating,
+            error: taskCreateError,
+        },
+    ] = useAddTasksMutation();
+    useEffect(() => {
+        if (isTaskCreateError) {
+            errorToast('Error creating a task!', taskCreateError as string);
+        }
+        if (isTaskCreatedSuccessfully) {
+            successToast('Task created successfully!');
+        }
+    }, [isTaskCreatedSuccessfully, isTaskCreateError]);
 
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const task: Partial<Task> = {
-            title: title,
-            description: description,
-            color: color,
-            due_end: due_date + 'T' + due_end,
-            due_date: due_date,
-            due_start: due_date + 'T' + due_start,
-            status: status,
+            Title: title,
+            Description: description,
+            Color: color,
+            DueEnd: due_date + 'T' + due_end,
+            DueDate:due_date + 'T' + due_end,
+            DueStart: due_date + 'T' + due_start,
+            Status: status,
         };
 
-        try {
-            addTask(task);
+
+            await createTask(task as Task).unwrap();
             setShowModal(false);
             setTitle('');
             setDescription('');
@@ -68,9 +86,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
             setDueEnd('14:00');
             setColor('#0369a1');
             setStatus('');
-        } catch (err) {
-            console.log(err);
-        }
+    
     };
 
     return (
@@ -179,6 +195,8 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                                 type="submit"
                                 select="primary"
                                 className="w-2/5"
+                                loading={isTaskCreating}
+
                             >
                                 Create
                             </Button>
