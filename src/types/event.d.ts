@@ -1,12 +1,12 @@
 export type Task = {
-    id?: number;
-    status?: string;
-    title?: string;
-    due_date?: string | Date | undefined;
-    description?: string;
-    color?: string;
-    due_start: string | Date;
-    due_end: string | Date;
+    ID?: number;
+    Status?: string;
+    Title?: string;
+    DueDate?: string | Date | undefined;
+    Description?: string;
+    Color?: string;
+    DueStart: string | Date;
+    DueEnd: string | Date;
 };
 export type EventItem = {
     start: Date;
