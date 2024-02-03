@@ -7,6 +7,7 @@ import { ModalContent } from './study-planner.styles';
 import { SetStateAction, useEffect, useState } from 'react';
 import { Modal } from '../../components/modal/modal.component';
 import moment from 'moment';
+import { errorToast, successToast } from '../../utils/toasts';
 
 interface ModalProps {
     ID: number;
@@ -18,9 +19,7 @@ export const EditTaskModal: React.FC<ModalProps> = ({ showModal,
     setShowModal, ID }) => {
     const { data: getTasks} = useFetchTaskQuery(ID);
     const task = getTasks?.data || [];
-    console.log(task)
 
-    // let task: TaskProps = useFetchTaskQuery(ID);
     const id = ID;
     const [title, setTitle] = useState(task?.Title);
     const [description, setDescription] = useState(task.Description);
@@ -40,56 +39,77 @@ export const EditTaskModal: React.FC<ModalProps> = ({ showModal,
         setStatus(task?.Status || '');
     }, [task]);
 
+    const [
+        editTask,
+        {
+            isSuccess: isTaskEditedSuccessfully,
+            isError: isTaskEditError,
+            isLoading: isTaskEditing,
+            error: taskEditError,
+        },
+    ] = useEditTaskMutation();
+    useEffect(() => {
+        if (isTaskEditError) {
+            errorToast('Error editing task!', taskEditError as string);
+        }
+        if (isTaskEditedSuccessfully) {
+            successToast('Task edited successfully!');
+        }
+    }, [isTaskEditedSuccessfully, isTaskEditError]);
+
+    const [
+        deleteTask,
+        {
+            isSuccess: isTaskDeletededSuccessfully,
+            isError: isTaskDeleteError,
+            error: taskDeleteError,
+        },
+    ] = useRemoveTaskMutation();
+    useEffect(() => {
+        if (isTaskDeleteError) {
+            errorToast('Error deleting the task!', taskDeleteError as string);
+        }
+        if (isTaskDeletededSuccessfully) {
+            successToast('Task deleted successfully!');
+        }
+    }, [isTaskDeletededSuccessfully, isTaskDeleteError]);
 
 
-
-    const [removeTask, t] = useRemoveTaskMutation();
-    const [addTask, a] = useEditTaskMutation();
-
-
-    const handleDelete = () => {
+    const handleDelete = async () => {
 
         const task: Partial<Task> = {
-            id: ID,
-            title: title,
-            description: description,
-            color: color,
-            due_end: due_date + 'T' + due_end,
-            due_date: due_date,
-            due_start: due_date + 'T' + due_start,
-            status: status,
+            ID: id,
+            Title: title,
+            Description: description,
+            Color: color,
+            DueEnd: due_date + 'T' + due_end,
+            DueDate:due_date + 'T' + due_end,
+            DueStart: due_date + 'T' + due_start,
+            Status: status,
 
         };
 
-        try {
-            console.log(t);
-            removeTask(task as Task);
-            setShowModal(false);
-                } catch (err) {
-            console.log(err);
 
-        }
+        await deleteTask(task as Task).unwrap();
+            setShowModal(false);
+         
     };
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const task: Partial<Task> = {
-            id: id,
-            title: title,
-            description: description,
-            color: color,
-            due_end: due_date + 'T' + due_end,
-            due_date: due_date,
-            due_start: due_date + 'T' + due_start,
-            status: status,
+            ID: id,
+            Title: title,
+            Description: description,
+            Color: color,
+            DueEnd: due_date + 'T' + due_end,
+            DueDate:due_date + 'T' + due_end,
+            DueStart: due_date + 'T' + due_start,
+            Status: status,
         };
 
-        try {
-            console.log(task)
-            addTask(task as Task);
-            setShowModal(false);
-        } catch (err) {
-            console.log(err);
-        }
+        await editTask(task as Task).unwrap();
+        setShowModal(false);
+     
     };
 
 
@@ -184,10 +204,20 @@ export const EditTaskModal: React.FC<ModalProps> = ({ showModal,
                             />
                         </div>
                         <div className="w-full flex flex-row gap-4 justify-end items-end pt-5">
-                            <Button type="submit" select="primary" className="w-[25%] border-2 border-indigo-900 ">
+                            <Button 
+                            type="submit" 
+                            select="primary" 
+                            className="w-[25%] border-2 border-indigo-900 "
+                            loading={isTaskEditing}
+                            >
                                 Save
                             </Button>
-                            <Button type="button" select='danger' outline={true} onClick={handleDelete} className="w-[25%]">
+                            <Button 
+                            type="button" 
+                            select='danger' 
+                            outline={true} 
+                            onClick={handleDelete} 
+                            className="w-[25%]">
                                 Delete
                             </Button>
 
