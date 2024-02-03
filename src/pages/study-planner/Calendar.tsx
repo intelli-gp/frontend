@@ -105,21 +105,6 @@ export const Calendar = (props: Omit<CalendarProps, 'localizer'>) => {
     const { data: getTasks, error, isLoading } = useFetchTasksQuery(undefined);
     const tasks = getTasks?.data || [];
     let EVENTS: any[] = [];
-    function convertToTime(dateString: string): string {
-        let date = new Date(dateString);
-        let hours = date.getUTCHours();
-        let minutes = date.getUTCMinutes();
-
-        let period = 'AM';
-        if (hours >= 12) {
-            period = 'PM';
-            if (hours > 12) hours -= 12;
-        } else if (hours === 0) {
-            hours = 12;
-        }
-        let minutesStr = minutes < 10 ? '0' + minutes : '' + minutes;
-        return `${hours}:${minutesStr} ${period}`;
-    }
     if (isLoading) {
     } else if (error) {
     } else {
@@ -139,8 +124,8 @@ export const Calendar = (props: Omit<CalendarProps, 'localizer'>) => {
                         id: task.ID,
                         status: task.Status,
                         courseName: task.Title,
-                        start: convertToTime(task.StartDate),
-                        end: convertToTime(task.DueDate),
+                        start:moment(task.StartDate).format('LT'),
+                        end:moment(task.DueDate).format('LT'),
                     },
                 },
             }),
