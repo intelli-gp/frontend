@@ -1,103 +1,71 @@
+import { ChangeEvent, useEffect, useState } from 'react';
 import { GoDash } from 'react-icons/go';
-import Button from '../../components/Button';
-import { InputWithLabel } from '../../components/Input';
-import { useEditTaskMutation, useRemoveTaskMutation,useFetchTaskQuery } from '../../store';
-import { Task } from '../../types/event';
-import { ModalContent } from './study-planner.styles';
-import { SetStateAction, useEffect, useState } from 'react';
-import { Modal } from '../../components/modal/modal.component';
-import moment from 'moment';
-import { errorToast, successToast } from '../../utils/toasts';
+
+import Button from './Button';
+import { InputWithLabel } from './Input';
+import { Modal } from './modal/modal.component';
+import { useAddTasksMutation } from '../store';
+import { Task } from '../types/event';
+import { ModalContent } from '../pages/study-planner/study-planner.styles';
+import { errorToast, successToast } from '../utils/toasts';
 
 interface ModalProps {
-    ID: number;
     showModal: boolean;
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
+// type Status = {
+//     icon: JSX.Element;
+//     status: string;
+// };
+export const AddTaskModal: React.FC<ModalProps> = ({
+    showModal,
+    setShowModal,
+}) => {
+    let currentDate = new Date().toJSON().slice(0, 10);
+    // const statuses: Status[] = [
+    //     {
+    //       icon: <></>,
+    //       status: "In Progress",
+    //     },
+    //     {
+    //       icon:<> </>,
+    //       status: "Hold",
+    //     },
+    //     {
+    //       icon: <></>,
+    //       status: "Done",
+    //     },
+    //   ];
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [color, setColor] = useState('#0369a1');
+    const [due_date, setDueDate] = useState(currentDate);
+    const [due_start, setDueStart] = useState('13:00');
+    const [due_end, setDueEnd] = useState('14:00');
+    const [status, setStatus] = useState('');
 
-export const EditTaskModal: React.FC<ModalProps> = ({ showModal,
-    setShowModal, ID }) => {
-    const { data: getTasks} = useFetchTaskQuery(ID);
-    const task = getTasks?.data || [];
-
-    const id = ID;
-    const [title, setTitle] = useState(task?.Title);
-    const [description, setDescription] = useState(task.Description);
-    const [color, setColor] = useState(task?.Color || '#000ff3');
-    const [due_date, setDueDate] = useState(moment(task.DueDate).format().slice(0,10));
-    const [due_start, setDueStart] = useState(moment(task.StartDate).format().slice(11, 16));
-    const [due_end, setDueEnd] = useState(moment(task.DueDate).format().slice(11, 16));
-    const [status, setStatus] = useState(task?.Status || '');
-
-    useEffect(() => {
-        setTitle(task?.Title || '');
-        setDescription(task?.Description || '');
-        setColor(task?.Color || '#000ff3');
-        setDueDate(task?.DueDate ? moment(task.DueDate).format().slice(0,10) : '');
-        setDueStart(task?.StartDate ? moment(task.StartDate).format().slice(11, 16) : '');
-        setDueEnd(task?.DueDate ? moment(task.DueDate).format().slice(11, 16) : '');
-        setStatus(task?.Status || '');
-    }, [task]);
 
     const [
-        editTask,
+        createTask,
         {
-            isSuccess: isTaskEditedSuccessfully,
-            isError: isTaskEditError,
-            isLoading: isTaskEditing,
-            error: taskEditError,
+            isSuccess: isTaskCreatedSuccessfully,
+            isError: isTaskCreateError,
+            isLoading: isTaskCreating,
+            error: taskCreateError,
         },
-    ] = useEditTaskMutation();
+    ] = useAddTasksMutation();
     useEffect(() => {
-        if (isTaskEditError) {
-            errorToast('Error editing task!', taskEditError as string);
+        if (isTaskCreateError) {
+            errorToast('Error creating a task!', taskCreateError as string);
         }
-        if (isTaskEditedSuccessfully) {
-            successToast('Task edited successfully!');
+        if (isTaskCreatedSuccessfully) {
+            successToast('Task created successfully!');
         }
-    }, [isTaskEditedSuccessfully, isTaskEditError]);
+    }, [isTaskCreatedSuccessfully, isTaskCreateError]);
 
-    const [
-        deleteTask,
-        {
-            isSuccess: isTaskDeletededSuccessfully,
-            isError: isTaskDeleteError,
-            error: taskDeleteError,
-        },
-    ] = useRemoveTaskMutation();
-    useEffect(() => {
-        if (isTaskDeleteError) {
-            errorToast('Error deleting the task!', taskDeleteError as string);
-        }
-        if (isTaskDeletededSuccessfully) {
-            successToast('Task deleted successfully!');
-        }
-    }, [isTaskDeletededSuccessfully, isTaskDeleteError]);
-
-
-    const handleDelete = async () => {
-
-        const task: Partial<Task> = {
-            ID: id,
-            Title: title,
-            Description: description,
-            Color: color,
-            DueEnd: due_date + 'T' + due_end,
-            DueDate:due_date + 'T' + due_end,
-            DueStart: due_date + 'T' + due_start,
-            Status: status,
-
-        };
-
-
-        await deleteTask(task as Task).unwrap();
-            setShowModal(false);
-         
-    };
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const task: Partial<Task> = {
-            ID: id,
             Title: title,
             Description: description,
             Color: color,
@@ -107,16 +75,27 @@ export const EditTaskModal: React.FC<ModalProps> = ({ showModal,
             Status: status,
         };
 
-        await editTask(task as Task).unwrap();
-        setShowModal(false);
-     
+
+            await createTask(task as Task).unwrap();
+            setShowModal(false);
+            setTitle('');
+            setDescription('');
+            setDueDate(currentDate);
+            setDueStart('13:00');
+            setDueEnd('14:00');
+            setColor('#0369a1');
+            setStatus('');
+    
     };
 
-
     return (
+        <div className="flex justify-between h-[100vh]">
             <Modal isOpen={showModal} setIsOpen={setShowModal}>
                 <ModalContent>
-                    <h1 className="text-3xl font-semibold text-txt"> Edit Task </h1>
+                    <h1 className="text-3xl font-semibold text-txt">
+                        {' '}
+                        Add Task{' '}
+                    </h1>
                     <form onSubmit={handleSubmitForm}>
                         <div className="w-full">
                             <InputWithLabel
@@ -124,8 +103,7 @@ export const EditTaskModal: React.FC<ModalProps> = ({ showModal,
                                 label="Task name"
                                 type="text"
                                 value={title}
-                                onChange={(e: { target: { value: SetStateAction<string>; }; }
-                                    ) =>
+                                onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                     setTitle(e.target?.value)
                                 }
                             />
@@ -138,7 +116,7 @@ export const EditTaskModal: React.FC<ModalProps> = ({ showModal,
                                     type="text"
                                     value={status}
                                     onChange={(
-                                        e: { target: { value: SetStateAction<string>; }; }
+                                        e: ChangeEvent<HTMLInputElement>,
                                     ) => setStatus(e.target.value)}
                                 />
                             </div>
@@ -151,7 +129,7 @@ export const EditTaskModal: React.FC<ModalProps> = ({ showModal,
                                     type="color"
                                     value={color}
                                     onChange={(
-                                        e: { target: { value: SetStateAction<string>; }; }
+                                        e: ChangeEvent<HTMLInputElement>,
                                     ) => setColor(e.target.value)}
                                 />
                             </div>
@@ -164,7 +142,7 @@ export const EditTaskModal: React.FC<ModalProps> = ({ showModal,
                                     type="date"
                                     label="Due date"
                                     onChange={(
-                                        e: { target: { value: SetStateAction<string>; }; }
+                                        e: ChangeEvent<HTMLInputElement>,
                                     ) => setDueDate(e.target.value)}
                                 />
                             </div>
@@ -189,7 +167,7 @@ export const EditTaskModal: React.FC<ModalProps> = ({ showModal,
                             </div>
                         </div>
                         <div className="flex flex-col gap-2 pt-[6px]">
-                            <InputWithLabel
+                        <InputWithLabel
                               label='Description'
                               value={description}
                               onChange={(e: { target: { value: any; }; }) => setDescription(e.target.value)}
@@ -199,29 +177,29 @@ export const EditTaskModal: React.FC<ModalProps> = ({ showModal,
                               cols={33}
                               rows={4}
                             />
-                         
                         </div>
                         <div className="w-full flex flex-row gap-4 justify-end items-end pt-5">
-                            <Button 
-                            type="submit" 
-                            select="primary" 
-                            className="w-[25%] border-2 border-indigo-900 "
-                            loading={isTaskEditing}
+                            <Button
+                                type="button"
+                                outline={true}
+                                onClick={() => setShowModal(false)}
+                                className="w-1/5 border-white"
                             >
-                                Save
+                                Cancel
                             </Button>
-                            <Button 
-                            type="button" 
-                            select='danger' 
-                            outline={true} 
-                            onClick={handleDelete} 
-                            className="w-[25%]">
-                                Delete
-                            </Button>
+                            <Button
+                                type="submit"
+                                select="primary"
+                                className="w-2/5"
+                                loading={isTaskCreating}
 
+                            >
+                                Create
+                            </Button>
                         </div>
                     </form>
                 </ModalContent>
             </Modal>
-    )
+        </div>
+    );
 };

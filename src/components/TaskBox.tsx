@@ -1,5 +1,5 @@
 
-import { TaskBoxContainer } from './study-planner.styles';
+import { TaskBoxContainer } from '../pages/study-planner/study-planner.styles';
 
 
 interface TaskProps {
@@ -17,14 +17,11 @@ interface TaskProps {
 }
 
 export default function TaskBox({
-    id,
     title,
     status,
     description,
     due_date,
     color,
-    StartDate,
-    DueDate,
 }: TaskProps): JSX.Element {
 
     return (
