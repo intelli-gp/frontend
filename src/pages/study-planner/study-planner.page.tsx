@@ -148,7 +148,7 @@ export default function StudyPlanner() {
     useEffect(() => {
         setTasks(data)
     }, [data]);
-    const [content, setContent] = useState();
+    const [content, setContent] = useState<JSX.Element | JSX.Element[] | null>(null);
 
     useEffect(() => {
         let content;
@@ -166,7 +166,16 @@ export default function StudyPlanner() {
                 </div>
             );
         } else {
-            content = tasks.map(
+            const getSortedFutureTasks = (tasks: any[]) => {
+                const currentDateTime = new Date();
+                return tasks
+                    .filter((task) => new Date(task.DueDate) > currentDateTime)
+                    .sort((a, b) => new Date(a.DueDate).getTime() - new Date(b.DueDate).getTime());
+            };
+            const futureTasks = getSortedFutureTasks(tasks);
+
+
+            content = futureTasks.map(
                 (tasks: {
                     ID: any;
                     Title: string | undefined;
@@ -232,8 +241,8 @@ export default function StudyPlanner() {
                             id: task.ID,
                             status: task.Status,
                             courseName: task.Title,
-                            start:moment(task.StartDate).format('LT'),
-                            end:moment(task.DueDate).format('LT'),
+                            start: moment(task.StartDate).format('LT'),
+                            end: moment(task.DueDate).format('LT'),
                         },
                     },
                 }),
@@ -262,12 +271,12 @@ export default function StudyPlanner() {
                                             <span>{data.task.end}</span>
                                         </p>
                                         <p className="text-xs text-[#0369A1] font-bold">
-                                        {data.task.courseName}
+                                            {data.task.courseName}
                                         </p>
                                     </div>
                                 </div>
                             );
-    
+
                         return null;
                     },
                 }}
@@ -339,17 +348,17 @@ export default function StudyPlanner() {
                         <div className="h-full w-full flex justify-center items-center p-8 flex-col gap-4">
                             <img src={noTask} className="w-[90%]" />
                             <div className='flex flex-col w-full justify-center items-center mr-6'>
-                            <p className="text-txt text-lg font-extrabold">No tasks</p>
-                            <p className="text-slate-400 text-sm text-center">You have no tasks to do.</p>
+                                <p className="text-txt text-lg font-extrabold">No tasks</p>
+                                <p className="text-slate-400 text-sm text-center">You have no tasks to do.</p>
                             </div>
-                           
+
 
                         </div>
                     )}</TasksContainer>
                 </div>
             </div>
             {editShow && <EditTaskModal showModal={editShow} setShowModal={setEdit} ID={id} />}
-            <AddTaskModal showModal={showModal} setShowModal={setShowModal} />
+            {showModal && <AddTaskModal showModal={showModal} setShowModal={setShowModal} />}
         </div>
     );
 }

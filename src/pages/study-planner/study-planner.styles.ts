@@ -32,7 +32,8 @@ export const TaskBoxContainer = styled.div`
     border-color: #0369a1;
     border-radius: 6px;
     padding: 10px;
-    height: 100px;
+    padding-right: 14px;
+
     p {
         color: '#0369a1';
     }

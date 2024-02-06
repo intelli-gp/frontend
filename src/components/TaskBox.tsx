@@ -33,7 +33,7 @@ export default function TaskBox({
                         {title}{' '}
                         <span className="text-sm opacity-50">{status}</span>
                     </p>
-                    <p className="text-[13px] pt-[3px] text-[#0369A1]">
+                    <p className="text-[13px] pt-[3px] text-[#0369A1] break-all">
                         {description}
                     </p>
                     <div className="pt-6">
