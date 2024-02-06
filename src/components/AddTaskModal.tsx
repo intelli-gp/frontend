@@ -8,6 +8,7 @@ import { useAddTasksMutation } from '../store';
 import { Task } from '../types/event';
 import { ModalContent } from '../pages/study-planner/study-planner.styles';
 import { errorToast, successToast } from '../utils/toasts';
+import moment from 'moment';
 
 interface ModalProps {
     showModal: boolean;
@@ -21,7 +22,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
     showModal,
     setShowModal,
 }) => {
-    let currentDate = new Date().toJSON().slice(0, 10);
+    let currentDate = new Date();
     // const statuses: Status[] = [
     //     {
     //       icon: <></>,
@@ -39,11 +40,24 @@ export const AddTaskModal: React.FC<ModalProps> = ({
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [color, setColor] = useState('#0369a1');
-    const [due_date, setDueDate] = useState(currentDate);
-    const [due_start, setDueStart] = useState('13:00');
-    const [due_end, setDueEnd] = useState('14:00');
+    const [due_date, setDueDate] = useState(moment(currentDate).format().slice(0, 10));
+    const [due_start, setDueStart] = useState( moment(currentDate).format().slice(11, 16));
+    const [due_end, setDueEnd] = useState(moment(currentDate).add(1, 'hours').format().slice(11, 16));
     const [status, setStatus] = useState('');
-
+    const handleDueStartChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const newDueStart = event.target.value;
+        setDueStart(newDueStart);
+        if (newDueStart > due_end) {
+          setDueEnd(newDueStart);
+        }
+      };
+      
+      const handleDueEndChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const newDueEnd = event.target.value;
+        if (newDueEnd >= due_start) {
+          setDueEnd(newDueEnd);
+        }
+      };
 
     const [
         createTask,
@@ -65,6 +79,16 @@ export const AddTaskModal: React.FC<ModalProps> = ({
 
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const selectedDueDateTime = new Date(`${due_date}T${due_start}`);
+        const nowDate = new Date();
+      
+        if (selectedDueDateTime < nowDate) {
+
+            errorToast('This is an old date!!');
+            return;
+        }
+      
+
         const task: Partial<Task> = {
             Title: title,
             Description: description,
@@ -80,9 +104,9 @@ export const AddTaskModal: React.FC<ModalProps> = ({
             setShowModal(false);
             setTitle('');
             setDescription('');
-            setDueDate(currentDate);
-            setDueStart('13:00');
-            setDueEnd('14:00');
+            setDueDate(moment(currentDate).format().slice(0, 10));
+            setDueStart( moment(currentDate).format().slice(11, 16));
+            setDueEnd(moment(currentDate).add(1, 'hours').format().slice(11, 16));
             setColor('#0369a1');
             setStatus('');
     
@@ -93,8 +117,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
             <Modal isOpen={showModal} setIsOpen={setShowModal}>
                 <ModalContent>
                     <h1 className="text-3xl font-semibold text-txt">
-                        {' '}
-                        Add Task{' '}
+                        Add Task
                     </h1>
                     <form onSubmit={handleSubmitForm}>
                         <div className="w-full">
@@ -151,9 +174,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                                     type="time"
                                     className="rounded border border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 mr-1"
                                     value={due_start}
-                                    onChange={(e) =>
-                                        setDueStart(e.target.value)
-                                    }
+                                    onChange={handleDueStartChange}
                                 />
                                 <span className="text-xl pt-3">
                                     <GoDash />
@@ -162,7 +183,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                                     type="time"
                                     className="rounded border ml-1 border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2"
                                     value={due_end}
-                                    onChange={(e) => setDueEnd(e.target.value)}
+                                    onChange={handleDueEndChange}
                                 />
                             </div>
                         </div>
