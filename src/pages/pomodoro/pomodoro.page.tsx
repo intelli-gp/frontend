@@ -1,4 +1,5 @@
 import usePomodoroTimer from '../../hooks/pomodoroTimer.hook';
+import { player } from '../../utils/sounds';
 import {
     CenterElement,
     ControlButton,
@@ -7,6 +8,18 @@ import {
     PomodoroContainer,
     Timer,
 } from './pomodoro.styles';
+import button from '../../assets/sounds/button-press.wav'
+import { useCallback } from 'react';
+const buttonSound = player({
+    asset: button,
+    volume: 0.5,
+  });
+  
+//   const tickingAudio = player({
+//     asset: button,
+//     loop: true,
+//   });
+  
 
 const PomodoroPage = () => {
     const {
@@ -18,7 +31,14 @@ const PomodoroPage = () => {
         timerMode,
         setTimerMode,
     } = usePomodoroTimer();
-
+    const toggleTimer = useCallback(() => {
+        buttonSound.play();
+        if (isRunning) {
+            stopTimer();
+        } else {
+            startTimer();
+        }
+      }, [startTimer, stopTimer, isRunning]);
     return (
         <CenterElement>
             <PomodoroContainer mode={timerMode}>
@@ -47,7 +67,7 @@ const PomodoroPage = () => {
                     {String(seconds).padStart(2, '0')}
                 </Timer>
                 <ControlButton
-                    onClick={isRunning ? stopTimer : startTimer}
+                    onClick={toggleTimer}
                     mode={timerMode}
                 >
                     {isRunning ? 'PAUSE' : 'START'}

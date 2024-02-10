@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import alarm from '../assets/sounds/alarm-digital.mp3'
+import { player } from '../utils/sounds';
 
 export type TimerModes = 'pomodoro' | 'shortBreak' | 'longBreak';
 const usePomodoroTimer = () => {
@@ -6,6 +8,10 @@ const usePomodoroTimer = () => {
     const [seconds, setSeconds] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
     const [timerMode, setTimerMode] = useState<TimerModes>('pomodoro');
+    const alarmAudio = player({
+        asset: alarm,
+        volume: 0.5,
+      });
     const startTimer = () => {
         setIsRunning(true);
     };
@@ -31,9 +37,10 @@ const usePomodoroTimer = () => {
         if (isRunning) {
             if (Number(minutes) === 0 && Number(seconds) === 0) {
                 stopTimer();
+                alarmAudio.play();
                 setTimerMode((prevMode) => {
                     if (prevMode === 'pomodoro') return 'shortBreak';
-                    if (prevMode === 'shortBreak') return 'longBreak';
+                    if (prevMode === 'shortBreak') return 'pomodoro';
                     if (prevMode === 'longBreak') return 'pomodoro';
                     return 'pomodoro';
                 });
