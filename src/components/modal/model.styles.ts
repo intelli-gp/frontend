@@ -19,4 +19,8 @@ export const ModalWrapper = styled.div`
     color: #000;
     border-radius: 10px;
     padding: 2rem 3.5rem;
+    @media (max-width: 500px) {
+    margin:5rem 0rem 0rem 0rem;
+    
+    }
 `;
