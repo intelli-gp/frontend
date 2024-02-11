@@ -5,7 +5,7 @@ import Button from './Button';
 import { InputWithLabel } from './Input';
 import { Modal } from './modal/modal.component';
 import { useAddTasksMutation } from '../store';
-import { Task } from '../types/event';
+import { sendTask } from '../types/event';
 import { ModalContent } from '../pages/study-planner/study-planner.styles';
 import { errorToast, successToast } from '../utils/toasts';
 import moment from 'moment';
@@ -89,18 +89,16 @@ export const AddTaskModal: React.FC<ModalProps> = ({
         }
       
 
-        const task: Partial<Task> = {
+        const task: Partial<sendTask> = {
             Title: title,
             Description: description,
-            Color: color,
-            DueEnd: due_date + 'T' + due_end,
             DueDate:due_date + 'T' + due_end,
-            DueStart: due_date + 'T' + due_start,
+            StartDate: due_date + 'T' + due_start,
             Status: status,
         };
 
 
-            await createTask(task as Task).unwrap();
+            await createTask(task as sendTask).unwrap();
             setShowModal(false);
             setTitle('');
             setDescription('');

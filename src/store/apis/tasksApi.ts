@@ -1,28 +1,23 @@
 import { appApi } from '.';
+import { Task, sendTask } from '../../types/event';
 
 export const taskApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
         removeTask: builder.mutation({
             invalidatesTags: ['Task'],
-            query: (task) => {
+            query: (ID) => {
                 return {
-                    url: `study-planner/${task.id}`,
+                    url: `study-planner/${ID}`,
                     method: 'DELETE',
                 };
             },
         }),
-        addTasks: builder.mutation({
+        addTasks: builder.mutation<Response, sendTask>({
             invalidatesTags: ['Task'],
             query: (task) => ({
                 url: '/study-planner',
                 method: 'POST',
-                body: {
-                    Title: task.title,
-                    StartDate: task.due_start,
-                    DueDate: task.due_end,
-                    Description: task.description,
-                    Status: task.status,
-                },
+                body:task,
             }),
         }),
         fetchTasks: builder.query({
@@ -32,18 +27,19 @@ export const taskApi = appApi.injectEndpoints({
                 method: 'GET',
             }),
         }),
-        editTask: builder.mutation({
+        editTask: builder.mutation<Response, Task> ({
             invalidatesTags: ['Task'],
             query: (task) => ({
-                url: `/study-planner/${task.id}`,
+                url: `/study-planner/${task.ID}`,
                 method: 'PATCH',
-                body: {
-                    Title: task.title,
-                    StartDate: task.due_start,
-                    DueDate: task.due_end,
-                    Description: task.description,
-                    Status: task.status,
-                },
+                body: task,
+            }),
+        }),
+        fetchTask: builder.query({
+            providesTags: ['Task'],
+            query: (ID) => ({
+                url: `/study-planner/${ID}`,
+                method: 'GET',
             }),
         }),
     }),
@@ -54,4 +50,5 @@ export const {
     useAddTasksMutation,
     useRemoveTaskMutation,
     useEditTaskMutation,
+    useFetchTaskQuery,
 } = taskApi;

@@ -8,6 +8,7 @@ import { SetStateAction, useEffect, useState } from 'react';
 import { Modal } from './modal/modal.component';
 import moment from 'moment';
 import { errorToast, successToast } from '../utils/toasts';
+import { getEditTask } from '../utils/getEditTask';
 
 interface ModalProps {
     ID: number;
@@ -19,24 +20,25 @@ export const EditTaskModal: React.FC<ModalProps> = ({ showModal,
     setShowModal, ID }) => {
     const { data: getTasks} = useFetchTaskQuery(ID);
     const task = getTasks?.data || [];
+    const existingTask =task;
 
     const id = ID;
-    const [title, setTitle] = useState(task?.Title);
+    const [title, setTitle] = useState(task.Title);
     const [description, setDescription] = useState(task.Description);
     const [color, setColor] = useState(task?.Color || '#000ff3');
     const [due_date, setDueDate] = useState(moment(task.DueDate).format().slice(0,10));
     const [due_start, setDueStart] = useState(moment(task.StartDate).format().slice(11, 16));
     const [due_end, setDueEnd] = useState(moment(task.DueDate).format().slice(11, 16));
-    const [status, setStatus] = useState(task?.Status || '');
+    const [status, setStatus] = useState(task.Status);
 
     useEffect(() => {
-        setTitle(task?.Title || '');
-        setDescription(task?.Description || '');
-        setColor(task?.Color || '#000ff3');
-        setDueDate(task?.DueDate ? moment(task.DueDate).format().slice(0,10) : '');
-        setDueStart(task?.StartDate ? moment(task.StartDate).format().slice(11, 16) : '');
-        setDueEnd(task?.DueDate ? moment(task.DueDate).format().slice(11, 16) : '');
-        setStatus(task?.Status || '');
+        setTitle(task.Title);
+        setDescription(task.Description);
+        setColor(task.Color);
+        setDueDate(moment(task.DueDate).format().slice(0,10));
+        setDueStart(moment(task.StartDate).format().slice(11, 16));
+        setDueEnd(moment(task.DueDate).format().slice(11, 16));
+        setStatus(task.Status);
     }, [task]);
 
     const handleDueStartChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,47 +94,39 @@ export const EditTaskModal: React.FC<ModalProps> = ({ showModal,
 
 
     const handleDelete = async () => {
-
-        const task: Partial<Task> = {
-            ID: id,
-            Title: title,
-            Description: description,
-            Color: color,
-            DueEnd: due_date + 'T' + due_end,
-            DueDate:due_date + 'T' + due_end,
-            DueStart: due_date + 'T' + due_start,
-            Status: status,
-
-        };
-
-
-        await deleteTask(task as Task).unwrap();
-            setShowModal(false);
-         
+        await deleteTask(ID).unwrap();
+        setShowModal(false); 
     };
-    const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+
+    const handleEditForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const selectedDueDateTime = new Date(`${due_date}T${due_start}`);
         const nowDate = new Date();
-      
         if (selectedDueDateTime < nowDate) {
-
             errorToast('This is an old date!!');
             return;
-        }
-      
-        const task: Partial<Task> = {
+        }      
+        const task: Task = {
             ID: id,
             Title: title,
             Description: description,
-            Color: color,
-            DueEnd: due_date + 'T' + due_end,
             DueDate:due_date + 'T' + due_end,
-            DueStart: due_date + 'T' + due_start,
+            StartDate: due_date + 'T' + due_start,
             Status: status,
-        };
+          };
+          console.log(task);
+          console.log("________________________")
+          console.log(existingTask);
 
-        await editTask(task as Task).unwrap();
+          const updatedTask = getEditTask(task, existingTask);
+          console.log("________________________")
+          console.log(updatedTask);
+          if (Object.keys(updatedTask).length === 1) {
+            setShowModal(false);
+            return;
+          }
+        
+        await editTask(updatedTask as Task).unwrap();
         setShowModal(false);
      
     };
@@ -142,7 +136,7 @@ export const EditTaskModal: React.FC<ModalProps> = ({ showModal,
             <Modal isOpen={showModal} setIsOpen={setShowModal}>
                 <ModalContent>
                     <h1 className="text-3xl font-semibold text-txt"> Edit Task </h1>
-                    <form onSubmit={handleSubmitForm}>
+                    <form onSubmit={handleEditForm}>
                         <div className="w-full">
                             <InputWithLabel
                                 required
