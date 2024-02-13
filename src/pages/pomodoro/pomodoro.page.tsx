@@ -10,16 +10,11 @@ import {
 } from './pomodoro.styles';
 import button from '../../assets/sounds/button-press.wav'
 import { useCallback } from 'react';
+
 const buttonSound = player({
     asset: button,
-    volume: 0.5,
-  });
-  
-//   const tickingAudio = player({
-//     asset: button,
-//     loop: true,
-//   });
-  
+});
+
 
 const PomodoroPage = () => {
     const {
@@ -30,7 +25,10 @@ const PomodoroPage = () => {
         stopTimer,
         timerMode,
         setTimerMode,
+        time,
     } = usePomodoroTimer();
+
+
     const toggleTimer = useCallback(() => {
         buttonSound.play();
         if (isRunning) {
@@ -38,7 +36,7 @@ const PomodoroPage = () => {
         } else {
             startTimer();
         }
-      }, [startTimer, stopTimer, isRunning]);
+    }, [startTimer, stopTimer, isRunning]);
     return (
         <CenterElement>
             <PomodoroContainer mode={timerMode}>
@@ -72,6 +70,9 @@ const PomodoroPage = () => {
                 >
                     {isRunning ? 'PAUSE' : 'START'}
                 </ControlButton>
+                <p>
+                    Round #{time.round}
+                </p>
             </PomodoroContainer>
         </CenterElement>
     );

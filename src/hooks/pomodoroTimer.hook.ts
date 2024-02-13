@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import alarm from '../assets/sounds/alarm-digital.mp3'
 import { player } from '../utils/sounds';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, incrementRound } from '../store';
 
 export type TimerModes = 'pomodoro' | 'shortBreak' | 'longBreak';
 const usePomodoroTimer = () => {
@@ -8,10 +10,18 @@ const usePomodoroTimer = () => {
     const [seconds, setSeconds] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
     const [timerMode, setTimerMode] = useState<TimerModes>('pomodoro');
+    const dispatch = useDispatch();
+    const  time  = useSelector(
+        (state: RootState) => {
+            return {
+                ...state['pomodoro']
+            };
+        },
+    );
+
     const alarmAudio = player({
         asset: alarm,
-        volume: 0.5,
-      });
+    });
     const startTimer = () => {
         setIsRunning(true);
     };
@@ -21,14 +31,14 @@ const usePomodoroTimer = () => {
     useEffect(() => {
         setIsRunning(false);
         if (timerMode === 'pomodoro') {
-            setMinutes(25);
-            setSeconds(0);
+            setMinutes(0);
+            setSeconds(20);
         } else if (timerMode === 'shortBreak') {
-            setMinutes(5);
-            setSeconds(0);
+            setMinutes(0);
+            setSeconds(5);
         } else if (timerMode === 'longBreak') {
-            setMinutes(15);
-            setSeconds(0);
+            setMinutes(0);
+            setSeconds(6);
         }
     }, [timerMode]);
     useEffect(() => {
@@ -38,12 +48,18 @@ const usePomodoroTimer = () => {
             if (Number(minutes) === 0 && Number(seconds) === 0) {
                 stopTimer();
                 alarmAudio.play();
-                setTimerMode((prevMode) => {
-                    if (prevMode === 'pomodoro') return 'shortBreak';
-                    if (prevMode === 'shortBreak') return 'pomodoro';
-                    if (prevMode === 'longBreak') return 'pomodoro';
-                    return 'pomodoro';
-                });
+
+                if (timerMode === 'shortBreak'|| timerMode === 'longBreak') {
+                    dispatch(incrementRound());
+                }
+
+                if (time.round % 3 === 0 && timerMode === 'pomodoro') {
+                    setTimerMode('longBreak');
+                } else if (timerMode === 'pomodoro') {
+                    setTimerMode('shortBreak');
+                } else {
+                    setTimerMode('pomodoro');
+                }
                 return;
             }
             if (Number(seconds) === 0) {
@@ -68,6 +84,7 @@ const usePomodoroTimer = () => {
         isRunning,
         startTimer,
         stopTimer,
+        time,
     };
 };
 export default usePomodoroTimer;
