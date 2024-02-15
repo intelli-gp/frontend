@@ -49,3 +49,64 @@ export const TasksContainer = styled.div`
     width: 100%;
     padding: 0.3rem;
 `;
+
+export const NoTasksContainer = styled.div`
+height: 100%;
+width: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
+padding: 2rem;
+flex-direction: column;
+gap: 1rem;
+`;
+export const ButtonMV = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 3.8rem;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 1.5rem;
+  gap: 1rem;
+
+  @media (min-width: 1024px) { 
+    display: none;
+  }
+`;
+export const CalendarHolder = styled.div`
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+
+  @media (min-width: 1024px) { 
+    flex-basis: 80%; 
+  }
+`;
+
+export const Searchbar = styled.div`
+    display: flex;
+    align-items: center;
+    width:100%;
+    padding: 5px;
+    padding-left:8px;
+    border-radius:36px;
+    background: #F4F4F5;
+    border:2px solid #F4F4F5;
+    transition : background 0.25s;
+    input {
+        font-size: 0.875rem;
+        margin-left:8px;
+        margin-right:4px;
+        background: transparent;
+        outline:none;
+        border:none;
+        flex:1;
+    }
+    &:focus-within {
+        border:2px solid #4F46E5;
+      }
+`;

@@ -8,7 +8,7 @@ import Button from '../../components/Button';
 import { useFetchTasksQuery } from '../../store';
 import { AddTaskModal } from '../../components/AddTaskModal';
 import TaskBox from '../../components/TaskBox';
-import { TasksContainer } from './study-planner.styles';
+import { ButtonMV, CalendarHolder, NoTasksContainer, Searchbar, TasksContainer } from './study-planner.styles';
 import { EditTaskModal } from '../../components/EditTaskModal';
 import Skeleton from '../../components/Skeleton';
 import React from 'react';
@@ -68,19 +68,19 @@ const CustomToolbar = (props: ToolbarProps) => {
             <div className="flex flex-row gap-3 pb-4  w-2/5 px-2">
                 {viewState == 'day' ? (
                     <>
-                        <label className="lg:text-4xl text-2xl text-indigo-900 font-semibold">
+                        <label className="lg:text-4xl text-3xl text-indigo-900 font-semibold">
                             {moment(props.date).format('DD ')}
                         </label>
-                        <label className="lg:text-4xl text-2xl text-indigo-900 font-normal">
+                        <label className="lg:text-4xl text-3xl text-indigo-900 font-normal">
                             {moment(props.date).format('dddd')}
                         </label>
                     </>
                 ) : (
                     <>
-                        <label className="lg:text-4xl text-2xl text-indigo-900 font-semibold">
+                        <label className="lg:text-4xl text-3xl text-indigo-900 font-semibold">
                             {moment(props.date).format('MMMM ')}
                         </label>
-                        <label className="lg:text-4xl text-2xl text-indigo-900 font-light">
+                        <label className="lg:text-4xl text-3xl text-indigo-900 font-light">
                             {moment(props.date).format('YYYY ')}
                         </label>
                     </>
@@ -160,10 +160,12 @@ export default function StudyPlanner() {
             );
         } else if (error) {
             content = (
-                <div className="h-full w-full flex justify-center items-center p-8 flex-col gap-4">
-                    <img src={noTask} className="w-1/2" />
-                    <p className="text-slate-500">Error Loading..</p>
-                </div>
+                <NoTasksContainer>
+                    <img src={noTask} className="w-[90%]" />
+                    <div className='flex flex-col w-full justify-center items-center mr-6'>
+                        <p className="text-txt text-lg font-extrabold">Error loading...</p>
+                    </div>
+                </NoTasksContainer>
             );
         } else {
             const getSortedFutureTasks = (tasks: any[]) => {
@@ -286,9 +288,9 @@ export default function StudyPlanner() {
 
     return (
         <div className="flex justify-between h-[100vh] xl:flex-row flex-col">
-            <div className=" h-[100vh] lg:basis-4/5 w-[100%%] flex justify-items-right justify-center">
+            <CalendarHolder>
                 <Calendar className="w-[95%] h-full" />
-                <div className="flex-col gap-3 absolute justify-center  w-[3.8rem] bottom-0 right-0 m-6 flex lg:hidden">
+                <ButtonMV>
                     <Button
                         select="primary300" S
                         type="button"
@@ -307,23 +309,19 @@ export default function StudyPlanner() {
                     >
                         <RiRobot2Line size="24" color="white" />
                     </Button>
-                </div>
-            </div>
-            <div className=" basis-1/5 h-full flex-col border-l-2 border-slate-200 p-8 lg:flex hidden">
+                    </ButtonMV>
+                </CalendarHolder>
+                <div className=" basis-1/5 h-full flex-col border-l-2 border-slate-200 p-8 lg:flex hidden">
                 <div className="flex-col flex gap-3 justify-items-center justify-center w-full">
-                    <div className="relative">
-                        <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <IoMdSearch color="#312E81" />
-                        </div>
+                    <Searchbar>
+                        <IoMdSearch color="#312E81" size='20' />
                         <input
                             type="search"
                             id="default-search"
-                            className=" w-full py-[3px] md:pl-8 py-5 text-sm text-txt focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2  rounded bg-[#F4F4F5] "
                             value={searchValue}
                             onChange={handleInputChange}
-                            required
                         />
-                    </div>
+                    </Searchbar>
                     {showButtons && (
                         <>
                             <Button select="primary300" type="button" onClick={openModal}>
@@ -345,15 +343,13 @@ export default function StudyPlanner() {
                     <TasksContainer>  {React.Children.count(content) !== 0 ? (
                         content
                     ) : (
-                        <div className="h-full w-full flex justify-center items-center p-8 flex-col gap-4">
+                        <NoTasksContainer>
                             <img src={noTask} className="w-[90%]" />
                             <div className='flex flex-col w-full justify-center items-center mr-6'>
                                 <p className="text-txt text-lg font-extrabold">No tasks</p>
                                 <p className="text-slate-400 text-sm text-center">You have no tasks to do.</p>
                             </div>
-
-
-                        </div>
+                        </NoTasksContainer>
                     )}</TasksContainer>
                 </div>
             </div>
