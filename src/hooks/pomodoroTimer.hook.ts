@@ -3,6 +3,8 @@ import alarm from '../assets/sounds/alarm-digital.mp3'
 import { player } from '../utils/sounds';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, incrementRound } from '../store';
+import { createSelector } from 'reselect';
+
 
 export type TimerModes = 'pomodoro' | 'shortBreak' | 'longBreak';
 const usePomodoroTimer = () => {
@@ -11,14 +13,16 @@ const usePomodoroTimer = () => {
     const [isRunning, setIsRunning] = useState(false);
     const [timerMode, setTimerMode] = useState<TimerModes>('pomodoro');
     const dispatch = useDispatch();
-    const  time  = useSelector(
-        (state: RootState) => {
-            return {
-                ...state['pomodoro']
-            };
-        },
-    );
-
+    const timeSelector = createSelector(
+        (state: RootState) => state.timer,
+        (timer: any) => {
+          return {
+            ...timer,
+          };
+        }
+      );
+      
+      const time = useSelector(timeSelector);
     const alarmAudio = player({
         asset: alarm,
     });
@@ -53,7 +57,7 @@ const usePomodoroTimer = () => {
                     dispatch(incrementRound());
                 }
 
-                if (time.round % 3 === 0 && timerMode === 'pomodoro') {
+                if (time.pomodoro.round % 3 === 0 && timerMode === 'pomodoro') {
                     setTimerMode('longBreak');
                 } else if (timerMode === 'pomodoro') {
                     setTimerMode('shortBreak');
