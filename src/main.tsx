@@ -8,11 +8,16 @@ import { HashRouter } from 'react-router-dom';
 import App from './App.tsx';
 import './index.css';
 import { store } from './store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistStore } from 'redux-persist';
+
+let persistor = persistStore(store);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <HashRouter>
             <Provider store={store}>
+                <PersistGate persistor={persistor}>
                 <Toaster
                     position="bottom-right"
                     toastOptions={{
@@ -20,6 +25,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                     }}
                 />
                 <App />
+                </PersistGate>
             </Provider>
         </HashRouter>
     </React.StrictMode>,

@@ -11,7 +11,7 @@ import PomodoroPage from './pages/pomodoro/pomodoro.page';
 import HomePage from './pages/home';
 import ProfilePage from './pages/profile/profile.page';
 import { SettingsPage } from './pages/settings/settings.page';
-import StudyPlanner from './pages/study-planner/StudyPlanner';
+import StudyPlanner from './pages/study-planner/study-planner.page';
 import AuthTemplatePage from './pages/templates/Auth';
 import LoggedInTemplatePage from './pages/templates/LoggedIn';
 import ViewArticlePage from './pages/view-article/view-article.page';
