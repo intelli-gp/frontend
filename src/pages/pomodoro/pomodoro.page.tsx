@@ -64,6 +64,7 @@ const PomodoroPage = () => {
                     {String(minutes).padStart(2, '0')}:
                     {String(seconds).padStart(2, '0')}
                 </Timer>
+                <div className='flex flex-col items-center gap-3'>
                 <ControlButton
                     onClick={toggleTimer}
                     mode={timerMode}
@@ -71,8 +72,9 @@ const PomodoroPage = () => {
                     {isRunning ? 'PAUSE' : 'START'}
                 </ControlButton>
                 <p>
-                    Round #{time.round}
+                    Round #{time.pomodoro.round}
                 </p>
+                </div>
             </PomodoroContainer>
         </CenterElement>
     );

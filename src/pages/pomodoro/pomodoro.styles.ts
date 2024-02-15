@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-
-import { TimerModes } from '../../../../../New folder/backend/src/hooks/pomodoroTimer/pomodoroTimer.hook';
+import { TimerModes } from '../../hooks/pomodoroTimer.hook';
 
 export const CenterElement = styled.section`
     display: flex;
@@ -33,6 +32,13 @@ export const PomodoroContainer = styled.div<TimerModesProps>`
               : '#6366F1'};
     @media (max-width: 768px) {
         height: 80vh;
+    }
+    p {
+        font-family: 'Lilita One', sans-serif;
+        font-size: 1.75rem;
+        font-weight: 400;
+        color: white;
+        opacity: 0.6;
     }
 `;
 export const ModesContainer = styled.div`
