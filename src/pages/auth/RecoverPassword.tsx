@@ -4,7 +4,7 @@ import { MdLockReset } from 'react-icons/md';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import Button from '../../components/Button';
-import {InputWithLabel} from '../../components/Input';
+import { InputWithLabel } from '../../components/Input';
 import { reset, useResetPasswordConfirmMutation } from '../../store';
 import { errorToast, successToast } from '../../utils/toasts';
 
@@ -66,7 +66,9 @@ const RecoverPassword = () => {
                         value={newPassword}
                         pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,30}$"
                         title="At least 8 characters long, contains at least one uppercase letter, one lowercase letter, one number, and one special character."
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => setNewPassword(e.target.value)}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            setNewPassword(e.target.value)
+                        }
                     />
                     <InputWithLabel
                         type="password"

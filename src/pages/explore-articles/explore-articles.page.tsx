@@ -3,12 +3,12 @@ import { LuSearch } from 'react-icons/lu';
 import { Link, useNavigate } from 'react-router-dom';
 
 import Button from '../../components/Button';
+import Spinner from '../../components/Spinner';
 import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
 import { useGetArticlesQuery } from '../../store';
 import { ReceivedArticle } from '../../types/article';
 import { Response } from '../../types/response';
 import { PageContainer, SearchBarContainer } from './explore-articles.styles';
-import Spinner from '../../components/Spinner';
 
 const ExploreArticlesPage = () => {
     const navigate = useNavigate();

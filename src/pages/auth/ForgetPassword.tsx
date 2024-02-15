@@ -5,7 +5,7 @@ import { IoChevronBack } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 
 import Button from '../../components/Button';
-import {InputWithLabel} from '../../components/Input';
+import { InputWithLabel } from '../../components/Input';
 import { useLazyResetPasswordQuery } from '../../store';
 import { errorToast, successToast } from '../../utils/toasts';
 
@@ -61,7 +61,9 @@ export default function ForgetPasswordPage() {
                         label="Your Email (Must be registered)"
                         placeholder="Enter your email"
                         value={email}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            setEmail(e.target.value)
+                        }
                     />
                     <Button
                         className="!h-11 text-base text-center font-bold w-full gap-2"

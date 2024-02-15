@@ -1,6 +1,4 @@
-
 import { TaskBoxContainer } from '../pages/study-planner/study-planner.styles';
-
 
 interface TaskProps {
     id?: any;
@@ -23,10 +21,8 @@ export default function TaskBox({
     due_date,
     color,
 }: TaskProps): JSX.Element {
-
     return (
         <div>
-           
             <TaskBoxContainer color={color}>
                 <div className="flex flex-col justify-between items-left">
                     <p className="text-sm text-[#0369A1] ">

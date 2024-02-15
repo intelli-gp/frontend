@@ -101,13 +101,13 @@ export default function SideNav() {
             id: 8,
         },
         {
-            icon:<GiTomato/>,
-            extendable:false,
-            path:'/app/pomodoro',
-            text:'Pomodoro',
-            active:false,
-            id:9
-        }
+            icon: <GiTomato />,
+            extendable: false,
+            path: '/app/pomodoro',
+            text: 'Pomodoro',
+            active: false,
+            id: 9,
+        },
     ]);
 
     const [menuActive, setMenuActive] = useState(false);

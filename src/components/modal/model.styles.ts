@@ -10,7 +10,7 @@ export const Background = styled.div`
     align-items: center;
     z-index: 101;
     inset: 0;
-    `;
+`;
 
 export const ModalWrapper = styled.div`
     width: 600px;
@@ -20,7 +20,6 @@ export const ModalWrapper = styled.div`
     border-radius: 10px;
     padding: 2rem 3.5rem;
     @media (max-width: 500px) {
-    margin:5rem 0rem 0rem 0rem;
-    
+        margin: 5rem 0rem 0rem 0rem;
     }
 `;

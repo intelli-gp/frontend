@@ -17,7 +17,7 @@ export const taskApi = appApi.injectEndpoints({
             query: (task) => ({
                 url: '/study-planner',
                 method: 'POST',
-                body:task,
+                body: task,
             }),
         }),
         fetchTasks: builder.query({
@@ -27,7 +27,7 @@ export const taskApi = appApi.injectEndpoints({
                 method: 'GET',
             }),
         }),
-        editTask: builder.mutation<Response, Task> ({
+        editTask: builder.mutation<Response, Task>({
             invalidatesTags: ['Task'],
             query: (task) => ({
                 url: `/study-planner/${task.ID}`,

@@ -27,7 +27,7 @@ export const AccordionContent = styled.main`
     flex-direction: column;
     gap: 1rem;
     position: relative;
-    @media(max-width: 768px){
+    @media (max-width: 768px) {
         padding: 1rem;
         font-size: 1rem;
     }

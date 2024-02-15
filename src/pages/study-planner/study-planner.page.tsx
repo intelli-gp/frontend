@@ -1,18 +1,6 @@
-import { useEffect, useState } from 'react';
-import { IoMdSearch } from 'react-icons/io';
-import { RiRobot2Line } from 'react-icons/ri';
-import { GoPlus } from "react-icons/go";
-import noTask from '../../assets/imgs/no-task.png'
-
-import Button from '../../components/Button';
-import { useFetchTasksQuery } from '../../store';
-import { AddTaskModal } from '../../components/AddTaskModal';
-import TaskBox from '../../components/TaskBox';
-import { ButtonMV, CalendarHolder, NoTasksContainer, Searchbar, TasksContainer } from './study-planner.styles';
-import { EditTaskModal } from '../../components/EditTaskModal';
-import Skeleton from '../../components/Skeleton';
-import React from 'react';
 import moment from 'moment';
+import { useEffect, useState } from 'react';
+import React from 'react';
 import {
     Calendar as BigCalendar,
     CalendarProps,
@@ -21,9 +9,26 @@ import {
     momentLocalizer,
 } from 'react-big-calendar';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
+import { GoPlus } from 'react-icons/go';
+import { IoMdSearch } from 'react-icons/io';
+import { RiRobot2Line } from 'react-icons/ri';
 
+import noTask from '../../assets/imgs/no-task.png';
+import { AddTaskModal } from '../../components/AddTaskModal';
+import Button from '../../components/Button';
+import { EditTaskModal } from '../../components/EditTaskModal';
+import Skeleton from '../../components/Skeleton';
+import TaskBox from '../../components/TaskBox';
 import '../../index.css';
+import { useFetchTasksQuery } from '../../store';
 import './Calendar.styles.css';
+import {
+    ButtonMV,
+    CalendarHolder,
+    NoTasksContainer,
+    Searchbar,
+    TasksContainer,
+} from './study-planner.styles';
 
 const formats = {
     weekdayFormat: 'ddd',
@@ -113,7 +118,6 @@ const CustomToolbar = (props: ToolbarProps) => {
     );
 };
 
-
 export default function StudyPlanner() {
     const [showModal, setShowModal] = useState(false);
     const openModal = () => {
@@ -133,22 +137,23 @@ export default function StudyPlanner() {
         setSearchValue(value);
         setShowButtons(value === '');
 
-        const filteredTasks = data.filter((task: { Title: string; }) =>
-            task.Title.toLowerCase().includes(value.toLowerCase())
+        const filteredTasks = data.filter((task: { Title: string }) =>
+            task.Title.toLowerCase().includes(value.toLowerCase()),
         );
 
         setTasks(filteredTasks);
-
     };
 
     const handleEdit = (ID: number) => {
         setID(ID);
         setEdit((prev) => !prev);
-    }
+    };
     useEffect(() => {
-        setTasks(data)
+        setTasks(data);
     }, [data]);
-    const [content, setContent] = useState<JSX.Element | JSX.Element[] | null>(null);
+    const [content, setContent] = useState<JSX.Element | JSX.Element[] | null>(
+        null,
+    );
 
     useEffect(() => {
         let content;
@@ -162,8 +167,10 @@ export default function StudyPlanner() {
             content = (
                 <NoTasksContainer>
                     <img src={noTask} className="w-[90%]" />
-                    <div className='flex flex-col w-full justify-center items-center mr-6'>
-                        <p className="text-txt text-lg font-extrabold">Error loading...</p>
+                    <div className="flex flex-col w-full justify-center items-center mr-6">
+                        <p className="text-txt text-lg font-extrabold">
+                            Error loading...
+                        </p>
                     </div>
                 </NoTasksContainer>
             );
@@ -172,10 +179,13 @@ export default function StudyPlanner() {
                 const currentDateTime = new Date();
                 return tasks
                     .filter((task) => new Date(task.DueDate) > currentDateTime)
-                    .sort((a, b) => new Date(a.DueDate).getTime() - new Date(b.DueDate).getTime());
+                    .sort(
+                        (a, b) =>
+                            new Date(a.DueDate).getTime() -
+                            new Date(b.DueDate).getTime(),
+                    );
             };
             const futureTasks = getSortedFutureTasks(tasks);
-
 
             content = futureTasks.map(
                 (tasks: {
@@ -201,7 +211,10 @@ export default function StudyPlanner() {
                     }
                     const time = formatTimestamp(tasks.DueDate);
                     return (
-                        <div className="w-full" onClick={() => handleEdit(tasks.ID)}>
+                        <div
+                            className="w-full"
+                            onClick={() => handleEdit(tasks.ID)}
+                        >
                             <TaskBox
                                 key={tasks.ID}
                                 id={tasks.ID}
@@ -220,7 +233,6 @@ export default function StudyPlanner() {
 
         setContent(content);
     }, [isLoading, error, tasks]);
-
 
     const Calendar = (props: Omit<CalendarProps, 'localizer'>) => {
         let EVENTS: any[] = [];
@@ -266,10 +278,15 @@ export default function StudyPlanner() {
                         const data = event?.data;
                         if (data?.task)
                             return (
-                                <div className='bg-[#DBEAF2] border-l-[6px]	border-[#0369A1] p-2 rounded-[6px] h-full w-[96%]' onClick={() => handleEdit(data.task.id)}>
+                                <div
+                                    className="bg-[#DBEAF2] border-l-[6px]	border-[#0369A1] p-2 rounded-[6px] h-full w-[96%]"
+                                    onClick={() => handleEdit(data.task.id)}
+                                >
                                     <div className="flex flex-col justify-between items-left ">
                                         <p className="text-[10px] text-[#0369A1] pb-[4px] font-bold">
-                                            <span>{data.task.start + ' - '}</span>
+                                            <span>
+                                                {data.task.start + ' - '}
+                                            </span>
                                             <span>{data.task.end}</span>
                                         </p>
                                         <p className="text-xs text-[#0369A1] font-bold">
@@ -292,7 +309,8 @@ export default function StudyPlanner() {
                 <Calendar className="w-[95%] h-full" />
                 <ButtonMV>
                     <Button
-                        select="primary300" S
+                        select="primary300"
+                        S
                         type="button"
                         className="!p-4 rounded-full justify-center"
                         onClick={(e: unknown) => {
@@ -309,12 +327,12 @@ export default function StudyPlanner() {
                     >
                         <RiRobot2Line size="24" color="white" />
                     </Button>
-                    </ButtonMV>
-                </CalendarHolder>
-                <div className=" basis-1/5 h-full flex-col border-l-2 border-slate-200 p-8 lg:flex hidden">
+                </ButtonMV>
+            </CalendarHolder>
+            <div className=" basis-1/5 h-full flex-col border-l-2 border-slate-200 p-8 lg:flex hidden">
                 <div className="flex-col flex gap-3 justify-items-center justify-center w-full">
                     <Searchbar>
-                        <IoMdSearch color="#312E81" size='20' />
+                        <IoMdSearch color="#312E81" size="20" />
                         <input
                             type="search"
                             id="default-search"
@@ -324,7 +342,11 @@ export default function StudyPlanner() {
                     </Searchbar>
                     {showButtons && (
                         <>
-                            <Button select="primary300" type="button" onClick={openModal}>
+                            <Button
+                                select="primary300"
+                                type="button"
+                                onClick={openModal}
+                            >
                                 + Add a task
                             </Button>
 
@@ -340,21 +362,39 @@ export default function StudyPlanner() {
                     )}
                 </div>
                 <div className="flex flex-col mt-8 items-center justify-center w-full ">
-                    <TasksContainer>  {React.Children.count(content) !== 0 ? (
-                        content
-                    ) : (
-                        <NoTasksContainer>
-                            <img src={noTask} className="w-[90%]" />
-                            <div className='flex flex-col w-full justify-center items-center mr-6'>
-                                <p className="text-txt text-lg font-extrabold">No tasks</p>
-                                <p className="text-slate-400 text-sm text-center">You have no tasks to do.</p>
-                            </div>
-                        </NoTasksContainer>
-                    )}</TasksContainer>
+                    <TasksContainer>
+                        {' '}
+                        {React.Children.count(content) !== 0 ? (
+                            content
+                        ) : (
+                            <NoTasksContainer>
+                                <img src={noTask} className="w-[90%]" />
+                                <div className="flex flex-col w-full justify-center items-center mr-6">
+                                    <p className="text-txt text-lg font-extrabold">
+                                        No tasks
+                                    </p>
+                                    <p className="text-slate-400 text-sm text-center">
+                                        You have no tasks to do.
+                                    </p>
+                                </div>
+                            </NoTasksContainer>
+                        )}
+                    </TasksContainer>
                 </div>
             </div>
-            {editShow && <EditTaskModal showModal={editShow} setShowModal={setEdit} ID={id} />}
-            {showModal && <AddTaskModal showModal={showModal} setShowModal={setShowModal} />}
+            {editShow && (
+                <EditTaskModal
+                    showModal={editShow}
+                    setShowModal={setEdit}
+                    ID={id}
+                />
+            )}
+            {showModal && (
+                <AddTaskModal
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                />
+            )}
         </div>
     );
 }

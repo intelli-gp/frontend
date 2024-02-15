@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import { TimerModes } from '../../hooks/pomodoroTimer.hook';
 
 export const CenterElement = styled.section`
@@ -45,7 +46,6 @@ export const ModesContainer = styled.div`
     display: flex;
     align-items: center;
     gap: 2rem;
-
 `;
 type Active = {
     active: string;

@@ -4,12 +4,12 @@ import ReactDOM from 'react-dom/client';
 import { Toaster } from 'react-hot-toast';
 import { Provider } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
+import { persistStore } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import App from './App.tsx';
 import './index.css';
 import { store } from './store';
-import { PersistGate } from 'redux-persist/integration/react';
-import { persistStore } from 'redux-persist';
 
 let persistor = persistStore(store);
 
@@ -18,13 +18,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <HashRouter>
             <Provider store={store}>
                 <PersistGate persistor={persistor}>
-                <Toaster
-                    position="bottom-right"
-                    toastOptions={{
-                        duration: 5000,
-                    }}
-                />
-                <App />
+                    <Toaster
+                        position="bottom-right"
+                        toastOptions={{
+                            duration: 5000,
+                        }}
+                    />
+                    <App />
                 </PersistGate>
             </Provider>
         </HashRouter>

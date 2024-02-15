@@ -4,7 +4,6 @@ import { FiPlus } from 'react-icons/fi';
 import { IoShareSocial } from 'react-icons/io5';
 import { SlOptions } from 'react-icons/sl';
 import { useParams } from 'react-router-dom';
-import { GridLoader } from 'react-spinners';
 
 import defaultCoverImage from '../../assets/imgs/defaultCover.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';

@@ -1,4 +1,4 @@
-import _, { set } from 'lodash';
+import _ from 'lodash';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';

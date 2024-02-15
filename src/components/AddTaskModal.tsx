@@ -1,14 +1,14 @@
+import moment from 'moment';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { GoDash } from 'react-icons/go';
 
+import { ModalContent } from '../pages/study-planner/study-planner.styles';
+import { useAddTasksMutation } from '../store';
+import { sendTask } from '../types/event';
+import { errorToast, successToast } from '../utils/toasts';
 import Button from './Button';
 import { InputWithLabel } from './Input';
 import { Modal } from './modal/modal.component';
-import { useAddTasksMutation } from '../store';
-import { sendTask } from '../types/event';
-import { ModalContent } from '../pages/study-planner/study-planner.styles';
-import { errorToast, successToast } from '../utils/toasts';
-import moment from 'moment';
 
 interface ModalProps {
     showModal: boolean;
@@ -40,24 +40,32 @@ export const AddTaskModal: React.FC<ModalProps> = ({
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [color, setColor] = useState('#0369a1');
-    const [due_date, setDueDate] = useState(moment(currentDate).format().slice(0, 10));
-    const [due_start, setDueStart] = useState( moment(currentDate).format().slice(11, 16));
-    const [due_end, setDueEnd] = useState(moment(currentDate).add(1, 'hours').format().slice(11, 16));
+    const [due_date, setDueDate] = useState(
+        moment(currentDate).format().slice(0, 10),
+    );
+    const [due_start, setDueStart] = useState(
+        moment(currentDate).format().slice(11, 16),
+    );
+    const [due_end, setDueEnd] = useState(
+        moment(currentDate).add(1, 'hours').format().slice(11, 16),
+    );
     const [status, setStatus] = useState('');
-    const handleDueStartChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleDueStartChange = (
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
         const newDueStart = event.target.value;
         setDueStart(newDueStart);
         if (newDueStart > due_end) {
-          setDueEnd(newDueStart);
+            setDueEnd(newDueStart);
         }
-      };
-      
-      const handleDueEndChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    };
+
+    const handleDueEndChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newDueEnd = event.target.value;
         if (newDueEnd >= due_start) {
-          setDueEnd(newDueEnd);
+            setDueEnd(newDueEnd);
         }
-      };
+    };
 
     const [
         createTask,
@@ -81,33 +89,29 @@ export const AddTaskModal: React.FC<ModalProps> = ({
         e.preventDefault();
         const selectedDueDateTime = new Date(`${due_date}T${due_start}`);
         const nowDate = new Date();
-      
-        if (selectedDueDateTime < nowDate) {
 
+        if (selectedDueDateTime < nowDate) {
             errorToast('This is an old date!!');
             return;
         }
-      
 
         const task: Partial<sendTask> = {
             Title: title,
             Description: description,
-            DueDate:due_date + 'T' + due_end,
+            DueDate: due_date + 'T' + due_end,
             StartDate: due_date + 'T' + due_start,
             Status: status,
         };
 
-
-            await createTask(task as sendTask).unwrap();
-            setShowModal(false);
-            setTitle('');
-            setDescription('');
-            setDueDate(moment(currentDate).format().slice(0, 10));
-            setDueStart( moment(currentDate).format().slice(11, 16));
-            setDueEnd(moment(currentDate).add(1, 'hours').format().slice(11, 16));
-            setColor('#0369a1');
-            setStatus('');
-    
+        await createTask(task as sendTask).unwrap();
+        setShowModal(false);
+        setTitle('');
+        setDescription('');
+        setDueDate(moment(currentDate).format().slice(0, 10));
+        setDueStart(moment(currentDate).format().slice(11, 16));
+        setDueEnd(moment(currentDate).add(1, 'hours').format().slice(11, 16));
+        setColor('#0369a1');
+        setStatus('');
     };
 
     return (
@@ -186,15 +190,17 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                             </div>
                         </div>
                         <div className="flex flex-col gap-2 pt-[6px]">
-                        <InputWithLabel
-                              label='Description'
-                              value={description}
-                              onChange={(e: { target: { value: any; }; }) => setDescription(e.target.value)}
-                              multiline='true'
-                              placeholder="Enter description..."
-                              maxLength={1000}
-                              cols={33}
-                              rows={4}
+                            <InputWithLabel
+                                label="Description"
+                                value={description}
+                                onChange={(e: { target: { value: any } }) =>
+                                    setDescription(e.target.value)
+                                }
+                                multiline="true"
+                                placeholder="Enter description..."
+                                maxLength={1000}
+                                cols={33}
+                                rows={4}
                             />
                         </div>
                         <div className="w-full flex flex-row gap-4 justify-end items-end pt-5">
@@ -211,7 +217,6 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                                 select="primary"
                                 className="w-2/5"
                                 loading={isTaskCreating}
-
                             >
                                 Create
                             </Button>

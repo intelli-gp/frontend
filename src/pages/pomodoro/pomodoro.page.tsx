@@ -1,3 +1,6 @@
+import { useCallback } from 'react';
+
+import button from '../../assets/sounds/button-press.wav';
 import usePomodoroTimer from '../../hooks/pomodoroTimer.hook';
 import { player } from '../../utils/sounds';
 import {
@@ -8,13 +11,10 @@ import {
     PomodoroContainer,
     Timer,
 } from './pomodoro.styles';
-import button from '../../assets/sounds/button-press.wav'
-import { useCallback } from 'react';
 
 const buttonSound = player({
     asset: button,
 });
-
 
 const PomodoroPage = () => {
     const {
@@ -27,7 +27,6 @@ const PomodoroPage = () => {
         setTimerMode,
         time,
     } = usePomodoroTimer();
-
 
     const toggleTimer = useCallback(() => {
         buttonSound.play();
@@ -64,16 +63,11 @@ const PomodoroPage = () => {
                     {String(minutes).padStart(2, '0')}:
                     {String(seconds).padStart(2, '0')}
                 </Timer>
-                <div className='flex flex-col items-center gap-3'>
-                <ControlButton
-                    onClick={toggleTimer}
-                    mode={timerMode}
-                >
-                    {isRunning ? 'PAUSE' : 'START'}
-                </ControlButton>
-                <p>
-                    Round #{time.pomodoro.round}
-                </p>
+                <div className="flex flex-col items-center gap-3">
+                    <ControlButton onClick={toggleTimer} mode={timerMode}>
+                        {isRunning ? 'PAUSE' : 'START'}
+                    </ControlButton>
+                    <p>Round #{time.pomodoro.round}</p>
                 </div>
             </PomodoroContainer>
         </CenterElement>
