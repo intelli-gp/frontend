@@ -30,6 +30,8 @@ export const getEditTask = (task: Task, existingTask: Task): Partial<Task> => {
     if (task.Status !== existingTask.Status) {
         updatedTask.Status = task.Status;
     }
-
+    if (task.Color !== existingTask.Color) {
+        updatedTask.Color = task.Color;
+    }
     return updatedTask;
 };

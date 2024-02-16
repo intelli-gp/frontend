@@ -127,14 +127,12 @@ export const EditTaskModal: React.FC<ModalProps> = ({
             DueDate: due_date + 'T' + due_end,
             StartDate: due_date + 'T' + due_start,
             Status: status,
+            Color: color,
         };
-        console.log(task);
-        console.log('________________________');
-        console.log(existingTask);
+
 
         const updatedTask = getEditTask(task, existingTask);
-        console.log('________________________');
-        console.log(updatedTask);
+
         if (Object.keys(updatedTask).length === 1) {
             setShowModal(false);
             return;

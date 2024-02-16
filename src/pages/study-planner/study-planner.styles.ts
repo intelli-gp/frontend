@@ -19,9 +19,12 @@ const hexToRgb = (hex: string | undefined) => {
         b = parseInt(hex.slice(5, 7), 16);
     return `${r}, ${g}, ${b}`;
 };
-export const TaskBoxContainer = styled.div`
-    border-color: '#0369a1';
-    background-color: rgba(${() => hexToRgb('#0369a1')}, 0.2);
+type Color = {
+    color: string;
+};
+export const TaskBoxContainer = styled.div<Color>`
+    border-color: ${(props) => props.color};
+    background-color: rgba(${(props) => hexToRgb(props.color)}, 0.2);
     display: flex;
     flex-direction: column;
     justify-content: start;
@@ -29,13 +32,12 @@ export const TaskBoxContainer = styled.div`
     width: 98%;
     border-style: solid;
     border-width: 0 0 0 6px;
-    border-color: #0369a1;
     border-radius: 6px;
     padding: 10px;
     padding-right: 14px;
 
     p {
-        color: '#0369a1';
+        color: ${(props) => props.color};
     }
 `;
 

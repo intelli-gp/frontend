@@ -27,6 +27,7 @@ import {
     CalendarHolder,
     NoTasksContainer,
     Searchbar,
+    TaskBoxContainer,
     TasksContainer,
 } from './study-planner.styles';
 
@@ -195,7 +196,7 @@ export default function StudyPlanner() {
                     Description: string | undefined;
                     DueDate: string;
                     StartDate: string;
-                    color: string | undefined;
+                    Color: string | undefined;
                 }) => {
                     function formatTimestamp(timestamp: string): string {
                         const date = new Date(timestamp);
@@ -224,6 +225,7 @@ export default function StudyPlanner() {
                                 DueDate={tasks.DueDate}
                                 StartDate={tasks.StartDate}
                                 due_date={'Due: ' + time}
+                                color = {tasks.Color}
                             />
                         </div>
                     );
@@ -247,6 +249,7 @@ export default function StudyPlanner() {
                     Description: string | undefined;
                     StartDate: string;
                     DueDate: string;
+                    Color: string | undefined;
                 }) => ({
                     start: moment(task.StartDate).toDate(),
                     end: moment(task.DueDate).toDate(),
@@ -257,6 +260,7 @@ export default function StudyPlanner() {
                             courseName: task.Title,
                             start: moment(task.StartDate).format('LT'),
                             end: moment(task.DueDate).format('LT'),
+                            color: task.Color,
                         },
                     },
                 }),
@@ -278,9 +282,10 @@ export default function StudyPlanner() {
                         const data = event?.data;
                         if (data?.task)
                             return (
-                                <div
-                                    className="bg-[#DBEAF2] border-l-[6px]	border-[#0369A1] p-2 rounded-[6px] h-full w-[96%]"
-                                    onClick={() => handleEdit(data.task.id)}
+                                <TaskBoxContainer 
+                                   color={data.task.color}
+                                   onClick={() => handleEdit(data.task.id)}
+                                   className='h-full'
                                 >
                                     <div className="flex flex-col justify-between items-left ">
                                         <p className="text-[10px] text-[#0369A1] pb-[4px] font-bold">
@@ -293,7 +298,7 @@ export default function StudyPlanner() {
                                             {data.task.courseName}
                                         </p>
                                     </div>
-                                </div>
+                                </TaskBoxContainer>
                             );
 
                         return null;

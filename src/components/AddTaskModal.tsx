@@ -101,6 +101,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
             DueDate: due_date + 'T' + due_end,
             StartDate: due_date + 'T' + due_start,
             Status: status,
+            Color:color,
         };
 
         await createTask(task as sendTask).unwrap();
