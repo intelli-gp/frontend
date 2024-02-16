@@ -54,10 +54,10 @@ const MarkdownEditor = ({ value, onChange, onDelete }: MarkdownEditorProps) => {
 
     return (
         <MDEditor
+            data-color-mode="light"
             height={300}
             tabSize={4}
             preview="edit"
-            data-color-mode="light"
             value={value}
             onChange={onChange}
             extraCommands={extraCommands}
