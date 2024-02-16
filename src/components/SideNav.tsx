@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import defaultUserImage from '../assets/imgs/user.jpg';
+import logo from '../assets/imgs/logo.png';
 import { clearCredentials, useLogoutUserMutation } from '../store';
 import Button from './Button';
 import SideNavItem from './SideNavItem';
@@ -198,8 +199,8 @@ export default function SideNav() {
         <>
             <aside className={sideNavClassNames} ref={sideNavRef}>
                 <div className="side-nav-links min-h-0">
-                    <h1 className="font-black text-white text-4xl text-center sticky top-0 pb-8 min-h-0">
-                        LoremIpsum
+                    <h1 className="font-black text-white text-4xl text-center sticky top-0 pb-8 min-h-0 flex justify-center">
+                        <img src={logo} alt="" className='w-[75%]'/>
                     </h1>
 
                     <div className="flex flex-col gap-2 overflow-y-scroll max-h-[70vh] side-nav-links px-2">

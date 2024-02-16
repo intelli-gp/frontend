@@ -64,7 +64,6 @@ export const ArticleImageSection = styled.img`
     object-position: center;
     width: 100%;
     height: 100%;
-    max-height: 250px;
 `;
 
 export const ArticleToolbar = styled.div`

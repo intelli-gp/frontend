@@ -143,12 +143,13 @@ const CreateArticlePage = () => {
         if (cover) {
             try {
                 article.coverImageUrl = await imageUploadTrigger(cover);
-                imageUploadReset();
             } catch (err) {
                 errorToast(
                     'Error uploading cover image while publishing blog post!',
                 );
                 return;
+            } finally {
+                imageUploadReset();
             }
         }
 
@@ -159,13 +160,13 @@ const CreateArticlePage = () => {
                 try {
                     let remoteURL = await imageUploadTrigger(section.value);
                     sectionsToSend.push([remoteURL, section.contentType]);
-                    console.log('image uploaded successfully!', remoteURL);
-                    imageUploadReset();
                 } catch (err) {
                     errorToast(
                         'Error uploading image while publishing blog post!',
                     );
                     return;
+                } finally {
+                    imageUploadReset();
                 }
             } else if (section.contentType === ArticleSectionType.Markdown) {
                 sectionsToSend.push([section.value, section.contentType]);
