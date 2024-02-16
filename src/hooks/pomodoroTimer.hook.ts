@@ -3,19 +3,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import alarm from '../assets/sounds/alarm-digital.mp3';
-import { RootState, incrementRound } from '../store';
+import { RootState, incrementRound, setMode } from '../store';
 import { player } from '../utils/sounds';
 
+type State = {
+    mode: string;
+    round: number;
+    autoBreaks: boolean;
+    autoPomodoros: boolean;
+    longBreakInterval: number;
+};
 export type TimerModes = 'pomodoro' | 'shortBreak' | 'longBreak';
 const usePomodoroTimer = () => {
     const [minutes, setMinutes] = useState(25);
     const [seconds, setSeconds] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
-    const [timerMode, setTimerMode] = useState<TimerModes>('pomodoro');
     const dispatch = useDispatch();
     const timeSelector = createSelector(
-        (state: RootState) => state.timer,
-        (timer: any) => {
+        (state: RootState) => state.timer.pomodoro,
+        (timer: State) => {
             return {
                 ...timer,
             };
@@ -23,6 +29,10 @@ const usePomodoroTimer = () => {
     );
 
     const time = useSelector(timeSelector);
+    useEffect(() => {
+        console.log(time.mode)
+        //    setTimerMode(time.pomodoro.mode)
+    }, [time])
     const alarmAudio = player({
         asset: alarm,
     });
@@ -34,17 +44,17 @@ const usePomodoroTimer = () => {
     };
     useEffect(() => {
         setIsRunning(false);
-        if (timerMode === 'pomodoro') {
-            setMinutes(0);
-            setSeconds(20);
-        } else if (timerMode === 'shortBreak') {
-            setMinutes(0);
-            setSeconds(5);
-        } else if (timerMode === 'longBreak') {
-            setMinutes(0);
-            setSeconds(6);
+        if (time.mode === 'pomodoro') {
+            setMinutes(25);
+            setSeconds(0);
+        } else if (time.mode === 'shortBreak') {
+            setMinutes(5);
+            setSeconds(0);
+        } else if (time.mode === 'longBreak') {
+            setMinutes(15);
+            setSeconds(0);
         }
-    }, [timerMode]);
+    }, [time.mode]);
     useEffect(() => {
         let interval: any = null;
 
@@ -53,16 +63,16 @@ const usePomodoroTimer = () => {
                 stopTimer();
                 alarmAudio.play();
 
-                if (timerMode === 'shortBreak' || timerMode === 'longBreak') {
+                if (time.mode === 'shortBreak' || time.mode === 'longBreak') {
                     dispatch(incrementRound());
                 }
 
-                if (time.pomodoro.round % 3 === 0 && timerMode === 'pomodoro') {
-                    setTimerMode('longBreak');
-                } else if (timerMode === 'pomodoro') {
-                    setTimerMode('shortBreak');
+                if (time.round % 3 === 0 && time.mode === 'pomodoro') {
+                    dispatch(setMode('longBreak'));
+                } else if (time.mode === 'pomodoro') {
+                    dispatch(setMode('shortBreak'));
                 } else {
-                    setTimerMode('pomodoro');
+                    dispatch(setMode('pomodoro'));
                 }
                 return;
             }
@@ -77,14 +87,13 @@ const usePomodoroTimer = () => {
             }
         }
 
+
         return () => clearInterval(interval);
     }, [isRunning, minutes, seconds]);
 
     return {
         minutes,
         seconds,
-        timerMode,
-        setTimerMode,
         isRunning,
         startTimer,
         stopTimer,

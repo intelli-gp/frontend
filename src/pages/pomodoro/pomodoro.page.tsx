@@ -11,6 +11,8 @@ import {
     PomodoroContainer,
     Timer,
 } from './pomodoro.styles';
+import { useDispatch } from 'react-redux';
+import { setMode } from '../../store';
 
 const buttonSound = player({
     asset: button,
@@ -23,8 +25,6 @@ const PomodoroPage = () => {
         isRunning,
         startTimer,
         stopTimer,
-        timerMode,
-        setTimerMode,
         time,
     } = usePomodoroTimer();
 
@@ -36,25 +36,28 @@ const PomodoroPage = () => {
             startTimer();
         }
     }, [startTimer, stopTimer, isRunning]);
+    const dispatch = useDispatch();
+
+
     return (
         <CenterElement>
-            <PomodoroContainer mode={timerMode}>
+            <PomodoroContainer mode={time.mode}>
                 <ModesContainer>
                     <ModeButton
-                        onClick={() => setTimerMode('pomodoro')}
-                        active={String(timerMode === 'pomodoro')}
+                        onClick={() => dispatch(setMode('pomodoro'))}
+                        active={String(time.mode === 'pomodoro')}
                     >
                         Pomodoro
                     </ModeButton>
                     <ModeButton
-                        onClick={() => setTimerMode('shortBreak')}
-                        active={String(timerMode === 'shortBreak')}
+                        onClick={() =>  dispatch(setMode('shortBreak'))}
+                        active={String(time.mode === 'shortBreak')}
                     >
                         Short Break
                     </ModeButton>
                     <ModeButton
-                        onClick={() => setTimerMode('longBreak')}
-                        active={String(timerMode === 'longBreak')}
+                        onClick={() => dispatch(setMode('longBreak'))}
+                        active={String(time.mode === 'longBreak')}
                     >
                         Long Break
                     </ModeButton>
@@ -64,10 +67,10 @@ const PomodoroPage = () => {
                     {String(seconds).padStart(2, '0')}
                 </Timer>
                 <div className="flex flex-col items-center gap-3">
-                    <ControlButton onClick={toggleTimer} mode={timerMode}>
+                    <ControlButton onClick={toggleTimer} mode={time.mode}>
                         {isRunning ? 'PAUSE' : 'START'}
                     </ControlButton>
-                    <p>Round #{time.pomodoro.round}</p>
+                    <p>Round #{time.round}</p>
                 </div>
             </PomodoroContainer>
         </CenterElement>

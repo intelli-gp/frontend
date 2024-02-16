@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import { TimerModes } from '../../hooks/pomodoroTimer.hook';
-
 export const CenterElement = styled.section`
     display: flex;
     flex-direction: column;
@@ -11,7 +9,7 @@ export const CenterElement = styled.section`
     height: 100vh;
 `;
 type TimerModesProps = {
-    mode: TimerModes;
+    mode: string;
 };
 
 export const PomodoroContainer = styled.div<TimerModesProps>`

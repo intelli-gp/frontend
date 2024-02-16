@@ -1,10 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+
+
 const initialState = {
+    mode: 'pomodoro',
     round: 1,
     autoBreaks: false,
     autoPomodoros: false,
-    longBreakInterval: 4,
+    longBreakInterval: 3,
 };
 export const pomodoroSlice = createSlice({
     name: 'pomodoro',
@@ -13,9 +16,12 @@ export const pomodoroSlice = createSlice({
         incrementRound: (state) => {
             state.round += 1;
         },
+        setMode: (state, action) => {
+            state.mode = action.payload;
+        },
     },
 });
 
-export const { incrementRound } = pomodoroSlice.actions;
+export const { incrementRound, setMode } = pomodoroSlice.actions;
 
 export const pomodoroReducer = pomodoroSlice.reducer;
