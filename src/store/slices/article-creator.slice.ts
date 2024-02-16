@@ -73,8 +73,8 @@ const articleCreatorSlice = createSlice({
         openDeleteSectionModal(state, action: PayloadAction<boolean>) {
             state.deleteSectionModalIsOpen = action.payload;
         },
-        resetArticleCreator(state) {
-            state = initialState;
+        resetArticleCreator() {
+            return initialState;
         },
     },
 });

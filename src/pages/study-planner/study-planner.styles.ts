@@ -10,6 +10,7 @@ export const ModalContent = styled.div`
     padding: 1rem;
     color: #141414;
 `;
+
 const hexToRgb = (hex: string | undefined) => {
     if (!hex) {
         return;
@@ -19,9 +20,11 @@ const hexToRgb = (hex: string | undefined) => {
         b = parseInt(hex.slice(5, 7), 16);
     return `${r}, ${g}, ${b}`;
 };
+
 type Color = {
-    color: string;
+    color?: string;
 };
+
 export const TaskBoxContainer = styled.div<Color>`
     border-color: ${(props) => props.color};
     background-color: rgba(${(props) => hexToRgb(props.color)}, 0.2);

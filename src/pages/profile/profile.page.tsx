@@ -57,28 +57,24 @@ const ProfilePage = () => {
 
     const [youMayKnow] = useState<any[]>([
         {
-            fname: 'Ahmed',
-            lname: 'Ali',
+            full_name: 'Ahmed',
             username: 'ahmedali',
-            imageUrl: defaultUserImage,
+            image: defaultUserImage,
         },
         {
-            fname: 'Ahmed',
-            lname: 'Ali',
+            full_name: 'Ahmed',
             username: 'ahmedali',
-            imageUrl: defaultUserImage,
+            image: defaultUserImage,
         },
         {
-            fname: 'Ahmed',
-            lname: 'Ali',
+            full_name: 'Ahmed',
             username: 'ahmedali',
-            imageUrl: defaultUserImage,
+            image: defaultUserImage,
         },
         {
-            fname: 'Ahmed',
-            lname: 'Ali',
+            full_name: 'Ahmed',
             username: 'ahmedali',
-            imageUrl: defaultUserImage,
+            image: defaultUserImage,
         },
     ]);
 

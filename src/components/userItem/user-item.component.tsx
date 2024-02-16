@@ -15,19 +15,18 @@ type UserItemProps = {
 } & Partial<User>;
 
 const UserItem = ({
-    fname,
-    lname,
+    full_name,
     username,
-    imageUrl,
+    image,
     action,
     actionHandler,
 }: UserItemProps) => {
     return (
         <UserItemContainer>
-            <UserItemImage src={imageUrl} alt="user profile" />
+            <UserItemImage src={image} alt="user profile" />
             <div>
                 <Link to={'#'} className="text-indigo-950">
-                    {fname} {lname}
+                    {full_name}
                 </Link>
                 <UserItemUsername>@{username}</UserItemUsername>
             </div>
