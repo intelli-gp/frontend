@@ -8,13 +8,3 @@ export const PageContainer = styled.div`
     flex-direction: column;
     gap: 2rem;
 `;
-
-export const SearchBarContainer = styled.div`
-    width: 100%;
-    border-radius: 99999px;
-    border: 1px solid var(--gray-500);
-    display: flex;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    gap: 1rem;
-`;
