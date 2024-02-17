@@ -18,7 +18,7 @@ const ExplorePageHeader = ({
     placeholder,
 }: ExplorePageHeaderProps) => {
     return (
-        <div className="flex w-full items-center gap-2 justify-center">
+        <div className="flex w-full items-center gap-2 justify-center max-w-[800px]">
             <SearchBarContainer>
                 <LuSearch />
                 <input
