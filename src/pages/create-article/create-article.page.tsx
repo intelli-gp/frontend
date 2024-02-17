@@ -1,18 +1,18 @@
 import _ from 'lodash';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import { FiEdit } from 'react-icons/fi';
 import { IoSend } from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import defaultCover from '../../assets/imgs/blogDefaultCover.png';
 import Button from '../../components/Button';
 import { ImageUploadSection } from '../../components/article-image-section/article-image-section.component';
 import MarkdownEditor from '../../components/markdown-editor/markdown.component';
 import { Modal } from '../../components/modal/modal.component';
+import OpenImage from '../../components/openImage/openImage.component';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import { useUploadImage } from '../../hooks/uploadImage.hook';
+import { PageTitle } from '../../index.styles';
 import {
     RootState,
     addArticleSection,
@@ -38,10 +38,8 @@ import { wait } from '../../utils/wait';
 import {
     AddSectionItem,
     AddSectionMenu,
-    ArticleCoverImage,
     ArticleCoverImageContainer,
     ArticleTitleInput,
-    EditButton,
     PageContainer,
     SectionContainer,
 } from './create-article.styles';
@@ -51,7 +49,6 @@ const CreateArticlePage = () => {
 
     const navigate = useNavigate();
 
-    const coverImageRef = useRef<HTMLInputElement>(null);
     const addSectionButtonRef = useRef<HTMLDivElement>(null);
 
     const { data: availableTagsRes } = useGetAllTagsQuery();
@@ -80,20 +77,6 @@ const CreateArticlePage = () => {
 
     const handleSectionEdit = (targetSectionId: number, newValue: string) => {
         dispatch(changeArticleSectionValue({ targetSectionId, newValue }));
-    };
-
-    const handleChangeCoverImage = (e: ChangeEvent<HTMLInputElement>) => {
-        const reader = new FileReader();
-
-        reader.onloadend = () => {
-            dispatch(changeArticleCoverImage(reader.result as string));
-        };
-
-        reader.readAsDataURL(e.target.files![0]);
-    };
-
-    const openCoverImageFileInput = () => {
-        coverImageRef.current?.click();
     };
 
     const addMarkdownSection = () => {
@@ -239,13 +222,8 @@ const CreateArticlePage = () => {
 
     const TagsInputSection = (
         <div className="flex flex-col gap-2">
-            <label
-                htmlFor="tags-input-2"
-                className="font-bold text-lg text-[var(--gray-700)]"
-            >
-                What this article about?
-            </label>
             <TagsInput2
+                label="Topics related to this article"
                 updateSelectedTags={(tags: string[]) => {
                     dispatch(changeArticleTags(tags));
                 }}
@@ -260,30 +238,17 @@ const CreateArticlePage = () => {
         <PageContainer>
             {DeleteSectionModal}
 
-            <h1 className="text-4xl font-bold text-[var(--gray-700)]">
-                Create New Article
-            </h1>
+            <PageTitle>Create New Article</PageTitle>
 
             <ArticleCoverImageContainer>
-                <ArticleCoverImage
-                    src={cover || defaultCover}
-                    onClick={openCoverImageFileInput}
-                    title="Click to change the image"
+                <OpenImage
+                    value={cover}
+                    onChange={(newImage) => {
+                        dispatch(changeArticleCoverImage(newImage));
+                    }}
+                    editButton
+                    height="350px"
                 />
-                <input
-                    type="file"
-                    hidden
-                    ref={coverImageRef}
-                    onChange={handleChangeCoverImage}
-                />
-                <EditButton
-                    select="warning"
-                    type="button"
-                    title="Click to change the image"
-                    onClick={openCoverImageFileInput}
-                >
-                    <FiEdit size={14} />
-                </EditButton>
             </ArticleCoverImageContainer>
 
             <ArticleTitleInput

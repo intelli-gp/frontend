@@ -5,13 +5,13 @@ import Button from '../../components/Button';
 export const PageContainer = styled.div`
     max-width: 1000px;
     margin: 0 auto;
-    padding: 4rem 2rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    gap: 2.5rem;
 
     @media (max-width: 500px) {
-        padding: 4rem 1rem;
+        padding: 1rem;
     }
 `;
 
