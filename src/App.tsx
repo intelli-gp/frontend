@@ -8,6 +8,7 @@ import SignupPage from './pages/auth/Signup';
 import InterestsPage from './pages/auth/interests/interests.page';
 import CreateArticlePage from './pages/create-article/create-article.page';
 import ExploreArticlesPage from './pages/explore-articles/explore-articles.page';
+import ExploreGroupsPage from './pages/explore-groups/explore-groups.page';
 import HomePage from './pages/home';
 import PomodoroPage from './pages/pomodoro/pomodoro.page';
 import ProfilePage from './pages/profile/profile.page';
@@ -52,6 +53,7 @@ function App() {
             <Route path="app" element={<LoggedInTemplatePage />}>
                 <Route path="profile" element={<ProfilePage />} />
                 <Route path="study-planner" element={<StudyPlanner />} />
+                <Route path="groups" element={<ExploreGroupsPage />} />
                 <Route path="settings" element={<SettingsPage />} />
                 <Route path="articles" element={<ExploreArticlesPage />} />
                 <Route
