@@ -5,17 +5,19 @@ export const ArticleContainer = styled.article`
     width: min(1000px, 100%);
     flex: 1;
     background-color: white;
+    cursor: pointer;
     border-radius: 1rem;
     padding: 1.5rem 2rem;
     display: flex;
     gap: 1rem;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 0 10px 0 rgb(99, 102, 241, 0.2);
     background-color: var(--gray-50);
     transition: background-color 0.2s ease-in-out;
     &:hover {
-        cursor: pointer;
         background-color: var(--indigo-50);
+        box-shadow: 0 0 10px 0 rgb(99, 102, 241, 0.25);
     }
     @media (max-width: 768px) {
         padding: 1rem 1.5rem;

@@ -1,6 +1,5 @@
 import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
 import { ReceivedGroup } from '../../types/group';
-import Button from '../Button';
 import Tag from '../tag/tag.component';
 import {
     CardContainer,
@@ -14,7 +13,6 @@ import {
 
 const GroupCard = ({
     title,
-    description,
     cover_image_url,
     group_tag,
     group_user,
