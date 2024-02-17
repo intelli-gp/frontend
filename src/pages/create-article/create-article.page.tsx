@@ -22,6 +22,7 @@ import {
     changeArticleTitle,
     executeSectionDeletion,
     openDeleteSectionModal,
+    resetArticleCreator,
     setSectionToBeDeleted,
     useCreateArticleMutation,
     useGetAllTagsQuery,
@@ -178,6 +179,7 @@ const CreateArticlePage = () => {
         }
         if (isArticleCreatedSuccessfully) {
             successToast('Article created successfully!');
+            resetArticleCreator();
             wait(1000).then(() => {
                 navigate(
                     `/app/articles/${
