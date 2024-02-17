@@ -10,12 +10,12 @@ export const useUploadImage = () => {
     };
 
     const trigger = async (image: string | File) => {
+        setIsLoading(true);
         image = await compressImage(image);
 
         const formData = new FormData();
         formData.append('file', image);
         formData.append('upload_preset', 'Mujedd');
-        setIsLoading(true);
         try {
             let response: any = await fetch(
                 `https://api.cloudinary.com/v1_1/${
