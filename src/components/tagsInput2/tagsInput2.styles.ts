@@ -12,6 +12,7 @@ export const TagsContainer = styled.div<{ disabled?: boolean }>`
     gap: 0.8rem;
     resize: vertical;
     pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
+    resize: vertical;
 
     & input {
         background-color: transparent;

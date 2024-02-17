@@ -11,6 +11,7 @@ type TagsInput2Props = {
     selectedTags: string[];
     disabled?: boolean;
     wrapperClassName?: string;
+    label?: string;
 };
 
 const TagsInput2 = ({
@@ -19,6 +20,7 @@ const TagsInput2 = ({
     selectedTags,
     disabled,
     wrapperClassName,
+    label,
 }: TagsInput2Props) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const [typing, setTyping] = useState('');
@@ -73,55 +75,68 @@ const TagsInput2 = ({
     };
 
     return (
-        <TagsContainer
-            onClick={() => {
-                inputRef.current?.focus();
-            }}
-            disabled={disabled}
-            className={wrapperClassName}
-        >
-            {selectedTags?.map((tag) => (
-                <Tag
-                    key={tag}
-                    text={tag}
-                    deletable={true}
-                    size="sm"
-                    deleteHandler={() => {
-                        updateSelectedTags(
-                            selectedTags.filter((t) => t !== tag),
-                        );
-                    }}
-                />
-            ))}
-            <input
-                type="text"
-                ref={inputRef}
-                title="Add a new tag"
-                autoComplete="off"
-                className="flex-1"
-                onChange={handleUserTyping}
-                value={typing}
-                id="tags-input-2"
-                placeholder={`Type a tag name and press "Enter"`}
-            />
-            {isOpen && (
-                <Dropdown>
-                    {filteredTags.map((tag) => {
-                        return (
-                            <TagListItem
-                                key={tag}
-                                onClick={() => {
-                                    setTyping('');
-                                    updateSelectedTags([...selectedTags, tag]);
-                                }}
-                            >
-                                {tag}
-                            </TagListItem>
-                        );
-                    })}
-                </Dropdown>
+        <div className="flex flex-col gap-1">
+            {label && (
+                <label
+                    htmlFor={label}
+                    className="font-bold text-[var(--gray-700)]"
+                >
+                    {label}:
+                </label>
             )}
-        </TagsContainer>
+            <TagsContainer
+                onClick={() => {
+                    inputRef.current?.focus();
+                }}
+                disabled={disabled}
+                className={wrapperClassName}
+            >
+                {selectedTags?.map((tag) => (
+                    <Tag
+                        key={tag}
+                        text={tag}
+                        deletable={true}
+                        size="sm"
+                        deleteHandler={() => {
+                            updateSelectedTags(
+                                selectedTags.filter((t) => t !== tag),
+                            );
+                        }}
+                    />
+                ))}
+                <input
+                    type="text"
+                    ref={inputRef}
+                    title="Add a new tag"
+                    autoComplete="off"
+                    className="flex-1"
+                    onChange={handleUserTyping}
+                    value={typing}
+                    id={label || 'tags-input-2'}
+                    placeholder={`Type a tag name and press "Enter"`}
+                />
+                {isOpen && (
+                    <Dropdown>
+                        {filteredTags.map((tag) => {
+                            return (
+                                <TagListItem
+                                    key={tag}
+                                    onClick={() => {
+                                        setTyping('');
+                                        updateSelectedTags([
+                                            ...selectedTags,
+                                            tag,
+                                        ]);
+                                    }}
+                                >
+                                    {tag}
+                                </TagListItem>
+                            );
+                        })}
+                    </Dropdown>
+                )}
+            </TagsContainer>
+        </div>
     );
 };
 
