@@ -179,13 +179,13 @@ const CreateArticlePage = () => {
         }
         if (isArticleCreatedSuccessfully) {
             successToast('Article created successfully!');
-            resetArticleCreator();
             wait(1000).then(() => {
                 navigate(
                     `/app/articles/${
                         (createdArticle as unknown as Response).data.ID
                     }`,
                 );
+                dispatch(resetArticleCreator());
             });
         }
     }, [isArticleCreatedSuccessfully, isArticleCreateError]);
