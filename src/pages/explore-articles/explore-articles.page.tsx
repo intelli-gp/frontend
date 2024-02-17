@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Spinner from '../../components/Spinner';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
+import { PageTitle } from '../../index.styles';
 import { useGetArticlesQuery } from '../../store';
 import { ReceivedArticle } from '../../types/article';
 import { Response } from '../../types/response';
@@ -29,6 +30,7 @@ const ExploreArticlesPage = () => {
         <Spinner />
     ) : (
         <PageContainer>
+            <PageTitle className="text-center">Explore Articles</PageTitle>
             <ExplorePageHeader
                 searchValue={searchValue}
                 onSearchValueChange={handleChangeSearchValue}

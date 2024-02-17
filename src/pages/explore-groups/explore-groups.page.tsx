@@ -4,6 +4,7 @@ import CreateGroupModal from '../../components/CreateGroupModal';
 import GroupCard from '../../components/chat-group-card/chat-group-card.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import { GroupsGrid, PageContainer } from './explore-groups.style';
+import { PageTitle } from '../../index.styles';
 
 const ExploreGroupsPage = () => {
     const [searchValue, setSearchValue] = useState('');
@@ -126,6 +127,7 @@ const ExploreGroupsPage = () => {
 
     return (
         <PageContainer>
+            <PageTitle className="text-center">Explore Groups</PageTitle>
             <CreateGroupModal
                 isOpen={createGroupModalOpen}
                 setIsOpen={setCreateGroupModalOpen}

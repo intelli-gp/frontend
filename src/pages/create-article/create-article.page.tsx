@@ -116,7 +116,7 @@ const CreateArticlePage = () => {
         return true;
     };
 
-    const publishBlogPost = async () => {
+    const publishArticle = async () => {
         if (!validateArticle()) return;
 
         const article: Partial<ArticleToSend> = {
@@ -129,7 +129,7 @@ const CreateArticlePage = () => {
                 article.coverImageUrl = await imageUploadTrigger(cover);
             } catch (err) {
                 errorToast(
-                    'Error uploading cover image while publishing blog post!',
+                    'Error uploading cover image while publishing article!',
                 );
                 return;
             } finally {
@@ -146,7 +146,7 @@ const CreateArticlePage = () => {
                     sectionsToSend.push([remoteURL, section.contentType]);
                 } catch (err) {
                     errorToast(
-                        'Error uploading image while publishing blog post!',
+                        'Error uploading image while publishing article!',
                     );
                     return;
                 } finally {
@@ -314,7 +314,7 @@ const CreateArticlePage = () => {
                     select="success"
                     type="button"
                     className="!p-4 !rounded-full items-center justify-center"
-                    onClick={publishBlogPost}
+                    onClick={publishArticle}
                     loading={imageUploadIsLoading || isArticleCreating}
                     title="Publish article"
                 >
