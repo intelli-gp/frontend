@@ -79,7 +79,7 @@ export const InputWithoutLabel = ({
     const inputClasses = classNames(commonStyles, className, {
         '!outline-red-600': error,
     });
-    const wrapperClasses = classNames('flex flex-col gap-1', wrapperClassName);
+    const wrapperClasses = classNames('flex flex-col gap-1 w-full', wrapperClassName);
 
     return (
         <div className={wrapperClasses}>
