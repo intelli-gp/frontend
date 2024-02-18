@@ -9,7 +9,7 @@ import {
     GroupTitleGradient,
     JoinButton,
     TagsContainer,
-} from './chat-group-card-.style';
+} from './chat-group-card.style';
 
 const GroupCard = ({
     title,

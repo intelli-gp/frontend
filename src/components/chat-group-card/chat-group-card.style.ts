@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import Button from '../Button';
 
 export const CardContainer = styled.div`
@@ -10,13 +11,11 @@ export const CardContainer = styled.div`
     height: fit-content;
     height: -moz-fit-content;
     border-radius: 10px;
-    box-shadow: 0 0 10px 0 rgb(99, 102, 241, 0.2);
-    background-color: var(--gray-50);
+    background-color: var(--gray-100);
     transition: all 0.25s ease-in-out;
     cursor: pointer;
     &:hover {
         background-color: var(--indigo-50);
-        box-shadow: 0 0 10px 0 rgb(99, 102, 241, 0.25);
     }
 `;
 
@@ -63,14 +62,12 @@ export const TagsContainer = styled.div`
     padding: 0 0.5rem;
 `;
 
-
 export const JoinButton = styled(Button)`
     padding: 0.25rem 2rem;
     border-radius: 0.5rem;
     margin-bottom: 1rem;
-    background-color: var(--gray-700);
     transition: all 0.25s ease-in-out;
     &:hover {
-        background-color: #0D6C20;
+        background-color: var(--indigo-950);
     }
-`
+`;
