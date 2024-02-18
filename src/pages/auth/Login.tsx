@@ -5,6 +5,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import Button from '../../components/Button';
 import { InputWithLabel } from '../../components/Input';
+import { PageTitle } from '../../index.styles';
 import {
     RootState,
     changeEmail,
@@ -92,9 +93,7 @@ export default function LoginPage() {
             className="flex flex-col gap-4 3xs:w-[20rem] md:!w-[25rem]"
             onSubmit={handleSubmitLogin}
         >
-            <h1 className="text-5xl 3xs:max-md:text-[2.5rem] text-slate-600 font-black text-center py-10 tracking-tight">
-                Welcome Back!
-            </h1>
+            <PageTitle className="text-center mb-6">Welcome Back!</PageTitle>
 
             <InputWithLabel
                 required

@@ -10,6 +10,7 @@ import { InputsGrid } from '../../components/Input';
 import Accordion from '../../components/accordion/accordion.component';
 import Tag from '../../components/tag/tag.component';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
+import { PageTitle } from '../../index.styles';
 import {
     RootState,
     setCredentials,
@@ -223,9 +224,7 @@ export const SettingsPage = () => {
 
     return (
         <PageContainer>
-            <h1 className="text-4xl font-bold text-slate-600">
-                Account Settings
-            </h1>
+            <PageTitle>Account Settings</PageTitle>
 
             <PageHeader>
                 <section className="flex flex-col items-center">
