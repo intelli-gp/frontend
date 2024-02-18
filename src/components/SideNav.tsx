@@ -187,7 +187,7 @@ export default function SideNav() {
     };
 
     const sideNavClassNames = classNames(
-        'bg-indigo-900  w-[300px] h-screen max-h-screen flex flex-col fixed lg:sticky top-0 px-2 py-6 justify-between gap-4 overflow-y-hidden z-20',
+        'bg-indigo-950  w-[300px] h-screen max-h-screen flex flex-col fixed lg:sticky top-0 px-2 py-6 justify-between gap-4 overflow-y-hidden z-20',
         'transition-all duration-500 linear',
         {
             'left-[-100%]': !sideNavOpen,
