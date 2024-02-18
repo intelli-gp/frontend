@@ -70,7 +70,7 @@ const CustomToolbar = (props: ToolbarProps) => {
         currentView();
     }
     return (
-        <div className="flex flex-column justify-between pt-[5rem]">
+        <div className="flex flex-column justify-between pt-[1rem]">
             <div className="flex flex-row gap-3 pb-4  w-2/5 px-2">
                 {viewState == 'day' ? (
                     <>
@@ -225,7 +225,7 @@ export default function StudyPlanner() {
                                 DueDate={tasks.DueDate}
                                 StartDate={tasks.StartDate}
                                 due_date={'Due: ' + time}
-                                color = {tasks.Color}
+                                color={tasks.Color}
                             />
                         </div>
                     );
@@ -282,10 +282,10 @@ export default function StudyPlanner() {
                         const data = event?.data;
                         if (data?.task)
                             return (
-                                <TaskBoxContainer 
-                                   color={data.task.color}
-                                   onClick={() => handleEdit(data.task.id)}
-                                   className='h-full'
+                                <TaskBoxContainer
+                                    color={data.task.color}
+                                    onClick={() => handleEdit(data.task.id)}
+                                    className="h-full"
                                 >
                                     <div className="flex flex-col justify-between items-left ">
                                         <p className="text-[10px] text-[#0369A1] pb-[4px] font-bold">
