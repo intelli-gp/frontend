@@ -4,12 +4,12 @@ import Button from '../../components/Button';
 
 export const PageContainer = styled.div`
     width: 100%;
-    max-width: 1200px;
-    padding: 4rem 2rem;
+    max-width: 1000px;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     margin: 0 auto;
-    gap: 4rem;
+    gap: 2rem;
 
     @media (max-width: 768px) {
         padding: 6rem 1rem 2rem 1rem;

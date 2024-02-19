@@ -6,6 +6,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import Button from '../../components/Button';
 import { InputWithLabel } from '../../components/Input';
 import PhoneNumberInput from '../../components/PhoneNumberInput';
+import { PageTitle } from '../../index.styles';
 import {
     changeSignupBirthDate,
     changeSignupConfirmPassword,
@@ -89,9 +90,8 @@ export default function SignupPage() {
 
     return (
         <div className="flex flex-col justify-center items-center w-full lg:w-3/5 py-8">
-            <h1 className="text-5xl 3xs:max-md:text-[2.5rem] text-slate-600 font-black text-center py-10 tracking-tight">
-                Create Account
-            </h1>
+            <PageTitle className="text-center mb-6">Create Account</PageTitle>
+
             <form
                 className="flex flex-col gap-2 3xs:w-[20rem] md:!w-[25rem]"
                 onSubmit={handleSubmitForm}

@@ -12,12 +12,10 @@ export const ArticleContainer = styled.article`
     gap: 1rem;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 0 10px 0 rgb(99, 102, 241, 0.2);
-    background-color: var(--gray-50);
+    background-color: var(--gray-100);
     transition: background-color 0.2s ease-in-out;
     &:hover {
         background-color: var(--indigo-50);
-        box-shadow: 0 0 10px 0 rgb(99, 102, 241, 0.25);
     }
     @media (max-width: 768px) {
         padding: 1rem 1.5rem;

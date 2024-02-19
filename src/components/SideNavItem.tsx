@@ -27,7 +27,7 @@ export default function SideNavItem({
         'flex flex-col w-full text-white text-base gap-4 rounded p-3 px-4 hover:bg-indigo-100/10',
         {
             'bg-indigo-100/10': active,
-            'bg-indigo-900': !active,
+            'bg-indigo-950': !active,
         },
     );
 
