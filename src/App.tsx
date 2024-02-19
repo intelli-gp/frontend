@@ -1,3 +1,4 @@
+import { useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
@@ -23,18 +24,20 @@ function App() {
     const dispatch = useDispatch();
     const { token } = useSelector((state: RootState) => state.auth);
 
-    if (!token) {
-        let savedToken = window.localStorage.getItem('token');
-        let user = window.localStorage.getItem('user');
-        if (savedToken) {
-            dispatch(
-                setCredentials({
-                    token: savedToken,
-                    user: JSON.parse(user as string),
-                }),
-            );
+    useLayoutEffect(() => {
+        if (!token) {
+            let savedToken = window.localStorage.getItem('token');
+            let user = window.localStorage.getItem('user');
+            if (savedToken) {
+                dispatch(
+                    setCredentials({
+                        token: savedToken,
+                        user: JSON.parse(user as string),
+                    }),
+                );
+            }
         }
-    }
+    }, []);
 
     return (
         <Routes>
