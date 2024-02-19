@@ -1,3 +1,4 @@
+import Fuse from 'fuse.js';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import React from 'react';
@@ -30,7 +31,6 @@ import {
     TaskBoxContainer,
     TasksContainer,
 } from './study-planner.styles';
-import Fuse from 'fuse.js';
 
 const formats = {
     weekdayFormat: 'ddd',
@@ -141,14 +141,15 @@ export default function StudyPlanner() {
         setShowButtons(value === '');
 
         const fuseOptions = {
-          keys: ['Title'], 
-          includeScore: true, 
+            keys: ['Title'],
+            includeScore: true,
         };
-      
+
         const fuse = new Fuse(data, fuseOptions);
         const searchResult = fuse.search(searchValue);
-      
-        const filteredTasks = value === '' ? data : searchResult.map((result) => result.item);
+
+        const filteredTasks =
+            value === '' ? data : searchResult.map((result) => result.item);
         setTasks(filteredTasks);
     };
 

@@ -3,8 +3,8 @@ import { useState } from 'react';
 import CreateGroupModal from '../../components/CreateGroupModal';
 import GroupCard from '../../components/chat-group-card/chat-group-card.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
-import { GroupsGrid, PageContainer } from './explore-groups.style';
 import { PageTitle } from '../../index.styles';
+import { GroupsGrid, PageContainer } from './explore-groups.style';
 
 const ExploreGroupsPage = () => {
     const [searchValue, setSearchValue] = useState('');

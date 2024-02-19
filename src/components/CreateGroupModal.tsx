@@ -39,7 +39,7 @@ const CreateGroupModal = ({ isOpen, setIsOpen }: CreateGroupModalProps) => {
             setIsOpen={setIsOpen}
             className="flex flex-col gap-4"
         >
-            <ModalTitle className='mb-6'>Create New Group</ModalTitle>
+            <ModalTitle className="mb-6">Create New Group</ModalTitle>
             <OpenImage
                 height="250px"
                 value={groupImage}

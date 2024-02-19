@@ -130,7 +130,6 @@ export const EditTaskModal: React.FC<ModalProps> = ({
             Color: color,
         };
 
-
         const updatedTask = getEditTask(task, existingTask);
 
         if (Object.keys(updatedTask).length === 1) {

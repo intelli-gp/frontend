@@ -30,9 +30,9 @@ const usePomodoroTimer = () => {
 
     const time = useSelector(timeSelector);
     useEffect(() => {
-        console.log(time.mode)
+        console.log(time.mode);
         //    setTimerMode(time.pomodoro.mode)
-    }, [time])
+    }, [time]);
     const alarmAudio = player({
         asset: alarm,
     });
@@ -86,7 +86,6 @@ const usePomodoroTimer = () => {
                 }, 1000);
             }
         }
-
 
         return () => clearInterval(interval);
     }, [isRunning, minutes, seconds]);

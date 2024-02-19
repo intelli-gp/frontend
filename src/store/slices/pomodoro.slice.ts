@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-
-
 const initialState = {
     mode: 'pomodoro',
     round: 1,

@@ -5,7 +5,7 @@ export type Task = {
     DueDate?: string | Date | undefined;
     Description?: string;
     StartDate?: string | Date;
-    Color:string;
+    Color: string;
 };
 export type EventItem = {
     start: Date;
@@ -19,6 +19,5 @@ export type sendTask = {
     DueDate: string | Date | undefined;
     Description: string;
     StartDate: string | Date;
-    Color:string;
-
+    Color: string;
 };

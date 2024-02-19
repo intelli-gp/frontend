@@ -17,8 +17,8 @@ import StudyPlanner from './pages/study-planner/study-planner.page';
 import AuthTemplatePage from './pages/templates/Auth';
 import LoggedInTemplatePage from './pages/templates/LoggedIn';
 import ViewArticlePage from './pages/view-article/view-article.page';
-import { RootState, setCredentials } from './store';
 import ViewGroupPage from './pages/view-group/view-group.page';
+import { RootState, setCredentials } from './store';
 
 function App() {
     const dispatch = useDispatch();
@@ -57,6 +57,7 @@ function App() {
                 <Route path="groups" element={<ExploreGroupsPage />} />
                 <Route path="settings" element={<SettingsPage />} />
                 <Route path="articles" element={<ExploreArticlesPage />} />
+                {/* This is temporary route */}
                 <Route path="groups/group" element={<ViewGroupPage />} />
                 <Route
                     path="articles/:articleId"
