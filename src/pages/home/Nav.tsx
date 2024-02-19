@@ -28,7 +28,7 @@ export default function Nav() {
     const menuItems = ['Home', 'About', 'Features', 'Pricing'];
 
     return (
-        <nav className=" sticky left-0 top-0 z-50 bg-txt w-full backdrop-blur py-3">
+        <nav className=" sticky left-0 top-0 z-50 bg-indigo-950 w-full backdrop-blur py-3">
             <div className="px-8 lg:px-16 flex justify-between items-center h-full flex-wrap">
                 <Link to="/" className="w-[130px] h-auto">
                     <img src={Logo1} />
