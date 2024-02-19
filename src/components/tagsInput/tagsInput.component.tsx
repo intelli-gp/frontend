@@ -57,11 +57,11 @@ const TagsInput = ({
     const createNewTag = (tag: string) => {
         const newTag = kebabCase(tag);
         if (newTag.trim() === '') {
-            warningToast('Please enter a valid tag', 'top-right');
+            warningToast('Please enter a valid tag');
             return;
         }
         if (selectedTags.includes(newTag)) {
-            infoToast('This tag is already selected', 'top-right');
+            infoToast('This tag is already selected');
             return;
         }
         addTagToSelected(newTag);
@@ -79,7 +79,7 @@ const TagsInput = ({
     const clickSuggestedTag = (e: React.MouseEvent) => {
         const tag = (e.target as HTMLElement).innerText;
         if (selectedTags.includes(tag)) {
-            infoToast('This tag is already selected', 'top-right');
+            infoToast('This tag is already selected');
             return;
         }
         addTagToSelected(tag);

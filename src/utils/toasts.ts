@@ -1,6 +1,6 @@
 import { ToastPosition, toast } from 'react-hot-toast';
 
-export const successToast = (message: string, position = 'bottom-right') =>
+export const successToast = (message: string, position = 'top-right') =>
     toast.success(message, {
         iconTheme: {
             primary: '#312e81',
@@ -9,7 +9,7 @@ export const successToast = (message: string, position = 'bottom-right') =>
         position: position as ToastPosition,
     });
 
-export const errorToast = (message: string, position = 'bottom-right') =>
+export const errorToast = (message: string, position = 'top-right') =>
     toast.error(message, {
         iconTheme: {
             primary: '#b91c1c',
@@ -18,7 +18,7 @@ export const errorToast = (message: string, position = 'bottom-right') =>
         position: position as ToastPosition,
     });
 
-export const warningToast = (message: string, position = 'bottom-right') => {
+export const warningToast = (message: string, position = 'top-right') => {
     toast(message, {
         icon: '⚠️',
         iconTheme: {
@@ -29,7 +29,7 @@ export const warningToast = (message: string, position = 'bottom-right') => {
     });
 };
 
-export const infoToast = (message: string, position = 'bottom-right') => {
+export const infoToast = (message: string, position = 'top-right') => {
     toast(message, {
         icon: '❕',
         iconTheme: {

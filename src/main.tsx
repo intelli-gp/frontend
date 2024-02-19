@@ -19,9 +19,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Provider store={store}>
                 <PersistGate persistor={persistor}>
                     <Toaster
-                        position="bottom-right"
                         toastOptions={{
-                            duration: 5000,
+                            duration: 3000,
                         }}
                     />
                     <App />
