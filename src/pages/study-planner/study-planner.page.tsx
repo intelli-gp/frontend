@@ -30,6 +30,7 @@ import {
     TaskBoxContainer,
     TasksContainer,
 } from './study-planner.styles';
+import Fuse from 'fuse.js';
 
 const formats = {
     weekdayFormat: 'ddd',
@@ -133,15 +134,21 @@ export default function StudyPlanner() {
 
     const [searchValue, setSearchValue] = useState('');
     const [showButtons, setShowButtons] = useState(true);
+
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = event.target;
+        const value = event.target.value;
         setSearchValue(value);
         setShowButtons(value === '');
 
-        const filteredTasks = data.filter((task: { Title: string }) =>
-            task.Title.toLowerCase().includes(value.toLowerCase()),
-        );
-
+        const fuseOptions = {
+          keys: ['Title'], 
+          includeScore: true, 
+        };
+      
+        const fuse = new Fuse(data, fuseOptions);
+        const searchResult = fuse.search(searchValue);
+      
+        const filteredTasks = value === '' ? data : searchResult.map((result) => result.item);
         setTasks(filteredTasks);
     };
 
@@ -241,7 +248,7 @@ export default function StudyPlanner() {
         if (isLoading) {
         } else if (error) {
         } else {
-            EVENTS = tasks?.map(
+            EVENTS = data?.map(
                 (task: {
                     ID: any;
                     Title: string | undefined;
