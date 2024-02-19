@@ -3,14 +3,7 @@ import styled from 'styled-components';
 export const PageContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    padding: 25px 55px 0px 55px;
-    @media (max-width: 768px) {
-
-        padding: 25px 45px 0px 45px;
-
-    }
-`;
+    `;
 export const GroupCoverImageContainer = styled.div`
     position: relative;
 
@@ -42,10 +35,11 @@ export const PictureOverlay = styled.img`
     width: 100%;
     height: 100%;
     opacity: 0;
+    object-fit: cover;
     position: absolute;
     transition: opacity 0.3s ease-in-out;
     &:hover {
-        opacity: 0.2;
+        opacity: 0.9;
         cursor: pointer;
     }
 `;
@@ -56,14 +50,76 @@ export const GroupCoverImage = styled.img`
     max-height: 310px;
     width: 100%;
     height: 100%;
-    border-radius: 40px 40px 6px 6px;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
-	box-shadow: 14px 37px 45.9px rgba(49, 46, 129, 0.19);
+    filter: brightness(60%);
+
 
     @media (max-width: 768px) {
         max-height: 300px;
-        border-radius: 30px 30px 5px 5px;
 
     }
 
+`;
+export const GroupInfoContainer = styled.div`
+
+display: grid;
+grid-template-columns: 5fr 2fr;
+@media (max-width: 768px) {
+    grid-template-columns: 1fr;
+
+}
+`
+export const LeftPart = styled.div`
+padding: 30px 80px 20px 80px;
+display: grid;
+grid-template-rows: 2fr 2fr 1fr;
+width:100%;
+p{
+    font-size: 24px;
+    color: var(--gray-700);
+    font-weight: 700;
+ }
+ @media (max-width: 768px) {
+    padding: 30px 50px 20px 50px;
+
+ }
+`
+export const RightPart = styled.div`
+padding: 20px 20px 0px 20px;
+box-shadow: 0px 0px 60px 5px rgba(39, 31, 75, 0.07);
+background:white;
+height:100%;
+
+p{
+    margin:0px 15px 0px 5px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-700);
+ }
+ @media (max-width: 768px) {
+    box-shadow: 0px;
+
+ background:transparent;
+ }
+`
+export const PeopleContainer = styled.div`
+display: grid;
+grid-template-columns: 1fr 1fr 1fr 1fr ;
+gap:16px;
+padding: 18px 0px 18px 12px;
+
+img{    
+    max-height:72px;
+    max-width:72px;
+    border-radius: 50%;
+    box-shadow: var(--gray-shadow);
+}
+h1 {
+    font-size: 0.8rem;
+
+    color: var(--gray-900);   
+}
+
+`
+export const EditButton = styled.div`
+    color: var(--slate-600);   
 `;
