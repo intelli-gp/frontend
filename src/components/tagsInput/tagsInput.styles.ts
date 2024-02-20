@@ -60,7 +60,6 @@ export const SelectedTagsContainer = styled.div`
     }
     &::-webkit-scrollbar-thumb {
         background: rgb(165, 180, 252);
-        border-radius: 10px;
     }
 `;
 

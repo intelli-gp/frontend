@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/Button';
 import TagsInput from '../../../components/tagsInput/tagsInput.component';
 import { FooterButtons } from '../../../components/tagsInput/tagsInput.styles';
+import { PageTitle } from '../../../index.styles';
 import {
     RootState,
     setCredentials,
@@ -28,7 +29,7 @@ const InterestsPage = () => {
 
     useEffect(() => {
         if (isError) {
-            errorToast(JSON.stringify(error), 'top-right');
+            errorToast(JSON.stringify(error));
         } else if (isSuccess) {
             navigate('/app');
         }
@@ -44,7 +45,7 @@ const InterestsPage = () => {
 
     const handleContinue = async () => {
         if (selectedTags.length < 3) {
-            errorToast('Please select at least 3 tags', 'top-right');
+            errorToast('Please select at least 3 tags');
             return;
         }
         const {
@@ -64,10 +65,10 @@ const InterestsPage = () => {
     return (
         <Page>
             <header>
-                <h1 className="text-5xl 3xs:max-md:text-[2.5rem] text-slate-600 font-black text-center tracking-tight pb-1">
+                <PageTitle className="text-center">
                     Add your interests
-                </h1>
-                <h3 className="text-lg text-slate-600 text-center">
+                </PageTitle>
+                <h3 className="text-lg text-[var(--gray-800)] text-center">
                     Help us to customize your feed
                 </h3>
             </header>

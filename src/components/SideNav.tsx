@@ -176,8 +176,12 @@ export default function SideNav() {
     };
 
     const handleLogout = async () => {
+        /**
+         * only in this case the order of operations matters
+         * because the logoutUser need the token to send the request.
+         */
+        logoutUser();
         dispatch(clearCredentials());
-        await logoutUser().unwrap();
     };
 
     // This is for mobile view only.

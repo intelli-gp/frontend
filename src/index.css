@@ -83,7 +83,7 @@ body::-webkit-scrollbar-track {
 
 /* Handle */
 body::-webkit-scrollbar-thumb {
-    background: var(--indigo-900);
+    background: var(--indigo-950);
 }
 
 /* width */
@@ -99,7 +99,6 @@ body::-webkit-scrollbar-thumb {
 /* Handle */
 .side-nav-links::-webkit-scrollbar-thumb {
     background: #56669c88;
-    border-radius: 10px;
 }
 
 /* Handle on hover */
