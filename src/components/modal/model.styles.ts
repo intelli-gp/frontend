@@ -26,7 +26,7 @@ export const ModalWrapper = styled.div`
     }
     /* width */
     &::-webkit-scrollbar {
-        width: 0.5rem;
+        width: 0.4rem;
     }
 
     /* Track */
@@ -37,8 +37,7 @@ export const ModalWrapper = styled.div`
 
     /* Handle */
     &::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        background: var(--indigo-900);
+        background: var(--gray-300);
         opacity: 0.2;
     }
 `;

@@ -75,5 +75,4 @@ input[type='time']::-webkit-calendar-picker-indicator {
 }
 .rbc-time-content::-webkit-scrollbar-thumb {
     background: var(--gray-300);
-    border-radius: 10px;
 }
