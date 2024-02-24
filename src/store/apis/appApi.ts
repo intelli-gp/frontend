@@ -24,27 +24,41 @@ const baseQueryWithRefresh = async (
     api: BaseQueryApi,
     extraOptions: any,
 ) => {
+    /**
+     * Try to execute the request with the given arguments.
+     */
     let result = await baseQuery(args, api, extraOptions);
-    console.log('inside baseQueryWithRefresh the result is: ', result);
 
+    /**
+     * If the request fails with a 401 or 403 means that the token is expired or invalid.
+     * In this case, try to refresh the token and execute the request again.
+     */
     if ([401, 403].includes(result?.error?.status as number)) {
+        /**
+         * Send a request to the server to refresh the token.
+         */
         const refreshResult = await baseQuery(
             { url: '/auth/refresh', method: 'POST' },
             api,
             extraOptions,
         );
-        console.log(
-            'inside baseQueryWithRefresh the refreshResult is: ',
-            refreshResult,
-        );
 
+        /**
+         * If the refresh request is successful, update the token and execute the request again.
+         */
         if (refreshResult?.data) {
             const user = (api.getState() as RootState).auth.user;
             const token = (refreshResult.data as Response).data.access_token;
             api.dispatch(setCredentials({ user, token }));
-
+            /**
+             * Execute the request again with the new token.
+             */
             result = await baseQuery(args, api, extraOptions);
         } else {
+            /**
+             * If the refresh request fails, clear the credentials and redirect the user to the login page.
+             * Which means that the user is not authenticated anymore and need to login again.
+             */
             api.dispatch(clearCredentials());
         }
     }
@@ -56,5 +70,5 @@ export const appApi = createApi({
     reducerPath: 'app',
     baseQuery: baseQueryWithRefresh,
     endpoints: (_builder) => ({}),
-    tagTypes: ['user'],
+    tagTypes: ['User', 'Task', 'Article'],
 });

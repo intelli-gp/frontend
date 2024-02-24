@@ -11,18 +11,28 @@ export const TagContainer = styled.div<{ size?: string; deletable?: boolean }>`
     border-radius: 10000px;
     font-size: ${({ size }) => {
         switch (size) {
-            case 'small':
+            case 'xs':
+                return '0.6rem';
+            case 'sm':
                 return '0.8rem';
-            case 'medium':
+            case 'md':
                 return '1rem';
-            case 'large':
+            case 'lg':
                 return '1.2rem';
             default:
                 return '1rem';
         }
     }};
-    background-color: #c7d2fe;
+    background-color: var(--indigo-200);
     cursor: pointer;
+
+    &:hover {
+        background-color: #1e40af;
+        color: white;
+        box-shadow: var(--tag-shadow);
+    }
+
+    transition: background-color linear 100ms;
 `;
 
 export const DeleteTagButton = styled.button`
@@ -31,11 +41,11 @@ export const DeleteTagButton = styled.button`
     justify-content: center;
     border-radius: 10000px;
     padding: 0.2rem 0.5rem;
-    color: #312e81;
+    color: var(--indigo-900);
     background-color: #eef2ff;
     font-weight: bolder;
 
     &:hover {
-        background-color: #e0e7ff;
+        background-color: var(--indigo-100);
     }
 `;

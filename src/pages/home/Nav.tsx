@@ -3,10 +3,11 @@ import { useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { CiLogin } from 'react-icons/ci';
 import { IoPersonOutline } from 'react-icons/io5';
+import { IoPersonSharp } from 'react-icons/io5';
+import { MdLogin } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-import { IoPersonSharp } from "react-icons/io5";
-import { MdLogin } from "react-icons/md";
 
+import Logo1 from '../../assets/imgs/logo.png';
 import Button from '../../components/Button';
 
 export default function Nav() {
@@ -27,13 +28,13 @@ export default function Nav() {
     const menuItems = ['Home', 'About', 'Features', 'Pricing'];
 
     return (
-        <nav className=" sticky left-0 top-0 z-50 bg-txt w-full backdrop-blur py-3">
+        <nav className=" sticky left-0 top-0 z-50 bg-indigo-950 w-full backdrop-blur py-3">
             <div className="px-8 lg:px-16 flex justify-between items-center h-full flex-wrap">
-                <Link to="/" className="font-black text-white text-4xl">
-                    LoremIpsum
+                <Link to="/" className="w-[130px] h-auto">
+                    <img src={Logo1} />
                 </Link>
 
-                <div className='flex gap-16 items-center'>
+                <div className="flex gap-16 items-center">
                     <div className="hidden md:flex">
                         <ul className="flex px-1 ">
                             {menuItems.map((item) => (
@@ -56,7 +57,7 @@ export default function Nav() {
                                 type="button"
                                 className="text-sm !px-8 border-indigo-900 border-2 rounded-lg gap-2"
                             >
-                            <IoPersonSharp size={14} />
+                                <IoPersonSharp size={14} />
                                 Signup
                             </Button>
                         </Link>

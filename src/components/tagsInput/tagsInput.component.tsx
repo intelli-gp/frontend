@@ -5,7 +5,7 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import { useGetSuggestedTagsQuery } from '../../store';
 import { infoToast, warningToast } from '../../utils/toasts';
 import Button from '../Button';
-import Input from '../Input';
+import { InputWithLabel } from '../Input';
 import Tag from '../tag/tag.component';
 import {
     Dropdown,
@@ -57,11 +57,11 @@ const TagsInput = ({
     const createNewTag = (tag: string) => {
         const newTag = kebabCase(tag);
         if (newTag.trim() === '') {
-            warningToast('Please enter a valid tag', 'top-right');
+            warningToast('Please enter a valid tag');
             return;
         }
         if (selectedTags.includes(newTag)) {
-            infoToast('This tag is already selected', 'top-right');
+            infoToast('This tag is already selected');
             return;
         }
         addTagToSelected(newTag);
@@ -79,7 +79,7 @@ const TagsInput = ({
     const clickSuggestedTag = (e: React.MouseEvent) => {
         const tag = (e.target as HTMLElement).innerText;
         if (selectedTags.includes(tag)) {
-            infoToast('This tag is already selected', 'top-right');
+            infoToast('This tag is already selected');
             return;
         }
         addTagToSelected(tag);
@@ -118,9 +118,9 @@ const TagsInput = ({
     }, [suggestedTagsRes]);
 
     return (
-        <div className="xl:w-[500px] md:w-[400px] xs:w-[350px] flex flex-col gap-6">
+        <div className="3xs:w-[20rem] md:!w-[25rem] flex flex-col gap-6">
             <TypingSection>
-                <Input
+                <InputWithLabel
                     label="Select at least 3 tags"
                     value={typing}
                     autoComplete="off"
@@ -143,7 +143,7 @@ const TagsInput = ({
                     {suggestedTags.map((tag) => (
                         <Tag
                             key={tag}
-                            size="small"
+                            size="sm"
                             text={tag}
                             clickHandler={clickSuggestedTag}
                         />
@@ -157,7 +157,7 @@ const TagsInput = ({
                     {selectedTags.map((tag) => (
                         <Tag
                             key={tag}
-                            size="small"
+                            size="sm"
                             text={tag}
                             deletable={true}
                             deleteHandler={() => {

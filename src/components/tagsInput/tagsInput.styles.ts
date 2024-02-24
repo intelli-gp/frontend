@@ -38,7 +38,7 @@ export const TagListItem = styled.li`
 `;
 
 export const SelectedTagsContainer = styled.div`
-background-color:rgb(250 250 250);
+    background-color: rgb(250 250 250);
     width: 100%;
     display: flex;
     align-items: start;
@@ -60,7 +60,6 @@ background-color:rgb(250 250 250);
     }
     &::-webkit-scrollbar-thumb {
         background: rgb(165, 180, 252);
-        border-radius: 10px;
     }
 `;
 

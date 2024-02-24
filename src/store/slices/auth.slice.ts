@@ -1,4 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+import { User } from '../../types/user';
+
+type StoredCredentials = {
+    token: string;
+    user: Readonly<Partial<User>>;
+    isAuthenticated?: boolean;
+};
 
 const authSlice = createSlice({
     name: 'auth',
@@ -8,20 +16,20 @@ const authSlice = createSlice({
         user: {},
     },
     reducers: {
-        setCredentials(state, action) {
+        setCredentials(state, action: PayloadAction<StoredCredentials>) {
             const { user, token } = action.payload;
-            window.localStorage.setItem('token', token);
-            window.localStorage.setItem('user', JSON.stringify(user));
             state.token = token;
             state.user = user;
             state.isAuthenticated = true;
+            window.localStorage.setItem('token', token);
+            window.localStorage.setItem('user', JSON.stringify(user));
         },
         clearCredentials(state) {
-            window.localStorage.removeItem('token');
-            window.localStorage.removeItem('user');
             state.token = '';
             state.user = {};
             state.isAuthenticated = false;
+            window.localStorage.removeItem('token');
+            window.localStorage.removeItem('user');
         },
     },
 });

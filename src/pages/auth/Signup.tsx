@@ -1,11 +1,12 @@
-import { useEffect } from 'react';
+import { ChangeEvent, useEffect, useLayoutEffect } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import Button from '../../components/Button';
-import Input from '../../components/Input';
+import { InputWithLabel } from '../../components/Input';
 import PhoneNumberInput from '../../components/PhoneNumberInput';
+import { PageTitle } from '../../index.styles';
 import {
     changeSignupBirthDate,
     changeSignupConfirmPassword,
@@ -20,7 +21,7 @@ import {
     useSignUpUserMutation,
 } from '../../store';
 import { RootState } from '../../store/index';
-import { User } from '../../types/user';
+import { UserToSend } from '../../types/user';
 import { errorToast } from '../../utils/toasts';
 
 export default function SignupPage() {
@@ -51,7 +52,7 @@ export default function SignupPage() {
     }, [isError]);
 
     // Google oauth
-    useEffect(() => {
+    useLayoutEffect(() => {
         const user = searchParams.get('userData');
         if (user) {
             setSearchParams({}, { replace: true });
@@ -66,9 +67,8 @@ export default function SignupPage() {
 
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const user: Partial<User> = {
-            fname: firstName,
-            lname: lastName,
+        const user: Partial<UserToSend> = {
+            fullName: firstName + ' ' + lastName,
             dob: birthDate,
             username,
             email,
@@ -90,59 +90,64 @@ export default function SignupPage() {
 
     return (
         <div className="flex flex-col justify-center items-center w-full lg:w-3/5 py-8">
+            <PageTitle className="text-center mb-6">Create Account</PageTitle>
+
             <form
-                className="flex flex-col gap-2 w-[25rem]"
+                className="flex flex-col gap-2 3xs:w-[20rem] md:!w-[25rem]"
                 onSubmit={handleSubmitForm}
             >
-                <h1 className="text-5xl text-neutral-600 font-black text-center py-10 tracking-tight">
-                    Create Account
-                </h1>
-
-                <div className="flex gap-2 w-full justify-between">
-                    <Input
+                <div className="flex gap-2 w-full justify-between 3xs:max-md:flex-col">
+                    <InputWithLabel
                         required
                         label="First Name"
+                        pattern="^[a-zA-Z0-9 ]{3,20}$"
+                        title="Between 3 and 20 characters long, contains letters, numbers, and spaces."
                         value={firstName}
-                        onChange={(e) => {
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
                             dispatch(changeSignupFirstName(e.target.value));
                         }}
                     />
-                    <Input
+                    <InputWithLabel
                         required
                         label="Last Name"
+                        pattern="^[a-zA-Z0-9 ]{3,20}$"
+                        title="Between 3 and 20 characters long, contains letters, numbers, and spaces."
                         value={lastName}
-                        onChange={(e) => {
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
                             dispatch(changeSignupLastName(e.target.value));
                         }}
                     />
                 </div>
 
-                <Input
+                <InputWithLabel
                     required
                     label="Username"
+                    pattern="^[a-z0-9_.]{3,}$"
+                    title="At least 3 characters long, contains only lowercase letters, numbers, underscores, and dots."
                     type="text"
                     value={username}
-                    onChange={(e) => {
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
                         dispatch(changeSignupUsername(e.target.value));
                     }}
                 />
 
-                <Input
+                <InputWithLabel
                     required
                     label="Email"
                     type="email"
                     value={email}
-                    onChange={(e) => {
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
                         dispatch(changeSignupEmail(e.target.value));
                     }}
                 />
 
-                <Input
+                <InputWithLabel
                     required
                     value={birthDate}
                     type="date"
+                    max={new Date().toISOString().split('T')[0]}
                     label="Birth Date"
-                    onChange={(e) => {
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
                         dispatch(changeSignupBirthDate(e.target.value));
                     }}
                 />
@@ -154,22 +159,26 @@ export default function SignupPage() {
                     }}
                 />
 
-                <div className="flex gap-2 w-full justify-between">
-                    <Input
+                <div className="flex gap-2 w-full justify-between 3xs:max-md:flex-col">
+                    <InputWithLabel
                         required
                         type="password"
                         label="Password"
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,30}$"
+                        title="At least 8 characters long, contains at least one uppercase letter, one lowercase letter, one number, and one special character."
                         value={password}
-                        onChange={(e) => {
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
                             dispatch(changeSignupPassword(e.target.value));
                         }}
                     />
-                    <Input
+                    <InputWithLabel
                         required
                         type="password"
                         label="Confirm Password"
                         value={confirmPassword}
-                        onChange={(e) => {
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,30}$"
+                        title="At least 8 characters long, contains at least one uppercase letter, one lowercase letter, one number, and one special character."
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
                             dispatch(
                                 changeSignupConfirmPassword(e.target.value),
                             );
@@ -184,7 +193,7 @@ export default function SignupPage() {
                         type="checkbox"
                         id="terms&conditions"
                         checked={termsOfServiceAgreement}
-                        onChange={(e) => {
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
                             dispatch(
                                 changeTermsOfServiceAgreement(e.target.checked),
                             );

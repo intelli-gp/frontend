@@ -11,9 +11,12 @@ type choice =
     | 'warning'
     | 'danger'
     | 'primary700'
-    | 'primary500';
+    | 'primary500'
+    | 'primary300';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps
+    extends ButtonHTMLAttributes<HTMLButtonElement>,
+        Record<string, unknown> {
     children: React.ReactNode;
     type: ButtonType;
     select?: choice;
@@ -42,8 +45,10 @@ function Button({
                 select === 'primary' && !outline,
             'bg-indigo-700 hover:bg-indigo-700/90 text-white':
                 select === 'primary700' && !outline,
-            'bg-indigo-500 hover:bg-indigo-500/90 text-white':
+            'bg-indigo-500 hover:bg-indigo-500/90 ':
                 select === 'primary500' && !outline,
+            'bg-indigo-300 hover:bg-indigo-300/90 ':
+                select === 'primary300' && !outline,
             'bg-secondary font-bold text-txt':
                 select === 'secondary' && !outline,
             'bg-green-500 hover:bg-green-500/90 text-white':

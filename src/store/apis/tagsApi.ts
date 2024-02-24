@@ -3,7 +3,7 @@ import { Response } from '../../types/response';
 
 export const tagsApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
-        getAllTags: builder.query<Response, undefined>({
+        getAllTags: builder.query<Response, void>({
             query: () => ({
                 url: '/tags',
                 method: 'GET',

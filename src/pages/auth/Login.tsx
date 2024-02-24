@@ -1,10 +1,11 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { ChangeEvent, useEffect, useLayoutEffect } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import Button from '../../components/Button';
-import Input from '../../components/Input';
+import { InputWithLabel } from '../../components/Input';
+import { PageTitle } from '../../index.styles';
 import {
     RootState,
     changeEmail,
@@ -29,13 +30,13 @@ export default function LoginPage() {
             };
         },
     );
-    const [loginUser, { isLoading, isError}] = useLoginUserMutation();
+    const [loginUser, { isLoading, isError }] = useLoginUserMutation();
 
     useEffect(() => {
-        if(isError){
-            errorToast("Invalid email or password.")
+        if (isError) {
+            errorToast('Invalid email or password.');
         }
-    }, [isError])
+    }, [isError]);
 
     // Redirect to app page if user is already logged in
     useLayoutEffect(() => {
@@ -89,27 +90,29 @@ export default function LoginPage() {
 
     return (
         <form
-            className="flex flex-col gap-4 w-[25rem]"
+            className="flex flex-col gap-4 3xs:w-[20rem] md:!w-[25rem]"
             onSubmit={handleSubmitLogin}
         >
-            <h1 className="text-5xl text-neutral-600 font-black text-center py-10 tracking-tight">
-                Welcome Back!
-            </h1>
+            <PageTitle className="text-center mb-6">Welcome Back!</PageTitle>
 
-            <Input
+            <InputWithLabel
                 required
                 type="email"
                 value={email}
                 label="Email"
-                onChange={(e) => dispatch(changeEmail(e.target.value))}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    dispatch(changeEmail(e.target.value))
+                }
             />
 
-            <Input
+            <InputWithLabel
                 required
                 type="password"
                 value={password}
                 label="Password"
-                onChange={(e) => dispatch(changePassword(e.target.value))}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    dispatch(changePassword(e.target.value))
+                }
             />
 
             <div className="flex justify-between items-center">

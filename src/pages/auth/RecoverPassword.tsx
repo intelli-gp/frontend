@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { IoChevronBack } from 'react-icons/io5';
 import { MdLockReset } from 'react-icons/md';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import Button from '../../components/Button';
-import Input from '../../components/Input';
+import { InputWithLabel } from '../../components/Input';
 import { reset, useResetPasswordConfirmMutation } from '../../store';
 import { errorToast, successToast } from '../../utils/toasts';
 
@@ -46,32 +46,38 @@ const RecoverPassword = () => {
 
     return (
         <form
-            className="flex flex-col gap-4 w-[25rem] py-8"
+            className="flex flex-col gap-4 3xs:w-[20rem] md:!w-[25rem] py-8"
             onSubmit={handleSubmit}
         >
-            <h1 className="text-5xl text-neutral-600 font-black text-center py-10 tracking-tight">
+            <h1 className="text-5xl 3xs:max-md:text-[2.5rem] text-slate-600 font-black text-center py-10 tracking-tight">
                 Recover password
             </h1>
 
             <main className="flex flex-col border rounded-md p-8 gap-2 border-slate-300">
-                <h2 className="text-2xl font-bold text-neutral-600">
-                    Creating you new password
+                <h2 className="text-2xl font-bold text-slate-600">
+                    Creating your new password
                 </h2>
                 <hr />
 
                 <div className="flex flex-col gap-6 mt-4">
-                    <Input
+                    <InputWithLabel
                         type="password"
                         label="New password"
                         value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,30}$"
+                        title="At least 8 characters long, contains at least one uppercase letter, one lowercase letter, one number, and one special character."
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            setNewPassword(e.target.value)
+                        }
                     />
-                    <Input
+                    <InputWithLabel
                         type="password"
                         label="Confirm password"
                         value={confirmPassword}
                         error={matchError}
-                        onChange={(e) => {
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,30}$"
+                        title="At least 8 characters long, contains at least one uppercase letter, one lowercase letter, one number, and one special character."
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
                             setConfirmPassword(e.target.value);
                             if (e.target.value !== newPassword) {
                                 setMatchError('Passwords do not match');

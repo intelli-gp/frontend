@@ -16,7 +16,7 @@ export const authApi = appApi.injectEndpoints({
         signUpUser: builder.mutation<Response, Partial<User>>({
             query: (user) => {
                 return {
-                    url: 'auth/signup',
+                    url: '/auth/signup',
                     method: 'POST',
                     body: user,
                 };
