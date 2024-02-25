@@ -20,6 +20,7 @@ import LoggedInTemplatePage from './pages/templates/LoggedIn';
 import ViewArticlePage from './pages/view-article/view-article.page';
 import ViewGroupPage from './pages/view-group/view-group.page';
 import { RootState, setCredentials } from './store';
+import { ChatroomPage } from './pages/chat-room/chat-room.page';
 
 function App() {
     const dispatch = useDispatch();
@@ -62,6 +63,8 @@ function App() {
                 <Route path="articles" element={<ExploreArticlesPage />} />
                 {/* This is temporary route */}
                 <Route path="groups/group" element={<ViewGroupPage />} />
+                <Route path="chat-room" element={<ChatroomPage />} />
+
                 <Route
                     path="articles/:articleId"
                     element={<ViewArticlePage />}
