@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { FiEdit, FiSave } from 'react-icons/fi';
+import { IoIosArrowDown } from 'react-icons/io';
 
 import coverImageCamera from '../../assets/imgs/coverImageCamera.png';
 import defaultCoverImage from '../../assets/imgs/defaultCover.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import Button from '../../components/Button';
 import { InputWithoutLabel } from '../../components/Input';
+import { Modal } from '../../components/modal/modal.component';
 import { TagContainer } from '../../components/tag/tag.styles';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import {
@@ -22,8 +24,6 @@ import {
     PictureOverlay,
     RightPart,
 } from './view-group.styles';
-import { IoIosArrowDown } from 'react-icons/io';
-import { Modal } from '../../components/modal/modal.component';
 
 const ViewGroupPage = () => {
     const [isEditingInterest, setisEditingInterest] = useState(false);
@@ -55,25 +55,16 @@ const ViewGroupPage = () => {
                     Are you sure you want to delete this group?
                 </p>
                 <div className="flex gap-4 justify-center">
-                <Button
-                        className="!px-8"
-                        type="button"
-                        select="danger"
-                      
-                    >
+                    <Button className="!px-8" type="button" select="danger">
                         Yes
                     </Button>
-                    <Button
-                        type="button"
-                        className="!px-6"
-                    >
+                    <Button type="button" className="!px-6">
                         Cancel
                     </Button>
                 </div>
             </div>
         </Modal>
     );
-
 
     return (
         <PageContainer>
@@ -131,7 +122,7 @@ const ViewGroupPage = () => {
                                     updateSelectedTags={(tags: string[]) =>
                                         setInterests(tags)
                                     }
-                                    availableTags={['happy','start']}
+                                    availableTags={['happy', 'start']}
                                     selectedTags={interests}
                                     disabled={!isEditingInterest}
                                 />
@@ -188,7 +179,14 @@ const ViewGroupPage = () => {
                         </div>
                     </div>
                     <div className="flex gap-2 items-end">
-                        <Button select="danger" outline type="button" onClick={openModal}>Delete Group</Button>
+                        <Button
+                            select="danger"
+                            outline
+                            type="button"
+                            onClick={openModal}
+                        >
+                            Delete Group
+                        </Button>
                     </div>
                 </LeftPart>
                 <RightPart>
@@ -198,22 +196,24 @@ const ViewGroupPage = () => {
                             const [showMenu, setShowMenu] = useState(false);
 
                             return (
-                                <PersonContainer
-                                    key={admin}
-                                >
+                                <PersonContainer key={admin}>
                                     <img src={defaultUserImage} />
-                                    <span className='flex flex-row items-center gap-2 relative'>
+                                    <span className="flex flex-row items-center gap-2 relative">
                                         <h1>{admin}</h1>
                                         <Arrow>
-                                            <IoIosArrowDown onClick={() => setShowMenu((val) => !val)} />
+                                            <IoIosArrowDown
+                                                onClick={() =>
+                                                    setShowMenu((val) => !val)
+                                                }
+                                            />
                                         </Arrow>
                                         {showMenu && (
                                             <Menu>
                                                 <div>
-                                                <h1>Remove</h1>
+                                                    <h1>Remove</h1>
                                                 </div>
                                                 <div>
-                                                <h1>Dismiss an admin</h1>
+                                                    <h1>Dismiss an admin</h1>
                                                 </div>
                                             </Menu>
                                         )}
@@ -225,25 +225,27 @@ const ViewGroupPage = () => {
                     <br />
                     <p>MEMBERS</p>
                     <PeopleContainer>
-                    {data.members.map((member) => {
+                        {data.members.map((member) => {
                             const [showMenu, setShowMenu] = useState(false);
                             return (
-                                <PersonContainer
-                                    key={member}
-                                >
+                                <PersonContainer key={member}>
                                     <img src={defaultUserImage} />
-                                    <span className='flex flex-row items-center gap-2 relative'>
+                                    <span className="flex flex-row items-center gap-2 relative">
                                         <h1>{member}</h1>
                                         <Arrow>
-                                            <IoIosArrowDown onClick={() => setShowMenu((val) => !val)} />
+                                            <IoIosArrowDown
+                                                onClick={() =>
+                                                    setShowMenu((val) => !val)
+                                                }
+                                            />
                                         </Arrow>
                                         {showMenu && (
                                             <Menu>
                                                 <div>
-                                                <h1>Remove</h1>
+                                                    <h1>Remove</h1>
                                                 </div>
                                                 <div>
-                                                <h1>Add group admin</h1>
+                                                    <h1>Add group admin</h1>
                                                 </div>
                                             </Menu>
                                         )}

@@ -7,6 +7,7 @@ import LoginPage from './pages/auth/Login';
 import RecoverPassword from './pages/auth/RecoverPassword';
 import SignupPage from './pages/auth/Signup';
 import InterestsPage from './pages/auth/interests/interests.page';
+import { ChatroomPage } from './pages/chat-room/chat-room.page';
 import CreateArticlePage from './pages/create-article/create-article.page';
 import ExploreArticlesPage from './pages/explore-articles/explore-articles.page';
 import ExploreGroupsPage from './pages/explore-groups/explore-groups.page';
@@ -20,7 +21,6 @@ import LoggedInTemplatePage from './pages/templates/LoggedIn';
 import ViewArticlePage from './pages/view-article/view-article.page';
 import ViewGroupPage from './pages/view-group/view-group.page';
 import { RootState, setCredentials } from './store';
-import { ChatroomPage } from './pages/chat-room/chat-room.page';
 
 function App() {
     const dispatch = useDispatch();
