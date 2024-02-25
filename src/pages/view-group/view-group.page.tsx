@@ -9,16 +9,21 @@ import { InputWithoutLabel } from '../../components/Input';
 import { TagContainer } from '../../components/tag/tag.styles';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import {
+    Arrow,
     EditButton,
     GroupCoverImage,
     GroupCoverImageContainer,
     GroupInfoContainer,
     LeftPart,
+    Menu,
     PageContainer,
     PeopleContainer,
+    PersonContainer,
     PictureOverlay,
     RightPart,
 } from './view-group.styles';
+import { IoIosArrowDown } from 'react-icons/io';
+import { Modal } from '../../components/modal/modal.component';
 
 const ViewGroupPage = () => {
     const [isEditingInterest, setisEditingInterest] = useState(false);
@@ -30,16 +35,49 @@ const ViewGroupPage = () => {
             'Lorem ipsum dolor sit amet consectetur. Ultrices luctus mi euismod sit quam pulvinar. Eu platea sit aliquam in egestas at volutpat netus. In massa aliquet semper etiam tempor cras hac sit imperdiet. Ornare risus nisl sit vulputate et rhoncus non. Amet libero scelerisque odio aliquet. At sed turpis sollicitudin tortor odio velit. Cursus nunc aliquam odio malesuada in et quis et volutpat. Sit sed viverra metus lorem cursus varius. Aliquam posuere malesuada nunc eleifend amet netus massa ut.',
         cover_image_url: '',
         group_tag: ['programming', 'networking', 'web-dev'],
-        admins: ['user1', 'user2'],
-        members: ['user0', 'user1', 'user2', 'user3'],
+        admins: ['Alis', 'Youmna'],
+        members: ['Alis', 'Youmna', 'Youmna', 'Youmna'],
         membersno: '4',
     };
     const [interests, setInterests] = useState(data.group_tag);
 
     const [description, setDescription] = useState(data.description);
 
+    const [showModal, setShowModal] = useState(false);
+    const openModal = () => {
+        setShowModal((prev) => !prev);
+    };
+
+    const DeleteSectionModal = (
+        <Modal isOpen={showModal} setIsOpen={setShowModal}>
+            <div className="flex flex-col gap-8">
+                <p className="text-2xl font-bold text-[var(--gray-800)] text-center">
+                    Are you sure you want to delete this group?
+                </p>
+                <div className="flex gap-4 justify-center">
+                <Button
+                        className="!px-8"
+                        type="button"
+                        select="danger"
+                      
+                    >
+                        Yes
+                    </Button>
+                    <Button
+                        type="button"
+                        className="!px-6"
+                    >
+                        Cancel
+                    </Button>
+                </div>
+            </div>
+        </Modal>
+    );
+
+
     return (
         <PageContainer>
+            {DeleteSectionModal}
             <GroupCoverImageContainer>
                 <PictureOverlay
                     src={coverImageCamera}
@@ -58,7 +96,7 @@ const ViewGroupPage = () => {
                     type="button"
                     select="warning"
                     title="Return"
-                    className="absolute bottom-8 right-8 text-[color:var(--slate-800)] text-lg font-medium rounded-lg"
+                    className="absolute bottom-8 right-8 text-[#1e1b4b] text-lg font-medium rounded-lg"
                 >
                     Return
                 </Button>
@@ -93,7 +131,7 @@ const ViewGroupPage = () => {
                                     updateSelectedTags={(tags: string[]) =>
                                         setInterests(tags)
                                     }
-                                    availableTags={[]}
+                                    availableTags={['happy','start']}
                                     selectedTags={interests}
                                     disabled={!isEditingInterest}
                                 />
@@ -149,31 +187,70 @@ const ViewGroupPage = () => {
                             )}
                         </div>
                     </div>
-
                     <div className="flex gap-2 items-end">
-                        <Button type="button">CLICK</Button>
+                        <Button select="danger" outline type="button" onClick={openModal}>Delete Group</Button>
                     </div>
                 </LeftPart>
                 <RightPart>
                     <p>ADMINS</p>
                     <PeopleContainer>
-                        {data.admins.map((admin) => (
-                            <div className=" flex flex-col gap-[8px] justify-center items-center">
-                                <img src={defaultUserImage} />
-                                <h1>{admin}</h1>
-                            </div>
-                        ))}
+                        {data.admins.map((admin) => {
+                            const [showMenu, setShowMenu] = useState(false);
+
+                            return (
+                                <PersonContainer
+                                    key={admin}
+                                >
+                                    <img src={defaultUserImage} />
+                                    <span className='flex flex-row items-center gap-2 relative'>
+                                        <h1>{admin}</h1>
+                                        <Arrow>
+                                            <IoIosArrowDown onClick={() => setShowMenu((val) => !val)} />
+                                        </Arrow>
+                                        {showMenu && (
+                                            <Menu>
+                                                <div>
+                                                <h1>Remove</h1>
+                                                </div>
+                                                <div>
+                                                <h1>Dismiss an admin</h1>
+                                                </div>
+                                            </Menu>
+                                        )}
+                                    </span>
+                                </PersonContainer>
+                            );
+                        })}
                     </PeopleContainer>
-                    <br />
                     <br />
                     <p>MEMBERS</p>
                     <PeopleContainer>
-                        {data.members.map((member) => (
-                            <div className=" flex flex-col gap-[8px] justify-center items-center">
-                                <img src={defaultUserImage} />
-                                <h1>{member}</h1>
-                            </div>
-                        ))}
+                    {data.members.map((member) => {
+                            const [showMenu, setShowMenu] = useState(false);
+                            return (
+                                <PersonContainer
+                                    key={member}
+                                >
+                                    <img src={defaultUserImage} />
+                                    <span className='flex flex-row items-center gap-2 relative'>
+                                        <h1>{member}</h1>
+                                        <Arrow>
+                                            <IoIosArrowDown onClick={() => setShowMenu((val) => !val)} />
+                                        </Arrow>
+                                        {showMenu && (
+                                            <Menu>
+                                                <div>
+                                                <h1>Remove</h1>
+                                                </div>
+                                                <div>
+                                                <h1>Add group admin</h1>
+                                                </div>
+                                            </Menu>
+                                        )}
+                                    </span>
+                                </PersonContainer>
+                            );
+                        })}
                     </PeopleContainer>
                 </RightPart>
             </GroupInfoContainer>
