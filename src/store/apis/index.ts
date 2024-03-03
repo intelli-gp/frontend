@@ -4,3 +4,4 @@ export * from './authApi';
 export * from './tagsApi';
 export * from './articlesApi';
 export * from './tasksApi';
+export * from './groupsApi';
