@@ -1,120 +1,20 @@
 import { useState } from 'react';
 
 import CreateGroupModal from '../../components/CreateGroupModal';
+import Spinner from '../../components/Spinner';
 import GroupCard from '../../components/chat-group-card/chat-group-card.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import { PageTitle } from '../../index.styles';
+import { useGetAllGroupsQuery } from '../../store';
+import { ReceivedGroup } from '../../types/group';
+import { Response } from '../../types/response';
 import { GroupsGrid, PageContainer } from './explore-groups.style';
 
 const ExploreGroupsPage = () => {
     const [searchValue, setSearchValue] = useState('');
     const [createGroupModalOpen, setCreateGroupModalOpen] = useState(false);
-
-    const data = [
-        {
-            title: 'Group Name',
-            description: 'Description for Group 1',
-            cover_image_url: '',
-            group_tag: ['programming', 'networking', 'web-dev'],
-            group_user: ['user1_1', 'user1_2'],
-        },
-        {
-            title: 'Group Name',
-            description: 'Description for Group 1',
-            cover_image_url:
-                'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            group_tag: ['programming', 'networking', 'web-dev'],
-            group_user: ['user1_1', 'user1_2'],
-        },
-        {
-            title: 'Group Name',
-            description: 'Description for Group 1',
-            cover_image_url:
-                'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            group_tag: ['programming', 'networking', 'web-dev'],
-            group_user: ['user1_1', 'user1_2'],
-        },
-        {
-            title: 'Group Name',
-            description: 'Description for Group 1',
-            cover_image_url:
-                'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            group_tag: ['programming', 'networking', 'web-dev'],
-            group_user: ['user1_1', 'user1_2'],
-        },
-        {
-            title: 'Group Name',
-            description: 'Description for Group 1',
-            cover_image_url:
-                'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            group_tag: ['programming', 'networking', 'web-dev'],
-            group_user: ['user1_1', 'user1_2'],
-        },
-        {
-            title: 'Group Name',
-            description: 'Description for Group 1',
-            cover_image_url:
-                'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            group_tag: ['programming', 'networking', 'web-dev'],
-            group_user: ['user1_1', 'user1_2'],
-        },
-        {
-            title: 'Group Name',
-            description: 'Description for Group 1',
-            cover_image_url:
-                'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            group_tag: ['programming', 'networking', 'web-dev'],
-            group_user: ['user1_1', 'user1_2'],
-        },
-        {
-            title: 'Group Name',
-            description: 'Description for Group 1',
-            cover_image_url:
-                'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            group_tag: ['programming', 'networking', 'web-dev'],
-            group_user: ['user1_1', 'user1_2'],
-        },
-        {
-            title: 'Group Name',
-            description: 'Description for Group 1',
-            cover_image_url:
-                'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            group_tag: ['programming', 'networking', 'web-dev'],
-            group_user: ['user1_1', 'user1_2'],
-        },
-        {
-            title: 'Group Name',
-            description: 'Description for Group 1',
-            cover_image_url:
-                'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            group_tag: ['programming', 'networking', 'web-dev'],
-            group_user: ['user1_1', 'user1_2'],
-        },
-        {
-            title: 'Group Name',
-            description: 'Description for Group 1',
-            cover_image_url:
-                'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            group_tag: ['programming', 'networking', 'web-dev'],
-            group_user: ['user1_1', 'user1_2'],
-        },
-        {
-            title: 'Group Name',
-            description: 'Description for Group 1',
-            cover_image_url:
-                'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            group_tag: ['programming', 'networking', 'web-dev'],
-            group_user: ['user1_1', 'user1_2'],
-        },
-        {
-            title: 'Group Name',
-            description: 'Description for Group 1',
-            cover_image_url:
-                'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            group_tag: ['programming', 'networking', 'web-dev'],
-            group_user: ['user1_1', 'user1_2'],
-        },
-    ];
+    const { data, isLoading } = useGetAllGroupsQuery();
+    let groups: ReceivedGroup[] = (data as unknown as Response)?.data ?? [];
 
     const handleSearchValueChange = (value: string) => {
         setSearchValue(value);
@@ -125,7 +25,9 @@ const ExploreGroupsPage = () => {
         setCreateGroupModalOpen(true);
     };
 
-    return (
+    return isLoading ? (
+        <Spinner />
+    ) : (
         <PageContainer>
             <PageTitle className="text-center">Explore Groups</PageTitle>
             <CreateGroupModal
@@ -139,7 +41,7 @@ const ExploreGroupsPage = () => {
                 onCreateButtonClick={handleCreateButtonClick}
             />
             <GroupsGrid>
-                {data.map((group) => (
+                {groups.map((group) => (
                     <GroupCard {...group} />
                 ))}
             </GroupsGrid>
