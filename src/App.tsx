@@ -2,6 +2,7 @@ import { useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
+import AIHelperPage from './pages/AI-helper/AI-helper.page';
 import ForgetPasswordPage from './pages/auth/ForgetPassword';
 import LoginPage from './pages/auth/Login';
 import RecoverPassword from './pages/auth/RecoverPassword';
@@ -18,11 +19,10 @@ import { SettingsPage } from './pages/settings/settings.page';
 import StudyPlanner from './pages/study-planner/study-planner.page';
 import AuthTemplatePage from './pages/templates/Auth';
 import LoggedInTemplatePage from './pages/templates/LoggedIn';
+import UpgradePage from './pages/upgrade/upgrade.page';
 import ViewArticlePage from './pages/view-article/view-article.page';
 import ViewGroupPage from './pages/view-group/view-group.page';
 import { RootState, setCredentials } from './store';
-import AIHelperPage from './pages/AI-helper/AI-helper.page';
-import UpgradePage from './pages/upgrade/upgrade.page';
 
 function App() {
     const dispatch = useDispatch();

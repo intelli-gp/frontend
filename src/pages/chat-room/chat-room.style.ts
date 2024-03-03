@@ -218,7 +218,7 @@ export const ChatBox = styled.div<userType>`
         flex-direction: column;
         gap: 8px;
         max-width: 40%;
-        min-width:20%;
+        min-width: 20%;
     }
     h1 {
         display: ${({ incoming }) => (incoming ? 'none' : '')};

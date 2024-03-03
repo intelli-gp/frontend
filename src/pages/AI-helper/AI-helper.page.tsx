@@ -1,9 +1,18 @@
-import { IoSend } from "react-icons/io5";
-import Button from "../../components/Button";
-import { InputWithoutLabel } from "../../components/Input";
-import { AIicon, ChatBody, ChatFooter, ChatHeader, Messagebar, PageContainer, ChatBox } from "./AI-helper.style";
-import AIimg from '../../assets/imgs/AI-profile.svg'
-import { Link } from "react-router-dom";
+import { IoSend } from 'react-icons/io5';
+import { Link } from 'react-router-dom';
+
+import AIimg from '../../assets/imgs/AI-profile.svg';
+import Button from '../../components/Button';
+import { InputWithoutLabel } from '../../components/Input';
+import {
+    AIicon,
+    ChatBody,
+    ChatBox,
+    ChatFooter,
+    ChatHeader,
+    Messagebar,
+    PageContainer,
+} from './AI-helper.style';
 
 type MessageType = {
     type: string;
@@ -23,10 +32,7 @@ const TextMsg = ({ el }: { el: MessageType }) => {
     );
 };
 
-
 const AIHelperPage = () => {
-
-
     const data1 = [
         {
             type: 'msg',
@@ -42,12 +48,11 @@ const AIHelperPage = () => {
         },
         {
             type: 'msg',
-            message: 'I am great, Can you come to work today? I am great, Can you come to work today? I am great, Can you come to work today?',
+            message:
+                'I am great, Can you come to work today? I am great, Can you come to work today? I am great, Can you come to work today?',
             incoming: true,
             date: '10/16/2023, 10:51:23 AM ',
-
         },
-
     ];
 
     return (
@@ -60,7 +65,11 @@ const AIHelperPage = () => {
                     </h1>
                 </span>
                 <Link to="/app/upgrade">
-                    <Button type="button" select="secondary" className="text-[#312E81] h-[38px] w-[80px]">
+                    <Button
+                        type="button"
+                        select="secondary"
+                        className="text-[#312E81] h-[38px] w-[80px]"
+                    >
                         Upgrade
                     </Button>
                 </Link>
@@ -80,11 +89,9 @@ const AIHelperPage = () => {
                         />
                         <IoSend color="var(--indigo-800)" size={26} />
                     </Messagebar>
-
                 </ChatFooter>
             </div>
-
         </PageContainer>
-    )
-}
+    );
+};
 export default AIHelperPage;

@@ -1,17 +1,17 @@
 import styled from 'styled-components';
-import image from '../../assets/imgs/AI-helper.svg'
+
+import image from '../../assets/imgs/AI-helper.svg';
 
 export const PageContainer = styled.div`
     display: flex;
     flex-direction: column;
     background: var(--indigo-50);
     height: 100vh;
-    background-image: url(${image}); 
-    background-size: cover; 
-    background-repeat: no-repeat; 
-    background-position: center; 
+    background-image: url(${image});
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 `;
-
 
 export const ChatHeader = styled.div`
     width: 100%;
@@ -33,7 +33,7 @@ export const ChatBody = styled.div`
     padding: 34px;
     flex-grow: 1;
     gap: 20px;
-    background:white;
+    background: white;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -64,14 +64,13 @@ export const Messagebar = styled.div`
     align-items: center;
     width: 100%;
     justify-content: space-between;
-    height:100%;
-    border: 2px solid  var(--gray-500);
+    height: 100%;
+    border: 2px solid var(--gray-500);
     border-radius: 10px;
-    background:  var(--gray-50);
+    background: var(--gray-50);
     transition: background 0.25s;
-    padding:10px 15px;
+    padding: 10px 15px;
     input {
-
         background: transparent;
         outline: none;
         border: none;
@@ -84,7 +83,7 @@ export const Messagebar = styled.div`
 export const ChatFooter = styled.div`
     width: 100%;
     height: 75px;
-    background:  white;
+    background: white;
     padding: 10px 32px 15px 32px;
 `;
 type userType = {
@@ -107,8 +106,7 @@ export const ChatBox = styled.div<userType>`
         flex-direction: column;
         gap: 8px;
         max-width: 40%;
-        min-width:20%;
-
+        min-width: 20%;
     }
 
     p {
