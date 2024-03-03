@@ -21,6 +21,7 @@ import LoggedInTemplatePage from './pages/templates/LoggedIn';
 import ViewArticlePage from './pages/view-article/view-article.page';
 import ViewGroupPage from './pages/view-group/view-group.page';
 import { RootState, setCredentials } from './store';
+import AIHelperPage from './pages/AI-helper/AI-helper.page';
 import UpgradePage from './pages/upgrade/upgrade.page';
 
 function App() {
@@ -72,6 +73,7 @@ function App() {
                 />
                 <Route path="articles/create" element={<CreateArticlePage />} />
                 <Route path="pomodoro" element={<PomodoroPage />} />
+                <Route path="AI-helper" element={<AIHelperPage />} />
                 <Route path="upgrade" element={<UpgradePage />} />
             </Route>
         </Routes>

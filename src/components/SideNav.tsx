@@ -80,7 +80,7 @@ export default function SideNav() {
         {
             icon: <FaHandsHelping />,
             extendable: false,
-            path: '/app',
+            path: '/app/AI-helper',
             text: 'AI helper',
             active: false,
             id: 6,
