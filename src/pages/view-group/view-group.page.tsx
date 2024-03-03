@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { FiEdit, FiSave } from 'react-icons/fi';
 import { IoIosArrowDown } from 'react-icons/io';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import coverImageCamera from '../../assets/imgs/coverImageCamera.png';
 import defaultCoverImage from '../../assets/imgs/defaultCover.jpg';
@@ -10,6 +12,15 @@ import { InputWithoutLabel } from '../../components/Input';
 import { Modal } from '../../components/modal/modal.component';
 import { TagContainer } from '../../components/tag/tag.styles';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
+import {
+    useDeleteGroupMutation,
+    useGetAllTagsQuery,
+    useGetGroupQuery,
+    useUpdateGroupMutation,
+} from '../../store';
+import { ReceivedGroup } from '../../types/group';
+import { Response } from '../../types/response';
+import { errorToast, successToast } from '../../utils/toasts';
 import {
     Arrow,
     EditButton,
@@ -26,26 +37,73 @@ import {
 } from './view-group.styles';
 
 const ViewGroupPage = () => {
-    const [isEditingInterest, setisEditingInterest] = useState(false);
-    const [isEditingDescription, setisEditingDescription] = useState(false);
-
-    const data = {
-        title: 'Computer Hackers',
-        description:
-            'Lorem ipsum dolor sit amet consectetur. Ultrices luctus mi euismod sit quam pulvinar. Eu platea sit aliquam in egestas at volutpat netus. In massa aliquet semper etiam tempor cras hac sit imperdiet. Ornare risus nisl sit vulputate et rhoncus non. Amet libero scelerisque odio aliquet. At sed turpis sollicitudin tortor odio velit. Cursus nunc aliquam odio malesuada in et quis et volutpat. Sit sed viverra metus lorem cursus varius. Aliquam posuere malesuada nunc eleifend amet netus massa ut.',
-        cover_image_url: '',
-        group_tag: ['programming', 'networking', 'web-dev'],
-        admins: ['Alis', 'Youmna'],
-        members: ['Alis', 'Youmna', 'Youmna', 'Youmna'],
-        membersno: '4',
-    };
-    const [interests, setInterests] = useState(data.group_tag);
-
-    const [description, setDescription] = useState(data.description);
-
+    const navigate = useNavigate();
+    const [isEditingInterest, setIsEditingInterest] = useState(false);
+    const [isEditingDescription, setIsEditingDescription] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [interests, setInterests] = useState(['']);
+    const [description, setDescription] = useState('');
+
+    const { id: groupId } = useParams();
+    const { data, isSuccess: isGroupDataFetched } = useGetGroupQuery(groupId!);
+    const { data: allTags } = useGetAllTagsQuery();
+    const [
+        deleteGroup,
+        {
+            isLoading: isDeletingGroup,
+            isSuccess: groupDeletedSuccessfully,
+            reset: resetDeleteGroup,
+        },
+    ] = useDeleteGroupMutation();
+    const [
+        updateGroup,
+        {
+            isSuccess: isGroupUpdatedSuccessfully,
+            isLoading: isGroupUpdating,
+            isError: isGroupUpdatingError,
+            reset: resetUpdateGroup,
+        },
+    ] = useUpdateGroupMutation();
+    const groupData: ReceivedGroup = (data as unknown as Response)?.data[0];
+    const admins =
+        groupData?.GroupMembers?.filter((member) => member.type === 'ADMIN') ??
+        [];
+    const members =
+        groupData?.GroupMembers?.filter(
+            (member) =>
+                member.type === 'MEMBER' && member.joining_status === true,
+        ) ?? [];
+
     const openModal = () => {
         setShowModal((prev) => !prev);
+    };
+
+    // Set the internal states with the fetched data
+    useEffect(() => {
+        setInterests(groupData?.GroupTags ?? []);
+        setDescription(groupData?.description ?? '');
+    }, [isGroupDataFetched]);
+
+    // Toasts handling
+    useEffect(() => {}, [
+        groupDeletedSuccessfully,
+        isGroupUpdatedSuccessfully,
+        isGroupUpdatingError,
+    ]);
+
+    const handleDeleteGroup = async () => {
+        try {
+            await deleteGroup(groupId!).unwrap();
+            setShowModal(false);
+            navigate('/app/groups');
+            successToast('Group deleted successfully');
+        } catch (error) {
+            errorToast('Error occurred while deleting the group');
+        }
+    };
+
+    const handleUpdateGroup = async () => {
+        
     };
 
     const DeleteSectionModal = (
@@ -55,10 +113,20 @@ const ViewGroupPage = () => {
                     Are you sure you want to delete this group?
                 </p>
                 <div className="flex gap-4 justify-center">
-                    <Button className="!px-8" type="button" select="danger">
+                    <Button
+                        className="!px-8"
+                        type="button"
+                        select="danger"
+                        loading={isDeletingGroup}
+                        onClick={handleDeleteGroup}
+                    >
                         Yes
                     </Button>
-                    <Button type="button" className="!px-6">
+                    <Button
+                        type="button"
+                        className="!px-6"
+                        onClick={() => setShowModal(false)}
+                    >
                         Cancel
                     </Button>
                 </div>
@@ -77,17 +145,18 @@ const ViewGroupPage = () => {
                 <GroupCoverImage src={defaultCoverImage} />
                 <div>
                     <h1 className="lg:text-5xl text-3xl text-white">
-                        {data.title}
+                        {groupData?.title}
                     </h1>
                     <p className="lg:text-2xl text-lg text-white">
-                        {data.membersno + ' Members'}
+                        {groupData?.GroupMembers?.length + ' Members'}
                     </p>
                 </div>
                 <Button
                     type="button"
                     select="warning"
                     title="Return"
-                    className="absolute bottom-8 right-8 text-[#1e1b4b] text-lg font-medium rounded-lg"
+                    className="absolute bottom-8 right-8 !text-[#1e1b4b] text-lg !font-bold rounded-lg"
+                    onClick={() => navigate('/app/groups')}
                 >
                     Return
                 </Button>
@@ -99,20 +168,14 @@ const ViewGroupPage = () => {
                             <p>Interest</p>
                             <EditButton
                                 title="Edit"
-                                onClick={() => {
-                                    setisEditingInterest(
-                                        (isEditingInterest) => {
-                                            if (isEditingInterest) {
-                                            }
-                                            return !isEditingInterest;
-                                        },
-                                    );
-                                }}
+                                onClick={() =>
+                                    setIsEditingInterest(!isEditingInterest)
+                                }
                             >
                                 {isEditingInterest ? (
-                                    <FiSave size={21} />
+                                    <FiSave size={24} />
                                 ) : (
-                                    <FiEdit size={18} />
+                                    <FiEdit size={24} />
                                 )}
                             </EditButton>
                         </div>
@@ -122,19 +185,17 @@ const ViewGroupPage = () => {
                                     updateSelectedTags={(tags: string[]) =>
                                         setInterests(tags)
                                     }
-                                    availableTags={['happy', 'start']}
+                                    availableTags={allTags?.data}
                                     selectedTags={interests}
                                     disabled={!isEditingInterest}
                                 />
                             ) : (
                                 <>
-                                    {data?.group_tag.map((tag) => {
-                                        return (
-                                            <TagContainer key={tag} size="sm">
-                                                {tag}
-                                            </TagContainer>
-                                        );
-                                    })}
+                                    {groupData?.GroupTags?.map((tag) => (
+                                        <TagContainer key={tag} size="sm">
+                                            {tag}
+                                        </TagContainer>
+                                    ))}
                                 </>
                             )}
                         </div>
@@ -145,7 +206,7 @@ const ViewGroupPage = () => {
                             <EditButton
                                 title="Edit"
                                 onClick={() => {
-                                    setisEditingDescription(
+                                    setIsEditingDescription(
                                         (isEditingDescription) => {
                                             if (isEditingDescription) {
                                             }
@@ -155,9 +216,9 @@ const ViewGroupPage = () => {
                                 }}
                             >
                                 {isEditingDescription ? (
-                                    <FiSave size={21} />
+                                    <FiSave size={24} />
                                 ) : (
-                                    <FiEdit size={18} />
+                                    <FiEdit size={24} />
                                 )}
                             </EditButton>
                         </div>
@@ -169,12 +230,12 @@ const ViewGroupPage = () => {
                                         setDescription(e.target.value)
                                     }
                                     className="rounded-lg resize-none w-full h-full"
-                                    multiline="true"
+                                    multiline
                                     maxLength={1000}
                                     rows={5}
                                 />
                             ) : (
-                                <>{description}</>
+                                <> {description} </>
                             )}
                         </div>
                     </div>
@@ -192,31 +253,15 @@ const ViewGroupPage = () => {
                 <RightPart>
                     <p>ADMINS</p>
                     <PeopleContainer>
-                        {data.admins.map((admin) => {
-                            const [showMenu, setShowMenu] = useState(false);
-
+                        {admins.map((admin) => {
                             return (
-                                <PersonContainer key={admin}>
-                                    <img src={defaultUserImage} />
+                                <PersonContainer key={admin?.username}>
+                                    <img alt="" src={defaultUserImage} />
                                     <span className="flex flex-row items-center gap-2 relative">
-                                        <h1>{admin}</h1>
+                                        <h1>{admin?.username}</h1>
                                         <Arrow>
-                                            <IoIosArrowDown
-                                                onClick={() =>
-                                                    setShowMenu((val) => !val)
-                                                }
-                                            />
+                                            <IoIosArrowDown />
                                         </Arrow>
-                                        {showMenu && (
-                                            <Menu>
-                                                <div>
-                                                    <h1>Remove</h1>
-                                                </div>
-                                                <div>
-                                                    <h1>Dismiss an admin</h1>
-                                                </div>
-                                            </Menu>
-                                        )}
                                     </span>
                                 </PersonContainer>
                             );
@@ -225,30 +270,15 @@ const ViewGroupPage = () => {
                     <br />
                     <p>MEMBERS</p>
                     <PeopleContainer>
-                        {data.members.map((member) => {
-                            const [showMenu, setShowMenu] = useState(false);
+                        {members.map((member) => {
                             return (
-                                <PersonContainer key={member}>
-                                    <img src={defaultUserImage} />
+                                <PersonContainer key={member?.username}>
+                                    <img alt="" src={defaultUserImage} />
                                     <span className="flex flex-row items-center gap-2 relative">
-                                        <h1>{member}</h1>
+                                        <h1>{member?.username}</h1>
                                         <Arrow>
-                                            <IoIosArrowDown
-                                                onClick={() =>
-                                                    setShowMenu((val) => !val)
-                                                }
-                                            />
+                                            <IoIosArrowDown />
                                         </Arrow>
-                                        {showMenu && (
-                                            <Menu>
-                                                <div>
-                                                    <h1>Remove</h1>
-                                                </div>
-                                                <div>
-                                                    <h1>Add group admin</h1>
-                                                </div>
-                                            </Menu>
-                                        )}
                                     </span>
                                 </PersonContainer>
                             );

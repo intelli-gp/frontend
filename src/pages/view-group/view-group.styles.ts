@@ -3,6 +3,14 @@ import styled from 'styled-components';
 export const PageContainer = styled.div`
     display: flex;
     flex-direction: column;
+
+    svg {
+        cursor: pointer;
+        opacity: 0.8;
+        &:hover {
+            opacity: 1;
+        }
+    }
 `;
 export const GroupCoverImageContainer = styled.div`
     position: relative;
@@ -63,6 +71,7 @@ export const LeftPart = styled.div`
     padding: 30px 80px 20px 80px;
     display: grid;
     grid-template-rows: 2fr 2fr 1fr;
+    gap: 2rem;
     width: 100%;
     p {
         font-size: 24px;
@@ -109,7 +118,7 @@ export const PeopleContainer = styled.div`
 `;
 export const Arrow = styled.div`
     /* By default, hide the element */
-    display: none;
+    /* display: none; */
 `;
 
 export const PersonContainer = styled.div`
@@ -119,6 +128,8 @@ export const PersonContainer = styled.div`
     align-items: center;
     padding: 6px 12px;
     gap: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
 
     &:hover {
         background: var(--indigo-50);

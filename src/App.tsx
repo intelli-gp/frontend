@@ -62,7 +62,7 @@ function App() {
                 <Route path="settings" element={<SettingsPage />} />
                 <Route path="articles" element={<ExploreArticlesPage />} />
                 {/* This is temporary route */}
-                <Route path="groups/group" element={<ViewGroupPage />} />
+                <Route path="groups/:id" element={<ViewGroupPage />} />
                 <Route path="chat-room" element={<ChatroomPage />} />
 
                 <Route
