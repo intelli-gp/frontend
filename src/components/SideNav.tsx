@@ -96,7 +96,7 @@ export default function SideNav() {
         {
             icon: <GiUpgrade />,
             extendable: false,
-            path: '/app',
+            path: '/app/upgrade',
             text: 'Upgrade',
             active: false,
             id: 8,
@@ -265,7 +265,7 @@ export default function SideNav() {
             </aside>
             <Button
                 type="button"
-                select="primary700"
+                select="primary"
                 className="absolute top-0 left-0 text-white z-10 lg:hidden rounded-none rounded-br-lg !p-2"
                 onClick={openSideNav}
             >
