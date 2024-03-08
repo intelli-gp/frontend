@@ -41,7 +41,7 @@ export const groupsApi = appApi.injectEndpoints({
             ],
             query: (update) => ({
                 url: `/chat-groups/${update.id}`,
-                method: 'PUT',
+                method: 'PATCH',
                 body: update,
             }),
         }),
@@ -64,7 +64,7 @@ export const groupsApi = appApi.injectEndpoints({
         leaveGroup: builder.mutation<Response, string>({
             query: (groupId) => ({
                 url: `/chat-groups/leave`,
-                method: 'POST',
+                method: 'PATCH',
                 body: {
                     ChatGroupId: groupId,
                 },
