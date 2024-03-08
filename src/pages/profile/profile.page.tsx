@@ -193,7 +193,7 @@ const ProfilePage = () => {
                     value={image}
                     onChange={setImage}
                     radius={title === 'Cover' ? '3px' : '50%'}
-                    cover={title === 'Cover' ? 'cover' : 'contain'}
+                    cover={title === 'Cover' ? 'contain' : 'cover'}
                 />
             </div>
             <div className="flex flex-row justify-end pt-6 items-center gap-2">
