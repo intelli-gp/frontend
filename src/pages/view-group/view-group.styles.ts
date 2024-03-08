@@ -5,7 +5,6 @@ export const PageContainer = styled.div`
     flex-direction: column;
     min-height: 100vh;
     height: 100%;
-
 `;
 export const GroupCoverImageContainer = styled.div`
     position: relative;
@@ -42,28 +41,26 @@ export const GroupCoverImage = styled.img`
     @media (max-width: 768px) {
         max-height: 300px;
     }
-   
-
 `;
 export const PictureOverlay = styled.img`
-  top: 0;
-  left: 0;
-  width: 100%;
-  min-height: 310px;
-  max-height: 310px;
-  opacity: 0;
-  position: absolute;
-  transition: opacity 0.3s ease-in-out;
-  object-fit: cover;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 310px;
+    max-height: 310px;
+    opacity: 0;
+    position: absolute;
+    transition: opacity 0.3s ease-in-out;
+    object-fit: cover;
 
     box-shadow: var(--black-shadow);
-  &:hover {
-    opacity: 0.1;
-    cursor: pointer;
-  }
+    &:hover {
+        opacity: 0.1;
+        cursor: pointer;
+    }
 `;
 export const GroupInfoContainer = styled.div`
-    flex:1;
+    flex: 1;
     display: grid;
     grid-template-columns: 5fr 2fr;
     @media (max-width: 768px) {
@@ -121,7 +118,7 @@ export const PeopleContainer = styled.div`
 `;
 export const Arrow = styled.div`
     /* By default, hide the element */
-    //  display: none; 
+    //  display: none;
 `;
 
 export const PersonContainer = styled.div`

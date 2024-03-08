@@ -27,7 +27,7 @@ export const OpenImage = ({
     width,
     height,
     radius,
-    cover
+    cover,
 }: OpenImageProps) => {
     const fileInput = useRef<HTMLInputElement>(null);
 

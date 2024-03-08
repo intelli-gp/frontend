@@ -19,6 +19,7 @@ import { AddTaskModal } from '../../components/AddTaskModal';
 import Button from '../../components/Button';
 import { EditTaskModal } from '../../components/EditTaskModal';
 import Skeleton from '../../components/Skeleton';
+import Spinner from '../../components/Spinner';
 import TaskBox from '../../components/TaskBox';
 import '../../index.css';
 import { useFetchTasksQuery } from '../../store';
@@ -31,7 +32,6 @@ import {
     TaskBoxContainer,
     TasksContainer,
 } from './study-planner.styles';
-import Spinner from '../../components/Spinner';
 
 const formats = {
     weekdayFormat: 'ddd',
@@ -317,9 +317,9 @@ export default function StudyPlanner() {
         );
     };
 
-    return (isLoading ? (
+    return isLoading ? (
         <Spinner />
-    ) :
+    ) : (
         <div className="flex justify-between h-[100vh] xl:flex-row flex-col">
             <CalendarHolder>
                 <Calendar className="w-[95%] h-full" />

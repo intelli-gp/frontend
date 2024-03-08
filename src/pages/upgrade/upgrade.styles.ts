@@ -73,7 +73,7 @@ export const CardHolder = styled.div`
     p {
         color: var(--slate-500);
     }
-    button{
+    button {
         width: 100%;
         color: black;
         outline: none;
@@ -84,7 +84,6 @@ export const CardHolder = styled.div`
         align-items: center;
         justify-content: center;
         border-radius: 4px;
-
     }
     @media (min-height: 700px) {
         height: 430px;

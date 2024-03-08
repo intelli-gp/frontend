@@ -221,7 +221,9 @@ export const SettingsPage = () => {
         setUsername(storedUser.username);
         setEmail(storedUser.email);
         setPhone(storedUser.phone_number);
-        setBirthDate(new Date(storedUser.dob ?? Date.now()).toISOString().split('T')[0],);
+        setBirthDate(
+            new Date(storedUser.dob ?? Date.now()).toISOString().split('T')[0],
+        );
         setBio(storedUser.bio);
         setInterests(storedUser.user_tag);
     }, [storedUser]);

@@ -19,5 +19,4 @@ export type GroupToSend = {
     GroupTags: string[];
     AddedGroupTags: string[];
     RemovedGroupTags?: string[];
-
 };
