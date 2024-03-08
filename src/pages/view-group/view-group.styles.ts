@@ -121,7 +121,7 @@ export const PeopleContainer = styled.div`
 `;
 export const Arrow = styled.div`
     /* By default, hide the element */
-    /* display: none; */
+    //  display: none; 
 `;
 
 export const PersonContainer = styled.div`

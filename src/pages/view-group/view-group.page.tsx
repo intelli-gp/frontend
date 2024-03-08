@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FiEdit, FiSave } from 'react-icons/fi';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,11 +11,9 @@ import { Modal } from '../../components/modal/modal.component';
 import { TagContainer } from '../../components/tag/tag.styles';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import {
-    useDeleteGroupMutation,
     useGetAllTagsQuery,
     useGetGroupQuery,
     useJoinGroupMutation,
-    useLeaveGroupMutation,
     useUpdateGroupMutation,
 } from '../../store';
 import { GroupToSend, ReceivedGroup } from '../../types/group';
@@ -42,6 +40,8 @@ import { useUploadImage } from '../../hooks/uploadImage.hook';
 import OpenImage from '../../components/openImage/openImage.component';
 import ExitModal from '../../components/ExitModal';
 import DeleteSectionModal from '../../components/DeleteModal';
+import _ from 'lodash';
+import { User } from '../../types/user';
 
 const ViewGroupPage = () => {
     const navigate = useNavigate();
@@ -53,7 +53,7 @@ const ViewGroupPage = () => {
     const [description, setDescription] = useState('');
     const [coverImg, setCoverImg] = useState('');
 
-    const userId = useSelector((state: any) => state.auth.user.user_id);
+    const user = useSelector((state: any) => state.auth.user) as User;
     const { id: groupId } = useParams();
     const { data, isSuccess: isGroupDataFetched } = useGetGroupQuery(groupId!);
     const { data: allTags } = useGetAllTagsQuery();
@@ -67,9 +67,30 @@ const ViewGroupPage = () => {
                 member.type === 'MEMBER' && member.joining_status === true,
         ) ?? [];
 
-    const userType = groupData?.GroupMembers?.find((member) => member.user_id === userId)?.type || 'NOTHING';
+    const userType = groupData?.GroupMembers?.find((member) => member.user_id === user.user_id)?.type || 'NOTHING';
+
+    const [showMenus, setShowMenus] = useState(members.map(() => false));
+
+    //TODO: Need to retrieve the ID of each user to remove or update their status
+    const handleArrowClick = (index: number) => {
+        setShowMenus(prev => {
+            const updatedShowMenus = [...prev];
+            updatedShowMenus[index] = !updatedShowMenus[index];
+            return updatedShowMenus;
+        });
+    };
 
 
+    // DELETE GROUP
+
+    const openDeleteModal = () => {
+        setDeleteModal((prev) => !prev);
+    };
+
+    //EXIT GROUP
+    const openExitModal = () => {
+        setExitModal((prev) => !prev);
+    };
 
     // JOINING GROUP
     const [
@@ -87,18 +108,7 @@ const ViewGroupPage = () => {
             errorToast('Error occurred while joining the group');
 
         }
-
     }
-    // DELETE GROUP
-
-    const openDeleteModal = () => {
-        setDeleteModal((prev) => !prev);
-    };
-
-    //EXIT GROUP
-    const openExitModal = () => {
-        setExitModal((prev) => !prev);
-    };
 
     // UPDATE GROUP
     const [
@@ -106,7 +116,6 @@ const ViewGroupPage = () => {
         {
             isSuccess: isGroupUpdatedSuccessfully,
             isLoading: isGroupUpdating,
-            isError: isGroupUpdatingError,
             reset: resetUpdateGroup,
         },
     ] = useUpdateGroupMutation();
@@ -120,34 +129,40 @@ const ViewGroupPage = () => {
             const updatedGroupData: Partial<GroupToSend> & { id: string } = {
                 id: groupData.group_id,
             }
-            if (descriptionChanged)
-                updatedGroupData.GroupDescription = description;
-            if (tagsChanged)
-                updatedGroupData.GroupTags = interests
+            if (descriptionChanged){
+                updatedGroupData.GroupDescription = description;}
+            if (tagsChanged) {
+                if(_.difference(interests, groupData.GroupTags).length!==0)
+                   updatedGroupData.AddedGroupTags = _.difference(interests, groupData.GroupTags);
+                if(_.difference(groupData.GroupTags,interests).length!==0)
+                   updatedGroupData.RemovedGroupTags = _.difference(groupData.GroupTags,interests,);
+            }
             if (imageChanged) {
                 const imageURL = await uploadImage(coverImg);
                 updatedGroupData.GroupCoverImageUrl = imageURL;
                 setImgModal(false);
             }
             if (descriptionChanged || tagsChanged || imageChanged) {
-                await updateGroup(updatedGroupData!).unwrap();
-                successToast('Updated the group successfully!');
+                console.log(updatedGroupData);
+                await updateGroup(updatedGroupData).unwrap();
             }
         }
         catch (error) {
             errorToast('Error occurred while updating!');
+            resetUpdateGroup();
         }
     };
 
 
     // Editing Cover Image
 
-
     const { isLoading: isImageLoading, trigger: uploadImage } = useUploadImage();
     const [showImgModal, setImgModal] = useState(false);
 
     const openImgModal = () => {
-        setImgModal((prev) => !prev);
+        if (userType === 'ADMIN') {
+            setImgModal((prev) => !prev);
+        }
     };
     const modalUploadImage = (
         <Modal
@@ -155,12 +170,12 @@ const ViewGroupPage = () => {
             isOpen={showImgModal}
             setIsOpen={setImgModal}
         >
-            <h1 className='text-[var(--slate-600)] text-[28px]'>Edit Cover Image</h1>
+            <h1 className='text-[var(--slate-700)] text-[30px]'>Edit Cover Image</h1>
             <OpenImage
-                height="250px"
+                height="280px"
                 value={coverImg}
                 onChange={(newImage) => setCoverImg(newImage)}
-                editButton
+                radius='5px'
             />
             <div className='flex flex-row justify-end pt-6 items-center gap-2'>
                 <Button
@@ -185,9 +200,9 @@ const ViewGroupPage = () => {
 
     // Set the internal states with the fetched data
     useEffect(() => {
-        setInterests(groupData?.GroupTags ?? []);
-        setDescription(groupData?.description ?? '');
-        setCoverImg(groupData?.cover_image_url ?? '');
+        setInterests(groupData?.GroupTags);
+        setDescription(groupData?.description);
+        setCoverImg(groupData?.cover_image_url);
     }, [isGroupDataFetched]);
 
     // Toasts handling
@@ -195,62 +210,59 @@ const ViewGroupPage = () => {
         if (isGroupJoinedSuccessfully) {
             successToast('Joined the group successfully!');
         }
-
-
+        if (isGroupUpdatedSuccessfully) {
+            successToast('Updated the group successfully!');
+        }
     }, [
         isGroupJoinedSuccessfully,
+        isGroupUpdatedSuccessfully
     ]);
 
-
-
-    const upperButton = (
-        userType === 'ADMIN' || userType === 'MEMBER' ? (
-            <Button
-                type="button"
-                select="secondary"
-                title="Return"
-                className="absolute bottom-8 right-8 "
-                onClick={() => navigate('/app/chat-room')}
-            >
-                Return
-            </Button>
-        ) : (
-            <Button
-                type="button"
-                select="secondary"
-                title="Return"
-                className="absolute bottom-8 right-8 px-4"
-                loading={isGroupUpJoining}
-                onClick={handleJoiningGroup}
-            >
-                Join
-            </Button>
-        )
+    const returnButton = (
+        <Button
+            type="button"
+            select="secondary"
+            title="Return"
+            className="absolute bottom-8 right-8"
+            onClick={() => navigate('/app/chat-room')}
+        >
+            Return
+        </Button>
     );
 
+    const deleteButton = (
+        <Button
+            select="danger"
+            outline
+            type="button"
+            onClick={openDeleteModal}
+        >
+            Delete Group
+        </Button>
+    );
 
-    const lowerButton = (
-        userType === 'ADMIN' ? (
-            <Button
-                select="danger"
-                outline
-                type="button"
-                onClick={openDeleteModal}
-            >
-                Delete Group
-            </Button>
-        ) : userType === 'MEMBER' ? (
-            <Button
-                select="danger"
-                outline
-                type="button"
-                onClick={openExitModal}
-            >
-                Exit Group
-            </Button>
-        ) : (
-            <></>
-        )
+    const exitButton = (
+        <Button
+            select="danger"
+            outline
+            type="button"
+            onClick={openExitModal}
+        >
+            Exit Group
+        </Button>
+    );
+
+    const joinButton = (
+        <Button
+            type="button"
+            select="secondary"
+            title="Return"
+            className="absolute bottom-8 right-8 px-4"
+            loading={isGroupUpJoining}
+            onClick={handleJoiningGroup}
+        >
+            Join
+        </Button>
     );
 
     return !isGroupDataFetched ? (
@@ -273,7 +285,7 @@ const ViewGroupPage = () => {
                         {groupData?.GroupMembers?.length + ' Members'}
                     </p>
                 </div>
-                {upperButton}
+                {(userType === 'ADMIN' || userType === 'MEMBER') ? returnButton : joinButton}
             </GroupCoverImageContainer>
             <GroupInfoContainer>
                 <LeftPart>
@@ -301,7 +313,6 @@ const ViewGroupPage = () => {
                                     }
                                     availableTags={allTags?.data}
                                     selectedTags={interests}
-                                    disabled={!isEditingInterest}
                                 />
                             ) : (
                                 <>
@@ -354,7 +365,7 @@ const ViewGroupPage = () => {
                         </div>
                     </div>
                     <div className="flex gap-2 items-end">
-                        {lowerButton}
+                        {(userType === 'ADMIN') ? deleteButton : (userType === 'MEMBER') ? exitButton : <></>}
                     </div>
                 </LeftPart>
                 <RightPart>
@@ -365,8 +376,8 @@ const ViewGroupPage = () => {
                                 <PersonContainer key={admin?.username}>
                                     <img alt="" src={defaultUserImage} />
                                     <span className="flex flex-row items-center gap-2 relative">
-                                        <h1>{(admin?.username ?? "").substring(0, 8)
-                                            + ((admin?.username ?? "").length > 8 ? "..." : "")}</h1>
+                                        <h1>{(admin?.username ?? "").substring(0, 9)
+                                            + ((admin?.username ?? "").length > 9 ? "..." : "")}</h1>
                                         <Arrow>
                                             <IoIosArrowDown />
                                         </Arrow>
@@ -378,7 +389,7 @@ const ViewGroupPage = () => {
                     <br />
                     <p>MEMBERS</p>
                     <PeopleContainer>
-                        {members.map((member) => {
+                        {members.map((member, index) => {
                             return (
                                 <PersonContainer key={member?.username}>
                                     <img alt="" src={defaultUserImage} />
@@ -386,8 +397,16 @@ const ViewGroupPage = () => {
                                         <h1>{(member?.username ?? "").substring(0, 8)
                                             + ((member?.username ?? "").length > 8 ? "..." : "")}</h1>
                                         <Arrow>
-                                            <IoIosArrowDown />
+                                            <IoIosArrowDown onClick={() => handleArrowClick(index)} />
                                         </Arrow>
+                                        {showMenus[index] && <Menu>
+                                            <div>
+                                                <h1>Remove</h1>
+                                            </div>
+                                            <div>
+                                                <h1>Add an admin</h1>
+                                            </div>
+                                        </Menu>}
                                     </span>
                                 </PersonContainer>
                             );
@@ -395,8 +414,8 @@ const ViewGroupPage = () => {
                     </PeopleContainer>
                 </RightPart>
             </GroupInfoContainer>
-             <DeleteSectionModal id={groupId} showModal={showDeleteModal} setShowModal={setDeleteModal}  />
-             <ExitModal id={groupId} showModal={showExitModal} setShowModal={setExitModal}  />
+            <DeleteSectionModal id={groupId} showModal={showDeleteModal} setShowModal={setDeleteModal} />
+            <ExitModal id={groupId} showModal={showExitModal} setShowModal={setExitModal} />
             {modalUploadImage}
         </PageContainer>
     );
