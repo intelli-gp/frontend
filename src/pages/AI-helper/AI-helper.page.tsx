@@ -1,5 +1,5 @@
 import { IoSend } from 'react-icons/io5';
-import { Link } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 
 import AIimg from '../../assets/imgs/AI-profile.svg';
 import Button from '../../components/Button';
@@ -33,6 +33,9 @@ const TextMsg = ({ el }: { el: MessageType }) => {
 };
 
 const AIHelperPage = () => {
+    const navigate = useNavigate();
+
+
     const data1 = [
         {
             type: 'msg',
@@ -64,15 +67,15 @@ const AIHelperPage = () => {
                         AI Helper
                     </h1>
                 </span>
-                <Link to="/app/upgrade">
                     <Button
                         type="button"
                         select="secondary"
                         className="text-[#312E81] h-[38px] w-[80px]"
+                        onClick={() => navigate('/app/upgrade')}
+
                     >
                         Upgrade
                     </Button>
-                </Link>
             </ChatHeader>
             <div className="flex flex-col md:px-[120px] px-[50px] h-[calc(100vh-70px)]">
                 <ChatBody>
