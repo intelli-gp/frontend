@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
+import { SetStateAction, useEffect, useState } from 'react';
 import { FiEdit, FiSave } from 'react-icons/fi';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import coverImageCamera from '../../assets/imgs/coverImageCamera.png';
-import defaultCoverImage from '../../assets/imgs/defaultCover.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import Button from '../../components/Button';
 import { InputWithoutLabel } from '../../components/Input';
@@ -16,9 +14,11 @@ import {
     useDeleteGroupMutation,
     useGetAllTagsQuery,
     useGetGroupQuery,
+    useJoinGroupMutation,
+    useLeaveGroupMutation,
     useUpdateGroupMutation,
 } from '../../store';
-import { ReceivedGroup } from '../../types/group';
+import { GroupToSend, ReceivedGroup } from '../../types/group';
 import { Response } from '../../types/response';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
@@ -35,35 +35,28 @@ import {
     PictureOverlay,
     RightPart,
 } from './view-group.styles';
+import { useSelector } from 'react-redux';
+import { GoSync } from 'react-icons/go';
+import Spinner from '../../components/Spinner';
+import { useUploadImage } from '../../hooks/uploadImage.hook';
+import OpenImage from '../../components/openImage/openImage.component';
+import ExitModal from '../../components/ExitModal';
+import DeleteSectionModal from '../../components/DeleteModal';
 
 const ViewGroupPage = () => {
     const navigate = useNavigate();
     const [isEditingInterest, setIsEditingInterest] = useState(false);
     const [isEditingDescription, setIsEditingDescription] = useState(false);
-    const [showModal, setShowModal] = useState(false);
+    const [showExitModal, setExitModal] = useState(false);
+    const [showDeleteModal, setDeleteModal] = useState(false);
     const [interests, setInterests] = useState(['']);
     const [description, setDescription] = useState('');
+    const [coverImg, setCoverImg] = useState('');
 
+    const userId = useSelector((state: any) => state.auth.user.user_id);
     const { id: groupId } = useParams();
     const { data, isSuccess: isGroupDataFetched } = useGetGroupQuery(groupId!);
     const { data: allTags } = useGetAllTagsQuery();
-    const [
-        deleteGroup,
-        {
-            isLoading: isDeletingGroup,
-            isSuccess: groupDeletedSuccessfully,
-            reset: resetDeleteGroup,
-        },
-    ] = useDeleteGroupMutation();
-    const [
-        updateGroup,
-        {
-            isSuccess: isGroupUpdatedSuccessfully,
-            isLoading: isGroupUpdating,
-            isError: isGroupUpdatingError,
-            reset: resetUpdateGroup,
-        },
-    ] = useUpdateGroupMutation();
     const groupData: ReceivedGroup = (data as unknown as Response)?.data[0];
     const admins =
         groupData?.GroupMembers?.filter((member) => member.type === 'ADMIN') ??
@@ -74,75 +67,204 @@ const ViewGroupPage = () => {
                 member.type === 'MEMBER' && member.joining_status === true,
         ) ?? [];
 
-    const openModal = () => {
-        setShowModal((prev) => !prev);
+    const userType = groupData?.GroupMembers?.find((member) => member.user_id === userId)?.type || 'NOTHING';
+
+
+
+    // JOINING GROUP
+    const [
+        joinGroup,
+        {
+            isSuccess: isGroupJoinedSuccessfully,
+            isLoading: isGroupUpJoining,
+        },
+    ] = useJoinGroupMutation();
+    const handleJoiningGroup = async () => {
+        try {
+            await joinGroup(groupId!).unwrap();
+            navigate('/app/chat-room')
+        } catch (error) {
+            errorToast('Error occurred while joining the group');
+
+        }
+
+    }
+    // DELETE GROUP
+
+    const openDeleteModal = () => {
+        setDeleteModal((prev) => !prev);
     };
+
+    //EXIT GROUP
+    const openExitModal = () => {
+        setExitModal((prev) => !prev);
+    };
+
+    // UPDATE GROUP
+    const [
+        updateGroup,
+        {
+            isSuccess: isGroupUpdatedSuccessfully,
+            isLoading: isGroupUpdating,
+            isError: isGroupUpdatingError,
+            reset: resetUpdateGroup,
+        },
+    ] = useUpdateGroupMutation();
+
+    const handleUpdateGroup = async () => {
+        try {
+            // Check if tags or description changed
+            const tagsChanged = JSON.stringify(groupData?.GroupTags) !== JSON.stringify(interests);
+            const descriptionChanged = groupData?.description !== description;
+            const imageChanged = groupData?.cover_image_url !== coverImg;
+            const updatedGroupData: Partial<GroupToSend> & { id: string } = {
+                id: groupData.group_id,
+            }
+            if (descriptionChanged)
+                updatedGroupData.GroupDescription = description;
+            if (tagsChanged)
+                updatedGroupData.GroupTags = interests
+            if (imageChanged) {
+                const imageURL = await uploadImage(coverImg);
+                updatedGroupData.GroupCoverImageUrl = imageURL;
+                setImgModal(false);
+            }
+            if (descriptionChanged || tagsChanged || imageChanged) {
+                await updateGroup(updatedGroupData!).unwrap();
+                successToast('Updated the group successfully!');
+            }
+        }
+        catch (error) {
+            errorToast('Error occurred while updating!');
+        }
+    };
+
+
+    // Editing Cover Image
+
+
+    const { isLoading: isImageLoading, trigger: uploadImage } = useUploadImage();
+    const [showImgModal, setImgModal] = useState(false);
+
+    const openImgModal = () => {
+        setImgModal((prev) => !prev);
+    };
+    const modalUploadImage = (
+        <Modal
+            className="flex flex-col gap-4"
+            isOpen={showImgModal}
+            setIsOpen={setImgModal}
+        >
+            <h1 className='text-[var(--slate-600)] text-[28px]'>Edit Cover Image</h1>
+            <OpenImage
+                height="250px"
+                value={coverImg}
+                onChange={(newImage) => setCoverImg(newImage)}
+                editButton
+            />
+            <div className='flex flex-row justify-end pt-6 items-center gap-2'>
+                <Button
+                    type='button'
+                    select='primary'
+                    loading={isImageLoading}
+                    onClick={handleUpdateGroup}
+                > Apply</Button>
+                <Button
+                    type='button'
+                    select='danger'
+                    onClick={() => {
+                        setCoverImg(groupData.cover_image_url)
+                        setImgModal(false)
+                    }}
+                    outline
+                    className='border-transparent'
+                > Cancel</Button>
+            </div>
+        </Modal>
+    )
 
     // Set the internal states with the fetched data
     useEffect(() => {
         setInterests(groupData?.GroupTags ?? []);
         setDescription(groupData?.description ?? '');
+        setCoverImg(groupData?.cover_image_url ?? '');
     }, [isGroupDataFetched]);
 
     // Toasts handling
-    useEffect(() => {}, [
-        groupDeletedSuccessfully,
-        isGroupUpdatedSuccessfully,
-        isGroupUpdatingError,
+    useEffect(() => {
+        if (isGroupJoinedSuccessfully) {
+            successToast('Joined the group successfully!');
+        }
+
+
+    }, [
+        isGroupJoinedSuccessfully,
     ]);
 
-    const handleDeleteGroup = async () => {
-        try {
-            await deleteGroup(groupId!).unwrap();
-            setShowModal(false);
-            navigate('/app/groups');
-            successToast('Group deleted successfully');
-        } catch (error) {
-            errorToast('Error occurred while deleting the group');
-        }
-    };
 
-    const handleUpdateGroup = async () => {
-        
-    };
 
-    const DeleteSectionModal = (
-        <Modal isOpen={showModal} setIsOpen={setShowModal}>
-            <div className="flex flex-col gap-8">
-                <p className="text-2xl font-bold text-[var(--gray-800)] text-center">
-                    Are you sure you want to delete this group?
-                </p>
-                <div className="flex gap-4 justify-center">
-                    <Button
-                        className="!px-8"
-                        type="button"
-                        select="danger"
-                        loading={isDeletingGroup}
-                        onClick={handleDeleteGroup}
-                    >
-                        Yes
-                    </Button>
-                    <Button
-                        type="button"
-                        className="!px-6"
-                        onClick={() => setShowModal(false)}
-                    >
-                        Cancel
-                    </Button>
-                </div>
-            </div>
-        </Modal>
+    const upperButton = (
+        userType === 'ADMIN' || userType === 'MEMBER' ? (
+            <Button
+                type="button"
+                select="secondary"
+                title="Return"
+                className="absolute bottom-8 right-8 "
+                onClick={() => navigate('/app/chat-room')}
+            >
+                Return
+            </Button>
+        ) : (
+            <Button
+                type="button"
+                select="secondary"
+                title="Return"
+                className="absolute bottom-8 right-8 px-4"
+                loading={isGroupUpJoining}
+                onClick={handleJoiningGroup}
+            >
+                Join
+            </Button>
+        )
     );
 
-    return (
+
+    const lowerButton = (
+        userType === 'ADMIN' ? (
+            <Button
+                select="danger"
+                outline
+                type="button"
+                onClick={openDeleteModal}
+            >
+                Delete Group
+            </Button>
+        ) : userType === 'MEMBER' ? (
+            <Button
+                select="danger"
+                outline
+                type="button"
+                onClick={openExitModal}
+            >
+                Exit Group
+            </Button>
+        ) : (
+            <></>
+        )
+    );
+
+    return !isGroupDataFetched ? (
+        <Spinner />
+    ) : (
         <PageContainer>
-            {DeleteSectionModal}
             <GroupCoverImageContainer>
+                <GroupCoverImage src={coverImg} />
+
                 <PictureOverlay
                     src={coverImageCamera}
                     title="Edit cover image"
+                    onClick={openImgModal}
                 />
-                <GroupCoverImage src={defaultCoverImage} />
                 <div>
                     <h1 className="lg:text-5xl text-3xl text-white">
                         {groupData?.title}
@@ -151,15 +273,7 @@ const ViewGroupPage = () => {
                         {groupData?.GroupMembers?.length + ' Members'}
                     </p>
                 </div>
-                <Button
-                    type="button"
-                    select="warning"
-                    title="Return"
-                    className="absolute bottom-8 right-8 !text-[#1e1b4b] text-lg !font-bold rounded-lg"
-                    onClick={() => navigate('/app/groups')}
-                >
-                    Return
-                </Button>
+                {upperButton}
             </GroupCoverImageContainer>
             <GroupInfoContainer>
                 <LeftPart>
@@ -172,11 +286,11 @@ const ViewGroupPage = () => {
                                     setIsEditingInterest(!isEditingInterest)
                                 }
                             >
-                                {isEditingInterest ? (
-                                    <FiSave size={24} />
+                                {userType === 'ADMIN' ? isGroupUpdating ? <GoSync className="animate-spin" /> : isEditingInterest ? (
+                                    <FiSave onClick={handleUpdateGroup} size={24} />
                                 ) : (
                                     <FiEdit size={24} />
-                                )}
+                                ) : (<></>)}
                             </EditButton>
                         </div>
                         <div className="flex gap-2 items-center justify-left mt-4 text-txt">
@@ -215,11 +329,11 @@ const ViewGroupPage = () => {
                                     );
                                 }}
                             >
-                                {isEditingDescription ? (
-                                    <FiSave size={24} />
+                                {userType === 'ADMIN' ? isGroupUpdating ? <GoSync className="animate-spin" /> : isEditingDescription ? (
+                                    <FiSave onClick={handleUpdateGroup} size={24} />
                                 ) : (
                                     <FiEdit size={24} />
-                                )}
+                                ) : (<></>)}
                             </EditButton>
                         </div>
                         <div className="flex gap-2 items-center justify-left mt-4 text-txt w-full">
@@ -240,14 +354,7 @@ const ViewGroupPage = () => {
                         </div>
                     </div>
                     <div className="flex gap-2 items-end">
-                        <Button
-                            select="danger"
-                            outline
-                            type="button"
-                            onClick={openModal}
-                        >
-                            Delete Group
-                        </Button>
+                        {lowerButton}
                     </div>
                 </LeftPart>
                 <RightPart>
@@ -258,7 +365,8 @@ const ViewGroupPage = () => {
                                 <PersonContainer key={admin?.username}>
                                     <img alt="" src={defaultUserImage} />
                                     <span className="flex flex-row items-center gap-2 relative">
-                                        <h1>{admin?.username}</h1>
+                                        <h1>{(admin?.username ?? "").substring(0, 8)
+                                            + ((admin?.username ?? "").length > 8 ? "..." : "")}</h1>
                                         <Arrow>
                                             <IoIosArrowDown />
                                         </Arrow>
@@ -275,7 +383,8 @@ const ViewGroupPage = () => {
                                 <PersonContainer key={member?.username}>
                                     <img alt="" src={defaultUserImage} />
                                     <span className="flex flex-row items-center gap-2 relative">
-                                        <h1>{member?.username}</h1>
+                                        <h1>{(member?.username ?? "").substring(0, 8)
+                                            + ((member?.username ?? "").length > 8 ? "..." : "")}</h1>
                                         <Arrow>
                                             <IoIosArrowDown />
                                         </Arrow>
@@ -286,6 +395,9 @@ const ViewGroupPage = () => {
                     </PeopleContainer>
                 </RightPart>
             </GroupInfoContainer>
+             <DeleteSectionModal id={groupId} showModal={showDeleteModal} setShowModal={setDeleteModal}  />
+             <ExitModal id={groupId} showModal={showExitModal} setShowModal={setExitModal}  />
+            {modalUploadImage}
         </PageContainer>
     );
 };

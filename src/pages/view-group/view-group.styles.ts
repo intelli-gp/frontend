@@ -3,17 +3,13 @@ import styled from 'styled-components';
 export const PageContainer = styled.div`
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
+    height: 100%;
 
-    svg {
-        cursor: pointer;
-        opacity: 0.8;
-        &:hover {
-            opacity: 1;
-        }
-    }
 `;
 export const GroupCoverImageContainer = styled.div`
     position: relative;
+    width: 100%;
 
     div {
         position: absolute;
@@ -34,33 +30,40 @@ export const GroupCoverImageContainer = styled.div`
         }
     }
 `;
-export const PictureOverlay = styled.img`
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    object-fit: cover;
-    position: absolute;
-    transition: opacity 0.3s ease-in-out;
-    &:hover {
-        opacity: 0.9;
-        cursor: pointer;
-    }
-`;
+
 export const GroupCoverImage = styled.img`
-    object-fit: cover;
-    object-position: center;
-    max-height: 310px;
     width: 100%;
-    height: 100%;
-    filter: brightness(60%);
+    max-height: 310px;
+    object-fit: cover;
+    border: none;
+    width: 100%;
+    filter: brightness(50%);
 
     @media (max-width: 768px) {
         max-height: 300px;
     }
+   
+
+`;
+export const PictureOverlay = styled.img`
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 310px;
+  max-height: 310px;
+  opacity: 0;
+  position: absolute;
+  transition: opacity 0.3s ease-in-out;
+  object-fit: cover;
+
+    box-shadow: var(--black-shadow);
+  &:hover {
+    opacity: 0.1;
+    cursor: pointer;
+  }
 `;
 export const GroupInfoContainer = styled.div`
+    flex:1;
     display: grid;
     grid-template-columns: 5fr 2fr;
     @media (max-width: 768px) {
