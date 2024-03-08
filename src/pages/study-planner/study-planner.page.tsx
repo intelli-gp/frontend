@@ -31,6 +31,7 @@ import {
     TaskBoxContainer,
     TasksContainer,
 } from './study-planner.styles';
+import Spinner from '../../components/Spinner';
 
 const formats = {
     weekdayFormat: 'ddd',
@@ -316,7 +317,9 @@ export default function StudyPlanner() {
         );
     };
 
-    return (
+    return (isLoading ? (
+        <Spinner />
+    ) :
         <div className="flex justify-between h-[100vh] xl:flex-row flex-col">
             <CalendarHolder>
                 <Calendar className="w-[95%] h-full" />
