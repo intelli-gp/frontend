@@ -14,6 +14,7 @@ type OpenImageProps = {
     deleteButton?: boolean;
     width?: string;
     height?: string;
+    radius?: string;
 };
 
 export const OpenImage = ({
@@ -24,6 +25,7 @@ export const OpenImage = ({
     deleteButton,
     width,
     height,
+    radius,
 }: OpenImageProps) => {
     const fileInput = useRef<HTMLInputElement>(null);
 
@@ -78,6 +80,7 @@ export const OpenImage = ({
             <Image
                 height={height}
                 width={width}
+                radius={radius}
                 src={value || defaultImage}
                 title="Click to change the image"
                 onClick={openFileInput}

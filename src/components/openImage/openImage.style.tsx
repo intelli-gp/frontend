@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Image = styled.img<{ height?: string; width?: string }>`
+export const Image = styled.img<{ height?: string; width?: string; radius?:string }>`
     object-fit: contain;
     background-color: var(--indigo-50);
     cursor: pointer;
@@ -8,6 +8,7 @@ export const Image = styled.img<{ height?: string; width?: string }>`
     width: ${({ width }) => width || '100%'};
     opacity: 0.9;
     transition: opacity 0.3s ease;
+    border-radius:${({ radius }) => radius || ''};
     &:hover {
         opacity: 1;
     }
