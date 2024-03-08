@@ -46,6 +46,14 @@ import OpenImage from '../../components/openImage/openImage.component';
 import { useUploadImage } from '../../hooks/uploadImage.hook';
 import { errorToast, successToast } from '../../utils/toasts';
 
+type ModalProps = {
+    isOpen: boolean;
+    setIsOpen: (isOpen: boolean) => void;
+    image: string;
+    setImage: (image: string) => void;
+    title: string;
+};
+
 const ProfilePage = () => {
     const [mainSectionHeaderTabs, setMainSectionHeaderTabs] = useState([
         { title: 'Posts', isActive: true, label: 'posts' },
@@ -59,8 +67,11 @@ const ProfilePage = () => {
     const userToken = useSelector((state: RootState) => state.auth.token);
 
     const [userImg, setUserImg] = useState(user.image);
+    const [userCover, setUserCover] = useState(user.cover_image);
+
     useEffect(() => {
         setUserImg(user.image);
+        setUserCover(user.cover_image);
     }, [user]);
 
     const [posts] = useState<ReceivedArticle[]>([]);
@@ -124,8 +135,21 @@ const ProfilePage = () => {
                 );
                 successToast("Image uploaded successfully");
             }
+            if (user?.cover_image !== userCover) {
+                const imageURL = await uploadImage(userCover);
+                update.coverImage = imageURL;
+                const { data: { updatedUser } } = await triggerUpdateUser(update).unwrap();
 
+                dispatch(
+                    setCredentials({
+                        user: updatedUser,
+                        token: userToken,
+                    })
+                );
+                successToast("Image uploaded successfully");
+            }
             setImgModal(false);
+            setCoverModal(false);
         } catch (error: any) {
             if (error.response?.status === 401) {
                 errorToast("Unauthorized. Please log in again.");
@@ -136,47 +160,32 @@ const ProfilePage = () => {
     };
     const { isLoading: isImageLoading, trigger: uploadImage } = useUploadImage();
     const [showImgModal, setImgModal] = useState(false);
-
     const openImgModal = () => {
         setImgModal((prev) => !prev);
     };
-    const modalUploadImage = (
-        <Modal
-            className="flex flex-col gap-4"
-            isOpen={showImgModal}
-            setIsOpen={setImgModal}
-        >
-            <h1 className='text-[var(--slate-700)] text-[30px]'>Edit Cover Image</h1>
+
+    const [showCoverModal, setCoverModal] = useState(false);
+    const openCoverModal = () => {
+        setCoverModal((prev) => !prev);
+    };
+
+    const ModalUploadImage: React.FC<ModalProps> = ({ isOpen, setIsOpen, image, setImage, title }) => (
+        <Modal className="flex flex-col gap-4" isOpen={isOpen} setIsOpen={setIsOpen}>
+            <h1 className='text-[var(--slate-700)] text-[30px]'>Edit {title} Image</h1>
             <div className='flex justify-center w-full'>
-                <OpenImage
-                    height="280px"
-                    width="280px"
-                    value={userImg}
-                    onChange={(newImage) => setUserImg(newImage)}
-                    radius='50%'
-                />
+                <OpenImage height="280px" width={title === 'Cover' ? "480":"280px"} value={image} onChange={setImage} radius= {title === 'Cover' ? '3px' : '50%'} cover={title === 'Cover' ? 'cover':'contain'} />
             </div>
             <div className='flex flex-row justify-end pt-6 items-center gap-2'>
-                <Button
-                    type='button'
-                    select='primary'
-                    loading={isImageLoading || isLoading}
-                    onClick={handleUpdate}
-                > Apply</Button>
-                <Button
-                    type='button'
-                    select='danger'
-                    onClick={() => {
-                        setUserImg(user.image)
-                        setImgModal(false)
-                    }}
-                    outline
-                    className='border-transparent'
-                > Cancel</Button>
+                <Button type='button' select='primary' loading={isImageLoading || isLoading} onClick={handleUpdate} className='w-[102px]'>
+                    Apply
+                </Button>
+                <Button type='button' select='danger' onClick={() => { 
+                    setImage(title === 'Cover'?user.cover_image:user.image); setIsOpen(false); }} outline className='border-transparent'>
+                    Cancel
+                </Button>
             </div>
         </Modal>
-    )
-
+    );
     return (
         <PageContainer>
             <PageHeader>
@@ -185,8 +194,9 @@ const ProfilePage = () => {
                         src={coverImageCamera}
                         title="Edit cover image"
                         className="!rounded-none"
+                        onClick={openCoverModal}
                     />
-                    <CoverImage src={defaultCoverImage} />
+                    <CoverImage src={userCover ?? defaultCoverImage} />
                 </CoverImageContainer>
 
                 <UserDataContainer>
@@ -278,7 +288,20 @@ const ProfilePage = () => {
                     </ul>
                 </YouMayNowSection>
             </MainContainer>
-            {modalUploadImage}
+            <ModalUploadImage
+                isOpen={showImgModal}
+                setIsOpen={setImgModal}
+                image={userImg}
+                setImage={setUserImg}
+                title="Profile"
+            />
+            <ModalUploadImage
+                isOpen={showCoverModal}
+                setIsOpen={setCoverModal}
+                image={userCover}
+                setImage={setUserCover}
+                title="Cover"
+            />
         </PageContainer>
     );
 };
