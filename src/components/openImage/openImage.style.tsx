@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-export const Image = styled.img<{ height?: string; width?: string; radius?:string }>`
-    object-fit: contain;
+export const Image = styled.img<{ height?: string; width?: string; radius?:string; cover?:string }>`
+    object-fit:  ${({ cover }) => cover || 'contain'};
     background-color: var(--indigo-50);
     cursor: pointer;
     height: ${({ height }) => height || '100%'};

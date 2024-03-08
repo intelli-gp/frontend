@@ -15,6 +15,7 @@ type OpenImageProps = {
     width?: string;
     height?: string;
     radius?: string;
+    cover?: string;
 };
 
 export const OpenImage = ({
@@ -26,6 +27,7 @@ export const OpenImage = ({
     width,
     height,
     radius,
+    cover
 }: OpenImageProps) => {
     const fileInput = useRef<HTMLInputElement>(null);
 
@@ -81,6 +83,7 @@ export const OpenImage = ({
                 height={height}
                 width={width}
                 radius={radius}
+                cover={cover}
                 src={value || defaultImage}
                 title="Click to change the image"
                 onClick={openFileInput}
