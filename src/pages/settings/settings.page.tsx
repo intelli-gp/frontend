@@ -216,6 +216,17 @@ export const SettingsPage = () => {
     };
 
     useEffect(() => {
+        setFirstName(storedUser.full_name?.split(' ')[0]);
+        setLastName(storedUser.full_name?.substring(firstName.length + 1));
+        setUsername(storedUser.username);
+        setEmail(storedUser.email);
+        setPhone(storedUser.phone_number);
+        setBirthDate(new Date(storedUser.dob ?? Date.now()).toISOString().split('T')[0],);
+        setBio(storedUser.bio);
+        setInterests(storedUser.user_tag);
+    }, [storedUser]);
+
+    useEffect(() => {
         if (isSuccess) {
             successToast('Your personal data has been updated successfully!');
             reset();
