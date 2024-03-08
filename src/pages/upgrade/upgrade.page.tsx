@@ -27,16 +27,16 @@ const Card = ({ el }: { el: Type }) => {
                 </span>
                 <p className="text-sm">lorem ipsum lorem ipsum</p>
             </div>
-            <Button
+            <button
                 type="button"
-                className={`w-full text-black ${
+                className={` ${
                     el.middle
                         ? 'bg-[#F9F8C1] hover:bg-[#F9F8C1]/90 border border-[1px] border-black'
                         : 'bg-[var(--gray-400)] hover:bg-gray-400/90'
                 } `}
             >
                 Get Started Now
-            </Button>
+            </button>
         </CardHolder>
     );
 };
