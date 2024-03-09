@@ -14,6 +14,7 @@ import { errorToast, successToast } from '../utils/toasts';
 import Button from './Button';
 import { InputWithLabel } from './Input';
 import { Modal } from './modal/modal.component';
+import { ModalTitle } from '../index.styles';
 
 interface ModalProps {
     ID: number;
@@ -144,7 +145,7 @@ export const EditTaskModal: React.FC<ModalProps> = ({
     return (
         <Modal isOpen={showModal} setIsOpen={setShowModal}>
             <ModalContent>
-                <h1 className="text-3xl font-semibold text-txt"> Edit Task </h1>
+                <ModalTitle> Edit Task </ModalTitle>
                 <form onSubmit={handleEditForm}>
                     <div className="w-full">
                         <InputWithLabel

@@ -9,6 +9,7 @@ import { errorToast, successToast } from '../utils/toasts';
 import Button from './Button';
 import { InputWithLabel } from './Input';
 import { Modal } from './modal/modal.component';
+import { ModalTitle } from '../index.styles';
 
 interface ModalProps {
     showModal: boolean;
@@ -119,9 +120,9 @@ export const AddTaskModal: React.FC<ModalProps> = ({
         <div className="flex justify-between h-[100vh]">
             <Modal isOpen={showModal} setIsOpen={setShowModal}>
                 <ModalContent>
-                    <h1 className="text-3xl font-semibold text-txt">
+                    <ModalTitle>
                         Add Task
-                    </h1>
+                    </ModalTitle>
                     <form onSubmit={handleSubmitForm}>
                         <div className="w-full">
                             <InputWithLabel

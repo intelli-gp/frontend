@@ -2,13 +2,17 @@ import styled from 'styled-components';
 
 export const ModalContent = styled.div`
     display: flex;
-    height: 550px;
     flex-direction: column;
     justify-content: space-between;
     align-items: left;
     line-height: 1.8;
-    padding: 1rem;
     color: #141414;
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
 `;
 
 const hexToRgb = (hex: string | undefined) => {

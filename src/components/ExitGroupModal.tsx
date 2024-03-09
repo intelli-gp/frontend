@@ -5,6 +5,7 @@ import { useLeaveGroupMutation } from '../store';
 import { errorToast, successToast } from '../utils/toasts';
 import Button from './Button';
 import { Modal } from './modal/modal.component';
+import { ModalTitle } from '../index.styles';
 
 interface ModalProps {
     id: string | undefined;
@@ -49,9 +50,9 @@ const ExitSectionModal: React.FC<ModalProps> = ({
     return (
         <Modal isOpen={showModal} setIsOpen={setShowModal}>
             <div className="flex flex-col gap-8">
-                <p className="text-2xl font-bold text-[var(--gray-800)] text-center">
+                <ModalTitle>
                     Are you sure you want to exit this group?
-                </p>
+                </ModalTitle>
                 <div className="flex gap-4 justify-center">
                     <Button
                         className="!px-8"
