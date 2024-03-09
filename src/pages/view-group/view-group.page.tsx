@@ -10,7 +10,7 @@ import coverImageCamera from '../../assets/imgs/coverImageCamera.png';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import Button from '../../components/Button';
 import DeleteSectionModal from '../../components/DeleteModal';
-import ExitModal from '../../components/ExitModal';
+import ExitModal from '../../components/ExitGroupModal';
 import { InputWithoutLabel } from '../../components/Input';
 import Spinner from '../../components/Spinner';
 import { Modal } from '../../components/modal/modal.component';
