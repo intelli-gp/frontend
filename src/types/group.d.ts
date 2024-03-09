@@ -17,6 +17,6 @@ export type GroupToSend = {
     GroupDescription: string;
     GroupCoverImageUrl: string;
     GroupTags: string[];
-    AddedGroupTags: string[];
-    RemovedGroupTags?: string[];
+    AddedGroupTags?: string[]; // Used when updating group
+    RemovedGroupTags?: string[]; // Used when updating group
 };
