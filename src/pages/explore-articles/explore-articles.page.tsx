@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Spinner from '../../components/Spinner';
@@ -9,17 +9,30 @@ import { useGetArticlesQuery } from '../../store';
 import { ReceivedArticle } from '../../types/article';
 import { Response } from '../../types/response';
 import { PageContainer } from './explore-articles.styles';
+import Fuse from 'fuse.js';
 
 const ExploreArticlesPage = () => {
     const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
 
     const { data, isLoading } = useGetArticlesQuery();
-    const articles = (data as unknown as Response)?.data ?? [];
+    const [articles, setArticles] = useState<ReceivedArticle[]>([]);
+    const receivedData = (data as unknown as Response)?.data ?? [];
 
+    useEffect(() => {
+        setArticles(receivedData);
+    }, [data]);
     const handleChangeSearchValue = (value: string) => {
         setSearchValue(value);
-        // Todo: filter the articles based on the search value
+        const fuseOptions = {
+            keys: ['title'],
+            includeScore: true,
+            threshold: 0.5,
+        };
+        const fuse = new Fuse(receivedData, fuseOptions);
+        const results = fuse.search(searchValue);
+        const filteredSearch = value === '' ? receivedData : results.map((result) => result.item);
+        setArticles(filteredSearch);
     };
 
     const handleCreateButtonClick = () => {
