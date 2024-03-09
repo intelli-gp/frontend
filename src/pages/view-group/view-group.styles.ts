@@ -6,7 +6,9 @@ export const PageContainer = styled.div`
     min-height: 100vh;
     height: 100%;
 `;
+
 export const GroupCoverImageContainer = styled.div`
+    height: 300px;
     position: relative;
     width: 100%;
 
@@ -15,39 +17,39 @@ export const GroupCoverImageContainer = styled.div`
         display: flex;
         flex-direction: column;
         gap: 20px;
-        left: 57px;
-        top: 135px;
+        left: 4rem;
+        top: 50%;
+        transform: translateY(-50%);
     }
+    
     @media (max-width: 768px) {
         div {
             position: absolute;
             display: flex;
             flex-direction: column;
             gap: 15px;
-            left: 47px;
-            top: 155px;
+            left: 3rem;
         }
     }
 `;
 
 export const GroupCoverImage = styled.img`
     width: 100%;
-    max-height: 310px;
+    height: 100%;
     object-fit: cover;
     border: none;
-    width: 100%;
     filter: brightness(50%);
 
     @media (max-width: 768px) {
         max-height: 300px;
     }
 `;
+
 export const PictureOverlay = styled.img`
     top: 0;
     left: 0;
     width: 100%;
-    min-height: 310px;
-    max-height: 310px;
+    height: 100%;
     opacity: 0;
     position: absolute;
     transition: opacity 0.3s ease-in-out;
@@ -59,6 +61,7 @@ export const PictureOverlay = styled.img`
         cursor: pointer;
     }
 `;
+
 export const GroupInfoContainer = styled.div`
     flex: 1;
     display: grid;
@@ -67,6 +70,7 @@ export const GroupInfoContainer = styled.div`
         grid-template-columns: 1fr;
     }
 `;
+
 export const LeftPart = styled.div`
     padding: 30px 80px 20px 80px;
     display: grid;
@@ -82,6 +86,7 @@ export const LeftPart = styled.div`
         padding: 30px 50px 20px 50px;
     }
 `;
+
 export const RightPart = styled.div`
     padding: 20px 20px 0px 20px;
     box-shadow: 0px 0px 60px 5px rgba(39, 31, 75, 0.07);
@@ -100,6 +105,7 @@ export const RightPart = styled.div`
         background: transparent;
     }
 `;
+
 export const PeopleContainer = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -116,6 +122,7 @@ export const PeopleContainer = styled.div`
         color: var(--gray-900);
     }
 `;
+
 export const Arrow = styled.div`
     /* By default, hide the element */
     //  display: none;

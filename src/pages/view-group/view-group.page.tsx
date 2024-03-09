@@ -9,7 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import coverImageCamera from '../../assets/imgs/coverImageCamera.png';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import Button from '../../components/Button';
-import DeleteSectionModal from '../../components/DeleteModal';
+import DeleteSectionModal from '../../components/DeleteGroupModal';
 import ExitModal from '../../components/ExitGroupModal';
 import { InputWithoutLabel } from '../../components/Input';
 import Spinner from '../../components/Spinner';
@@ -84,7 +84,6 @@ const ViewGroupPage = () => {
     };
 
     // DELETE GROUP
-
     const openDeleteModal = () => {
         setDeleteModal((prev) => !prev);
     };
@@ -160,16 +159,14 @@ const ViewGroupPage = () => {
     };
 
     // Editing Cover Image
-
     const { isLoading: isImageLoading, trigger: uploadImage } =
         useUploadImage();
     const [showImgModal, setImgModal] = useState(false);
 
     const openImgModal = () => {
-        if (userType === 'ADMIN') {
-            setImgModal((prev) => !prev);
-        }
+        setImgModal((prev) => !prev);
     };
+
     const modalUploadImage = (
         <Modal
             className="flex flex-col gap-4"
@@ -192,7 +189,6 @@ const ViewGroupPage = () => {
                     loading={isImageLoading}
                     onClick={handleUpdateGroup}
                 >
-                    {' '}
                     Apply
                 </Button>
                 <Button
@@ -205,7 +201,6 @@ const ViewGroupPage = () => {
                     outline
                     className="border-transparent"
                 >
-                    {' '}
                     Cancel
                 </Button>
             </div>
@@ -273,11 +268,14 @@ const ViewGroupPage = () => {
             <GroupCoverImageContainer>
                 <GroupCoverImage src={coverImg} />
 
-                <PictureOverlay
-                    src={coverImageCamera}
-                    title="Edit cover image"
-                    onClick={openImgModal}
-                />
+                {userType === 'ADMIN' && (
+                    <PictureOverlay
+                        src={coverImageCamera}
+                        title="Edit cover image"
+                        onClick={openImgModal}
+                    />
+                )}
+
                 <div>
                     <h1 className="lg:text-5xl text-3xl text-white">
                         {groupData?.title}
