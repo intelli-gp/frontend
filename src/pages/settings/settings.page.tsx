@@ -242,7 +242,7 @@ export const SettingsPage = () => {
             <PageHeader>
                 <section className="flex flex-col items-center">
                     <ProfilePictureContainer>
-                        <ProfilePicture src={defaultProfile} />
+                        <ProfilePicture src={storedUser.image ?? defaultProfile} />
                         <PictureOverlay src={cameraImage} />
                     </ProfilePictureContainer>
                     <h2 className="text-xl font-bold mt-4">

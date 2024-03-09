@@ -326,7 +326,6 @@ export default function StudyPlanner() {
                 <ButtonMV>
                     <Button
                         select="primary300"
-                        S
                         type="button"
                         className="!p-4 rounded-full justify-center"
                         onClick={(e: unknown) => {
