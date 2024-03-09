@@ -29,4 +29,6 @@ export type ArticleToSend = {
     coverImageUrl: string;
     tags: string[];
     sections: ArticleSectionToSend[];
+    addedTags?: string[]; // Used on updating
+    removedTags?: string[]; // Used on updating
 };

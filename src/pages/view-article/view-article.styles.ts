@@ -16,6 +16,7 @@ export const ArticleCoverImage = styled.img`
     max-height: 250px;
     width: 100%;
     height: 100%;
+    filter: brightness(0.75);
 `;
 
 export const AuthorDataContainer = styled.div`

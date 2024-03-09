@@ -46,11 +46,16 @@ const articleCreatorSlice = createSlice({
             state.sectionToBeDeletedId = -1;
             state.deleteSectionModalIsOpen = false;
         },
-        addArticleSection(state, action: PayloadAction<ArticleSectionType>) {
+        addArticleSection(
+            state,
+            action: PayloadAction<
+                Partial<ArticleSection> & { contentType: ArticleSectionType }
+            >,
+        ) {
             state.sections.push({
                 id: Math.floor(Math.random() * 10e9),
-                contentType: action.payload as ArticleSectionType,
-                value: '',
+                contentType: action.payload.contentType,
+                value: action.payload.value || '',
             });
         },
         changeArticleSectionValue(
@@ -76,6 +81,9 @@ const articleCreatorSlice = createSlice({
         resetArticleCreator() {
             return initialState;
         },
+        deleteAllSections(state) {
+            state.sections = [];
+        }
     },
 });
 
@@ -89,5 +97,6 @@ export const {
     executeSectionDeletion,
     setSectionToBeDeleted,
     openDeleteSectionModal,
+    deleteAllSections,
 } = articleCreatorSlice.actions;
 export const articleCreatorReducer = articleCreatorSlice.reducer;

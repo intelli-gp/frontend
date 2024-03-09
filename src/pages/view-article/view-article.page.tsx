@@ -1,9 +1,10 @@
 import MDEditor from '@uiw/react-md-editor';
 import { CiBookmark, CiStar } from 'react-icons/ci';
-import { FiPlus } from 'react-icons/fi';
+import { FiEdit, FiPlus } from 'react-icons/fi';
 import { IoShareSocial } from 'react-icons/io5';
 import { SlOptions } from 'react-icons/sl';
-import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import defaultCoverImage from '../../assets/imgs/defaultCover.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
@@ -11,8 +12,10 @@ import Button from '../../components/Button';
 import Spinner from '../../components/Spinner';
 import { TagContainer } from '../../components/tag/tag.styles';
 import { useGetArticleQuery } from '../../store';
+import { RootState } from '../../store';
 import { ArticleSectionType, ReceivedArticle } from '../../types/article.d';
 import { Response } from '../../types/response';
+import { User } from '../../types/user';
 import {
     ArticleBodyContainer,
     ArticleCoverImage,
@@ -28,6 +31,8 @@ import {
 
 const ViewArticlePage = () => {
     const { articleId } = useParams();
+    const navigate = useNavigate();
+    const user = useSelector((state: RootState) => state.auth.user);
 
     if (!articleId) {
         return <div>Article not found</div>;
@@ -35,6 +40,8 @@ const ViewArticlePage = () => {
 
     const { data, isLoading } = useGetArticleQuery(parseInt(articleId));
     const article: ReceivedArticle = (data as unknown as Response)?.data;
+    const isArticleOwner =
+        article?.author?.username === (user as User)?.username;
 
     return isLoading ? (
         <Spinner />
@@ -69,6 +76,20 @@ const ViewArticlePage = () => {
                         Follow
                     </Button>
                 </AuthorDataContainer>
+
+                {isArticleOwner && (
+                    <Button
+                        select="warning"
+                        type="button"
+                        title="Edit Article"
+                        className="absolute top-4 left-4 rounded-full !text-[var(--gray-800)] !p-4"
+                        onClick={() =>
+                            navigate(`/app/article/edit/${articleId}`)
+                        }
+                    >
+                        <FiEdit size={18} />
+                    </Button>
+                )}
             </ArticleCoverImageContainer>
 
             <ArticleBodyContainer data-color-mode="light">

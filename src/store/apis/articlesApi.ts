@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import { appApi } from '.';
 import { ArticleToSend } from '../../types/article.d';
 
@@ -25,6 +27,26 @@ const articleApi = appApi.injectEndpoints({
                 method: 'GET',
             }),
         }),
+        updateArticle: builder.mutation<
+            Response,
+            Partial<ArticleToSend> & { id: number }
+        >({
+            invalidatesTags: (_result, _error, { id }) => [
+                { type: 'Article', id },
+            ],
+            query: (update) => ({
+                url: `/articles/${update.id}`,
+                method: 'PATCH',
+                body: _.omit(update, 'id'),
+            }),
+        }),
+        deleteArticle: builder.mutation<Response, number>({
+            invalidatesTags: ['Article'],
+            query: (id) => ({
+                url: `/articles/${id}`,
+                method: 'DELETE',
+            }),
+        }),
     }),
 });
 
@@ -32,4 +54,7 @@ export const {
     useCreateArticleMutation,
     useGetArticlesQuery,
     useGetArticleQuery,
+    useLazyGetArticleQuery,
+    useUpdateArticleMutation,
+    useDeleteArticleMutation,
 } = articleApi;

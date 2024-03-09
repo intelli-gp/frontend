@@ -1,9 +1,11 @@
 import _ from 'lodash';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
+import { LuSave } from 'react-icons/lu';
+import { RiDeleteBinLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Button from '../../components/Button';
 import { ImageUploadSection } from '../../components/article-image-section/article-image-section.component';
@@ -20,22 +22,26 @@ import {
     changeArticleSectionValue,
     changeArticleTags,
     changeArticleTitle,
+    deleteAllSections,
     executeSectionDeletion,
     openDeleteSectionModal,
     resetArticleCreator,
     setSectionToBeDeleted,
     useCreateArticleMutation,
+    useDeleteArticleMutation,
     useGetAllTagsQuery,
+    useLazyGetArticleQuery,
+    useUpdateArticleMutation,
 } from '../../store';
 import {
     ArticleSection,
     ArticleSectionToSend,
     ArticleSectionType,
     ArticleToSend,
+    ReceivedArticle,
 } from '../../types/article.d';
 import { Response } from '../../types/response';
 import { errorToast, successToast } from '../../utils/toasts';
-import { wait } from '../../utils/wait';
 import {
     AddSectionItem,
     AddSectionMenu,
@@ -46,46 +52,44 @@ import {
 } from './create-article.styles';
 
 const CreateArticlePage = () => {
-    const [addSectionMenuIsOpen, setAddSectionMenuIsOpen] = useState(false);
-
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const addSectionButtonRef = useRef<HTMLDivElement>(null);
-
+    const [addSectionMenuIsOpen, setAddSectionMenuIsOpen] = useState(false);
+    const [removeArticle] = useDeleteArticleMutation();
+    const [deleteArticleModalIsOpen, setDeleteArticleModalIsOpen] =
+        useState(false);
     const { data: availableTagsRes } = useGetAllTagsQuery();
-
-    const [
-        createArticle,
-        {
-            isSuccess: isArticleCreatedSuccessfully,
-            isError: isArticleCreateError,
-            isLoading: isArticleCreating,
-            error: articleCreateError,
-            data: createdArticle,
-        },
-    ] = useCreateArticleMutation();
-
+    const [createArticle, { isLoading: isArticleCreating }] =
+        useCreateArticleMutation();
     const {
         isLoading: imageUploadIsLoading,
         trigger: imageUploadTrigger,
         reset: imageUploadReset,
     } = useUploadImage();
-
     const { tags, sections, title, cover, deleteSectionModalIsOpen } =
         useSelector((state: RootState) => state['article-creator']);
 
-    const dispatch = useDispatch();
+    // These only used when editing an article
+    const isEdit = new URL(window.location.href).pathname.includes('edit');
+    const { articleId } = useParams();
+    const [getArticle, { data }] = useLazyGetArticleQuery();
+    const articleBeforeEdit = (data as unknown as Response)
+        ?.data as ReceivedArticle;
+    const [patchArticle] = useUpdateArticleMutation();
 
     const handleSectionEdit = (targetSectionId: number, newValue: string) => {
         dispatch(changeArticleSectionValue({ targetSectionId, newValue }));
     };
 
     const addMarkdownSection = () => {
-        dispatch(addArticleSection(ArticleSectionType.Markdown));
+        dispatch(
+            addArticleSection({ contentType: ArticleSectionType.Markdown }),
+        );
     };
 
     const addImageSection = () => {
-        dispatch(addArticleSection(ArticleSectionType.Image));
+        dispatch(addArticleSection({ contentType: ArticleSectionType.Image }));
     };
 
     const validateArticle = () => {
@@ -158,8 +162,130 @@ const CreateArticlePage = () => {
         }
 
         article.sections = sectionsToSend;
-        await createArticle(article as ArticleToSend).unwrap();
+
+        try {
+            let response = await createArticle(
+                article as ArticleToSend,
+            ).unwrap();
+            successToast('Article created successfully!');
+            navigate(
+                `/app/articles/${(response as unknown as Response).data.ID}`,
+            );
+            dispatch(resetArticleCreator());
+        } catch (error) {
+            console.log(error);
+            errorToast('Error creating article!');
+        }
     };
+
+    const updateArticle = async () => {
+        if (!validateArticle()) return;
+
+        // Get diff of tags
+        let addedTags = _.difference(tags, articleBeforeEdit.tags);
+        let removedTags = _.difference(articleBeforeEdit.tags, tags);
+
+        // Get diff of Title
+        let titleChanged = title !== articleBeforeEdit.title;
+
+        // Get diff of cover image
+        let coverImageChanged = cover !== articleBeforeEdit.coverImageUrl;
+
+        // Get diff of sections
+        let sectionsChanged = !_.isEqual(
+            articleBeforeEdit.sections,
+            sections.map((section) => _.omit(section, 'id')),
+        );
+
+        let update: Partial<ArticleToSend> = {};
+
+        if (addedTags.length) {
+            update.addedTags = addedTags;
+        }
+
+        if (removedTags.length) {
+            update.removedTags = removedTags;
+        }
+
+        if (titleChanged) {
+            update.title = title;
+        }
+
+        if (coverImageChanged) {
+            try {
+                update.coverImageUrl = await imageUploadTrigger(cover);
+            } catch (err) {
+                errorToast(
+                    'Error uploading cover image while updating article!',
+                );
+                return;
+            } finally {
+                imageUploadReset();
+            }
+        }
+
+        if (sectionsChanged) {
+            update.sections = sections.map((section) => {
+                return [section.value, section.contentType];
+            });
+        }
+
+        if (_.isEmpty(update)) {
+            errorToast('No changes detected!');
+            navigate(`/app/articles/${articleBeforeEdit.ID}`);
+            dispatch(resetArticleCreator());
+            return;
+        }
+
+        // TODO: Pls remove me
+        console.log(update);
+
+        try {
+            await patchArticle({
+                id: articleBeforeEdit.ID,
+                ...update,
+            }).unwrap();
+            successToast('Article updated successfully!');
+            navigate(`/app/articles/${articleBeforeEdit.ID}`);
+            dispatch(resetArticleCreator());
+        } catch (err) {
+            errorToast('Error updating article!');
+        }
+    };
+
+    const deleteArticle = async () => {
+        let articleId = articleBeforeEdit.ID;
+        try {
+            await removeArticle(articleId).unwrap();
+            successToast('Article deleted successfully!');
+            navigate('/app/articles');
+        } catch (error) {
+            errorToast('Error occurred while deleting the article.');
+        }
+    };
+
+    useLayoutEffect(() => {
+        // In case of editing an article, fetch the article data
+        if (!isEdit || !articleId) return;
+        getArticle(+articleId)
+            .unwrap()
+            .then((res) => {
+                const article = (res as unknown as Response)
+                    .data as ReceivedArticle;
+                dispatch(deleteAllSections());
+                dispatch(changeArticleTitle(article.title));
+                dispatch(changeArticleCoverImage(article.coverImageUrl));
+                dispatch(changeArticleTags(article.tags));
+                article.sections.forEach((section) => {
+                    dispatch(
+                        addArticleSection({
+                            contentType: section.contentType,
+                            value: section.value,
+                        }),
+                    );
+                });
+            });
+    }, []);
 
     useEffect(() => {
         function hideAddSectionMenu() {
@@ -173,22 +299,21 @@ const CreateArticlePage = () => {
         };
     }, []);
 
+    /**
+     * This useEffect is used to clear the state of page when the user
+     * come here to edit an article then leave the page either by editing
+     * the article or just changed their mind, the state need to be cleared
+     * to not affect the create article flow.
+     */
     useEffect(() => {
-        if (isArticleCreateError) {
-            errorToast('Error creating article!', articleCreateError as string);
-        }
-        if (isArticleCreatedSuccessfully) {
-            successToast('Article created successfully!');
-            wait(1000).then(() => {
-                navigate(
-                    `/app/articles/${
-                        (createdArticle as unknown as Response).data.ID
-                    }`,
-                );
-                dispatch(resetArticleCreator());
-            });
-        }
-    }, [isArticleCreatedSuccessfully, isArticleCreateError]);
+        /**
+         * return a clean up function that runs when this component
+         * in unmounted from the screen
+         */
+        return () => {
+            isEdit && dispatch(resetArticleCreator());
+        };
+    }, []);
 
     const DeleteSectionModal = (
         <Modal
@@ -222,6 +347,36 @@ const CreateArticlePage = () => {
         </Modal>
     );
 
+    const DeleteArticleModal = (
+        <Modal
+            isOpen={deleteArticleModalIsOpen}
+            setIsOpen={setDeleteArticleModalIsOpen}
+        >
+            <div className="flex flex-col gap-8">
+                <p className="text-2xl font-bold text-[var(--gray-800)] text-center">
+                    Are you sure you want to delete this Article?
+                </p>
+                <div className="flex gap-4 justify-center">
+                    <Button
+                        type="button"
+                        className="!px-8"
+                        onClick={() => setDeleteArticleModalIsOpen(false)}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        className="!px-8"
+                        type="button"
+                        select="danger"
+                        onClick={deleteArticle}
+                    >
+                        Yes
+                    </Button>
+                </div>
+            </div>
+        </Modal>
+    );
+
     const TagsInputSection = (
         <div className="flex flex-col gap-2">
             <TagsInput2
@@ -239,8 +394,11 @@ const CreateArticlePage = () => {
     return (
         <PageContainer>
             {DeleteSectionModal}
+            {DeleteArticleModal}
 
-            <PageTitle>Create New Article</PageTitle>
+            <PageTitle>
+                {isEdit ? 'Edit Article' : 'Create New Article'}
+            </PageTitle>
 
             <ArticleCoverImageContainer>
                 <OpenImage
@@ -286,7 +444,7 @@ const CreateArticlePage = () => {
                 }
             })}
 
-            <div className="flex flex-col items-center gap-4 fixed bottom-4 right-4 z-40">
+            <div className="flex flex-col items-center gap-2 fixed bottom-4 right-4 z-40">
                 {addSectionMenuIsOpen && (
                     <AddSectionMenu>
                         <AddSectionItem onClick={addMarkdownSection}>
@@ -308,18 +466,30 @@ const CreateArticlePage = () => {
                     title="Add New section"
                     ref={addSectionButtonRef}
                 >
-                    <FaPlus size={24} />
+                    <FaPlus size={18} />
                 </Button>
                 <Button
                     select="success"
                     type="button"
                     className="!p-4 !rounded-full items-center justify-center"
-                    onClick={publishArticle}
+                    onClick={isEdit ? updateArticle : publishArticle}
                     loading={imageUploadIsLoading || isArticleCreating}
-                    title="Publish article"
+                    title={isEdit ? 'Save changes' : 'Publish article'}
                 >
-                    <IoSend size={24} />
+                    {isEdit ? <LuSave size={18} /> : <IoSend size={18} />}
                 </Button>
+                {isEdit && (
+                    <Button
+                        select="danger"
+                        type="button"
+                        className="!p-4 !rounded-full items-center justify-center"
+                        onClick={() => setDeleteArticleModalIsOpen(true)}
+                        loading={false}
+                        title={'Delete this article'}
+                    >
+                        <RiDeleteBinLine size={18} />
+                    </Button>
+                )}
             </div>
         </PageContainer>
     );
