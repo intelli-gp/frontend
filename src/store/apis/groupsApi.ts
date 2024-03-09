@@ -1,4 +1,4 @@
-import { GroupToSend } from '../../types/group';
+import { GroupToSend, UserGroup } from '../../types/group';
 import { appApi } from './appApi';
 
 export const groupsApi = appApi.injectEndpoints({
@@ -70,6 +70,22 @@ export const groupsApi = appApi.injectEndpoints({
                 },
             }),
         }),
+        PermissionGroup: builder.mutation<
+        Response,
+        Partial<UserGroup> & { id: string }
+    >({
+        invalidatesTags: (_result, _error, update) => [
+            { type: 'Group', id: update.id },
+        ],
+            query: (update) => ({
+                url: `/chat-groups/permission/${update.id}`,
+                method: 'PATCH',
+                body: {
+                    TargetID: update.ID,
+                    permissionLevel: update.type
+                },
+            }),
+        }),
     }),
 });
 
@@ -81,4 +97,5 @@ export const {
     useDeleteGroupMutation,
     useJoinGroupMutation,
     useLeaveGroupMutation,
+    usePermissionGroupMutation,
 } = groupsApi;
