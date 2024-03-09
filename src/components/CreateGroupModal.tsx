@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 
 import { useUploadImage } from '../hooks/uploadImage.hook';
 import { ModalTitle } from '../index.styles';
@@ -20,10 +20,8 @@ const CreateGroupModal = ({ isOpen, setIsOpen }: CreateGroupModalProps) => {
     const [groupDescription, setGroupDescription] = useState('');
     const [groupImage, setGroupImage] = useState('');
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
-    const [
-        addGroup,
-        { isLoading, isError, isSuccess, reset: resetCreatingGroup },
-    ] = useAddGroupMutation();
+    const [addGroup, { isLoading, reset: resetCreatingGroup }] =
+        useAddGroupMutation();
     const { isLoading: isImageLoading, trigger: uploadImage } =
         useUploadImage();
 
@@ -46,7 +44,7 @@ const CreateGroupModal = ({ isOpen, setIsOpen }: CreateGroupModalProps) => {
         }
     };
 
-    const handleCreateGroup = async (event: SubmitEvent) => {
+    const handleCreateGroup = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         let validationError = validateGroupData();
         if (validationError) {
