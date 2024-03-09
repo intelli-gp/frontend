@@ -24,6 +24,10 @@ export default {
             '2xs': '375px',
             '3xs': '320px',
         },
+        fontFamily: {
+            serif: ['Merriweather'],
+        },
     },
+
     plugins: [],
 };
