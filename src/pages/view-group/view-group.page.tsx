@@ -22,9 +22,10 @@ import {
     useGetAllTagsQuery,
     useGetGroupQuery,
     useJoinGroupMutation,
+    usePermissionGroupMutation,
     useUpdateGroupMutation,
 } from '../../store';
-import { GroupToSend, ReceivedGroup } from '../../types/group';
+import { GroupToSend, ReceivedGroup, UserGroup } from '../../types/group';
 import { Response } from '../../types/response';
 import { User } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
@@ -43,6 +44,12 @@ import {
     RightPart,
 } from './view-group.styles';
 
+enum Role {
+    member = "MEMBER",
+    admin = "ADMIN",
+    not_member = "NOTHING",
+}
+
 const ViewGroupPage = () => {
     const navigate = useNavigate();
     const [isEditingInterest, setIsEditingInterest] = useState(false);
@@ -59,30 +66,35 @@ const ViewGroupPage = () => {
     const { data: allTags } = useGetAllTagsQuery();
     const groupData: ReceivedGroup = (data as unknown as Response)?.data[0];
     const admins =
-        groupData?.GroupMembers?.filter((member) => member.type === 'ADMIN') ??
+        groupData?.GroupMembers?.filter((member) => member.type === Role.admin) ??
         [];
     const members =
         groupData?.GroupMembers?.filter(
             (member) =>
-                member.type === 'MEMBER' && member.joining_status === true,
+                member.type === Role.member && member.joiningStatus === true,
         ) ?? [];
 
     const userType =
         groupData?.GroupMembers?.find(
-            (member) => member.user_id === user.user_id,
-        )?.type || 'NOTHING';
+            (member) => member.ID === user.user_id,
+        )?.type || Role.not_member;
 
-    const [showMenus, setShowMenus] = useState(members.map(() => false));
-
-    //TODO: Need to retrieve the ID of each user to remove or update their status
-    const handleArrowClick = (index: number) => {
-        setShowMenus((prev) => {
+    const [memberMenus, setMemberMenus] = useState(members.map(() => false));
+    const handleMemberClick = (index: number) => {
+        setMemberMenus((prev) => {
             const updatedShowMenus = [...prev];
             updatedShowMenus[index] = !updatedShowMenus[index];
             return updatedShowMenus;
         });
     };
-
+    const [adminMenus, setAdminMenus] = useState(admins.map(() => false));
+    const handleAdminClick = (index: number) => {
+        setAdminMenus((prev) => {
+            const updatedShowMenus = [...prev];
+            updatedShowMenus[index] = !updatedShowMenus[index];
+            return updatedShowMenus;
+        });
+    };
     // DELETE GROUP
     const openDeleteModal = () => {
         setDeleteModal((prev) => !prev);
@@ -116,7 +128,22 @@ const ViewGroupPage = () => {
             reset: resetUpdateGroup,
         },
     ] = useUpdateGroupMutation();
+    const [ updateStatus ] = usePermissionGroupMutation();
+    const handleStatus = async (id: string | undefined, type: 'ADMIN' | 'MEMBER') => {
+        try {
+            const updatedGroupData: Partial<UserGroup> & { id: string } = {
+                id: groupData.group_id,
+                ID: id,
+                type: type,
+            }
+            await updateStatus(updatedGroupData).unwrap();
+            successToast('Changed the permission successfully!');
 
+        }
+        catch (error) {
+            errorToast('Error occurred while giving permission!');
+        }
+    };
     const handleUpdateGroup = async () => {
         try {
             // Check if tags or description changed
@@ -149,7 +176,6 @@ const ViewGroupPage = () => {
                 setImgModal(false);
             }
             if (descriptionChanged || tagsChanged || imageChanged) {
-                console.log(updatedGroupData);
                 await updateGroup(updatedGroupData).unwrap();
             }
         } catch (error) {
@@ -222,6 +248,7 @@ const ViewGroupPage = () => {
         if (isGroupUpdatedSuccessfully) {
             successToast('Updated the group successfully!');
         }
+
     }, [isGroupJoinedSuccessfully, isGroupUpdatedSuccessfully]);
 
     const returnButton = (
@@ -268,7 +295,7 @@ const ViewGroupPage = () => {
             <GroupCoverImageContainer>
                 <GroupCoverImage src={coverImg} />
 
-                {userType === 'ADMIN' && (
+                {userType === Role.admin && (
                     <PictureOverlay
                         src={coverImageCamera}
                         title="Edit cover image"
@@ -284,7 +311,7 @@ const ViewGroupPage = () => {
                         {groupData?.GroupMembers?.length + ' Members'}
                     </p>
                 </div>
-                {userType === 'ADMIN' || userType === 'MEMBER'
+                {userType === Role.admin || userType === Role.member
                     ? returnButton
                     : joinButton}
             </GroupCoverImageContainer>
@@ -299,7 +326,7 @@ const ViewGroupPage = () => {
                                     setIsEditingInterest(!isEditingInterest)
                                 }
                             >
-                                {userType === 'ADMIN' ? (
+                                {userType === Role.admin ? (
                                     isGroupUpdating ? (
                                         <GoSync className="animate-spin" />
                                     ) : isEditingInterest ? (
@@ -350,7 +377,7 @@ const ViewGroupPage = () => {
                                     );
                                 }}
                             >
-                                {userType === 'ADMIN' ? (
+                                {userType === Role.admin ? (
                                     isGroupUpdating ? (
                                         <GoSync className="animate-spin" />
                                     ) : isEditingDescription ? (
@@ -384,9 +411,9 @@ const ViewGroupPage = () => {
                         </div>
                     </div>
                     <div className="flex gap-2 items-end">
-                        {userType === 'ADMIN' ? (
+                        {userType === Role.admin ? (
                             deleteButton
-                        ) : userType === 'MEMBER' ? (
+                        ) : userType === Role.member ? (
                             exitButton
                         ) : (
                             <></>
@@ -396,10 +423,10 @@ const ViewGroupPage = () => {
                 <RightPart>
                     <p>ADMINS</p>
                     <PeopleContainer>
-                        {admins.map((admin) => {
+                        {admins.map((admin, index) => {
                             return (
                                 <PersonContainer key={admin?.username}>
-                                    <img alt="" src={defaultUserImage} />
+                                    <img alt="" src={admin?.profileImg ?? defaultUserImage} />
                                     <span className="flex flex-row items-center gap-2 relative">
                                         <h1>
                                             {(admin?.username ?? '').substring(
@@ -411,9 +438,23 @@ const ViewGroupPage = () => {
                                                     ? '...'
                                                     : '')}
                                         </h1>
-                                        <Arrow>
-                                            <IoIosArrowDown />
-                                        </Arrow>
+                                        {(userType === Role.admin) && admin.ID !== user.user_id ? (
+                                            <>
+                                                <Arrow>
+                                                    <IoIosArrowDown onClick={() => handleAdminClick(index)} />
+                                                </Arrow>
+                                                {adminMenus[index] && (
+                                                    <Menu>
+                                                        <div onClick={() => handleStatus(admin.ID, Role.member)}>
+                                                            <h1>Dismiss an admin</h1>
+                                                        </div>
+                                                    </Menu>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <></>
+                                        )
+                                        }
                                     </span>
                                 </PersonContainer>
                             );
@@ -422,42 +463,40 @@ const ViewGroupPage = () => {
                     <br />
                     <p>MEMBERS</p>
                     <PeopleContainer>
-                        {members.map((member, index) => {
-                            return (
-                                <PersonContainer key={member?.username}>
-                                    <img alt="" src={defaultUserImage} />
-                                    <span className="flex flex-row items-center gap-2 relative">
-                                        <h1>
-                                            {(member?.username ?? '').substring(
-                                                0,
-                                                8,
-                                            ) +
-                                                ((member?.username ?? '')
-                                                    .length > 8
-                                                    ? '...'
-                                                    : '')}
-                                        </h1>
-                                        <Arrow>
-                                            <IoIosArrowDown
-                                                onClick={() =>
-                                                    handleArrowClick(index)
-                                                }
-                                            />
-                                        </Arrow>
-                                        {showMenus[index] && (
-                                            <Menu>
-                                                <div>
-                                                    <h1>Remove</h1>
-                                                </div>
-                                                <div>
-                                                    <h1>Add an admin</h1>
-                                                </div>
-                                            </Menu>
-                                        )}
-                                    </span>
-                                </PersonContainer>
-                            );
-                        })}
+                        {
+                            members.map((member, index) => {
+                                return (
+                                    <PersonContainer key={member?.username}>
+                                        <img alt="" src={member?.profileImg ?? defaultUserImage} />
+                                        <span className="flex flex-row items-center gap-2 relative">
+                                            <h1>
+                                                {(member?.username ?? '').substring(
+                                                    0, 8,) +
+                                                    ((member?.username ?? '')
+                                                        .length > 8
+                                                        ? '...'
+                                                        : '')}
+                                            </h1>
+                                            {userType === Role.admin && member.ID !== user.user_id ? (
+                                                <>
+                                                    <Arrow>
+                                                        <IoIosArrowDown
+                                                            onClick={() =>
+                                                                handleMemberClick(index)
+                                                            }
+                                                        />
+                                                    </Arrow>
+                                                    {memberMenus[index] && (
+                                                        <Menu>
+                                                            <div onClick={() => handleStatus(member.ID, Role.admin)}>
+                                                                <h1>Add an admin</h1>
+                                                            </div>
+                                                        </Menu>
+                                                    )}</>) : (<></>)}
+                                        </span>
+                                    </PersonContainer>
+                                );
+                            })}
                     </PeopleContainer>
                 </RightPart>
             </GroupInfoContainer>
