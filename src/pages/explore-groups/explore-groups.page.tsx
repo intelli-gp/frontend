@@ -17,18 +17,16 @@ const ExploreGroupsPage = () => {
     const [createGroupModalOpen, setCreateGroupModalOpen] = useState(false);
     const { data, isLoading } = useGetAllGroupsQuery();
     let groups: ReceivedGroup[] = (data as unknown as Response)?.data ?? [];
-    const userId = useSelector((state: any) => state.auth.user.user_id) as String;
+    const userId = useSelector((state: any) => state.auth.user.user_id) as string;
     const [showGroups, setGroups] = useState<ReceivedGroup[]>([]);
     const filteredGroups = groups.filter((group) => {
-        const isUserAssigned = group.GroupMembers.some(
-            (member) => member.user_id === userId
-        );
-
+        const isUserAssigned = group.GroupMembers.some((member) => member.ID === userId);
         return !isUserAssigned;
-    });
-    useEffect(() => {
+      });
+      
+      useEffect(() => {
         setGroups(filteredGroups);
-    }, [groups])
+      }, [groups, userId]);
 
     const handleSearchValueChange = (value: string) => {
         setSearchValue(value);
