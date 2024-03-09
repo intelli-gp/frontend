@@ -46,34 +46,29 @@ const CreateGroupModal = ({ isOpen, setIsOpen }: CreateGroupModalProps) => {
         }
     };
 
-    const handleCreateGroup = async () => {
+    const handleCreateGroup = async (event: SubmitEvent) => {
+        event.preventDefault();
         let validationError = validateGroupData();
         if (validationError) {
             return errorToast(validationError);
         }
         try {
             const imageURL = await uploadImage(groupImage);
-            addGroup({
+            await addGroup({
                 GroupTitle: groupName,
                 GroupDescription: groupDescription,
                 GroupTags: selectedTags,
                 GroupCoverImageUrl: imageURL,
-            });
+            }).unwrap();
+            successToast('Group created successfully');
+            setIsOpen(false);
+            resetForm();
         } catch (err) {
-            errorToast('Error occurred while uploading group image');
+            errorToast('Error occurred while creating group');
+        } finally {
+            resetCreatingGroup();
         }
     };
-
-    useEffect(() => {
-        if (isError) {
-            errorToast('Error occurred while creating group');
-            resetCreatingGroup();
-        } else if (isSuccess) {
-            resetForm();
-            setIsOpen(false);
-            successToast('Group created successfully');
-        }
-    }, [isError, isSuccess]);
 
     return (
         <Modal
