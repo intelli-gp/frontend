@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import CreateGroupModal from '../../components/CreateGroupModal';
 import Spinner from '../../components/Spinner';
@@ -9,16 +9,38 @@ import { useGetAllGroupsQuery } from '../../store';
 import { ReceivedGroup } from '../../types/group';
 import { Response } from '../../types/response';
 import { GroupsGrid, PageContainer } from './explore-groups.style';
+import { useSelector } from 'react-redux';
+import Fuse from 'fuse.js';
 
 const ExploreGroupsPage = () => {
     const [searchValue, setSearchValue] = useState('');
     const [createGroupModalOpen, setCreateGroupModalOpen] = useState(false);
     const { data, isLoading } = useGetAllGroupsQuery();
     let groups: ReceivedGroup[] = (data as unknown as Response)?.data ?? [];
+    const userId = useSelector((state: any) => state.auth.user.user_id) as String;
+    const [showGroups, setGroups] = useState<ReceivedGroup[]>([]);
+    const filteredGroups = groups.filter((group) => {
+        const isUserAssigned = group.GroupMembers.some(
+            (member) => member.user_id === userId
+        );
+
+        return !isUserAssigned;
+    });
+    useEffect(() => {
+        setGroups(filteredGroups);
+    }, [groups])
 
     const handleSearchValueChange = (value: string) => {
         setSearchValue(value);
-        // Todo: filter the groups based on the search value
+        const fuseOptions = {
+            keys: ['title'],
+            includeScore: true,
+            threshold: 0.5,
+        };
+        const fuse = new Fuse(filteredGroups, fuseOptions);
+        const results = fuse.search(searchValue);
+        const filteredSearch = value === '' ? filteredGroups : results.map((result) => result.item);
+        setGroups(filteredSearch);
     };
 
     const handleCreateButtonClick = () => {
@@ -41,7 +63,7 @@ const ExploreGroupsPage = () => {
                 onCreateButtonClick={handleCreateButtonClick}
             />
             <GroupsGrid>
-                {groups.map((group) => (
+                {showGroups.map((group) => (
                     <GroupCard {...group} />
                 ))}
             </GroupsGrid>
