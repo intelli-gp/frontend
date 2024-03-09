@@ -1,5 +1,10 @@
-import { User } from './user';
-
+export type UserGroup = {
+    ID: string;
+    username: string;
+    profileImg: string;
+    joiningStatus: boolean; 
+    type: 'ADMIN' | 'MEMBER';
+};
 export type ReceivedGroup = {
     group_id: string;
     title: string;
@@ -7,7 +12,7 @@ export type ReceivedGroup = {
     cover_image_url: string;
     GroupTags: string[];
     GroupMembers: Array<
-        Partial<User> & { joining_status: boolean; type: 'ADMIN' | 'MEMBER' }
+        Partial<UserGroup>
     >;
     GroupOwner: Partial<User>;
 };
@@ -17,6 +22,9 @@ export type GroupToSend = {
     GroupDescription: string;
     GroupCoverImageUrl: string;
     GroupTags: string[];
+    GroupMembers: Array<
+        Partial<UserGroup> & { joining_status: boolean; type: 'ADMIN' | 'MEMBER' }
+    >;
     AddedGroupTags?: string[]; // Used when updating group
     RemovedGroupTags?: string[]; // Used when updating group
 };
