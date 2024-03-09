@@ -13,14 +13,15 @@ export const Background = styled.div`
 `;
 
 export const ModalWrapper = styled.div`
+    user-select: none;
     width: 600px;
-    max-height: 90vh;
+    max-height: 95vh;
     overflow-y: auto;
     box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
     background: #fff;
     color: #000;
-    border-radius: 10px;
-    padding: 2rem 3.5rem;
+    border-radius: 0.75rem;
+    padding: 1.5rem 3.5rem;
     @media (max-width: 500px) {
         margin: 5rem 0rem 0rem 0rem;
     }
@@ -32,12 +33,19 @@ export const ModalWrapper = styled.div`
     /* Track */
     &::-webkit-scrollbar-track {
         width: 0.5rem;
-        background: transparent;
+        background: rgba(0, 0, 0, 0.1);
     }
 
     /* Handle */
     &::-webkit-scrollbar-thumb {
-        background: var(--gray-300);
+        background: var(--gray-400);
         opacity: 0.2;
+        border-radius: 0.4rem;
+    }
+    /* Handle */
+    &::-webkit-scrollbar-thumb:hover {
+        background: var(--gray-500);
+        opacity: 0.2;
+        border-radius: 0.4rem;
     }
 `;
