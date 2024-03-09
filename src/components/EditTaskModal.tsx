@@ -2,6 +2,7 @@ import moment from 'moment';
 import { SetStateAction, useEffect, useState } from 'react';
 import { GoDash } from 'react-icons/go';
 
+import { ModalTitle } from '../index.styles';
 import { ModalContent } from '../pages/study-planner/study-planner.styles';
 import {
     useEditTaskMutation,
@@ -14,7 +15,6 @@ import { errorToast, successToast } from '../utils/toasts';
 import Button from './Button';
 import { InputWithLabel } from './Input';
 import { Modal } from './modal/modal.component';
-import { ModalTitle } from '../index.styles';
 
 interface ModalProps {
     ID: number;

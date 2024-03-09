@@ -72,7 +72,10 @@ function App() {
                     element={<ViewArticlePage />}
                 />
                 <Route path="articles/create" element={<CreateArticlePage />} />
-                <Route path="article/edit/:articleId" element={<CreateArticlePage />} />
+                <Route
+                    path="article/edit/:articleId"
+                    element={<CreateArticlePage />}
+                />
                 <Route path="pomodoro" element={<PomodoroPage />} />
                 <Route path="AI-helper" element={<AIHelperPage />} />
                 <Route path="upgrade" element={<UpgradePage />} />

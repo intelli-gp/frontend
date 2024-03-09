@@ -2,6 +2,7 @@ import moment from 'moment';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { GoDash } from 'react-icons/go';
 
+import { ModalTitle } from '../index.styles';
 import { ModalContent } from '../pages/study-planner/study-planner.styles';
 import { useAddTasksMutation } from '../store';
 import { sendTask } from '../types/event';
@@ -9,7 +10,6 @@ import { errorToast, successToast } from '../utils/toasts';
 import Button from './Button';
 import { InputWithLabel } from './Input';
 import { Modal } from './modal/modal.component';
-import { ModalTitle } from '../index.styles';
 
 interface ModalProps {
     showModal: boolean;
@@ -120,9 +120,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
         <div className="flex justify-between h-[100vh]">
             <Modal isOpen={showModal} setIsOpen={setShowModal}>
                 <ModalContent>
-                    <ModalTitle>
-                        Add Task
-                    </ModalTitle>
+                    <ModalTitle>Add Task</ModalTitle>
                     <form onSubmit={handleSubmitForm}>
                         <div className="w-full">
                             <InputWithLabel

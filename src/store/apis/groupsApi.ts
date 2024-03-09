@@ -71,18 +71,18 @@ export const groupsApi = appApi.injectEndpoints({
             }),
         }),
         PermissionGroup: builder.mutation<
-        Response,
-        Partial<UserGroup> & { id: string }
-    >({
-        invalidatesTags: (_result, _error, update) => [
-            { type: 'Group', id: update.id },
-        ],
+            Response,
+            Partial<UserGroup> & { id: string }
+        >({
+            invalidatesTags: (_result, _error, update) => [
+                { type: 'Group', id: update.id },
+            ],
             query: (update) => ({
                 url: `/chat-groups/permission/${update.id}`,
                 method: 'PATCH',
                 body: {
                     TargetID: update.ID,
-                    permissionLevel: update.type
+                    permissionLevel: update.type,
                 },
             }),
         }),

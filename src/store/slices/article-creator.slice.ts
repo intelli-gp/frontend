@@ -83,7 +83,7 @@ const articleCreatorSlice = createSlice({
         },
         deleteAllSections(state) {
             state.sections = [];
-        }
+        },
     },
 });
 

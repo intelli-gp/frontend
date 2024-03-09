@@ -1,3 +1,4 @@
+import Fuse from 'fuse.js';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,7 +10,6 @@ import { useGetArticlesQuery } from '../../store';
 import { ReceivedArticle } from '../../types/article';
 import { Response } from '../../types/response';
 import { PageContainer } from './explore-articles.styles';
-import Fuse from 'fuse.js';
 
 const ExploreArticlesPage = () => {
     const [searchValue, setSearchValue] = useState('');
@@ -31,7 +31,8 @@ const ExploreArticlesPage = () => {
         };
         const fuse = new Fuse(receivedData, fuseOptions);
         const results = fuse.search(searchValue);
-        const filteredSearch = value === '' ? receivedData : results.map((result) => result.item);
+        const filteredSearch =
+            value === '' ? receivedData : results.map((result) => result.item);
         setArticles(filteredSearch);
     };
 

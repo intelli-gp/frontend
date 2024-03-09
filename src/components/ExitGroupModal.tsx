@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { ModalTitle } from '../index.styles';
 import { useLeaveGroupMutation } from '../store';
 import { errorToast, successToast } from '../utils/toasts';
 import Button from './Button';
 import { Modal } from './modal/modal.component';
-import { ModalTitle } from '../index.styles';
 
 interface ModalProps {
     id: string | undefined;

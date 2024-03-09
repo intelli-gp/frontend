@@ -21,7 +21,7 @@ export const GroupCoverImageContainer = styled.div`
         top: 50%;
         transform: translateY(-50%);
     }
-    
+
     @media (max-width: 768px) {
         div {
             position: absolute;
