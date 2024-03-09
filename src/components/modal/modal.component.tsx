@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -35,9 +36,23 @@ export const Modal = ({
         <>
             {isOpen && (
                 <Background onClick={closeModal} ref={modalRef}>
-                    <ModalWrapper className={className ?? ''}>
-                        {children}
-                    </ModalWrapper>
+                    <motion.div
+                        initial={{
+                            opacity: 0,
+                            y: 100,
+                        }}
+                        animate={{
+                            opacity: 1,
+                            y: 0,
+                        }}
+                        transition={{
+                            duration: 0.15,
+                        }}
+                    >
+                        <ModalWrapper className={className ?? ''}>
+                            {children}
+                        </ModalWrapper>
+                    </motion.div>
                 </Background>
             )}
         </>,
