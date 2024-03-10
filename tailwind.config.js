@@ -12,6 +12,14 @@ export default {
             backgroundImage: {
                 hero: "url('/src/assets/img/Hero-illustration.svg')",
             },
+            keyframes: {
+                shimmer: {
+                  '100%': { transform: 'translateX(100%)' },
+                },
+              },
+              animation: {
+                shimmer: 'shimmer 1.5s infinite',
+              },
         },
         screens: {
             '3xl': '1920px',
