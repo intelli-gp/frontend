@@ -112,9 +112,10 @@ export const PeopleContainer = styled.div`
     padding: 18px 0px 10px 12px;
 
     img {
-        max-height: 70px;
-        max-width: 70px;
+        height: 70px;
+        width: 70px;
         border-radius: 50%;
+        object-fit: cover;
     }
     h1 {
         font-size: 0.8rem;

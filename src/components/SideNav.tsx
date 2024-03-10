@@ -250,11 +250,12 @@ export default function SideNav() {
                             e.stopPropagation();
                             setMenuActive(!menuActive);
                         }}
+                        title={user.username}
                     >
                         <img
                             src={user.image ?? defaultUserImage}
                             alt="profile pic"
-                            className="w-10 h-10 rounded-full"
+                            className="w-10 h-10 rounded-full object-cover"
                         />
                         <p className="select-none text-ellipsis overflow-hidden whitespace-nowrap">
                             {user.username}
