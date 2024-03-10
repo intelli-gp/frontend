@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { ModalTitle } from '../index.styles';
 import { useLeaveGroupMutation } from '../store';
@@ -18,7 +17,6 @@ const ExitSectionModal: React.FC<ModalProps> = ({
     setShowModal,
     id,
 }) => {
-    const navigate = useNavigate();
 
     const [
         leaveGroup,
@@ -33,7 +31,6 @@ const ExitSectionModal: React.FC<ModalProps> = ({
         try {
             await leaveGroup(id!).unwrap();
             setShowModal(false);
-            navigate('/app/groups');
         } catch (error) {
             errorToast('Error occurred while exiting the group');
             resetLeaveGroup();
