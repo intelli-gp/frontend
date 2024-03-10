@@ -10,10 +10,12 @@ import cameraImage from '../../assets/imgs/camera.png';
 import coverImageCamera from '../../assets/imgs/coverImageCamera.png';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import Button from '../../components/Button';
+import Skeleton from '../../components/Skeleton';
 import { Modal } from '../../components/modal/modal.component';
 import OpenImage from '../../components/openImage/openImage.component';
 import UserItem from '../../components/userItem/user-item.component';
 import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
+import WideGroupCard from '../../components/wide-group-card/wide-group-card.component';
 import { useUploadImage } from '../../hooks/uploadImage.hook';
 import { ModalTitle } from '../../index.styles';
 import {
@@ -24,9 +26,16 @@ import {
     ProfilePictureContainer,
     UserDataContainer,
 } from '../../pages/profile/profile.styles';
-import { Response } from '../../types/response';
-import { RootState, setCredentials, useGetAllGroupsQuery, useGetArticlesQuery, useUpdateUserMutation } from '../../store';
+import {
+    RootState,
+    setCredentials,
+    useGetAllGroupsQuery,
+    useGetArticlesQuery,
+    useUpdateUserMutation,
+} from '../../store';
 import { ReceivedArticle } from '../../types/article.d';
+import { ReceivedGroup } from '../../types/group';
+import { Response } from '../../types/response';
 import { User, UserToSend } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
@@ -44,9 +53,6 @@ import {
     CoverImageContainer,
     ProfilePicture,
 } from './profile.styles';
-import { ReceivedGroup } from '../../types/group';
-import WideGroupCard from '../../components/wide-group-card/wide-group-card.component';
-import Skeleton from '../../components/Skeleton';
 
 type ModalProps = {
     isOpen: boolean;
@@ -62,7 +68,6 @@ const ProfilePage = () => {
         { title: 'Groups', isActive: true, label: 'groups' },
         { title: 'Followers', isActive: false, label: 'followers' },
         { title: 'Following', isActive: false, label: 'following' },
-
     ]);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -75,22 +80,25 @@ const ProfilePage = () => {
     const [_followers] = useState<any[]>([]);
     const [_following] = useState<any[]>([]);
 
-
     const { data: postsData, isLoading: PostsLoading } = useGetArticlesQuery();
     const [posts, setArticles] = useState<ReceivedArticle[]>([]);
-    const receivedData: ReceivedArticle[] = (postsData as unknown as Response)?.data ?? [];
+    const receivedData: ReceivedArticle[] =
+        (postsData as unknown as Response)?.data ?? [];
     const filteredPosts = useMemo(() => {
-        return receivedData.filter((post) => user.username === post.author.username);
+        return receivedData.filter(
+            (post) => user.username === post.author.username,
+        );
     }, [receivedData, user.user_id]);
 
-
-    const { data: groupData, isLoading: GroupsLoading } = useGetAllGroupsQuery();
-    const groups: ReceivedGroup[] = (groupData as unknown as Response)?.data ?? [];
+    const { data: groupData, isLoading: GroupsLoading } =
+        useGetAllGroupsQuery();
+    const groups: ReceivedGroup[] =
+        (groupData as unknown as Response)?.data ?? [];
     const [showGroups, setGroups] = useState<ReceivedGroup[]>([]);
     const filteredGroups = useMemo(() => {
         return groups.filter((group) => {
             const isUserAssigned = group.GroupMembers.some(
-                (member) => member.ID === user.user_id
+                (member) => member.ID === user.user_id,
             );
             return isUserAssigned;
         });
@@ -102,7 +110,6 @@ const ProfilePage = () => {
         setGroups(filteredGroups);
         setArticles(filteredPosts);
     }, [filteredPosts, filteredGroups, user.image, user.cover_image]);
-
 
     const [youMayKnow] = useState<any[]>([
         {
@@ -129,18 +136,31 @@ const ProfilePage = () => {
 
     const mainContent = () => {
         return mainSectionHeaderTabs.map((tab) => {
-            if (tab.title === "Posts" && tab.isActive) {
-                return (PostsLoading ? <div className='px-8 py-4'><Skeleton times={3} className="h-[180px] w-full mb-4" /></div> :                     
-                <div className='grid xl:grid-cols-2 gap-4 grid-cols-1'>
-                    {posts.map((post) => <WideArticleItem {...post} />)}</div>)
+            if (tab.title === 'Posts' && tab.isActive) {
+                return PostsLoading ? (
+                    <div className="px-8 py-4">
+                        <Skeleton times={3} className="h-[180px] w-full mb-4" />
+                    </div>
+                ) : (
+                    <div className="grid xl:grid-cols-2 gap-4 grid-cols-1">
+                        {posts.map((post) => (
+                            <WideArticleItem {...post} />
+                        ))}
+                    </div>
+                );
             }
-            if (tab.title === "Groups" && tab.isActive) {
-                return (GroupsLoading ? <div className='px-8 py-4'><Skeleton times={3} className="h-[180px] w-full mb-4" /></div> :
-                    <div className='grid xl:grid-cols-2 gap-4 grid-cols-1'>
+            if (tab.title === 'Groups' && tab.isActive) {
+                return GroupsLoading ? (
+                    <div className="px-8 py-4">
+                        <Skeleton times={3} className="h-[180px] w-full mb-4" />
+                    </div>
+                ) : (
+                    <div className="grid xl:grid-cols-2 gap-4 grid-cols-1">
                         {showGroups.map((group) => (
                             <WideGroupCard {...group} />
                         ))}
-                    </div>)
+                    </div>
+                );
             }
             return null;
         });

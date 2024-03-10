@@ -17,7 +17,6 @@ const ExitSectionModal: React.FC<ModalProps> = ({
     setShowModal,
     id,
 }) => {
-
     const [
         leaveGroup,
         {

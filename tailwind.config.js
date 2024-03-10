@@ -14,12 +14,12 @@ export default {
             },
             keyframes: {
                 shimmer: {
-                  '100%': { transform: 'translateX(100%)' },
+                    '100%': { transform: 'translateX(100%)' },
                 },
-              },
-              animation: {
+            },
+            animation: {
                 shimmer: 'shimmer 1.5s infinite',
-              },
+            },
         },
         screens: {
             '3xl': '1920px',
