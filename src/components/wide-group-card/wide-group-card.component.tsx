@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
 import { ReceivedGroup } from '../../types/group';
 import Tag from '../tag/tag.component';
+import ExitModal from '../ExitGroupModal';
+
 import {
     CardContainer,
     CardImage,
@@ -14,6 +16,7 @@ import {
     TypographyContainer,
     ExitButton,
 } from './wide-group-card.style';
+import { useState } from 'react';
 
 const WideGroupCard = ({
     group_id,
@@ -23,11 +26,13 @@ const WideGroupCard = ({
     GroupMembers,
 }: Partial<ReceivedGroup>) => {
     const navigate = useNavigate();
+    const [showExitModal, setExitModal] = useState(false);
+    const openExitModal = () => {
+        setExitModal((prev) => !prev);
+    };
     return (
         <CardContainer
-            onClick={() => {
-                navigate(`/app/groups/${group_id}`);
-            }}
+            
         >
             <CardImageContainer>
                 <CardImage
@@ -46,14 +51,20 @@ const WideGroupCard = ({
                 </TagsContainer>
             </TypographyContainer>
             <ButtonsContainer>
-            <ViewButton type="button" title="Become a member of this group">
+            <ViewButton type="button" onClick={() => {
+                navigate(`/app/groups/${group_id}`);
+            }} title="Become a member of this group">
                     View
                 </ViewButton>
-                <ExitButton type="button" outline select='danger' title="Leave this group">
+                <ExitButton type="button" outline select='danger' onClick={openExitModal} title="Leave this group">
                     Exit group
                 </ExitButton>
                 </ButtonsContainer>
-
+                <ExitModal
+                id={group_id}
+                showModal={showExitModal}
+                setShowModal={setExitModal}
+            />
         </CardContainer>
     );
 };
