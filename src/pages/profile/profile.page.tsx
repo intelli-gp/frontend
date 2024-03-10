@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FaBirthdayCake, FaEnvelope } from 'react-icons/fa';
 import { FaPhoneAlt } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
@@ -24,7 +24,8 @@ import {
     ProfilePictureContainer,
     UserDataContainer,
 } from '../../pages/profile/profile.styles';
-import { RootState, setCredentials, useUpdateUserMutation } from '../../store';
+import { Response } from '../../types/response';
+import { RootState, setCredentials, useGetAllGroupsQuery, useGetArticlesQuery, useUpdateUserMutation } from '../../store';
 import { ReceivedArticle } from '../../types/article.d';
 import { User, UserToSend } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
@@ -43,6 +44,9 @@ import {
     CoverImageContainer,
     ProfilePicture,
 } from './profile.styles';
+import { ReceivedGroup } from '../../types/group';
+import WideGroupCard from '../../components/wide-group-card/wide-group-card.component';
+import Skeleton from '../../components/Skeleton';
 
 type ModalProps = {
     isOpen: boolean;
@@ -54,9 +58,11 @@ type ModalProps = {
 
 const ProfilePage = () => {
     const [mainSectionHeaderTabs, setMainSectionHeaderTabs] = useState([
-        { title: 'Posts', isActive: true, label: 'posts' },
+        { title: 'Posts', isActive: false, label: 'posts' },
+        { title: 'Groups', isActive: true, label: 'groups' },
         { title: 'Followers', isActive: false, label: 'followers' },
         { title: 'Following', isActive: false, label: 'following' },
+
     ]);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -66,16 +72,37 @@ const ProfilePage = () => {
 
     const [userImg, setUserImg] = useState(user.image);
     const [userCover, setUserCover] = useState(user.cover_image);
+    const [_followers] = useState<any[]>([]);
+    const [_following] = useState<any[]>([]);
+
+
+    const { data: postsData, isLoading: PostsLoading } = useGetArticlesQuery();
+    const [posts, setArticles] = useState<ReceivedArticle[]>([]);
+    const receivedData: ReceivedArticle[] = (postsData as unknown as Response)?.data ?? [];
+    const filteredPosts = useMemo(() => {
+        return receivedData.filter((post) => user.username === post.author.username);
+    }, [receivedData, user.user_id]);
+
+
+    const { data: groupData, isLoading: GroupsLoading } = useGetAllGroupsQuery();
+    const groups: ReceivedGroup[] = (groupData as unknown as Response)?.data ?? [];
+    const [showGroups, setGroups] = useState<ReceivedGroup[]>([]);
+    const filteredGroups = useMemo(() => {
+        return groups.filter((group) => {
+            const isUserAssigned = group.GroupMembers.some(
+                (member) => member.ID === user.user_id
+            );
+            return isUserAssigned;
+        });
+    }, [groups, user.user_id]);
 
     useEffect(() => {
         setUserImg(user.image);
         setUserCover(user.cover_image);
-    }, [user]);
+        setGroups(filteredGroups);
+        setArticles(filteredPosts);
+    }, [filteredPosts, filteredGroups, user.image, user.cover_image]);
 
-    const [posts] = useState<ReceivedArticle[]>([]);
-
-    const [_followers] = useState<any[]>([]);
-    const [_following] = useState<any[]>([]);
 
     const [youMayKnow] = useState<any[]>([
         {
@@ -101,7 +128,22 @@ const ProfilePage = () => {
     ]);
 
     const mainContent = () => {
-        return posts.map((post) => <WideArticleItem {...post} />);
+        return mainSectionHeaderTabs.map((tab) => {
+            if (tab.title === "Posts" && tab.isActive) {
+                return (PostsLoading ? <div className='px-8 py-4'><Skeleton times={3} className="h-[180px] w-full mb-4" /></div> :                     
+                <div className='grid xl:grid-cols-2 gap-4 grid-cols-1'>
+                    {posts.map((post) => <WideArticleItem {...post} />)}</div>)
+            }
+            if (tab.title === "Groups" && tab.isActive) {
+                return (GroupsLoading ? <div className='px-8 py-4'><Skeleton times={3} className="h-[180px] w-full mb-4" /></div> :
+                    <div className='grid xl:grid-cols-2 gap-4 grid-cols-1'>
+                        {showGroups.map((group) => (
+                            <WideGroupCard {...group} />
+                        ))}
+                    </div>)
+            }
+            return null;
+        });
     };
 
     const handleMainSectionHeaderTabClick = (index: number) => {
