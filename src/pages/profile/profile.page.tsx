@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 
 import cameraImage from '../../assets/imgs/camera.png';
 import coverImageCamera from '../../assets/imgs/coverImageCamera.png';
-import defaultCoverImage from '../../assets/imgs/defaultCover.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import Button from '../../components/Button';
 import { Modal } from '../../components/modal/modal.component';
@@ -16,6 +15,7 @@ import OpenImage from '../../components/openImage/openImage.component';
 import UserItem from '../../components/userItem/user-item.component';
 import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
 import { useUploadImage } from '../../hooks/uploadImage.hook';
+import { ModalTitle } from '../../index.styles';
 import {
     MainContainer,
     PageContainer,
@@ -221,24 +221,22 @@ const ProfilePage = () => {
         title,
     }) => (
         <Modal
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-10"
             isOpen={isOpen}
             setIsOpen={setIsOpen}
         >
-            <h1 className="text-[var(--slate-700)] text-[30px]">
-                Edit {title} Image
-            </h1>
+            <ModalTitle>Edit {title} Image</ModalTitle>
             <div className="flex justify-center w-full">
                 <OpenImage
                     height="280px"
-                    width={title === 'Cover' ? '480' : '280px'}
+                    width={title === 'Cover' ? '480px' : '280px'}
                     value={image}
                     onChange={setImage}
-                    radius={title === 'Cover' ? '3px' : '50%'}
+                    radius={title === 'Cover' ? '5px' : '50%'}
                     cover={title === 'Cover' ? 'contain' : 'cover'}
                 />
             </div>
-            <div className="flex flex-row justify-end pt-6 items-center gap-2">
+            <div className="flex flex-row-reverse pt-6 items-center gap-4">
                 <Button
                     type="button"
                     select="primary"
@@ -275,7 +273,11 @@ const ProfilePage = () => {
                         className="!rounded-none"
                         onClick={openCoverModal}
                     />
-                    <CoverImage src={userCover ?? defaultCoverImage} />
+                    {userCover ? (
+                        <CoverImage src={userCover} />
+                    ) : (
+                        <div className="bg-indigo-900 h-[200px]" />
+                    )}
                 </CoverImageContainer>
 
                 <UserDataContainer>
