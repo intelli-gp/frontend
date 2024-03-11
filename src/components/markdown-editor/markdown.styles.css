@@ -27,3 +27,19 @@ body .w-md-editor-text-input {
 .wmde-markdown > *:not(code, pre) {
     font-family: 'Merriweather', serif;
 }
+
+.w-md-editor-area,
+.w-md-editor-preview {
+    &::-webkit-scrollbar {
+        width: 0.5rem;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.025);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--gray-300);
+        border-radius: 1rem;
+    }
+}
