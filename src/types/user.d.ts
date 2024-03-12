@@ -1,16 +1,30 @@
-export type User = {
-    user_id: string;
-    full_name: string;
-    username: string;
-    email: string;
-    dob: string;
-    level_id: number;
-    plan_id: number;
-    bio: string;
-    phone_number: string;
-    cover_image: string;
-    image: string;
-    user_tag: string[];
+import { ReceivedGroup } from './group';
+
+export type ReceivedUser = {
+    ID: string;
+    FullName: string;
+    Username: string;
+    Email: string;
+    DOB: string;
+    UserLevel: unknown;
+    SubscriptionsPlan: unknown;
+    Bio: string;
+    PhoneNumber: string;
+    CoverImage: string;
+    ProfileImage: string;
+    UserTags: string[];
+    GroupsCreated: Array<
+        Pick<
+            ReceivedGroup,
+            'ID' | 'GroupTitle' | 'GroupCoverImageUrl' | 'GroupUserCont'
+        >
+    >;
+    GroupsJoined: Array<
+        Pick<
+            ReceivedGroup,
+            'ID' | 'GroupTitle' | 'GroupCoverImageUrl' | 'GroupUserCont'
+        >
+    >;
 };
 
 export type UserToSend = {

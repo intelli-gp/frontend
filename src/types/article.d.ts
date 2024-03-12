@@ -1,4 +1,4 @@
-import { User, UserToSend } from './user';
+import { ReceivedUser, UserToSend } from './user';
 
 export enum ArticleSectionType {
     Markdown = 'markdown',
@@ -6,20 +6,22 @@ export enum ArticleSectionType {
 }
 
 export type ArticleSection = {
-    id?: number;
-    contentType: ArticleSectionType;
-    value: string;
+    ID?: number;
+    ContentType: ArticleSectionType;
+    Value: string;
 };
 
 // Receive from server
 export type ReceivedArticle = {
     ID: number;
-    author: Partial<UserToSend>;
-    coverImageUrl: string;
-    tags: string[];
-    title: string;
-    sections: ArticleSection[];
-    updatedAt: string;
+    Author: Pick<ReceivedUser, 'FullName' | 'Username' | 'ProfileImage'> & {
+        FollowersCont: number;
+    };
+    CoverImage: string;
+    ArticleTags: string[];
+    Title: string;
+    Sections: ArticleSection[];
+    UpdatedAt: string;
 };
 
 // Send to server

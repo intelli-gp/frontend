@@ -1,18 +1,21 @@
-export type UserGroup = {
-    ID: string;
-    username: string;
-    profileImg: string;
-    joiningStatus: boolean;
-    type: 'ADMIN' | 'MEMBER';
+import { ReceivedUser } from './user';
+
+export type GroupUser = Pick<
+    ReceivedUser,
+    'Username' | 'ID' | 'ProfileImage'
+> & {
+    Type: 'ADMIN' | 'MEMBER';
 };
+
 export type ReceivedGroup = {
-    group_id: string;
-    title: string;
-    description: string;
-    cover_image_url: string;
+    ID: string;
+    GroupTitle: string;
+    GroupDescription: string;
+    GroupCoverImageUrl: string;
     GroupTags: string[];
-    GroupMembers: Array<Partial<UserGroup>>;
-    GroupOwner: Partial<User>;
+    GroupMembers: Array<GroupUser>;
+    GroupOwner: Pick<ReceivedUser, "Username" | "ID" | "Email">;
+    GroupUserCont: number;
 };
 
 export type GroupToSend = {
@@ -20,12 +23,7 @@ export type GroupToSend = {
     GroupDescription: string;
     GroupCoverImageUrl: string;
     GroupTags: string[];
-    GroupMembers: Array<
-        Partial<UserGroup> & {
-            joining_status: boolean;
-            type: 'ADMIN' | 'MEMBER';
-        }
-    >;
+    GroupMembers?: Array<GroupUser>;
     AddedGroupTags?: string[]; // Used when updating group
     RemovedGroupTags?: string[]; // Used when updating group
 };
