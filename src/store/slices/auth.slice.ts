@@ -1,20 +1,22 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, Store, createSlice } from '@reduxjs/toolkit';
 
-import { User } from '../../types/user';
+import { ReceivedUser } from '../../types/user';
 
 type StoredCredentials = {
     token: string;
-    user: Readonly<Partial<User>>;
+    user: Readonly<Partial<ReceivedUser>>;
     isAuthenticated?: boolean;
+};
+
+let initialState: StoredCredentials = {
+    token: '',
+    isAuthenticated: false,
+    user: {},
 };
 
 const authSlice = createSlice({
     name: 'auth',
-    initialState: {
-        token: '',
-        isAuthenticated: false,
-        user: {},
-    },
+    initialState,
     reducers: {
         setCredentials(state, action: PayloadAction<StoredCredentials>) {
             const { user, token } = action.payload;

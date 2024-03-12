@@ -8,14 +8,14 @@ const initialState = {
     tags: ['we-are-examples', `don't-forget-to`, 'delete-us'],
     sections: [
         {
-            id: 1,
-            contentType: ArticleSectionType.Markdown,
-            value: '',
+            ID: 1,
+            ContentType: ArticleSectionType.Markdown,
+            Value: '',
         },
         {
-            id: 2,
-            contentType: ArticleSectionType.Image,
-            value: '',
+            ID: 2,
+            ContentType: ArticleSectionType.Image,
+            Value: '',
         },
     ] as ArticleSection[],
     sectionToBeDeletedId: -1,
@@ -41,7 +41,7 @@ const articleCreatorSlice = createSlice({
         },
         executeSectionDeletion(state) {
             state.sections = state.sections.filter(
-                (section) => section.id != state.sectionToBeDeletedId,
+                (section) => section.ID != state.sectionToBeDeletedId,
             );
             state.sectionToBeDeletedId = -1;
             state.deleteSectionModalIsOpen = false;
@@ -49,13 +49,13 @@ const articleCreatorSlice = createSlice({
         addArticleSection(
             state,
             action: PayloadAction<
-                Partial<ArticleSection> & { contentType: ArticleSectionType }
+                Partial<ArticleSection> & { ContentType: ArticleSectionType }
             >,
         ) {
             state.sections.push({
-                id: Math.floor(Math.random() * 10e9),
-                contentType: action.payload.contentType,
-                value: action.payload.value || '',
+                ID: Math.floor(Math.random() * 10e9),
+                ContentType: action.payload.ContentType,
+                Value: action.payload.Value || '',
             });
         },
         changeArticleSectionValue(
@@ -67,10 +67,10 @@ const articleCreatorSlice = createSlice({
         ) {
             const { targetSectionId, newValue } = action.payload;
             state.sections = state.sections.map((section) => {
-                if (section.id === targetSectionId) {
+                if (section.ID === targetSectionId) {
                     return {
                         ...section,
-                        value: newValue,
+                        Value: newValue,
                     };
                 } else return section;
             });

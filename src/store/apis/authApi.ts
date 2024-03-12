@@ -1,5 +1,5 @@
 import { Response } from '../../types/response';
-import { User, UserCredentials } from '../../types/user';
+import { ReceivedUser, UserCredentials } from '../../types/user';
 import { appApi } from './appApi';
 
 export const authApi = appApi.injectEndpoints({
@@ -13,7 +13,7 @@ export const authApi = appApi.injectEndpoints({
                 };
             },
         }),
-        signUpUser: builder.mutation<Response, Partial<User>>({
+        signUpUser: builder.mutation<Response, Partial<ReceivedUser>>({
             query: (user) => {
                 return {
                     url: '/auth/signup',

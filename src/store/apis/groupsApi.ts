@@ -1,4 +1,4 @@
-import { GroupToSend, UserGroup } from '../../types/group';
+import { GroupToSend, GroupUser } from '../../types/group';
 import { appApi } from './appApi';
 
 export const groupsApi = appApi.injectEndpoints({
@@ -72,7 +72,7 @@ export const groupsApi = appApi.injectEndpoints({
         }),
         PermissionGroup: builder.mutation<
             Response,
-            Partial<UserGroup> & { id: string }
+            Partial<GroupUser> & { id: string }
         >({
             invalidatesTags: (_result, _error, update) => [
                 { type: 'Group', id: update.id },
@@ -82,7 +82,7 @@ export const groupsApi = appApi.injectEndpoints({
                 method: 'PATCH',
                 body: {
                     TargetID: update.ID,
-                    permissionLevel: update.type,
+                    permissionLevel: update.Type,
                 },
             }),
         }),
