@@ -84,12 +84,12 @@ const CreateArticlePage = () => {
 
     const addMarkdownSection = () => {
         dispatch(
-            addArticleSection({ contentType: ArticleSectionType.Markdown }),
+            addArticleSection({ ContentType: ArticleSectionType.Markdown }),
         );
     };
 
     const addImageSection = () => {
-        dispatch(addArticleSection({ contentType: ArticleSectionType.Image }));
+        dispatch(addArticleSection({ ContentType: ArticleSectionType.Image }));
     };
 
     const validateArticle = () => {
@@ -144,10 +144,10 @@ const CreateArticlePage = () => {
         let sectionsToSend: ArticleSectionToSend[] = [];
 
         for (const section of sections) {
-            if (section.contentType === ArticleSectionType.Image) {
+            if (section.ContentType === ArticleSectionType.Image) {
                 try {
-                    let remoteURL = await imageUploadTrigger(section.value);
-                    sectionsToSend.push([remoteURL, section.contentType]);
+                    let remoteURL = await imageUploadTrigger(section.Value);
+                    sectionsToSend.push([remoteURL, section.ContentType]);
                 } catch (err) {
                     errorToast(
                         'Error uploading image while publishing article!',
@@ -156,8 +156,8 @@ const CreateArticlePage = () => {
                 } finally {
                     imageUploadReset();
                 }
-            } else if (section.contentType === ArticleSectionType.Markdown) {
-                sectionsToSend.push([section.value, section.contentType]);
+            } else if (section.ContentType === ArticleSectionType.Markdown) {
+                sectionsToSend.push([section.Value, section.ContentType]);
             }
         }
 
@@ -182,19 +182,19 @@ const CreateArticlePage = () => {
         if (!validateArticle()) return;
 
         // Get diff of tags
-        let addedTags = _.difference(tags, articleBeforeEdit.tags);
-        let removedTags = _.difference(articleBeforeEdit.tags, tags);
+        let addedTags = _.difference(tags, articleBeforeEdit.ArticleTags);
+        let removedTags = _.difference(articleBeforeEdit.ArticleTags, tags);
 
         // Get diff of Title
-        let titleChanged = title !== articleBeforeEdit.title;
+        let titleChanged = title !== articleBeforeEdit.Title;
 
         // Get diff of cover image
-        let coverImageChanged = cover !== articleBeforeEdit.coverImageUrl;
+        let coverImageChanged = cover !== articleBeforeEdit.CoverImage;
 
         // Get diff of sections
         let sectionsChanged = !_.isEqual(
-            articleBeforeEdit.sections,
-            sections.map((section) => _.omit(section, 'id')),
+            articleBeforeEdit.Sections,
+            sections.map((section) => _.omit(section, 'ID')),
         );
 
         let update: Partial<ArticleToSend> = {};
@@ -226,7 +226,7 @@ const CreateArticlePage = () => {
 
         if (sectionsChanged) {
             update.sections = sections.map((section) => {
-                return [section.value, section.contentType];
+                return [section.Value, section.ContentType];
             });
         }
 
@@ -273,14 +273,14 @@ const CreateArticlePage = () => {
                 const article = (res as unknown as Response)
                     .data as ReceivedArticle;
                 dispatch(deleteAllSections());
-                dispatch(changeArticleTitle(article.title));
-                dispatch(changeArticleCoverImage(article.coverImageUrl));
-                dispatch(changeArticleTags(article.tags));
-                article.sections.forEach((section) => {
+                dispatch(changeArticleTitle(article.Title));
+                dispatch(changeArticleCoverImage(article.CoverImage));
+                dispatch(changeArticleTags(article.ArticleTags));
+                article.Sections.forEach((section) => {
                     dispatch(
                         addArticleSection({
-                            contentType: section.contentType,
-                            value: section.value,
+                            ContentType: section.ContentType,
+                            Value: section.Value,
                         }),
                     );
                 });
@@ -422,24 +422,24 @@ const CreateArticlePage = () => {
             {TagsInputSection}
 
             {sections.map((section: ArticleSection) => {
-                if (section.contentType === ArticleSectionType.Markdown) {
+                if (section.ContentType === ArticleSectionType.Markdown) {
                     return (
                         <SectionContainer>
                             <MarkdownEditor
-                                key={section.id!}
-                                value={section.value}
+                                key={section.ID!}
+                                value={section.Value}
                                 onChange={(value: string | undefined) =>
-                                    handleSectionEdit(section.id!, value!)
+                                    handleSectionEdit(section.ID!, value!)
                                 }
                                 onDelete={() => {
                                     dispatch(
-                                        setSectionToBeDeleted(section.id!),
+                                        setSectionToBeDeleted(section.ID!),
                                     );
                                 }}
                             />
                         </SectionContainer>
                     );
-                } else if (section.contentType === ArticleSectionType.Image) {
+                } else if (section.ContentType === ArticleSectionType.Image) {
                     return <ImageUploadSection section={section} />;
                 }
             })}

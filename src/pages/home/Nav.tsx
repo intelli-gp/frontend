@@ -31,7 +31,9 @@ export default function Nav() {
         <nav className=" sticky left-0 top-0 z-50 bg-indigo-950 w-full backdrop-blur py-3">
             <div className="px-8 lg:px-16 flex justify-between items-center h-full flex-wrap">
                 <Link to="/" className="w-[130px] h-auto">
-                    <img src={Logo1} />
+                    <h1 className="font-black text-white text-4xl sticky top-0 min-h-0 flex justify-center font-serif select-none">
+                        Mujedd
+                    </h1>
                 </Link>
 
                 <div className="flex gap-16 items-center">

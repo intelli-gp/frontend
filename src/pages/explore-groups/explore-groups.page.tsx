@@ -7,7 +7,7 @@ import Spinner from '../../components/Spinner';
 import GroupCard from '../../components/chat-group-card/chat-group-card.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import { PageTitle } from '../../index.styles';
-import { useGetAllGroupsQuery } from '../../store';
+import { RootState, useGetAllGroupsQuery } from '../../store';
 import { ReceivedGroup } from '../../types/group';
 import { Response } from '../../types/response';
 import { GroupsGrid, PageContainer } from './explore-groups.style';
@@ -18,12 +18,12 @@ const ExploreGroupsPage = () => {
     const { data, isLoading } = useGetAllGroupsQuery();
     let groups: ReceivedGroup[] = (data as unknown as Response)?.data ?? [];
     const userId = useSelector(
-        (state: any) => state.auth.user.user_id,
+        (state: RootState) => state?.auth?.user?.ID,
     ) as string;
     const [showGroups, setGroups] = useState<ReceivedGroup[]>([]);
     const filteredGroups = groups.filter((group) => {
         const isUserAssigned = group.GroupMembers.some(
-            (member) => member.ID === userId,
+            (member) => member?.ID === userId,
         );
         return !isUserAssigned;
     });
@@ -35,7 +35,7 @@ const ExploreGroupsPage = () => {
     const handleSearchValueChange = (value: string) => {
         setSearchValue(value);
         const fuseOptions = {
-            keys: ['title'],
+            keys: ['GroupTitle'],
             includeScore: true,
             threshold: 0.5,
         };

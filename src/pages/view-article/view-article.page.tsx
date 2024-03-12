@@ -15,7 +15,7 @@ import { useGetArticleQuery } from '../../store';
 import { RootState } from '../../store';
 import { ArticleSectionType, ReceivedArticle } from '../../types/article.d';
 import { Response } from '../../types/response';
-import { User } from '../../types/user';
+import { ReceivedUser } from '../../types/user';
 import {
     ArticleBodyContainer,
     ArticleCoverImage,
@@ -41,7 +41,7 @@ const ViewArticlePage = () => {
     const { data, isLoading } = useGetArticleQuery(parseInt(articleId));
     const article: ReceivedArticle = (data as unknown as Response)?.data;
     const isArticleOwner =
-        article?.author?.username === (user as User)?.username;
+        article?.Author?.Username === (user as ReceivedUser)?.Username;
 
     return isLoading ? (
         <Spinner />
@@ -49,21 +49,21 @@ const ViewArticlePage = () => {
         <PageContainer>
             <ArticleCoverImageContainer>
                 <ArticleCoverImage
-                    src={article?.coverImageUrl ?? defaultCoverImage}
+                    src={article?.CoverImage ?? defaultCoverImage}
                 />
 
                 <AuthorDataContainer>
                     <AuthorProfileImage
-                        src={article?.author.image ?? defaultUserImage}
+                        src={article?.Author?.ProfileImage ?? defaultUserImage}
                         alt="author profile image"
                     />
                     <div>
                         <p className="text-md font-black text-[var(--gray-800)]">
-                            {article?.author.fullName}
+                            {article?.Author?.FullName}
                         </p>
                         <p className="text-xs text-[var(--gray-700)]">
-                            {article?.updatedAt &&
-                                new Date(article.updatedAt).toDateString()}
+                            {article?.UpdatedAt &&
+                                new Date(article.UpdatedAt).toDateString()}
                         </p>
                     </div>
 
@@ -93,13 +93,13 @@ const ViewArticlePage = () => {
             </ArticleCoverImageContainer>
 
             <ArticleBodyContainer data-color-mode="light">
-                <h1 className="text-5xl font-black text-[var(--gray-700)] text-center tracking-tight">
-                    {article?.title}
+                <h1 className="text-5xl font-bold text-[var(--gray-800)] text-center tracking-tight font-serif">
+                    {article?.Title}
                 </h1>
 
                 {/* Article Tags */}
                 <div className="flex gap-2 items-center justify-center">
-                    {article?.tags.map((tag) => {
+                    {article?.ArticleTags.map((tag) => {
                         return (
                             <TagContainer key={tag} size="sm">
                                 {tag}
@@ -129,19 +129,19 @@ const ViewArticlePage = () => {
                 </ArticleToolbar>
 
                 {/* Article sections */}
-                {article?.sections.map((section, index) => {
-                    if (section.contentType === ArticleSectionType.Image) {
+                {article?.Sections.map((section, index) => {
+                    if (section.ContentType === ArticleSectionType.Image) {
                         return (
                             <ArticleImageSection
                                 key={index}
-                                src={section.value}
+                                src={section.Value}
                                 alt="article section"
                             />
                         );
                     } else if (
-                        section.contentType === ArticleSectionType.Markdown
+                        section.ContentType === ArticleSectionType.Markdown
                     ) {
-                        return <MDEditor.Markdown source={section.value} />;
+                        return <MDEditor.Markdown source={section.Value} />;
                     }
                 })}
 
@@ -150,7 +150,10 @@ const ViewArticlePage = () => {
                 <AuthorMoreInfoContainer>
                     <div className="flex justify-between items-center w-full">
                         <AuthorProfileImage
-                            src={article?.author.image ?? defaultUserImage}
+                            src={
+                                article?.Author?.ProfileImage ??
+                                defaultUserImage
+                            }
                         />
                         <Button
                             select="primary700"
@@ -162,7 +165,7 @@ const ViewArticlePage = () => {
                         </Button>
                     </div>
                     <p className="text-3xl font-bold text-[var(--gray-700)]">
-                        Written by {article?.author.fullName}
+                        Written by {article?.Author?.FullName}
                     </p>
                 </AuthorMoreInfoContainer>
 

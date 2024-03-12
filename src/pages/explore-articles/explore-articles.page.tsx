@@ -25,7 +25,7 @@ const ExploreArticlesPage = () => {
     const handleChangeSearchValue = (value: string) => {
         setSearchValue(value);
         const fuseOptions = {
-            keys: ['title'],
+            keys: ['Title'],
             includeScore: true,
             threshold: 0.5,
         };

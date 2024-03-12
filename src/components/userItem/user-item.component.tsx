@@ -1,7 +1,7 @@
 import { capitalize } from 'lodash';
 import { Link } from 'react-router-dom';
 
-import { User } from '../../types/user';
+import { ReceivedUser } from '../../types/user';
 import Button from '../Button';
 import {
     UserItemContainer,
@@ -12,12 +12,12 @@ import {
 type UserItemProps = {
     action: string;
     actionHandler: React.MouseEventHandler<HTMLButtonElement>;
-} & Partial<User>;
+} & Partial<ReceivedUser>;
 
 const UserItem = ({
-    full_name,
-    username,
-    image,
+    FullName: full_name,
+    Username: username,
+    ProfileImage: image,
     action,
     actionHandler,
 }: UserItemProps) => {

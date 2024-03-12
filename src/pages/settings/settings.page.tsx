@@ -21,7 +21,7 @@ import {
     SerializedCustomInput,
     SerializedInput,
 } from '../../types/serialized-input';
-import { User, UserToSend } from '../../types/user';
+import { ReceivedUser, UserToSend } from '../../types/user';
 import { successToast } from '../../utils/toasts';
 import {
     EditButton,
@@ -44,22 +44,22 @@ export const SettingsPage = () => {
     const [isEditingPersonalInfo, setIsEditingPersonalInfo] = useState(false);
     const storedUser = useSelector(
         (state: RootState) => state.auth.user,
-    ) as User;
+    ) as ReceivedUser;
     const userToken = useSelector((state: RootState) => state.auth.token);
     const [firstName, setFirstName] = useState(
-        storedUser.full_name?.split(' ')[0] ?? '',
+        storedUser.FullName?.split(' ')[0] ?? '',
     );
     const [lastName, setLastName] = useState(
-        storedUser.full_name?.substring(firstName.length + 1) ?? '',
+        storedUser.FullName?.substring(firstName.length + 1) ?? '',
     );
-    const [username, setUsername] = useState(storedUser.username ?? '');
-    const [email, setEmail] = useState(storedUser.email ?? '');
-    const [phone, setPhone] = useState(storedUser.phone_number);
+    const [username, setUsername] = useState(storedUser.Username ?? '');
+    const [email, setEmail] = useState(storedUser.Email ?? '');
+    const [phone, setPhone] = useState(storedUser.PhoneNumber);
     const [birthDate, setBirthDate] = useState(
-        new Date(storedUser.dob ?? Date.now()).toISOString().split('T')[0],
+        new Date(storedUser.DOB ?? Date.now()).toISOString().split('T')[0],
     );
-    const [bio, setBio] = useState(storedUser.bio);
-    const [interests, setInterests] = useState(storedUser.user_tag);
+    const [bio, setBio] = useState(storedUser.Bio);
+    const [interests, setInterests] = useState(storedUser.UserTags);
 
     // Serialized inputs
     const personalInfoInputs: SerializedCustomInput[] = [
@@ -173,30 +173,30 @@ export const SettingsPage = () => {
          */
         const diff: Partial<UserToSend> = {};
 
-        if (storedUser.full_name !== `${firstName} ${lastName}`) {
+        if (storedUser.FullName !== `${firstName} ${lastName}`) {
             diff.fullName = `${firstName} ${lastName}`;
         }
-        if (storedUser.username !== username) {
+        if (storedUser.Username !== username) {
             diff.username = username;
         }
-        if (storedUser.email !== email) {
+        if (storedUser.Email !== email) {
             diff.email = email;
         }
-        if (storedUser.phone_number !== phone) {
+        if (storedUser.PhoneNumber !== phone) {
             diff.phoneNumber = phone;
         }
         if (
-            new Date(storedUser.dob).getTime() !== new Date(birthDate).getTime()
+            new Date(storedUser.DOB).getTime() !== new Date(birthDate).getTime()
         ) {
             diff.dob = birthDate;
         }
-        if (storedUser.bio !== bio) {
+        if (storedUser.Bio !== bio) {
             diff.bio = bio;
         }
-        if (JSON.stringify(storedUser.user_tag) !== JSON.stringify(interests)) {
-            diff.addedInterests = _.difference(interests, storedUser.user_tag);
+        if (JSON.stringify(storedUser.UserTags) !== JSON.stringify(interests)) {
+            diff.addedInterests = _.difference(interests, storedUser.UserTags);
             diff.removedInterests = _.difference(
-                storedUser.user_tag,
+                storedUser.UserTags,
                 interests,
             );
         }
@@ -216,16 +216,16 @@ export const SettingsPage = () => {
     };
 
     useEffect(() => {
-        setFirstName(storedUser.full_name?.split(' ')[0]);
-        setLastName(storedUser.full_name?.substring(firstName.length + 1));
-        setUsername(storedUser.username);
-        setEmail(storedUser.email);
-        setPhone(storedUser.phone_number);
+        setFirstName(storedUser.FullName?.split(' ')[0]);
+        setLastName(storedUser.FullName?.substring(firstName.length + 1));
+        setUsername(storedUser.Username);
+        setEmail(storedUser.Email);
+        setPhone(storedUser.PhoneNumber);
         setBirthDate(
-            new Date(storedUser.dob ?? Date.now()).toISOString().split('T')[0],
+            new Date(storedUser.DOB ?? Date.now()).toISOString().split('T')[0],
         );
-        setBio(storedUser.bio);
-        setInterests(storedUser.user_tag);
+        setBio(storedUser.Bio);
+        setInterests(storedUser.UserTags);
     }, [storedUser]);
 
     useEffect(() => {
@@ -243,25 +243,25 @@ export const SettingsPage = () => {
                 <section className="flex flex-col items-center">
                     <ProfilePictureContainer>
                         <ProfilePicture
-                            src={storedUser.image ?? defaultProfile}
+                            src={storedUser.ProfileImage ?? defaultProfile}
                         />
                         <PictureOverlay src={cameraImage} />
                     </ProfilePictureContainer>
                     <h2 className="text-xl font-bold mt-4">
-                        {storedUser.full_name ?? 'Delete me'}
+                        {storedUser.FullName ?? 'Delete me'}
                     </h2>
                     <h2 className="text-md opacity-75 font-thin">
-                        @{storedUser.username ?? 'Delete me'}
+                        @{storedUser.Username ?? 'Delete me'}
                     </h2>
                 </section>
 
                 <section className="flex flex-col gap-6">
                     <p className="max-w-[70ch]">
-                        {storedUser.bio ?? "You don't have bio yet."}
+                        {storedUser.Bio ?? "You don't have bio yet."}
                     </p>
 
                     <div className="flex gap-4 flex-wrap">
-                        {storedUser.user_tag?.map((tag) => (
+                        {storedUser.UserTags?.map((tag) => (
                             <Tag key={tag} text={tag} size="sm" />
                         ))}
                     </div>

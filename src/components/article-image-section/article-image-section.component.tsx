@@ -18,7 +18,7 @@ export const ImageUploadSection = ({ section }: ImageUploadSectionProps) => {
     const fileInput = useRef<HTMLInputElement>(null);
     const dispatch = useDispatch();
 
-    const { value: imageSrc, id } = section;
+    const { Value: imageSrc, ID: id } = section;
 
     const handleImageSelection = (e: ChangeEvent<HTMLInputElement>) => {
         const reader = new FileReader();
@@ -55,7 +55,7 @@ export const ImageUploadSection = ({ section }: ImageUploadSectionProps) => {
                     title="Delete this section"
                     className="z-30 !p-2 rounded-none"
                     onClick={() => {
-                        dispatch(setSectionToBeDeleted(section.id!));
+                        dispatch(setSectionToBeDeleted(section.ID!));
                     }}
                 >
                     <RiDeleteBinLine size={14} />

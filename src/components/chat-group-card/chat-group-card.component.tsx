@@ -14,9 +14,9 @@ import {
 } from './chat-group-card.style';
 
 const GroupCard = ({
-    group_id,
-    title,
-    cover_image_url,
+    ID: group_id,
+    GroupTitle: title,
+    GroupCoverImageUrl: cover_image_url,
     GroupTags,
     GroupMembers,
 }: Partial<ReceivedGroup>) => {

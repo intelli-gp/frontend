@@ -18,6 +18,7 @@ import OpenImage from '../../components/openImage/openImage.component';
 import { TagContainer } from '../../components/tag/tag.styles';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import { useUploadImage } from '../../hooks/uploadImage.hook';
+import { ModalTitle } from '../../index.styles';
 import {
     useGetAllTagsQuery,
     useGetGroupQuery,
@@ -25,9 +26,9 @@ import {
     usePermissionGroupMutation,
     useUpdateGroupMutation,
 } from '../../store';
-import { GroupToSend, ReceivedGroup, UserGroup } from '../../types/group';
+import { GroupToSend, GroupUser, ReceivedGroup } from '../../types/group';
 import { Response } from '../../types/response';
-import { User } from '../../types/user';
+import { ReceivedUser } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
     Arrow,
@@ -60,24 +61,23 @@ const ViewGroupPage = () => {
     const [description, setDescription] = useState('');
     const [coverImg, setCoverImg] = useState('');
 
-    const user = useSelector((state: any) => state.auth.user) as User;
+    const user = useSelector((state: any) => state.auth.user) as ReceivedUser;
     const { id: groupId } = useParams();
     const { data, isSuccess: isGroupDataFetched } = useGetGroupQuery(groupId!);
     const { data: allTags } = useGetAllTagsQuery();
     const groupData: ReceivedGroup = (data as unknown as Response)?.data[0];
     const admins =
         groupData?.GroupMembers?.filter(
-            (member) => member.type === Role.admin,
+            (member) => member.Type === Role.admin,
         ) ?? [];
     const members =
         groupData?.GroupMembers?.filter(
-            (member) =>
-                member.type === Role.member && member.joiningStatus === true,
+            (member) => member.Type === Role.member,
         ) ?? [];
 
     const userType =
-        groupData?.GroupMembers?.find((member) => member.ID === user.user_id)
-            ?.type || Role.not_member;
+        groupData?.GroupMembers?.find((member) => member.ID === user.ID)
+            ?.Type || Role.not_member;
 
     const [memberMenus, setMemberMenus] = useState(members.map(() => false));
     const handleMemberClick = (index: number) => {
@@ -134,10 +134,10 @@ const ViewGroupPage = () => {
         type: 'ADMIN' | 'MEMBER',
     ) => {
         try {
-            const updatedGroupData: Partial<UserGroup> & { id: string } = {
-                id: groupData.group_id,
+            const updatedGroupData: Partial<GroupUser> & { id: string } = {
+                id: groupData.ID,
                 ID: id,
-                type: type,
+                Type: type,
             };
             await updateStatus(updatedGroupData).unwrap();
             successToast('Changed the permission successfully!');
@@ -151,10 +151,11 @@ const ViewGroupPage = () => {
             const tagsChanged =
                 JSON.stringify(groupData?.GroupTags) !==
                 JSON.stringify(interests);
-            const descriptionChanged = groupData?.description !== description;
-            const imageChanged = groupData?.cover_image_url !== coverImg;
+            const descriptionChanged =
+                groupData?.GroupDescription !== description;
+            const imageChanged = groupData?.GroupCoverImageUrl !== coverImg;
             const updatedGroupData: Partial<GroupToSend> & { id: string } = {
-                id: groupData.group_id,
+                id: groupData.ID,
             };
             if (descriptionChanged) {
                 updatedGroupData.GroupDescription = description;
@@ -200,9 +201,7 @@ const ViewGroupPage = () => {
             isOpen={showImgModal}
             setIsOpen={setImgModal}
         >
-            <h1 className="text-[var(--slate-700)] text-[30px]">
-                Edit Cover Image
-            </h1>
+            <ModalTitle>Edit Cover Image</ModalTitle>
             <OpenImage
                 height="280px"
                 value={coverImg}
@@ -222,7 +221,7 @@ const ViewGroupPage = () => {
                     type="button"
                     select="danger"
                     onClick={() => {
-                        setCoverImg(groupData.cover_image_url);
+                        setCoverImg(groupData.GroupCoverImageUrl);
                         setImgModal(false);
                     }}
                     outline
@@ -237,8 +236,8 @@ const ViewGroupPage = () => {
     // Set the internal states with the fetched data
     useEffect(() => {
         setInterests(groupData?.GroupTags);
-        setDescription(groupData?.description);
-        setCoverImg(groupData?.cover_image_url);
+        setDescription(groupData?.GroupDescription);
+        setCoverImg(groupData?.GroupCoverImageUrl);
     }, [isGroupDataFetched]);
 
     // Toasts handling
@@ -305,7 +304,7 @@ const ViewGroupPage = () => {
 
                 <div>
                     <h1 className="lg:text-5xl text-3xl text-white">
-                        {groupData?.title}
+                        {groupData?.GroupTitle}
                     </h1>
                     <p className="lg:text-2xl text-lg text-white">
                         {groupData?.GroupMembers?.length + ' Members'}
@@ -425,27 +424,27 @@ const ViewGroupPage = () => {
                     <PeopleContainer>
                         {admins.map((admin, index) => {
                             return (
-                                <PersonContainer key={admin?.username}>
+                                <PersonContainer key={admin?.Username}>
                                     <img
                                         alt=""
                                         src={
-                                            admin?.profileImg ??
+                                            admin?.ProfileImage ??
                                             defaultUserImage
                                         }
                                     />
                                     <span className="flex flex-row items-center gap-2 relative">
                                         <h1>
-                                            {(admin?.username ?? '').substring(
+                                            {(admin?.Username ?? '').substring(
                                                 0,
                                                 9,
                                             ) +
-                                                ((admin?.username ?? '')
+                                                ((admin?.Username ?? '')
                                                     .length > 9
                                                     ? '...'
                                                     : '')}
                                         </h1>
                                         {userType === Role.admin &&
-                                        admin.ID !== user.user_id ? (
+                                        admin.ID !== user.ID ? (
                                             <>
                                                 <Arrow>
                                                     <IoIosArrowDown
@@ -486,27 +485,27 @@ const ViewGroupPage = () => {
                     <PeopleContainer>
                         {members.map((member, index) => {
                             return (
-                                <PersonContainer key={member?.username}>
+                                <PersonContainer key={member?.Username}>
                                     <img
                                         alt=""
                                         src={
-                                            member?.profileImg ??
+                                            member?.ProfileImage ??
                                             defaultUserImage
                                         }
                                     />
                                     <span className="flex flex-row items-center gap-2 relative">
                                         <h1>
-                                            {(member?.username ?? '').substring(
+                                            {(member?.Username ?? '').substring(
                                                 0,
                                                 8,
                                             ) +
-                                                ((member?.username ?? '')
+                                                ((member?.Username ?? '')
                                                     .length > 8
                                                     ? '...'
                                                     : '')}
                                         </h1>
                                         {userType === Role.admin &&
-                                        member.ID !== user.user_id ? (
+                                        member.ID !== user.ID ? (
                                             <>
                                                 <Arrow>
                                                     <IoIosArrowDown

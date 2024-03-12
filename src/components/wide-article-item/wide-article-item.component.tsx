@@ -15,11 +15,11 @@ type WideArticleItemProps = ReceivedArticle & {
 };
 
 const WideArticleItem = ({
-    author,
-    coverImageUrl,
-    tags,
-    title,
-    updatedAt,
+    Author: author,
+    CoverImage: coverImageUrl,
+    ArticleTags: tags,
+    Title: title,
+    UpdatedAt: updatedAt,
     onClick,
 }: WideArticleItemProps) => {
     return (
@@ -27,10 +27,10 @@ const WideArticleItem = ({
             <ArticleContentContainer>
                 <AuthorData>
                     <AuthorPicture
-                        src={author?.image ?? defaultUserImage}
+                        src={author?.ProfileImage ?? defaultUserImage}
                         alt="user profile picture"
                     />
-                    {author?.fullName}
+                    {author?.FullName}
                     <span className="text-xs opacity-50"> • </span>
                     <span className="text-xs opacity-70">
                         {new Date(updatedAt).toDateString()}
@@ -39,7 +39,7 @@ const WideArticleItem = ({
 
                 <div className="flex justify-between items-center gap-4">
                     <div className="flex flex-col gap-4">
-                        <h1 className="text-2xl font-black text-slate-700">
+                        <h1 className="text-2xl font-bold text-[var(--gray-800)] leading-7">
                             {title}
                         </h1>
                         <ArticleFooter>

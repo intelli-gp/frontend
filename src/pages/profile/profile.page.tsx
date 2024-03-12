@@ -36,7 +36,7 @@ import {
 import { ReceivedArticle } from '../../types/article.d';
 import { ReceivedGroup } from '../../types/group';
 import { Response } from '../../types/response';
-import { User, UserToSend } from '../../types/user';
+import { ReceivedUser, UserToSend } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
     AboutList,
@@ -72,11 +72,13 @@ const ProfilePage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const user = useSelector((state: RootState) => state.auth.user) as User;
+    const user = useSelector(
+        (state: RootState) => state.auth.user,
+    ) as ReceivedUser;
     const userToken = useSelector((state: RootState) => state.auth.token);
 
-    const [userImg, setUserImg] = useState(user.image);
-    const [userCover, setUserCover] = useState(user.cover_image);
+    const [userImg, setUserImg] = useState(user.ProfileImage);
+    const [userCover, setUserCover] = useState(user.CoverImage);
     const [_followers] = useState<any[]>([]);
     const [_following] = useState<any[]>([]);
 
@@ -86,9 +88,9 @@ const ProfilePage = () => {
         (postsData as unknown as Response)?.data ?? [];
     const filteredPosts = useMemo(() => {
         return receivedData.filter(
-            (post) => user.username === post.author.username,
+            (post) => user.Username === post?.Author?.Username,
         );
-    }, [receivedData, user.user_id]);
+    }, [receivedData, user.ID]);
 
     const { data: groupData, isLoading: GroupsLoading } =
         useGetAllGroupsQuery();
@@ -98,39 +100,39 @@ const ProfilePage = () => {
     const filteredGroups = useMemo(() => {
         return groups.filter((group) => {
             const isUserAssigned = group.GroupMembers.some(
-                (member) => member.ID === user.user_id,
+                (member) => member.ID === user.ID,
             );
             return isUserAssigned;
         });
-    }, [groups, user.user_id]);
+    }, [groups, user.ID]);
 
     useEffect(() => {
-        setUserImg(user.image);
-        setUserCover(user.cover_image);
+        setUserImg(user.ProfileImage);
+        setUserCover(user.CoverImage);
         setGroups(filteredGroups);
         setArticles(filteredPosts);
-    }, [filteredPosts, filteredGroups, user.image, user.cover_image]);
+    }, [filteredPosts, filteredGroups, user.ProfileImage, user.CoverImage]);
 
     const [youMayKnow] = useState<any[]>([
         {
-            full_name: 'Ahmed',
-            username: 'ahmedali',
-            image: defaultUserImage,
+            FullName: 'Ahmed',
+            Username: 'ahmedali',
+            ProfileImage: defaultUserImage,
         },
         {
-            full_name: 'Ahmed',
-            username: 'ahmedali',
-            image: defaultUserImage,
+            FullName: 'Ahmed',
+            Username: 'ahmedali',
+            ProfileImage: defaultUserImage,
         },
         {
-            full_name: 'Ahmed',
-            username: 'ahmedali',
-            image: defaultUserImage,
+            FullName: 'Ahmed',
+            Username: 'ahmedali',
+            ProfileImage: defaultUserImage,
         },
         {
-            full_name: 'Ahmed',
-            username: 'ahmedali',
-            image: defaultUserImage,
+            FullName: 'Ahmed',
+            Username: 'ahmedali',
+            ProfileImage: defaultUserImage,
         },
     ]);
 
@@ -181,7 +183,7 @@ const ProfilePage = () => {
         try {
             const update: Partial<UserToSend> = {};
 
-            if (user?.image !== userImg) {
+            if (user?.ProfileImage !== userImg) {
                 const imageURL = await uploadImage(userImg);
                 update.image = imageURL;
                 const {
@@ -196,7 +198,7 @@ const ProfilePage = () => {
                 );
                 successToast('Image uploaded successfully');
             }
-            if (user?.cover_image !== userCover) {
+            if (user?.CoverImage !== userCover) {
                 const imageURL = await uploadImage(userCover);
                 update.coverImage = imageURL;
                 const {
@@ -271,7 +273,9 @@ const ProfilePage = () => {
                     select="danger"
                     onClick={() => {
                         setImage(
-                            title === 'Cover' ? user.cover_image : user.image,
+                            title === 'Cover'
+                                ? user.CoverImage
+                                : user.ProfileImage,
                         );
                         setIsOpen(false);
                     }}
@@ -311,10 +315,10 @@ const ProfilePage = () => {
                     </ProfilePictureContainer>
                     <div className="flex flex-col justify-between h-[75px] p-2">
                         <h2 className="font-semibold text-[var(--gray-700)] overflow-hidden whitespace-nowrap text-ellipsis 3xs:max-w-[7ch] 3xs:text-2xl md:max-w-full md:text-3xl ">
-                            {user.full_name}
+                            {user.FullName}
                         </h2>
                         <p className="text-[var(--gray-600)]">
-                            @{user.username}
+                            @{user.Username}
                         </p>
                     </div>
                     <Button
@@ -336,13 +340,13 @@ const ProfilePage = () => {
                     </h1>
                     <hr />
                     <p className="text-[var(--gray-700)]">
-                        {user.bio ?? 'This user has no bio.'}
+                        {user.Bio ?? 'This user has no bio.'}
                     </p>
                     <hr />
                     <AboutList>
                         <AboutListItem>
                             <FaBirthdayCake />
-                            {new Date(user.dob).toLocaleDateString()}
+                            {new Date(user.DOB).toLocaleDateString()}
                         </AboutListItem>
                         <AboutListItem>
                             <IoMdPin />
@@ -350,11 +354,11 @@ const ProfilePage = () => {
                         </AboutListItem>
                         <AboutListItem>
                             <FaEnvelope />
-                            {user.email}
+                            {user.Email}
                         </AboutListItem>
                         <AboutListItem>
                             <FaPhoneAlt />
-                            {user.phone_number}
+                            {user.PhoneNumber}
                         </AboutListItem>
                     </AboutList>
                 </AboutSection>

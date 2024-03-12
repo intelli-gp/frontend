@@ -15,3 +15,15 @@ body .w-md-editor-text-input {
 .w-md-editor-toolbar li > button:focus:not(:disabled) {
     color: var(--indigo-700) !important;
 }
+
+.code-highlight {
+    font-family: 'JetBrains Mono', monospace !important;
+
+    * {
+        font-family: inherit !important;
+    }
+}
+
+.wmde-markdown > *:not(code, pre) {
+    font-family: 'Merriweather', serif;
+}
