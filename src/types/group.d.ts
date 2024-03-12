@@ -11,10 +11,10 @@ export type ReceivedGroup = {
     ID: string;
     GroupTitle: string;
     GroupDescription: string;
-    GroupCoverImageUrl: string;
+    GroupCoverImage: string;
     GroupTags: string[];
     GroupMembers: Array<GroupUser>;
-    GroupOwner: Pick<ReceivedUser, "Username" | "ID" | "Email">;
+    GroupOwner: Pick<ReceivedUser, 'Username' | 'ID' | 'Email'>;
     GroupUserCont: number;
 };
 

@@ -16,7 +16,7 @@ import {
 const GroupCard = ({
     ID: group_id,
     GroupTitle: title,
-    GroupCoverImageUrl: cover_image_url,
+    GroupCoverImage: cover_image_url,
     GroupTags,
     GroupMembers,
 }: Partial<ReceivedGroup>) => {

@@ -153,7 +153,7 @@ const ViewGroupPage = () => {
                 JSON.stringify(interests);
             const descriptionChanged =
                 groupData?.GroupDescription !== description;
-            const imageChanged = groupData?.GroupCoverImageUrl !== coverImg;
+            const imageChanged = groupData?.GroupCoverImage !== coverImg;
             const updatedGroupData: Partial<GroupToSend> & { id: string } = {
                 id: groupData.ID,
             };
@@ -221,7 +221,7 @@ const ViewGroupPage = () => {
                     type="button"
                     select="danger"
                     onClick={() => {
-                        setCoverImg(groupData.GroupCoverImageUrl);
+                        setCoverImg(groupData.GroupCoverImage);
                         setImgModal(false);
                     }}
                     outline
@@ -237,7 +237,7 @@ const ViewGroupPage = () => {
     useEffect(() => {
         setInterests(groupData?.GroupTags);
         setDescription(groupData?.GroupDescription);
-        setCoverImg(groupData?.GroupCoverImageUrl);
+        setCoverImg(groupData?.GroupCoverImage);
     }, [isGroupDataFetched]);
 
     // Toasts handling

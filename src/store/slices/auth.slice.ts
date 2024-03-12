@@ -1,4 +1,4 @@
-import { PayloadAction, Store, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { ReceivedUser } from '../../types/user';
 

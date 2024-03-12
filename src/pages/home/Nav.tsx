@@ -7,7 +7,6 @@ import { IoPersonSharp } from 'react-icons/io5';
 import { MdLogin } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
-import Logo1 from '../../assets/imgs/logo.png';
 import Button from '../../components/Button';
 
 export default function Nav() {

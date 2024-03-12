@@ -16,13 +16,13 @@ export type ReceivedUser = {
     GroupsCreated: Array<
         Pick<
             ReceivedGroup,
-            'ID' | 'GroupTitle' | 'GroupCoverImageUrl' | 'GroupUserCont'
+            'ID' | 'GroupTitle' | 'GroupCoverImage' | 'GroupUserCont'
         >
     >;
     GroupsJoined: Array<
         Pick<
             ReceivedGroup,
-            'ID' | 'GroupTitle' | 'GroupCoverImageUrl' | 'GroupUserCont'
+            'ID' | 'GroupTitle' | 'GroupCoverImage' | 'GroupUserCont'
         >
     >;
 };
