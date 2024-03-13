@@ -23,6 +23,7 @@ import UpgradePage from './pages/upgrade/upgrade.page';
 import ViewArticlePage from './pages/view-article/view-article.page';
 import ViewGroupPage from './pages/view-group/view-group.page';
 import { RootState, setCredentials } from './store';
+import { getSocket } from './utils/socket';
 
 function App() {
     const dispatch = useDispatch();
@@ -39,6 +40,8 @@ function App() {
                         user: JSON.parse(user as string),
                     }),
                 );
+                // Initialize Socket connection
+                getSocket(savedToken);
             }
         }
     }, []);
