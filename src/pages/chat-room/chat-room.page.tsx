@@ -12,6 +12,7 @@ import { LuPaperclip } from 'react-icons/lu';
 import { MdOutlineEmojiEmotions } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { BeatLoader } from 'react-spinners';
 
 import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
@@ -168,16 +169,21 @@ export const ChatroomPage = () => {
                             </GroupName>
                             <GroupTypingStatus>
                                 {typingUsers?.length ? (
-                                    <>
+                                    <div className="flex gap-1 items-center">
+                                        <BeatLoader
+                                            color="var(--gray-800)"
+                                            size={6}
+                                        />
                                         <span className="font-bold">
-                                            {typingUsers?.join(' ,') + ' '}
+                                            {typingUsers?.join(' ,')}
                                         </span>
                                         {` ${
                                             typingUsers.length === 1
                                                 ? 'is'
                                                 : 'are'
-                                        }  typing...`}
-                                    </>
+                                        }  `}
+                                        typing...
+                                    </div>
                                 ) : (
                                     <span className="text-[var(--gray-900)]">
                                         Idle
