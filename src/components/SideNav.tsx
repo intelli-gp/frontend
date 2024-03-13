@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom';
 
 import defaultUserImage from '../assets/imgs/user.jpg';
 import { RootState, clearCredentials, useLogoutUserMutation } from '../store';
+import { deleteSocket } from '../utils/socket';
 import Button from './Button';
 import SideNavItem from './SideNavItem';
 
@@ -181,6 +182,7 @@ export default function SideNav() {
          */
         logoutUser();
         dispatch(clearCredentials());
+        deleteSocket(); // Clear socket connection
     };
 
     // This is for mobile view only.
