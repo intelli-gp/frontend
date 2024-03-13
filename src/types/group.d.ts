@@ -2,9 +2,10 @@ import { ReceivedUser } from './user';
 
 export type GroupUser = Pick<
     ReceivedUser,
-    'Username' | 'ID' | 'ProfileImage'
+    'Username' | 'ID' | 'ProfileImage' | 'FullName'
 > & {
     Type: 'ADMIN' | 'MEMBER';
+    ConnectedStatus: boolean;
 };
 
 export type ReceivedGroup = {
@@ -13,8 +14,11 @@ export type ReceivedGroup = {
     GroupDescription: string;
     GroupCoverImage: string;
     GroupTags: string[];
-    GroupMembers: Array<GroupUser>;
-    GroupOwner: Pick<ReceivedUser, 'Username' | 'ID' | 'Email'>;
+    GroupMembers: GroupUser[];
+    GroupOwner: Pick<
+        ReceivedUser,
+        'Username' | 'ID' | 'Email' | 'FullName' | 'ProfileImage'
+    >;
     GroupUserCont: number;
 };
 
