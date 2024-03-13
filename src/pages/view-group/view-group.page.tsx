@@ -63,7 +63,7 @@ const ViewGroupPage = () => {
 
     const user = useSelector((state: any) => state.auth.user) as ReceivedUser;
     const { id: groupId } = useParams();
-    const { data, isSuccess: isGroupDataFetched } = useGetGroupQuery(groupId!);
+    const { data, isSuccess: isGroupDataFetched } = useGetGroupQuery(+groupId!);
     const { data: allTags } = useGetAllTagsQuery();
     const groupData: ReceivedGroup = (data as unknown as Response)?.data[0];
     const admins =
@@ -95,6 +95,7 @@ const ViewGroupPage = () => {
             return updatedShowMenus;
         });
     };
+
     // DELETE GROUP
     const openDeleteModal = () => {
         setDeleteModal((prev) => !prev);
@@ -113,7 +114,7 @@ const ViewGroupPage = () => {
     const handleJoiningGroup = async () => {
         try {
             await joinGroup(groupId!).unwrap();
-            navigate('/app/chat-room');
+            navigate(`/app/chat-room/${groupId}`);
         } catch (error) {
             errorToast('Error occurred while joining the group');
         }
@@ -256,7 +257,7 @@ const ViewGroupPage = () => {
             select="secondary"
             title="Return"
             className="absolute bottom-8 right-8"
-            onClick={() => navigate('/app/chat-room')}
+            onClick={() => navigate(`/app/chat-room/${groupId}`)}
         >
             Return
         </Button>
