@@ -1,5 +1,9 @@
-import { RootState } from '..';
-import { CreateMessageDTO, SerializedMessage } from '../../types/message';
+import {
+    CreateMessageDTO,
+    ReceivedTypingDTO,
+    SerializedMessage,
+} from '../../types/message';
+import { SendIsTypingDTO } from '../../types/message';
 import { getSocket } from '../../utils/socket';
 import { appApi } from './appApi';
 
@@ -9,17 +13,11 @@ const messageApi = appApi.injectEndpoints({
             queryFn: () => ({ data: [] }),
             async onCacheEntryAdded(
                 groupId,
-                {
-                    updateCachedData,
-                    cacheDataLoaded,
-                    cacheEntryRemoved,
-                    getState,
-                },
+                { updateCachedData, cacheDataLoaded, cacheEntryRemoved },
             ) {
                 try {
                     await cacheDataLoaded;
-                    let { auth } = getState() as RootState;
-                    let socket = await getSocket(auth.token);
+                    let socket = await getSocket();
                     socket.emit('joinRoom', { ChatGroupId: groupId });
                     socket.on(
                         'allMessages',
@@ -47,15 +45,52 @@ const messageApi = appApi.injectEndpoints({
         }),
         sendMessage: builder.mutation({
             queryFn: () => ({ data: [] }),
+            async onCacheEntryAdded(data: CreateMessageDTO) {
+                try {
+                    let socket = await getSocket();
+                    socket.emit('createMessage', data);
+                } catch (error) {
+                    console.error(error);
+                }
+            },
+        }),
+        sendTyping: builder.mutation({
+            queryFn: () => ({ data: [] }),
+            async onCacheEntryAdded(data: SendIsTypingDTO) {
+                try {
+                    let socket = await getSocket();
+                    socket.emit('typing', data);
+                } catch (error) {
+                    console.error(error);
+                }
+            },
+        }),
+        receiveTyping: builder.query<unknown, void>({
+            queryFn: () => ({ data: [] }),
             async onCacheEntryAdded(
-                data: CreateMessageDTO,
-                { cacheDataLoaded, getState },
+                _,
+                { updateCachedData, cacheDataLoaded, cacheEntryRemoved },
             ) {
                 try {
                     await cacheDataLoaded;
-                    let { auth } = getState() as RootState;
-                    let socket = await getSocket(auth.token);
-                    socket.emit('createMessage', data);
+                    let socket = await getSocket();
+                    socket.on('isTyping', (data: ReceivedTypingDTO) => {
+                        updateCachedData((draft) => {
+                            let index = (draft as string[]).findIndex(
+                                (element) => element === data.Username,
+                            );
+
+                            if (index === -1) {
+                                (draft as string[]).push(data.Username);
+                            }
+
+                            if (index > -1 && !data.IsTyping) {
+                                (draft as string[]).splice(index, 1);
+                            }
+                        });
+                    });
+                    await cacheEntryRemoved;
+                    socket.off('isTyping');
                 } catch (error) {
                     console.error(error);
                 }
@@ -64,4 +99,9 @@ const messageApi = appApi.injectEndpoints({
     }),
 });
 
-export const { useGetGroupMessagesQuery, useSendMessageMutation } = messageApi;
+export const {
+    useGetGroupMessagesQuery,
+    useSendMessageMutation,
+    useReceiveTypingQuery,
+    useSendTypingMutation,
+} = messageApi;

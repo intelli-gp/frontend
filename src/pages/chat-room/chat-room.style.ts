@@ -1,24 +1,12 @@
 import styled, { css, keyframes } from 'styled-components';
 
-type onlineType = {
-    online: boolean;
-};
-
-type userType = {
-    incoming: boolean;
-};
-
 export const PageContainer = styled.div`
     display: flex;
     flex-direction: row;
     height: 100vh;
-    gap: 30px;
-    justify-content: space-between;
+    gap: 1rem;
     background: var(--indigo-50);
-    padding: 2rem;
-    @media (max-width: 768px) {
-        padding: 30px 20px;
-    }
+    padding: 1rem;
 `;
 
 export const LeftPart = styled.div`
@@ -26,7 +14,7 @@ export const LeftPart = styled.div`
     width: 80%;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 1rem;
     max-height: 100vh;
     justify-content: space-between;
     @media (max-width: 768px) {
@@ -43,11 +31,25 @@ export const ChatHeader = styled.div`
     display: flex;
     flex-direction: row;
     padding: 20px 25px;
-    justify-content: space-between;
     align-items: center;
+    gap: 1rem;
 `;
 
-export const GroupIcon = styled.img`
+export const GroupName = styled.h1`
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 24ch;
+    font-weight: 700;
+    color: var(--gray-800);
+    font-size: 1.2rem;
+`;
+
+export const GroupTypingStatus = styled.p`
+    font-size: 0.8rem;
+`;
+
+export const GroupImage = styled.img`
     border-radius: 50%;
     height: 50px;
     width: 50px;
@@ -104,7 +106,6 @@ const scrollbarStyles = css`
 
 export const ChatFooter = styled.div`
     ${scrollbarStyles}
-
     border-radius: 15px;
     box-shadow: 0px 0px 22px 10px rgba(99, 102, 241, 0.07);
     width: 100%;
@@ -112,14 +113,15 @@ export const ChatFooter = styled.div`
     background: white;
     padding: 1rem;
     display: flex;
-    flex-direction: row;
     align-items: center;
-    gap: 1rem;
+    justify-content: center;
+    position: relative;
+    gap: 0.25rem;
 `;
 
 export const RightPart = styled.div`
     height: 100%;
-    width: 20%;
+    width: 25%;
     @media (max-width: 768px) {
         display: none;
     }
@@ -133,6 +135,9 @@ export const UsersContainer = styled.div`
     box-shadow: 0px 0px 22px 10px rgba(99, 102, 241, 0.07);
     padding: 30px 25px;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 
     /* width */
     &::-webkit-scrollbar {
@@ -150,6 +155,7 @@ export const UsersContainer = styled.div`
         background: var(--gray-300);
         opacity: 0.2;
     }
+
     & > div:first-child {
         flex: 1 1 auto;
         min-height: 6px;
@@ -168,11 +174,13 @@ export const UsersContainer = styled.div`
 
 export const UserContainer = styled.div`
     width: 100%;
+    cursor: pointer;
+    border-radius: 10rem;
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 10px;
-    margin: 20px 0px;
+    gap: 1rem;
+    padding: 0.5rem;
     img {
         border-radius: 50%;
         height: 48px;
@@ -183,11 +191,23 @@ export const UserContainer = styled.div`
         flex-direction: column;
     }
 
+    &:hover {
+        background-color: var(--indigo-50);
+    }
+
     @media (max-width: 1024px) {
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
+`;
+
+export const GroupUserFullName = styled.h2`
+    font-size: 0.8rem;
+    max-width: 12ch;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 `;
 
 export const ripple = keyframes`
@@ -201,22 +221,18 @@ export const ripple = keyframes`
   }
 `;
 
-export const StyledBadge = styled.span<onlineType>`
+export const StyledBadge = styled.span<{ online: boolean }>`
     &::after {
         content: '';
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
+        width: 0.55rem;
+        height: 0.55rem;
+        border-radius: 5rem;
         background-color: ${({ online }) => (online ? '#44b700' : '#D30000')};
-        color: ${({ online }) => (online ? '#44b700' : '#D30000')};
-        box-shadow: 0 0 0 2px #fff;
-        border: 1px solid currentColor;
     }
 `;
 
-export const Message = styled.div<userType>`
+export const Message = styled.div<{ incoming: boolean }>`
     display: flex;
-    flex-direction: row;
     width: 100%;
     justify-content: ${({ incoming }) =>
         incoming ? 'flex-end' : 'flex-start'};
@@ -233,10 +249,12 @@ export const Message = styled.div<userType>`
         max-width: 40%;
         min-width: 20%;
     }
+
     h1 {
         display: ${({ incoming }) => (incoming ? 'none' : '')};
-        font-weight: 600;
+        font-weight: 700;
     }
+
     p {
         color: ${({ incoming }) => (incoming ? 'white' : ' var(--gray-800)')};
     }
@@ -247,10 +265,18 @@ export const Message = styled.div<userType>`
         height: 24px;
         border-radius: 50%;
     }
+
     span {
+        // Message Date
         display: flex;
         justify-content: flex-end;
         font-size: 10px;
-        color: ${({ incoming }) => (incoming ? 'white' : 'var(--slate-500)')};
+        color: ${({ incoming }) => (incoming ? 'white' : 'var(--gray-800)')};
+        opacity: 0.75;
+        user-select: none;
+
+        &:hover {
+            opacity: 1;
+        }
     }
 `;

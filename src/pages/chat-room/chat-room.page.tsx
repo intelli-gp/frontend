@@ -1,5 +1,12 @@
 import Picker from 'emoji-picker-react';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import {
+    ChangeEvent,
+    FormEvent,
+    MouseEventHandler,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 import { IoSend } from 'react-icons/io5';
 import { LuPaperclip } from 'react-icons/lu';
 import { MdOutlineEmojiEmotions } from 'react-icons/md';
@@ -14,7 +21,9 @@ import { useGetGroupQuery } from '../../store';
 import { RootState } from '../../store';
 import {
     useGetGroupMessagesQuery,
+    useReceiveTypingQuery,
     useSendMessageMutation,
+    useSendTypingMutation,
 } from '../../store/apis/messagesApi';
 import { ReceivedGroup } from '../../types/group';
 import { SerializedMessage } from '../../types/message';
@@ -23,7 +32,10 @@ import {
     ChatBody,
     ChatFooter,
     ChatHeader,
-    GroupIcon,
+    GroupImage,
+    GroupName,
+    GroupTypingStatus,
+    GroupUserFullName,
     LeftPart,
     Message,
     PageContainer,
@@ -41,17 +53,17 @@ const TextMsg = (message: SerializedMessage) => {
     return (
         <Message incoming={incoming}>
             <div>
-                <div className="flex flex-row gap-2 items-center">
+                <div className="flex gap-2 items-center">
                     <img
                         alt="sender profile image"
                         src={message.User.ProfileImage ?? defaultUserImage}
                         className="object-cover"
                     />
-                    <h1 className="text-xs text-[var(--slate-600)]">
+                    <h1 className="text-xs text-[var(--gray-700)]">
                         {message.User.FullName}
                     </h1>
                 </div>
-                <p>{message.Content}</p>
+                <p className="text-sm">{message.Content}</p>
                 <span>
                     {new Date(message.CreatedAt ?? Date.now()).toLocaleString()}
                 </span>
@@ -63,8 +75,11 @@ const TextMsg = (message: SerializedMessage) => {
 export const ChatroomPage = () => {
     const { id: groupId } = useParams();
     const chatBodyRef = useRef<HTMLDivElement>(null);
+    const { user } = useSelector((state: RootState) => state.auth);
 
-    const { data: _groupData } = useGetGroupQuery(+groupId!);
+    const { data: _groupData } = useGetGroupQuery(+groupId!, {
+        pollingInterval: 30e3,
+    });
     const groupData = (_groupData as unknown as Response)
         ?.data[0] as ReceivedGroup;
 
@@ -72,44 +87,31 @@ export const ChatroomPage = () => {
     const messages = _messages as SerializedMessage[];
 
     const [sendMessage] = useSendMessageMutation();
+    const [sendTypingStatus] = useSendTypingMutation();
+    const { data: _typingUsers } = useReceiveTypingQuery();
+    const typingUsers = _typingUsers as string[];
 
-    // const groupUsers = [
-    //     {
-    //         name: 'Youmna Mahmoud',
-    //         online: true,
-    //         img: defaultUserImage,
-    //     },
-    //     {
-    //         name: 'Youmna Mahmoud',
-    //         online: true,
-    //         img: defaultUserImage,
-    //     },
-    //     {
-    //         name: 'Youmna Mahmoud',
-    //         online: true,
-    //         img: defaultUserImage,
-    //     },
-    //     {
-    //         name: 'Youmna Mahmoud',
-    //         online: false,
-    //         img: defaultUserImage,
-    //     },
-    //     {
-    //         name: 'Youmna Mahmoud',
-    //         online: false,
-    //         img: defaultUserImage,
-    //     },
-    // ];
+    const onlineUsers =
+        groupData?.GroupMembers?.filter(
+            (member) => member.ConnectedStatus || member.ID === user.ID,
+        ) ?? [];
+
+    const offlineUsers =
+        groupData?.GroupMembers?.filter(
+            (member) => !member.ConnectedStatus && member.ID !== user.ID,
+        ) ?? [];
 
     const [messageInput, setMessageInput] = useState('');
     const [showPicker, setShowPicker] = useState(false);
+    const [typingTimeout, setTypingTimeout] = useState<any>();
 
     const onEmojiClick = (emojiObject: { emoji: string }) => {
         setMessageInput((prevInput) => prevInput + emojiObject.emoji);
         setShowPicker(false);
     };
 
-    const handleSendMessage = async () => {
+    const handleSendMessage = async (event: FormEvent<HTMLFormElement>) => {
+        event?.preventDefault();
         if (!messageInput.trim()) return;
         setMessageInput('');
         await sendMessage({
@@ -118,95 +120,139 @@ export const ChatroomPage = () => {
         }).unwrap();
     };
 
-    /**
-     * The dependency list is skipped deliberately
-     * for this function to run on every render.
-     */
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+        // Debounce mechanism
+        setMessageInput(e.target.value);
+
+        if (typingTimeout) {
+            clearTimeout(typingTimeout);
+        }
+
+        // Send to the server telling that I am currently typing.
+        sendTypingStatus({
+            IsTyping: true,
+            GroupID: +groupId!,
+        });
+
+        // Send to the server telling that I stopped typing.
+        let newTimeout = setTimeout(() => {
+            sendTypingStatus({
+                IsTyping: false,
+                GroupID: +groupId!,
+            });
+        }, 5e3);
+
+        setTypingTimeout(newTimeout);
+    };
+
     useEffect(() => {
         chatBodyRef?.current?.scrollTo({
             top: chatBodyRef?.current?.scrollHeight,
             behavior: 'instant',
         });
-    });
+    }, [_messages]);
 
     return (
         <PageContainer>
-            <LeftPart>
-                <ChatHeader>
-                    <span className="flex flex-row gap-4 items-center">
-                        <GroupIcon
+            <div className="my-0 mx-auto max-w-[1200px] w-full flex gap-4">
+                <LeftPart>
+                    <ChatHeader>
+                        <GroupImage
                             src={
                                 groupData?.GroupCoverImage ?? defaultGroupImage
                             }
                         />
-                        <h1 className="text-lg font-bold text-[var(--gray-700)]">
-                            {groupData?.GroupTitle ?? 'Loading...'}
-                        </h1>
-                    </span>
-                    <Button
-                        type="button"
-                        select="primary300"
-                        className="h-[32px] w-[70px] text-[var(--indigo-900)]"
-                    >
-                        Invite
-                    </Button>
-                </ChatHeader>
-                <ChatBody ref={chatBodyRef}>
-                    <div />
-                    {messages?.map((message) => (
-                        <TextMsg key={message.MessageID} {...message} />
-                    ))}
-                </ChatBody>
-                <ChatFooter>
-                    <span className="flex gap-1 relative">
+                        <div className="flex flex-col">
+                            <GroupName>
+                                {groupData?.GroupTitle ?? `Wait i'm loading...`}
+                            </GroupName>
+                            <GroupTypingStatus>
+                                {typingUsers?.length ? (
+                                    <>
+                                        <span className="font-bold">
+                                            {typingUsers?.join(' ,') + ' '}
+                                        </span>
+                                        {` ${
+                                            typingUsers.length === 1
+                                                ? 'is'
+                                                : 'are'
+                                        }  typing...`}
+                                    </>
+                                ) : (
+                                    <span className="text-[var(--gray-900)]">
+                                        Idle
+                                    </span>
+                                )}
+                            </GroupTypingStatus>
+                        </div>
+                        <Button
+                            type="button"
+                            select="primary300"
+                            className="!px-2 !py-1 text-[var(--indigo-900)] !ml-auto"
+                        >
+                            Invite
+                        </Button>
+                    </ChatHeader>
+                    <ChatBody ref={chatBodyRef}>
+                        <div />
+                        {messages?.map((message) => (
+                            <TextMsg key={message.MessageID} {...message} />
+                        ))}
+                    </ChatBody>
+                    <ChatFooter>
                         {showPicker && (
-                            <div className="absolute bottom-[150%]">
+                            <div className="absolute bottom-[110%] left-0">
                                 <Picker onEmojiClick={onEmojiClick} />
                             </div>
                         )}
                         <MdOutlineEmojiEmotions
-                            className="fill-[var(--indigo-800)] cursor-pointer box-content p-2 bg-indigo-50 rounded-full hover:bg-indigo-100"
-                            size={28}
-                            onClick={() => setShowPicker((val) => !val)}
+                            className="fill-[var(--indigo-800)] cursor-pointer box-content p-2 rounded-full hover:bg-indigo-100"
+                            size={24}
+                            onClick={() => setShowPicker(!showPicker)}
                         />
                         <LuPaperclip
                             color="var(--indigo-800)"
-                            className="cursor-pointer box-content p-2 bg-indigo-50 rounded-full hover:bg-indigo-100"
-                            size={26}
+                            className="cursor-pointer box-content p-2 rounded-full hover:bg-indigo-100"
+                            size={24}
                         />
-                    </span>
-                    <InputWithoutLabel
-                        className="shadow-none bg-[var(--slate-100)] border-none "
-                        placeholder="Type a message..."
-                        value={messageInput}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            setMessageInput(e.target.value);
-                        }}
-                    />
-                    <IoSend
-                        title="Send message"
-                        className="fill-[var(--indigo-800)] cursor-pointer box-content p-2 bg-indigo-50 rounded-full hover:bg-indigo-100"
-                        size={26}
-                        onClick={handleSendMessage}
-                    />
-                </ChatFooter>
-            </LeftPart>
+                        <form
+                            className="flex gap-2 flex-1"
+                            onSubmit={handleSendMessage}
+                        >
+                            <InputWithoutLabel
+                                className="bg-[var(--slate-100)] border-none "
+                                placeholder="Type a message..."
+                                value={messageInput}
+                                onChange={handleInputChange}
+                            />
+                        </form>
+                        <IoSend
+                            title="Send message"
+                            className="fill-[var(--indigo-800)] cursor-pointer box-content p-2  rounded-full hover:bg-indigo-100"
+                            size={24}
+                            onClick={
+                                handleSendMessage as unknown as MouseEventHandler
+                            }
+                        />
+                    </ChatFooter>
+                </LeftPart>
 
-            <RightPart>
-                <UsersContainer>
-                    <h1>ONLINE USERS</h1>
-                    {/* {groupUsers
-                        .filter((person) => person.online)
-                        .map((person) => (
+                <RightPart>
+                    <UsersContainer>
+                        <h1>ONLINE USERS</h1>
+                        {onlineUsers.map((person) => (
                             <UserContainer>
                                 <img
+                                    className="object-cover"
                                     alt="username"
-                                    src={person?.img ?? defaultUserImage}
+                                    src={
+                                        person?.ProfileImage ?? defaultUserImage
+                                    }
                                 />
                                 <span>
-                                    <h2 className="text-[12px] ">
-                                        {person.name}
-                                    </h2>
+                                    <GroupUserFullName title={person.FullName}>
+                                        {person.FullName}
+                                    </GroupUserFullName>
                                     <div className="flex flex-row gap-[6px] items-center">
                                         <StyledBadge online={true} />
                                         <p className="text-xs text-[var(--slate-500)]">
@@ -215,20 +261,21 @@ export const ChatroomPage = () => {
                                     </div>
                                 </span>
                             </UserContainer>
-                        ))} */}
-                    <h1>OFFLINE USERS</h1>
-                    {/* {groupUsers
-                        .filter((person) => !person.online)
-                        .map((person) => (
+                        ))}
+                        <h1 className="mt-8">OFFLINE USERS</h1>
+                        {offlineUsers.map((person) => (
                             <UserContainer>
                                 <img
                                     alt="username"
-                                    src={person?.img ?? defaultUserImage}
+                                    src={
+                                        person?.ProfileImage ?? defaultUserImage
+                                    }
+                                    className="object-cover"
                                 />
                                 <span>
-                                    <h1 className="text-[13px]">
-                                        {person.name}
-                                    </h1>
+                                    <GroupUserFullName title={person.FullName}>
+                                        {person.FullName}
+                                    </GroupUserFullName>
                                     <div className="flex flex-row gap-[6px] items-center">
                                         <StyledBadge online={false} />
                                         <p className="text-xs text-[var(--slate-500)]">
@@ -237,9 +284,10 @@ export const ChatroomPage = () => {
                                     </div>
                                 </span>
                             </UserContainer>
-                        ))} */}
-                </UsersContainer>
-            </RightPart>
+                        ))}
+                    </UsersContainer>
+                </RightPart>
+            </div>
         </PageContainer>
     );
 };
