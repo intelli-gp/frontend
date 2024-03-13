@@ -20,7 +20,7 @@ export const groupsApi = appApi.injectEndpoints({
                 method: 'GET',
             }),
         }),
-        getGroup: builder.query<Response, string>({
+        getGroup: builder.query<Response, number>({
             providesTags: (_result, _error, groupId) => [
                 { type: 'Group', id: groupId },
             ],
