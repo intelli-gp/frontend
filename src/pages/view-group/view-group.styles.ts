@@ -117,11 +117,6 @@ export const PeopleContainer = styled.div`
         border-radius: 50%;
         object-fit: cover;
     }
-    h1 {
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: var(--gray-900);
-    }
 `;
 
 export const Arrow = styled.div`
@@ -146,6 +141,15 @@ export const PersonContainer = styled.div`
             display: inline;
         }
     }
+`;
+
+export const PersonName = styled.p`
+    margin: 0 !important;
+    font-size: 0.8rem;
+    max-width: 9ch;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 `;
 
 export const Menu = styled.div`

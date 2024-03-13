@@ -41,6 +41,7 @@ import {
     PageContainer,
     PeopleContainer,
     PersonContainer,
+    PersonName,
     PictureOverlay,
     RightPart,
 } from './view-group.styles';
@@ -434,16 +435,9 @@ const ViewGroupPage = () => {
                                         }
                                     />
                                     <span className="flex flex-row items-center gap-2 relative">
-                                        <h1>
-                                            {(admin?.Username ?? '').substring(
-                                                0,
-                                                9,
-                                            ) +
-                                                ((admin?.Username ?? '')
-                                                    .length > 9
-                                                    ? '...'
-                                                    : '')}
-                                        </h1>
+                                        <PersonName title={admin?.FullName}>
+                                            {admin?.FullName}
+                                        </PersonName>
                                         {userType === Role.admin &&
                                         admin.ID !== user.ID ? (
                                             <>
@@ -495,16 +489,9 @@ const ViewGroupPage = () => {
                                         }
                                     />
                                     <span className="flex flex-row items-center gap-2 relative">
-                                        <h1>
-                                            {(member?.Username ?? '').substring(
-                                                0,
-                                                8,
-                                            ) +
-                                                ((member?.Username ?? '')
-                                                    .length > 8
-                                                    ? '...'
-                                                    : '')}
-                                        </h1>
+                                        <PersonName title={member?.FullName}>
+                                            {member?.FullName}
+                                        </PersonName>
                                         {userType === Role.admin &&
                                         member.ID !== user.ID ? (
                                             <>
