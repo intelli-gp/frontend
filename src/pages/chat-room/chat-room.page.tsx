@@ -1,20 +1,31 @@
-import { faker } from '@faker-js/faker';
 import Picker from 'emoji-picker-react';
-import { SetStateAction, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { IoSend } from 'react-icons/io5';
 import { LuPaperclip } from 'react-icons/lu';
 import { MdOutlineEmojiEmotions } from 'react-icons/md';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
+import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import Button from '../../components/Button';
 import { InputWithoutLabel } from '../../components/Input';
+import { useGetGroupQuery } from '../../store';
+import { RootState } from '../../store';
+import {
+    useGetGroupMessagesQuery,
+    useSendMessageMutation,
+} from '../../store/apis/messagesApi';
+import { ReceivedGroup } from '../../types/group';
+import { SerializedMessage } from '../../types/message';
+import { Response } from '../../types/response';
 import {
     ChatBody,
-    ChatBox,
     ChatFooter,
     ChatHeader,
     GroupIcon,
     LeftPart,
+    Message,
     PageContainer,
     RightPart,
     StyledBadge,
@@ -22,137 +33,114 @@ import {
     UsersContainer,
 } from './chat-room.style';
 
-type MessageType = {
-    type: string;
-    message: string;
-    incoming: boolean;
-    outgoing: boolean;
-    date: string;
-    name: string;
-    img: string;
-};
+const TextMsg = (message: SerializedMessage) => {
+    const { user } = useSelector((state: RootState) => state.auth);
 
-const TextMsg = ({ el }: { el: MessageType }) => {
+    const incoming = message.User.ID === user.ID; // Does this message belongs to me.
+
     return (
-        <ChatBox incoming={el.incoming}>
+        <Message incoming={incoming}>
             <div>
                 <div className="flex flex-row gap-2 items-center">
-                    <img src={el.img} />
+                    <img
+                        alt="sender profile image"
+                        src={message.User.ProfileImage ?? defaultUserImage}
+                        className="object-cover"
+                    />
                     <h1 className="text-xs text-[var(--slate-600)]">
-                        {el.name}
+                        {message.User.FullName}
                     </h1>
                 </div>
-                <p>{el.message}</p>
-                <span>{el.date}</span>
+                <p>{message.Content}</p>
+                <span>
+                    {new Date(message.CreatedAt ?? Date.now()).toLocaleString()}
+                </span>
             </div>
-        </ChatBox>
+        </Message>
     );
 };
 
 export const ChatroomPage = () => {
-    const data1 = [
-        {
-            type: 'msg',
-            message: 'HI, how are you?',
-            incoming: true,
-            outgoing: false,
-            date: '10/16/2023, 10:51:23 AM ',
-            name: 'John Salah',
-            img: defaultUserImage,
-        },
-        {
-            type: 'msg',
-            message: 'Thanks for asking! I am fine and u?',
-            incoming: false,
-            outgoing: true,
-            date: '10/16/2023, 10:51:23 AM ',
-            name: 'John Salah',
-            img: defaultUserImage,
-        },
-        {
-            type: 'msg',
-            message: 'I am great, Can you come to work today?',
-            incoming: true,
-            outgoing: false,
-            date: '10/16/2023, 10:51:23 AM ',
-            name: 'John Salah',
-            img: defaultUserImage,
-        },
-        {
-            type: 'img',
-            preview: faker.image.avatar(),
-            message: 'Yep, I can do that',
-            incoming: false,
-            outgoing: true,
-            date: '10/16/2023, 10:51:23 AM ',
-            name: 'John Salah',
-            img: defaultUserImage,
-        },
-        {
-            type: 'msg',
-            message: 'I am great, Can you come to work today?',
-            incoming: true,
-            outgoing: false,
-            date: '10/16/2023, 10:51:23 AM ',
-            name: 'John Salah',
-            img: defaultUserImage,
-        },
-        {
-            type: 'img',
-            preview: faker.image.avatar(),
-            message: 'Yep, I can do that',
-            incoming: false,
-            outgoing: true,
-            date: '10/16/2023, 10:51:23 AM ',
-            name: 'John Salah',
-            img: defaultUserImage,
-        },
-    ];
-    const groupImg =
-        'https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
-    const data = [
-        {
-            name: 'Youmna Mahmoud',
-            online: true,
-            img: defaultUserImage,
-        },
-        {
-            name: 'Youmna Mahmoud',
-            online: true,
-            img: defaultUserImage,
-        },
-        {
-            name: 'Youmna Mahmoud',
-            online: true,
-            img: defaultUserImage,
-        },
-        {
-            name: 'Youmna Mahmoud',
-            online: false,
-            img: defaultUserImage,
-        },
-        {
-            name: 'Youmna Mahmoud',
-            online: false,
-            img: defaultUserImage,
-        },
-    ];
-    const [inputStr, setInputStr] = useState('');
+    const { id: groupId } = useParams();
+    const chatBodyRef = useRef<HTMLDivElement>(null);
+
+    const { data: _groupData } = useGetGroupQuery(+groupId!);
+    const groupData = (_groupData as unknown as Response)
+        ?.data[0] as ReceivedGroup;
+
+    const { data: _messages } = useGetGroupMessagesQuery(Number(groupId));
+    const messages = _messages as SerializedMessage[];
+
+    const [sendMessage] = useSendMessageMutation();
+
+    // const groupUsers = [
+    //     {
+    //         name: 'Youmna Mahmoud',
+    //         online: true,
+    //         img: defaultUserImage,
+    //     },
+    //     {
+    //         name: 'Youmna Mahmoud',
+    //         online: true,
+    //         img: defaultUserImage,
+    //     },
+    //     {
+    //         name: 'Youmna Mahmoud',
+    //         online: true,
+    //         img: defaultUserImage,
+    //     },
+    //     {
+    //         name: 'Youmna Mahmoud',
+    //         online: false,
+    //         img: defaultUserImage,
+    //     },
+    //     {
+    //         name: 'Youmna Mahmoud',
+    //         online: false,
+    //         img: defaultUserImage,
+    //     },
+    // ];
+
+    const [messageInput, setMessageInput] = useState('');
     const [showPicker, setShowPicker] = useState(false);
 
     const onEmojiClick = (emojiObject: { emoji: string }) => {
-        setInputStr((prevInput) => prevInput + emojiObject.emoji);
+        setMessageInput((prevInput) => prevInput + emojiObject.emoji);
         setShowPicker(false);
     };
+
+    const handleSendMessage = async () => {
+        if (!messageInput.trim()) return;
+        setMessageInput('');
+        await sendMessage({
+            Content: messageInput,
+            GroupID: +groupId!,
+        }).unwrap();
+    };
+
+    /**
+     * The dependency list is skipped deliberately
+     * for this function to run on every render.
+     */
+    useEffect(() => {
+        chatBodyRef?.current?.scrollTo({
+            top: chatBodyRef?.current?.scrollHeight,
+            behavior: 'instant',
+        });
+    });
 
     return (
         <PageContainer>
             <LeftPart>
                 <ChatHeader>
                     <span className="flex flex-row gap-4 items-center">
-                        <GroupIcon src={groupImg} />
-                        <h1 className="text-lg font-bold text-[var(--slate-700)]">
-                            Computer Hackers
+                        <GroupIcon
+                            src={
+                                groupData?.GroupCoverImage ?? defaultGroupImage
+                            }
+                        />
+                        <h1 className="text-lg font-bold text-[var(--gray-700)]">
+                            {groupData?.GroupTitle ?? 'Loading...'}
                         </h1>
                     </span>
                     <Button
@@ -163,41 +151,51 @@ export const ChatroomPage = () => {
                         Invite
                     </Button>
                 </ChatHeader>
-                <ChatBody>
+                <ChatBody ref={chatBodyRef}>
                     <div />
-                    {data1.map((text) => (
-                        <TextMsg el={text} />
+                    {messages?.map((message) => (
+                        <TextMsg key={message.MessageID} {...message} />
                     ))}
                 </ChatBody>
                 <ChatFooter>
-                    <span className="flex gap-2 relative">
+                    <span className="flex gap-1 relative">
                         {showPicker && (
-                            <div className="absolute top-[-1700%]">
+                            <div className="absolute bottom-[150%]">
                                 <Picker onEmojiClick={onEmojiClick} />
                             </div>
                         )}
                         <MdOutlineEmojiEmotions
-                            color="var(--indigo-800)"
+                            className="fill-[var(--indigo-800)] cursor-pointer box-content p-2 bg-indigo-50 rounded-full hover:bg-indigo-100"
                             size={28}
                             onClick={() => setShowPicker((val) => !val)}
                         />
-                        <LuPaperclip color="var(--indigo-800)" size={26} />
+                        <LuPaperclip
+                            color="var(--indigo-800)"
+                            className="cursor-pointer box-content p-2 bg-indigo-50 rounded-full hover:bg-indigo-100"
+                            size={26}
+                        />
                     </span>
                     <InputWithoutLabel
                         className="shadow-none bg-[var(--slate-100)] border-none "
                         placeholder="Type a message..."
-                        value={inputStr}
-                        onChange={(e: {
-                            target: { value: SetStateAction<string> };
-                        }) => setInputStr(e.target.value)}
+                        value={messageInput}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                            setMessageInput(e.target.value);
+                        }}
                     />
-                    <IoSend color="var(--indigo-800)" size={26} />
+                    <IoSend
+                        title="Send message"
+                        className="fill-[var(--indigo-800)] cursor-pointer box-content p-2 bg-indigo-50 rounded-full hover:bg-indigo-100"
+                        size={26}
+                        onClick={handleSendMessage}
+                    />
                 </ChatFooter>
             </LeftPart>
+
             <RightPart>
                 <UsersContainer>
                     <h1>ONLINE USERS</h1>
-                    {data
+                    {/* {groupUsers
                         .filter((person) => person.online)
                         .map((person) => (
                             <UserContainer>
@@ -217,9 +215,9 @@ export const ChatroomPage = () => {
                                     </div>
                                 </span>
                             </UserContainer>
-                        ))}
+                        ))} */}
                     <h1>OFFLINE USERS</h1>
-                    {data
+                    {/* {groupUsers
                         .filter((person) => !person.online)
                         .map((person) => (
                             <UserContainer>
@@ -239,7 +237,7 @@ export const ChatroomPage = () => {
                                     </div>
                                 </span>
                             </UserContainer>
-                        ))}
+                        ))} */}
                 </UsersContainer>
             </RightPart>
         </PageContainer>

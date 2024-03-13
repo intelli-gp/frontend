@@ -1,5 +1,13 @@
 import styled, { css, keyframes } from 'styled-components';
 
+type onlineType = {
+    online: boolean;
+};
+
+type userType = {
+    incoming: boolean;
+};
+
 export const PageContainer = styled.div`
     display: flex;
     flex-direction: row;
@@ -7,7 +15,7 @@ export const PageContainer = styled.div`
     gap: 30px;
     justify-content: space-between;
     background: var(--indigo-50);
-    padding: 30px 60px;
+    padding: 2rem;
     @media (max-width: 768px) {
         padding: 30px 20px;
     }
@@ -25,6 +33,7 @@ export const LeftPart = styled.div`
         width: 100%;
     }
 `;
+
 export const ChatHeader = styled.div`
     border-radius: 15px;
     box-shadow: 0px 0px 22px 10px rgba(99, 102, 241, 0.07);
@@ -37,10 +46,12 @@ export const ChatHeader = styled.div`
     justify-content: space-between;
     align-items: center;
 `;
+
 export const GroupIcon = styled.img`
     border-radius: 50%;
     height: 50px;
     width: 50px;
+    object-fit: cover;
 `;
 
 export const ChatBody = styled.div`
@@ -61,15 +72,16 @@ export const ChatBody = styled.div`
 
     /* Track */
     &::-webkit-scrollbar-track {
-        width: 0.6rem;
-        background: transparent;
+        width: 0.5rem;
+        background: rgba(0, 0, 0, 0.025);
     }
 
     /* Handle */
     &::-webkit-scrollbar-thumb {
-        background: var(--gray-300);
-        opacity: 0.2;
+        background-color: var(--gray-300);
+        border-radius: 99rem;
     }
+
     & > div:first-child {
         flex: 1 1 auto;
         min-height: 6px;
@@ -82,9 +94,11 @@ const scrollbarStyles = css`
     }
     .epr_b8hfyo::-webkit-scrollbar-track {
         background: transparent;
+        background-color: rgba(0, 0, 0, 0.025);
     }
     .epr_b8hfyo::-webkit-scrollbar-thumb {
         background: var(--gray-300);
+        border-radius: 1rem;
     }
 `;
 
@@ -96,12 +110,13 @@ export const ChatFooter = styled.div`
     width: 100%;
     height: 75px;
     background: white;
-    padding: 20px;
+    padding: 1rem;
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 20px;
+    gap: 1rem;
 `;
+
 export const RightPart = styled.div`
     height: 100%;
     width: 20%;
@@ -109,6 +124,7 @@ export const RightPart = styled.div`
         display: none;
     }
 `;
+
 export const UsersContainer = styled.div`
     height: 100%;
     width: 100%;
@@ -149,6 +165,7 @@ export const UsersContainer = styled.div`
         }
     }
 `;
+
 export const UserContainer = styled.div`
     width: 100%;
     display: flex;
@@ -183,9 +200,7 @@ export const ripple = keyframes`
     opacity: 0.6;
   }
 `;
-type onlineType = {
-    online: boolean;
-};
+
 export const StyledBadge = styled.span<onlineType>`
     &::after {
         content: '';
@@ -198,10 +213,8 @@ export const StyledBadge = styled.span<onlineType>`
         border: 1px solid currentColor;
     }
 `;
-type userType = {
-    incoming: boolean;
-};
-export const ChatBox = styled.div<userType>`
+
+export const Message = styled.div<userType>`
     display: flex;
     flex-direction: row;
     width: 100%;
