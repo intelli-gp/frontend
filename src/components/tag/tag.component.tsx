@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { DeleteTagButton, TagContainer } from './tag.styles';
+import { DeleteTagButton, TagContainer, TagText } from './tag.styles';
 
 type TagProps = {
     text: string;
@@ -18,8 +18,13 @@ const Tag = ({
     clickHandler,
 }: TagProps) => {
     return (
-        <TagContainer size={size} deletable={deletable} onClick={clickHandler}>
-            {text}
+        <TagContainer
+            size={size}
+            deletable={deletable}
+            onClick={clickHandler}
+            title={text}
+        >
+            <TagText>{text}</TagText>
             {deletable && (
                 <DeleteTagButton onClick={deleteHandler} title="Delete">
                     ✕

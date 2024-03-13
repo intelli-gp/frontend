@@ -4,7 +4,6 @@ export const TagContainer = styled.div<{ size?: string; deletable?: boolean }>`
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: bold;
     gap: 0.5rem;
     padding: ${({ deletable }) =>
         deletable ? '0.2rem 0.2rem 0.2rem 1rem' : '0.3rem 1rem'};
@@ -33,6 +32,14 @@ export const TagContainer = styled.div<{ size?: string; deletable?: boolean }>`
     }
 
     transition: background-color linear 100ms;
+`;
+
+export const TagText = styled.p`
+    max-width: 12ch;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-weight: bold;
 `;
 
 export const DeleteTagButton = styled.button`
