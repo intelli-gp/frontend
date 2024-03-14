@@ -13,10 +13,9 @@ const messageApi = appApi.injectEndpoints({
             queryFn: () => ({ data: [] }),
             async onCacheEntryAdded(
                 groupId,
-                { updateCachedData, cacheDataLoaded, cacheEntryRemoved },
+                { updateCachedData, cacheEntryRemoved },
             ) {
                 try {
-                    await cacheDataLoaded;
                     let socket = await getSocket();
                     socket.emit('joinRoom', { ChatGroupId: groupId });
                     socket.on(
@@ -42,6 +41,7 @@ const messageApi = appApi.injectEndpoints({
                     console.error(error);
                 }
             },
+            keepUnusedDataFor: 1, // Invalidate the data once the component is unmounted.
         }),
         sendMessage: builder.mutation({
             queryFn: () => ({ data: [] }),
@@ -69,10 +69,9 @@ const messageApi = appApi.injectEndpoints({
             queryFn: () => ({ data: [] }),
             async onCacheEntryAdded(
                 _,
-                { updateCachedData, cacheDataLoaded, cacheEntryRemoved },
+                { updateCachedData, cacheEntryRemoved },
             ) {
                 try {
-                    await cacheDataLoaded;
                     let socket = await getSocket();
                     socket.on('isTyping', (data: ReceivedTypingDTO) => {
                         updateCachedData((draft) => {
@@ -95,6 +94,7 @@ const messageApi = appApi.injectEndpoints({
                     console.error(error);
                 }
             },
+            keepUnusedDataFor: 1, // Invalidate the data once the component is unmounted.
         }),
     }),
 });
