@@ -77,7 +77,7 @@ const messageApi = appApi.injectEndpoints({
                     socket.on('isTyping', (data: ReceivedTypingDTO) => {
                         updateCachedData((draft) => {
                             let index = (draft as string[]).findIndex(
-                                (element) => element === data.Username,
+                                (username) => username === data.Username,
                             );
 
                             if (index === -1) {

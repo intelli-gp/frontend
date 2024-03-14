@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useLayoutEffect } from 'react';
+import React, { ChangeEvent, useLayoutEffect } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
@@ -16,6 +16,7 @@ import {
     useLoginUserMutation,
 } from '../../store';
 import { Response } from '../../types/response';
+import { getSocket } from '../../utils/socket';
 import { errorToast } from '../../utils/toasts';
 
 export default function LoginPage() {
@@ -30,13 +31,7 @@ export default function LoginPage() {
             };
         },
     );
-    const [loginUser, { isLoading, isError }] = useLoginUserMutation();
-
-    useEffect(() => {
-        if (isError) {
-            errorToast('Invalid email or password.');
-        }
-    }, [isError]);
+    const [loginUser, { isLoading }] = useLoginUserMutation();
 
     // Redirect to app page if user is already logged in
     useLayoutEffect(() => {
@@ -58,6 +53,8 @@ export default function LoginPage() {
                 }),
             );
             navigate('/app/study-planner');
+            // Initialize socket connection.
+            getSocket(token);
         }
     }, []);
 
@@ -77,6 +74,8 @@ export default function LoginPage() {
                 );
                 navigate('/app/study-planner');
                 dispatch(reset());
+                // Initialize socket connection.
+                getSocket(data.access_token);
             } else {
                 console.log(
                     'The response for login request has returned with this data: ',
@@ -84,6 +83,7 @@ export default function LoginPage() {
                 );
             }
         } catch (err) {
+            errorToast('Invalid email or password.');
             console.error(err);
         }
     };

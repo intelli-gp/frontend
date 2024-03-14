@@ -40,7 +40,7 @@ function App() {
                         user: JSON.parse(user as string),
                     }),
                 );
-                // Initialize Socket connection
+                // Initialize socket connection on reload.
                 getSocket(savedToken);
             }
         }

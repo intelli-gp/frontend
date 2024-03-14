@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useLayoutEffect } from 'react';
+import { ChangeEvent, useLayoutEffect } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
@@ -22,6 +22,7 @@ import {
 } from '../../store';
 import { RootState } from '../../store/index';
 import { UserToSend } from '../../types/user';
+import { getSocket } from '../../utils/socket';
 import { errorToast } from '../../utils/toasts';
 
 export default function SignupPage() {
@@ -40,16 +41,8 @@ export default function SignupPage() {
         termsOfServiceAgreement,
     } = useSelector((state: RootState) => state['signup-form']);
     const [searchParams, setSearchParams] = useSearchParams();
-    const [signUp, { isLoading, isError, error, reset: resetMutation }] =
+    const [signUp, { isLoading, reset: resetMutation }] =
         useSignUpUserMutation();
-
-    // Error handling
-    useEffect(() => {
-        if (isError) {
-            errorToast(JSON.stringify(error));
-            resetMutation();
-        }
-    }, [isError]);
 
     // Google oauth
     useLayoutEffect(() => {
@@ -83,8 +76,12 @@ export default function SignupPage() {
                 setCredentials({ token: access_token, user: loggedInUser }),
             );
             navigate('/auth/interests');
+            // Initialize socket connection.
+            getSocket(access_token);
         } catch (err) {
+            errorToast(JSON.stringify(err));
             console.log(err);
+            resetMutation();
         }
     };
 
