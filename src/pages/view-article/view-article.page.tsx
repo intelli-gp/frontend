@@ -10,7 +10,7 @@ import defaultCoverImage from '../../assets/imgs/defaultCover.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import Button from '../../components/Button';
 import Spinner from '../../components/Spinner';
-import { TagContainer } from '../../components/tag/tag.styles';
+import Tag from '../../components/tag/tag.component';
 import { useGetArticleQuery } from '../../store';
 import { RootState } from '../../store';
 import { ArticleSectionType, ReceivedArticle } from '../../types/article.d';
@@ -100,11 +100,7 @@ const ViewArticlePage = () => {
                 {/* Article Tags */}
                 <div className="flex gap-2 items-center justify-center">
                     {article?.ArticleTags.map((tag) => {
-                        return (
-                            <TagContainer key={tag} size="sm">
-                                {tag}
-                            </TagContainer>
-                        );
+                        return <Tag text={tag} size="sm" />;
                     })}
                 </div>
 
