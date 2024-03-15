@@ -13,11 +13,11 @@
     },
     "dependencies": {
         "@reduxjs/toolkit": "^1.9.7",
-        "@types/react-big-calendar": "^1.8.7",
         "@uiw/react-md-editor": "^4.0.3",
         "browser-image-compression": "^2.0.2",
         "classnames": "^2.3.2",
         "emoji-picker-react": "^4.8.0",
+        "event-source-polyfill": "^1.0.31",
         "framer-motion": "^11.0.8",
         "fuse.js": "^7.0.0",
         "lodash": "^4.17.21",
@@ -44,8 +44,10 @@
     "devDependencies": {
         "@faker-js/faker": "^8.3.1",
         "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+        "@types/event-source-polyfill": "^1.0.5",
         "@types/lodash": "^4.14.202",
         "@types/react": "^18.2.45",
+        "@types/react-big-calendar": "^1.8.9",
         "@types/react-dom": "^18.2.15",
         "@types/react-slick": "^0.23.12",
         "@types/socket.io-client": "^3.0.0",

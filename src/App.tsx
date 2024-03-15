@@ -24,6 +24,7 @@ import ViewArticlePage from './pages/view-article/view-article.page';
 import ViewGroupPage from './pages/view-group/view-group.page';
 import { RootState, setCredentials } from './store';
 import { getSocket } from './utils/socket';
+import { connectSSE } from './utils/sse';
 
 function App() {
     const dispatch = useDispatch();
@@ -42,6 +43,7 @@ function App() {
                 );
                 // Initialize socket connection on reload.
                 getSocket(savedToken);
+                connectSSE(savedToken);
             }
         }
     }, []);

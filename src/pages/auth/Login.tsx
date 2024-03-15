@@ -17,6 +17,7 @@ import {
 } from '../../store';
 import { Response } from '../../types/response';
 import { getSocket } from '../../utils/socket';
+import { connectSSE } from '../../utils/sse';
 import { errorToast } from '../../utils/toasts';
 
 export default function LoginPage() {
@@ -55,6 +56,7 @@ export default function LoginPage() {
             navigate('/app/study-planner');
             // Initialize socket connection.
             getSocket(token);
+            connectSSE(token);
         }
     }, []);
 
@@ -76,6 +78,7 @@ export default function LoginPage() {
                 dispatch(reset());
                 // Initialize socket connection.
                 getSocket(data.access_token);
+                connectSSE(data.access_token);
             } else {
                 console.log(
                     'The response for login request has returned with this data: ',

@@ -23,6 +23,7 @@ import {
 import { RootState } from '../../store/index';
 import { UserToSend } from '../../types/user';
 import { getSocket } from '../../utils/socket';
+import { connectSSE } from '../../utils/sse';
 import { errorToast } from '../../utils/toasts';
 
 export default function SignupPage() {
@@ -78,6 +79,7 @@ export default function SignupPage() {
             navigate('/auth/interests');
             // Initialize socket connection.
             getSocket(access_token);
+            connectSSE(access_token);
         } catch (err) {
             errorToast(JSON.stringify(err));
             console.log(err);
