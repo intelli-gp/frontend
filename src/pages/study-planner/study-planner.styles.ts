@@ -1,5 +1,93 @@
 import styled from 'styled-components';
 
+export const PageContainer = styled.div`
+.rbc-time-view .rbc-row:first-child {
+    font-size: 1rem;
+    min-height: 3rem !important;
+    flex-grow: 3 !important;
+}
+.rbc-header {
+    padding: 10px 0 0 0 !important;
+
+    color: #1b2547;
+    border-bottom: 0px solid !important;
+    font-size: larger;
+    font-weight: 400;
+}
+.rbc-header + .rbc-today {
+    color: #312e81;
+}
+.rbc-label {
+    color: #868e96;
+}
+.rbc-allday-cell {
+    visibility: hidden !important;
+    height: 0 !important;
+}
+.rbc-time-header-gutter {
+    border-style: solid;
+
+    border-width: 0 !important;
+}
+.rbc-today {
+    background-color: #e9eafd;
+}
+
+.rbc-event {
+    padding: 0px !important;
+    border-radius: 0px !important;
+    border: none !important;
+    background-color: transparent !important;
+    z-index: 2;
+    position: relative;
+}
+
+.rbc-background-event {
+    padding: 0px !important;
+    border-radius: 0px !important;
+    border: none !important;
+    background-color: transparent !important;
+}
+
+.rbc-event-label {
+    display: none !important;
+}
+
+.rbc-timeslot-group {
+    min-height: 80px !important;
+    border-color: transparent !important;
+}
+
+.rbc-events-container {
+    @media (min-width: 1441px) {
+        margin-right: 0px !important;
+    }
+}
+input[type='time']::-webkit-calendar-picker-indicator {
+    display: none;
+}
+.rbc-current-time-indicator {
+    background-color: #312e81 !important;
+}
+
+.rbc-time-content::-webkit-scrollbar {
+    width: 0.4rem;
+}
+.rbc-time-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+.rbc-time-content::-webkit-scrollbar-thumb {
+    background: var(--gray-300);
+}
+
+display: flex;
+flex-direction: column; 
+height: 100vh;
+justify-content: space-between;
+@media (min-width: 1280px) {
+    flex-direction: row;
+  }
+`
 export const ModalContent = styled.div`
     display: flex;
     flex-direction: column;
@@ -42,7 +130,12 @@ export const TaskBoxContainer = styled.div<Color>`
     border-radius: 6px;
     padding: 10px;
     padding-right: 14px;
-
+    & > div:first-child {
+        display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start
+    }
     p {
         color: ${(props) => props.color};
     }
@@ -58,7 +151,26 @@ export const TasksContainer = styled.div`
     width: 100%;
     padding: 0.3rem;
 `;
+export const SideNav = styled.div`
+display: flex;
+flex-basis: 18%;
+height: 100%;
+flex-direction: column;
+border-left: 2px solid #CBD5E0;
+padding: 1.8rem;
+  @media (max-width: 1024px) { 
+    display: none;
+  }
+  & > div:first-child {
+    display: flex;
+    flex-direction: column; 
+    gap: 0.75rem; 
+    justify-items: center; 
+    justify-content: center; 
+    width: 100%; 
+  }
 
+`;
 export const NoTasksContainer = styled.div`
     height: 100%;
     width: 100%;
@@ -80,7 +192,7 @@ export const ButtonMV = styled.div`
     margin: 1.5rem;
     gap: 1rem;
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1250px) {
         display: none;
     }
 `;
@@ -91,8 +203,8 @@ export const CalendarHolder = styled.div`
     justify-content: center;
     align-items: flex-end;
 
-    @media (min-width: 1024px) {
-        flex-basis: 80%;
+    @media (min-width: 1025px) {
+        flex-basis: 82%;
     }
 `;
 

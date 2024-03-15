@@ -23,12 +23,13 @@ import Spinner from '../../components/Spinner';
 import TaskBox from '../../components/TaskBox';
 import '../../index.css';
 import { useFetchTasksQuery } from '../../store';
-import './Calendar.styles.css';
 import {
     ButtonMV,
     CalendarHolder,
     NoTasksContainer,
+    PageContainer,
     Searchbar,
+    SideNav,
     TaskBoxContainer,
     TasksContainer,
 } from './study-planner.styles';
@@ -296,8 +297,8 @@ export default function StudyPlanner() {
                                     onClick={() => handleEdit(data.task.id)}
                                     className="h-full"
                                 >
-                                    <div className="flex flex-col justify-between items-left ">
-                                        <p className="text-[10px] text-[#0369A1] pb-[4px] font-bold">
+                                    <div>
+                                        <p className="text-[10px] pb-[4px] font-bold">
                                             <span>
                                                 {data.task.start + ' - '}
                                             </span>
@@ -320,7 +321,7 @@ export default function StudyPlanner() {
     return isLoading ? (
         <Spinner />
     ) : (
-        <div className="flex justify-between h-[100vh] xl:flex-row flex-col">
+        <PageContainer>
             <CalendarHolder>
                 <Calendar className="w-[95%] h-full" />
                 <ButtonMV>
@@ -344,8 +345,8 @@ export default function StudyPlanner() {
                     </Button>
                 </ButtonMV>
             </CalendarHolder>
-            <div className=" basis-1/5 h-full flex-col border-l-2 border-slate-200 p-8 lg:flex hidden">
-                <div className="flex-col flex gap-3 justify-items-center justify-center w-full">
+            <SideNav>
+                <div>
                     <Searchbar>
                         <IoMdSearch color="#312E81" size="20" />
                         <input
@@ -396,7 +397,7 @@ export default function StudyPlanner() {
                         )}
                     </TasksContainer>
                 </div>
-            </div>
+            </SideNav>
             {editShow && (
                 <EditTaskModal
                     showModal={editShow}
@@ -410,6 +411,6 @@ export default function StudyPlanner() {
                     setShowModal={setShowModal}
                 />
             )}
-        </div>
+        </PageContainer>
     );
 }
