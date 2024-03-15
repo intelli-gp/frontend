@@ -30,7 +30,6 @@ export const TagContainer = styled.div<{ size?: string; deletable?: boolean }>`
         color: white;
         box-shadow: var(--tag-shadow);
     }
-
     transition: background-color linear 100ms;
 `;
 
@@ -49,10 +48,10 @@ export const DeleteTagButton = styled.button`
     border-radius: 10000px;
     padding: 0.2rem 0.5rem;
     color: var(--indigo-900);
-    background-color: #eef2ff;
+    background-color: var(--indigo-50);
     font-weight: bolder;
-
+    transition: all 0.25s ease-in-out;
     &:hover {
-        background-color: var(--indigo-100);
+        background-color: var(--indigo-200);
     }
 `;
