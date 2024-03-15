@@ -8,7 +8,7 @@ export const PageContainer = styled.div`
 `;
 
 export const GroupCoverImageContainer = styled.div`
-    height: 300px;
+    height: 30vh;
     position: relative;
     width: 100%;
 
@@ -22,7 +22,8 @@ export const GroupCoverImageContainer = styled.div`
         transform: translateY(-50%);
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
+        height: 20vh;
         div {
             position: absolute;
             display: flex;
@@ -72,18 +73,42 @@ export const GroupInfoContainer = styled.div`
 `;
 
 export const LeftPart = styled.div`
-    padding: 30px 80px 20px 80px;
-    display: grid;
-    grid-template-rows: 2fr 2fr 1fr;
+    padding: 2rem 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    width: 100%;
+    @media (max-width: 768px) {
+        padding: 2rem;
+    }
+`;
+
+export const EditableSection = styled.section`
+    display: flex;
+    flex-direction: column;
     gap: 2rem;
     width: 100%;
-    p {
-        font-size: 24px;
+`;
+
+export const EditableSectionHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    h2 {
+        font-size: 1.5rem;
         color: var(--gray-700);
         font-weight: 700;
     }
+`;
+
+export const EditableSectionBody = styled.div`
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
     @media (max-width: 768px) {
-        padding: 30px 50px 20px 50px;
+        width: 100%;
     }
 `;
 
@@ -179,6 +204,15 @@ export const Menu = styled.div`
     }
 `;
 
-export const EditButton = styled.div`
-    color: var(--slate-600);
+export const EditButton = styled.button`
+    cursor: pointer;
+    opacity: 0.8;
+    color: var(--gray-700);
+    padding: 0.75rem;
+    border-radius: 5rem;
+    transition: all 0.25s ease-in-out;
+    &:hover {
+        opacity: 1;
+        background-color: var(--indigo-50);
+    }
 `;

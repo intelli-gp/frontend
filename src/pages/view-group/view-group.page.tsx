@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { FiEdit, FiSave } from 'react-icons/fi';
 import { GoSync } from 'react-icons/go';
 import { IoIosArrowDown } from 'react-icons/io';
@@ -15,7 +15,7 @@ import { InputWithoutLabel } from '../../components/Input';
 import Spinner from '../../components/Spinner';
 import { Modal } from '../../components/modal/modal.component';
 import OpenImage from '../../components/openImage/openImage.component';
-import { TagContainer } from '../../components/tag/tag.styles';
+import Tag from '../../components/tag/tag.component';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import { useUploadImage } from '../../hooks/uploadImage.hook';
 import { ModalTitle } from '../../index.styles';
@@ -33,6 +33,9 @@ import { errorToast, successToast } from '../../utils/toasts';
 import {
     Arrow,
     EditButton,
+    EditableSection,
+    EditableSectionBody,
+    EditableSectionHeader,
     GroupCoverImage,
     GroupCoverImageContainer,
     GroupInfoContainer,
@@ -289,9 +292,11 @@ const ViewGroupPage = () => {
         </Button>
     );
 
-    return !isGroupDataFetched ? (
-        <Spinner />
-    ) : (
+    if (!isGroupDataFetched) {
+        return <Spinner />;
+    }
+
+    return (
         <PageContainer>
             <GroupCoverImageContainer>
                 <GroupCoverImage src={coverImg} />
@@ -308,19 +313,21 @@ const ViewGroupPage = () => {
                     <h1 className="lg:text-5xl text-3xl text-white">
                         {groupData?.GroupTitle}
                     </h1>
-                    <p className="lg:text-2xl text-lg text-white">
+                    <p className="lg:text-2xl text-md text-white ml-2">
                         {groupData?.GroupMembers?.length + ' Members'}
                     </p>
                 </div>
+
                 {userType === Role.admin || userType === Role.member
                     ? returnButton
                     : joinButton}
             </GroupCoverImageContainer>
+
             <GroupInfoContainer>
                 <LeftPart>
-                    <div>
-                        <div className="flex justify-between items-center">
-                            <p>Interest</p>
+                    <EditableSection>
+                        <EditableSectionHeader>
+                            <h2>Interest</h2>
                             <EditButton
                                 title="Edit"
                                 onClick={() =>
@@ -342,8 +349,9 @@ const ViewGroupPage = () => {
                                     <></>
                                 )}
                             </EditButton>
-                        </div>
-                        <div className="flex gap-2 items-center justify-left mt-4 text-txt">
+                        </EditableSectionHeader>
+
+                        <EditableSectionBody>
                             {isEditingInterest ? (
                                 <TagsInput2
                                     updateSelectedTags={(tags: string[]) =>
@@ -355,26 +363,21 @@ const ViewGroupPage = () => {
                             ) : (
                                 <>
                                     {groupData?.GroupTags?.map((tag) => (
-                                        <TagContainer key={tag} size="sm">
-                                            {tag}
-                                        </TagContainer>
+                                        <Tag text={tag} size="sm" />
                                     ))}
                                 </>
                             )}
-                        </div>
-                    </div>
-                    <div className="w-full">
-                        <div className="flex justify-between items-center">
-                            <p>Description</p>
+                        </EditableSectionBody>
+                    </EditableSection>
+
+                    <EditableSection>
+                        <EditableSectionHeader>
+                            <h2>Description</h2>
                             <EditButton
                                 title="Edit"
                                 onClick={() => {
                                     setIsEditingDescription(
-                                        (isEditingDescription) => {
-                                            if (isEditingDescription) {
-                                            }
-                                            return !isEditingDescription;
-                                        },
+                                        !isEditingDescription,
                                     );
                                 }}
                             >
@@ -393,15 +396,15 @@ const ViewGroupPage = () => {
                                     <></>
                                 )}
                             </EditButton>
-                        </div>
-                        <div className="flex gap-2 items-center justify-left mt-4 text-txt w-full">
+                        </EditableSectionHeader>
+
+                        <EditableSectionBody>
                             {isEditingDescription ? (
                                 <InputWithoutLabel
                                     value={description}
-                                    onChange={(e: { target: { value: any } }) =>
-                                        setDescription(e.target.value)
-                                    }
-                                    className="rounded-lg resize-none w-full h-full"
+                                    onChange={(
+                                        e: ChangeEvent<HTMLInputElement>,
+                                    ) => setDescription(e.target.value)}
                                     multiline
                                     maxLength={1000}
                                     rows={5}
@@ -409,8 +412,9 @@ const ViewGroupPage = () => {
                             ) : (
                                 <> {description} </>
                             )}
-                        </div>
-                    </div>
+                        </EditableSectionBody>
+                    </EditableSection>
+
                     <div className="flex gap-2 items-end">
                         {userType === Role.admin ? (
                             deleteButton
@@ -421,6 +425,7 @@ const ViewGroupPage = () => {
                         )}
                     </div>
                 </LeftPart>
+
                 <RightPart>
                     <p>ADMINS</p>
                     <PeopleContainer>
