@@ -157,15 +157,13 @@ export const UsersContainer = styled.div`
     }
 
     & > div:first-child {
-        flex: 1 1 auto;
+        /* flex: 1 1 auto; */
         min-height: 6px;
     }
 
     @media (max-width: 1024px) {
         padding: 30px 12px;
         display: flex;
-        flex-direction: column;
-        align-items: center;
         h1 {
             font-size: 12px;
         }
@@ -177,7 +175,6 @@ export const UserContainer = styled.div`
     cursor: pointer;
     border-radius: 10rem;
     display: flex;
-    flex-direction: row;
     align-items: center;
     gap: 1rem;
     padding: 0.5rem;
@@ -193,12 +190,6 @@ export const UserContainer = styled.div`
 
     &:hover {
         background-color: var(--indigo-50);
-    }
-
-    @media (max-width: 1024px) {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
     }
 `;
 
@@ -230,53 +221,15 @@ export const StyledBadge = styled.span<{ online: boolean }>`
         background-color: ${({ online }) => (online ? '#44b700' : '#D30000')};
     }
 `;
-
-export const Message = styled.div<{ incoming: boolean }>`
-    display: flex;
-    width: 100%;
-    justify-content: ${({ incoming }) =>
-        incoming ? 'flex-end' : 'flex-start'};
-
-    & > div:first-child {
-        background-color: ${({ incoming }) =>
-            incoming ? 'var(--indigo-600)' : 'var(  --gray-200)'};
-        padding: ${({ incoming }) => (incoming ? '8px  15px ' : '15px')};
-        border-radius: ${({ incoming }) =>
-            incoming ? '16px 16px 0px 16px' : '16px 16px 16px 0px'};
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        max-width: 40%;
-        min-width: 20%;
-    }
-
-    h1 {
-        display: ${({ incoming }) => (incoming ? 'none' : '')};
-        font-weight: 700;
-    }
-
-    p {
-        color: ${({ incoming }) => (incoming ? 'white' : ' var(--gray-800)')};
-    }
-
-    img {
-        display: ${({ incoming }) => (incoming ? 'none' : '')};
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-    }
-
-    span {
-        // Message Date
-        display: flex;
-        justify-content: flex-end;
-        font-size: 10px;
-        color: ${({ incoming }) => (incoming ? 'white' : 'var(--gray-800)')};
-        opacity: 0.75;
-        user-select: none;
-
-        &:hover {
-            opacity: 1;
-        }
+export const EditButton = styled.button`
+    cursor: pointer;
+    opacity: 0.8;
+    color: var(--gray-700);
+    padding: 0.75rem;
+    border-radius: 5rem;
+    transition: all 0.25s ease-in-out;
+    &:hover {
+        opacity: 1;
+        background-color: var(--indigo-50);
     }
 `;

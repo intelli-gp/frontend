@@ -3,7 +3,11 @@ import {
     ReceivedTypingDTO,
     SerializedMessage,
 } from '../../types/message';
-import { SendIsTypingDTO } from '../../types/message';
+import {
+    DeleteMessageDTO,
+    SendIsTypingDTO,
+    UpdateMessageDTO,
+} from '../../types/message';
 import { getSocket } from '../../utils/socket';
 import { appApi } from './appApi';
 
@@ -21,10 +25,8 @@ const messageApi = appApi.injectEndpoints({
                     socket.on(
                         'allMessages',
                         (messages: SerializedMessage[]) => {
-                            updateCachedData((draft) => {
-                                (draft as SerializedMessage[]).push(
-                                    ...messages,
-                                );
+                            updateCachedData(() => {
+                                return messages;
                             });
                         },
                     );
@@ -96,6 +98,28 @@ const messageApi = appApi.injectEndpoints({
             },
             keepUnusedDataFor: 1, // Invalidate the data once the component is unmounted.
         }),
+        deleteMessage: builder.mutation({
+            queryFn: () => ({ data: [] }),
+            async onCacheEntryAdded(data: DeleteMessageDTO) {
+                try {
+                    const socket = await getSocket();
+                    socket.emit('deleteMessage', data);
+                } catch (error) {
+                    console.error(error);
+                }
+            },
+        }),
+        updateMessage: builder.mutation({
+            queryFn: () => ({ data: [] }),
+            async onCacheEntryAdded(data: UpdateMessageDTO) {
+                try {
+                    let socket = await getSocket();
+                    socket.emit('editMessage', data);
+                } catch (error) {
+                    console.log(error);
+                }
+            },
+        }),
     }),
 });
 
@@ -104,4 +128,6 @@ export const {
     useSendMessageMutation,
     useReceiveTypingQuery,
     useSendTypingMutation,
+    useUpdateMessageMutation, 
+    useDeleteMessageMutation,
 } = messageApi;

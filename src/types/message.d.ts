@@ -14,11 +14,21 @@ export type CreateMessageDTO = {
     GroupID: number;
 };
 
+export type UpdateMessageDTO = {
+    Content: string;
+    MessageID: number;
+};
+
+export type DeleteMessageDTO = {
+    MessageID: number;
+};
+
 export type ReceivedTypingDTO = {
     IsTyping: boolean;
     Username: string;
     FullName: string;
 };
+
 export type SendIsTypingDTO = { IsTyping: boolean; GroupID: number };
 
 export type ClientToServerEvents = {
@@ -26,8 +36,8 @@ export type ClientToServerEvents = {
     joinRoom: (dto: { ChatGroupId: number }) => void;
     leaveRoom: (dto: { ChatGroupId: number }) => void;
     typing: (data: SendIsTypingDTO) => void;
-    deleteMessage: (data: { MessageID: number }) => void;
-    editMessage: (data: { MessageID: number; Content: string }) => void;
+    deleteMessage: (data: DeleteMessageDTO) => void;
+    editMessage: (data: UpdateMessageDTO) => void;
 };
 
 export type ServerToClientEvents = {

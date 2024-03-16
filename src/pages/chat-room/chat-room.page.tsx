@@ -10,14 +10,16 @@ import {
 import { IoSend } from 'react-icons/io5';
 import { LuPaperclip } from 'react-icons/lu';
 import { MdOutlineEmojiEmotions } from 'react-icons/md';
+import { SlOptions } from 'react-icons/sl';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { BeatLoader } from 'react-spinners';
 
 import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
-import Button from '../../components/Button';
 import { InputWithoutLabel } from '../../components/Input';
+import DropdownMenu from '../../components/Menu/menu.component';
+import ChatMessage from '../../components/message/message.component';
 import { useGetGroupQuery } from '../../store';
 import { RootState } from '../../store';
 import {
@@ -29,16 +31,17 @@ import {
 import { ReceivedGroup } from '../../types/group';
 import { SerializedMessage } from '../../types/message';
 import { Response } from '../../types/response';
+import { successToast } from '../../utils/toasts';
 import {
     ChatBody,
     ChatFooter,
     ChatHeader,
+    EditButton,
     GroupImage,
     GroupName,
     GroupTypingStatus,
     GroupUserFullName,
     LeftPart,
-    Message,
     PageContainer,
     RightPart,
     StyledBadge,
@@ -46,35 +49,9 @@ import {
     UsersContainer,
 } from './chat-room.style';
 
-const TextMsg = (message: SerializedMessage) => {
-    const { user } = useSelector((state: RootState) => state.auth);
-
-    const incoming = message.User.ID === user.ID; // Does this message belongs to me.
-
-    return (
-        <Message incoming={incoming}>
-            <div>
-                <div className="flex gap-2 items-center">
-                    <img
-                        alt="sender profile image"
-                        src={message.User.ProfileImage ?? defaultUserImage}
-                        className="object-cover"
-                    />
-                    <h1 className="text-xs text-[var(--gray-700)]">
-                        {message.User.FullName}
-                    </h1>
-                </div>
-                <p className="text-sm">{message.Content}</p>
-                <span>
-                    {new Date(message.CreatedAt ?? Date.now()).toLocaleString()}
-                </span>
-            </div>
-        </Message>
-    );
-};
-
 export const ChatroomPage = () => {
     const { id: groupId } = useParams();
+    const navigate = useNavigate();
     const chatBodyRef = useRef<HTMLDivElement>(null);
     const { user } = useSelector((state: RootState) => state.auth);
 
@@ -104,7 +81,7 @@ export const ChatroomPage = () => {
 
     const [messageInput, setMessageInput] = useState('');
     const [showPicker, setShowPicker] = useState(false);
-    const [typingTimeout, setTypingTimeout] = useState<any>();
+    const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout>();
 
     const onEmojiClick = (emojiObject: { emoji: string }) => {
         setMessageInput((prevInput) => prevInput + emojiObject.emoji);
@@ -145,6 +122,19 @@ export const ChatroomPage = () => {
 
         setTypingTimeout(newTimeout);
     };
+
+    const groupOptions = [
+        {
+            option: 'View Group',
+            handler: () => navigate(`/app/groups/${groupId}`),
+        },
+        {
+            option: 'Copy Link',
+            handler: () => {
+                successToast('Link copied to clipboard', 'right-bottom');
+            },
+        },
+    ];
 
     useEffect(() => {
         chatBodyRef?.current?.scrollTo({
@@ -191,18 +181,28 @@ export const ChatroomPage = () => {
                                 )}
                             </GroupTypingStatus>
                         </div>
-                        <Button
-                            type="button"
-                            select="primary300"
-                            className="!px-2 !py-1 text-[var(--indigo-900)] !ml-auto"
+                        <DropdownMenu
+                            options={groupOptions}
+                            mainElementClassName="ml-auto"
+                            right="50%"
+                            top="100%"
+                            left="auto"
+                            bottom="auto"
+                            menuWidth="10rem"
                         >
-                            Invite
-                        </Button>
+                            <EditButton>
+                                <SlOptions size={20} />
+                            </EditButton>
+                        </DropdownMenu>
                     </ChatHeader>
                     <ChatBody ref={chatBodyRef}>
                         <div />
                         {messages?.map((message) => (
-                            <TextMsg key={message.MessageID} {...message} />
+                            <ChatMessage
+                                key={message.MessageID}
+                                enableOptions
+                                message={message}
+                            />
                         ))}
                     </ChatBody>
                     <ChatFooter>
