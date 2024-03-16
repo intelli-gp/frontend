@@ -7,6 +7,7 @@ export type SerializedMessage = {
     Content: string;
     Attachment: string;
     CreatedAt: string;
+    IsDeleted: boolean;
 };
 
 export type CreateMessageDTO = {
