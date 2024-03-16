@@ -2,12 +2,10 @@ import _ from 'lodash';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { FiEdit, FiSave } from 'react-icons/fi';
 import { GoSync } from 'react-icons/go';
-import { IoIosArrowDown } from 'react-icons/io';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import coverImageCamera from '../../assets/imgs/coverImageCamera.png';
-import defaultUserImage from '../../assets/imgs/user.jpg';
 import Button from '../../components/Button';
 import DeleteSectionModal from '../../components/DeleteGroupModal';
 import ExitModal from '../../components/ExitGroupModal';
@@ -23,15 +21,13 @@ import {
     useGetAllTagsQuery,
     useGetGroupQuery,
     useJoinGroupMutation,
-    usePermissionGroupMutation,
     useUpdateGroupMutation,
 } from '../../store';
-import { GroupToSend, GroupUser, ReceivedGroup } from '../../types/group';
+import { GroupToSend, ReceivedGroup } from '../../types/group';
 import { Response } from '../../types/response';
 import { ReceivedUser } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
-    Arrow,
     EditButton,
     EditableSection,
     EditableSectionBody,
@@ -40,14 +36,12 @@ import {
     GroupCoverImageContainer,
     GroupInfoContainer,
     LeftPart,
-    Menu,
     PageContainer,
     PeopleContainer,
-    PersonContainer,
-    PersonName,
     PictureOverlay,
     RightPart,
 } from './view-group.styles';
+import UserContainer from '../../components/group-user/group-user.page';
 
 enum Role {
     member = 'MEMBER',
@@ -83,22 +77,7 @@ const ViewGroupPage = () => {
         groupData?.GroupMembers?.find((member) => member.ID === user.ID)
             ?.Type || Role.not_member;
 
-    const [memberMenus, setMemberMenus] = useState(members.map(() => false));
-    const handleMemberClick = (index: number) => {
-        setMemberMenus((prev) => {
-            const updatedShowMenus = [...prev];
-            updatedShowMenus[index] = !updatedShowMenus[index];
-            return updatedShowMenus;
-        });
-    };
-    const [adminMenus, setAdminMenus] = useState(admins.map(() => false));
-    const handleAdminClick = (index: number) => {
-        setAdminMenus((prev) => {
-            const updatedShowMenus = [...prev];
-            updatedShowMenus[index] = !updatedShowMenus[index];
-            return updatedShowMenus;
-        });
-    };
+
 
     // DELETE GROUP
     const openDeleteModal = () => {
@@ -133,23 +112,7 @@ const ViewGroupPage = () => {
             reset: resetUpdateGroup,
         },
     ] = useUpdateGroupMutation();
-    const [updateStatus] = usePermissionGroupMutation();
-    const handleStatus = async (
-        id: string | undefined,
-        type: 'ADMIN' | 'MEMBER',
-    ) => {
-        try {
-            const updatedGroupData: Partial<GroupUser> & { id: string } = {
-                id: groupData.ID,
-                ID: id,
-                Type: type,
-            };
-            await updateStatus(updatedGroupData).unwrap();
-            successToast('Changed the permission successfully!');
-        } catch (error) {
-            errorToast('Error occurred while giving permission!');
-        }
-    };
+
     const handleUpdateGroup = async () => {
         try {
             // Check if tags or description changed
@@ -429,109 +392,22 @@ const ViewGroupPage = () => {
                 <RightPart>
                     <p>ADMINS</p>
                     <PeopleContainer>
-                        {admins.map((admin, index) => {
-                            return (
-                                <PersonContainer key={admin?.Username}>
-                                    <img
-                                        alt=""
-                                        src={
-                                            admin?.ProfileImage ??
-                                            defaultUserImage
-                                        }
-                                    />
-                                    <span className="flex flex-row items-center gap-2 relative">
-                                        <PersonName title={admin?.FullName}>
-                                            {admin?.FullName}
-                                        </PersonName>
-                                        {userType === Role.admin &&
-                                        admin.ID !== user.ID ? (
-                                            <>
-                                                <Arrow>
-                                                    <IoIosArrowDown
-                                                        onClick={() =>
-                                                            handleAdminClick(
-                                                                index,
-                                                            )
-                                                        }
-                                                    />
-                                                </Arrow>
-                                                {adminMenus[index] && (
-                                                    <Menu>
-                                                        <div
-                                                            onClick={() =>
-                                                                handleStatus(
-                                                                    admin.ID,
-                                                                    Role.member,
-                                                                )
-                                                            }
-                                                        >
-                                                            <h1>
-                                                                Dismiss an admin
-                                                            </h1>
-                                                        </div>
-                                                    </Menu>
-                                                )}
-                                            </>
-                                        ) : (
-                                            <></>
-                                        )}
-                                    </span>
-                                </PersonContainer>
-                            );
+                        {admins.map((admin) => {
+                            return <UserContainer
+                            sameUser={admin.ID !== user.ID } 
+                            Admin={userType === Role.admin } 
+                            GroupID={groupId} 
+                            {...admin}                            />
                         })}
                     </PeopleContainer>
                     <br />
                     <p>MEMBERS</p>
                     <PeopleContainer>
-                        {members.map((member, index) => {
-                            return (
-                                <PersonContainer key={member?.Username}>
-                                    <img
-                                        alt=""
-                                        src={
-                                            member?.ProfileImage ??
-                                            defaultUserImage
-                                        }
-                                    />
-                                    <span className="flex flex-row items-center gap-2 relative">
-                                        <PersonName title={member?.FullName}>
-                                            {member?.FullName}
-                                        </PersonName>
-                                        {userType === Role.admin &&
-                                        member.ID !== user.ID ? (
-                                            <>
-                                                <Arrow>
-                                                    <IoIosArrowDown
-                                                        onClick={() =>
-                                                            handleMemberClick(
-                                                                index,
-                                                            )
-                                                        }
-                                                    />
-                                                </Arrow>
-                                                {memberMenus[index] && (
-                                                    <Menu>
-                                                        <div
-                                                            onClick={() =>
-                                                                handleStatus(
-                                                                    member.ID,
-                                                                    Role.admin,
-                                                                )
-                                                            }
-                                                        >
-                                                            <h1>
-                                                                Add an admin
-                                                            </h1>
-                                                        </div>
-                                                    </Menu>
-                                                )}
-                                            </>
-                                        ) : (
-                                            <></>
-                                        )}
-                                    </span>
-                                </PersonContainer>
-                            );
+                        {members.map((member) => {
+                            return <UserContainer
+                            sameUser={member.ID !== user.ID }
+                             Admin={userType === Role.admin } 
+                             GroupID={groupId} {...member} />
                         })}
                     </PeopleContainer>
                 </RightPart>
