@@ -2,11 +2,14 @@ import styled, { css, keyframes } from 'styled-components';
 
 export const PageContainer = styled.div`
     display: flex;
-    flex-direction: row;
     height: 100vh;
-    gap: 1rem;
+    gap: 0.5rem;
     background: var(--indigo-50);
     padding: 1rem;
+
+    @media (max-width: 768px) {
+        padding: 0.5rem;
+    }
 `;
 
 export const LeftPart = styled.div`
@@ -14,23 +17,22 @@ export const LeftPart = styled.div`
     width: 80%;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
     max-height: 100vh;
     justify-content: space-between;
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
         width: 100%;
     }
 `;
 
 export const ChatHeader = styled.div`
-    border-radius: 15px;
+    border-radius: 0.5rem;
     box-shadow: 0px 0px 22px 10px rgba(99, 102, 241, 0.07);
     width: 100%;
-    height: 80px;
     background: white;
     display: flex;
     flex-direction: row;
-    padding: 20px 25px;
+    padding: 1rem 2rem;
     align-items: center;
     gap: 1rem;
 `;
@@ -42,7 +44,7 @@ export const GroupName = styled.h1`
     max-width: 24ch;
     font-weight: 700;
     color: var(--gray-800);
-    font-size: 1.2rem;
+    font-size: 1rem;
 `;
 
 export const GroupTypingStatus = styled.p`
@@ -51,18 +53,18 @@ export const GroupTypingStatus = styled.p`
 
 export const GroupImage = styled.img`
     border-radius: 50%;
-    height: 50px;
-    width: 50px;
+    height: 3rem;
+    width: 3rem;
     object-fit: cover;
 `;
 
 export const ChatBody = styled.div`
-    border-radius: 15px;
+    border-radius: 0.5rem;
     box-shadow: 0px 0px 22px 10px rgba(99, 102, 241, 0.07);
     width: 100%;
-    padding: 30px;
+    padding: 2rem;
     flex-grow: 1;
-    gap: 20px;
+    gap: 0.25rem;
     background-color: white;
     overflow-y: auto;
     display: flex;
@@ -88,6 +90,10 @@ export const ChatBody = styled.div`
         flex: 1 1 auto;
         min-height: 6px;
     }
+
+    @media (max-width: 1024px) {
+        padding: 1rem;
+    }
 `;
 
 const scrollbarStyles = css`
@@ -106,24 +112,33 @@ const scrollbarStyles = css`
 
 export const ChatFooter = styled.div`
     ${scrollbarStyles}
-    border-radius: 15px;
+    border-radius: 0.5rem;
     box-shadow: 0px 0px 22px 10px rgba(99, 102, 241, 0.07);
     width: 100%;
-    height: 75px;
     background: white;
-    padding: 1rem;
+    padding: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    gap: 0.25rem;
+    gap: 0.5rem;
 `;
 
 export const RightPart = styled.div`
     height: 100%;
-    width: 25%;
-    @media (max-width: 768px) {
-        display: none;
+    width: max(20%, 250px);
+    transition: right 0.35s ease-in-out;
+    @media (max-width: 1024px) {
+        height: 100%;
+        position: fixed;
+        right: -100%;
+        top: 0;
+        width: 250px;
+        &.open {
+            right: 0;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+        }
     }
 `;
 
@@ -131,9 +146,9 @@ export const UsersContainer = styled.div`
     height: 100%;
     width: 100%;
     background: white;
-    border-radius: 15px;
+    border-radius: 0.5rem;
     box-shadow: 0px 0px 22px 10px rgba(99, 102, 241, 0.07);
-    padding: 30px 25px;
+    padding: 2rem 1rem;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -156,17 +171,8 @@ export const UsersContainer = styled.div`
         opacity: 0.2;
     }
 
-    & > div:first-child {
-        /* flex: 1 1 auto; */
-        min-height: 6px;
-    }
-
     @media (max-width: 1024px) {
-        padding: 30px 12px;
-        display: flex;
-        h1 {
-            font-size: 12px;
-        }
+        border-radius: 0;
     }
 `;
 
@@ -221,7 +227,8 @@ export const StyledBadge = styled.span<{ online: boolean }>`
         background-color: ${({ online }) => (online ? '#44b700' : '#D30000')};
     }
 `;
-export const EditButton = styled.button`
+
+export const HeaderButton = styled.button`
     cursor: pointer;
     opacity: 0.8;
     color: var(--gray-700);

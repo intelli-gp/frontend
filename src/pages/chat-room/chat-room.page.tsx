@@ -11,6 +11,7 @@ import { IoSend } from 'react-icons/io5';
 import { LuPaperclip } from 'react-icons/lu';
 import { MdOutlineEmojiEmotions } from 'react-icons/md';
 import { SlOptions } from 'react-icons/sl';
+import { TbUsers } from 'react-icons/tb';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BeatLoader } from 'react-spinners';
@@ -36,11 +37,11 @@ import {
     ChatBody,
     ChatFooter,
     ChatHeader,
-    EditButton,
     GroupImage,
     GroupName,
     GroupTypingStatus,
     GroupUserFullName,
+    HeaderButton,
     LeftPart,
     PageContainer,
     RightPart,
@@ -82,6 +83,7 @@ export const ChatroomPage = () => {
     const [messageInput, setMessageInput] = useState('');
     const [showPicker, setShowPicker] = useState(false);
     const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout>();
+    const [usersListOpen, setUsersListOpen] = useState(false);
 
     const onEmojiClick = (emojiObject: { emoji: string }) => {
         setMessageInput((prevInput) => prevInput + emojiObject.emoji);
@@ -131,6 +133,9 @@ export const ChatroomPage = () => {
         {
             option: 'Copy Link',
             handler: () => {
+                navigator.clipboard.writeText(
+                    window.location.href.replace('/chat-room', '/groups'),
+                );
                 successToast('Link copied to clipboard', 'right-bottom');
             },
         },
@@ -143,9 +148,20 @@ export const ChatroomPage = () => {
         });
     }, [_messages]);
 
+    useEffect(() => {
+        const screenClickHandler = () => {
+            setUsersListOpen(false);
+        };
+        document.addEventListener('click', screenClickHandler);
+
+        return () => {
+            document.removeEventListener('click', screenClickHandler);
+        };
+    }, []);
+
     return (
         <PageContainer>
-            <div className="my-0 mx-auto max-w-[1200px] w-full flex gap-4">
+            <div className="my-0 mx-auto max-w-[1200px] w-full flex gap-2">
                 <LeftPart>
                     <ChatHeader>
                         <GroupImage
@@ -181,19 +197,30 @@ export const ChatroomPage = () => {
                                 )}
                             </GroupTypingStatus>
                         </div>
-                        <DropdownMenu
-                            options={groupOptions}
-                            mainElementClassName="ml-auto"
-                            right="50%"
-                            top="100%"
-                            left="auto"
-                            bottom="auto"
-                            menuWidth="10rem"
-                        >
-                            <EditButton>
-                                <SlOptions size={20} />
-                            </EditButton>
-                        </DropdownMenu>
+                        <div className="flex gap-2 ml-auto justify-center">
+                            <DropdownMenu
+                                options={groupOptions}
+                                right="50%"
+                                top="100%"
+                                left="auto"
+                                bottom="auto"
+                                menuWidth="10rem"
+                            >
+                                <HeaderButton title="Group options">
+                                    <SlOptions size={20} />
+                                </HeaderButton>
+                            </DropdownMenu>
+                            <HeaderButton
+                                title="View users"
+                                className="flex lg:hidden"
+                                onClick={(e: React.MouseEvent) => {
+                                    e.stopPropagation();
+                                    setUsersListOpen(true);
+                                }}
+                            >
+                                <TbUsers size={20} />
+                            </HeaderButton>
+                        </div>
                     </ChatHeader>
                     <ChatBody ref={chatBodyRef}>
                         <div />
@@ -211,22 +238,24 @@ export const ChatroomPage = () => {
                                 <Picker onEmojiClick={onEmojiClick} />
                             </div>
                         )}
-                        <MdOutlineEmojiEmotions
-                            className="fill-[var(--indigo-800)] cursor-pointer box-content p-2 rounded-full hover:bg-indigo-100"
-                            size={24}
-                            onClick={() => setShowPicker(!showPicker)}
-                        />
-                        <LuPaperclip
-                            color="var(--indigo-800)"
-                            className="cursor-pointer box-content p-2 rounded-full hover:bg-indigo-100"
-                            size={24}
-                        />
+                        <div className="flex gap-0">
+                            <MdOutlineEmojiEmotions
+                                className="fill-[var(--indigo-800)] cursor-pointer box-content p-2 rounded-full hover:bg-indigo-100"
+                                size={20}
+                                onClick={() => setShowPicker(!showPicker)}
+                            />
+                            <LuPaperclip
+                                color="var(--indigo-800)"
+                                className="cursor-pointer box-content p-2 rounded-full hover:bg-indigo-100"
+                                size={20}
+                            />
+                        </div>
                         <form
                             className="flex gap-2 flex-1"
                             onSubmit={handleSendMessage}
                         >
                             <InputWithoutLabel
-                                className="bg-[var(--slate-100)] border-none "
+                                className="bg-[var(--gray-100)] border-none focus-visible:!outline-none"
                                 placeholder="Type a message..."
                                 value={messageInput}
                                 onChange={handleInputChange}
@@ -235,7 +264,7 @@ export const ChatroomPage = () => {
                         <IoSend
                             title="Send message"
                             className="fill-[var(--indigo-800)] cursor-pointer box-content p-2  rounded-full hover:bg-indigo-100"
-                            size={24}
+                            size={20}
                             onClick={
                                 handleSendMessage as unknown as MouseEventHandler
                             }
@@ -243,9 +272,9 @@ export const ChatroomPage = () => {
                     </ChatFooter>
                 </LeftPart>
 
-                <RightPart>
+                <RightPart className={`${usersListOpen && 'open'}`}>
                     <UsersContainer>
-                        <h1>ONLINE USERS</h1>
+                        <h1 className="font-bold">ONLINE USERS</h1>
                         {onlineUsers.map((person) => (
                             <UserContainer>
                                 <img
@@ -268,7 +297,7 @@ export const ChatroomPage = () => {
                                 </span>
                             </UserContainer>
                         ))}
-                        <h1 className="mt-8">OFFLINE USERS</h1>
+                        <h1 className="mt-8 font-bold">OFFLINE USERS</h1>
                         {offlineUsers.map((person) => (
                             <UserContainer>
                                 <img
