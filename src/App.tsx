@@ -12,7 +12,6 @@ import { ChatroomPage } from './pages/chat-room/chat-room.page';
 import CreateArticlePage from './pages/create-article/create-article.page';
 import ExploreArticlesPage from './pages/explore-articles/explore-articles.page';
 import ExploreGroupsPage from './pages/explore-groups/explore-groups.page';
-import HomePage from './pages/home';
 import PomodoroPage from './pages/pomodoro/pomodoro.page';
 import ProfilePage from './pages/profile/profile.page';
 import { SettingsPage } from './pages/settings/settings.page';
@@ -25,6 +24,7 @@ import ViewGroupPage from './pages/view-group/view-group.page';
 import { RootState, setCredentials } from './store';
 import { getSocket } from './utils/socket';
 import { connectSSE } from './utils/sse';
+import HomePage from './pages/home/home.page';
 
 function App() {
     const dispatch = useDispatch();

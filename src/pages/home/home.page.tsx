@@ -10,12 +10,12 @@ import StudyGroup from '../../assets/imgs/studyGroup-illustration.svg';
 import StudyPlanner from '../../assets/imgs/studyPlanner-illustration.svg';
 import Button from '../../components/Button';
 import Feature from '../../components/Feature';
-import SingleBlog from '../../components/SingleBlog';
 import { faker } from '@faker-js/faker';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
 import Star from '../../assets/imgs/star.svg';
 import icons from '../../assets/imgs/icons.svg';
+import { Response } from '../../types/response';
 import {
     StyledFooter, FooterContainer, FooterNav, FooterLink, CopyRightText, IconContainer 
     ,FeedbackSection, BlogsContainer, BlogsSection, BlogsTitle, Body,
@@ -23,6 +23,9 @@ import {
     TextAIContainer, NavContainer, UpperContainer, Title, 
     Sidebar, MenuTitles, StyledLink, MenuList,  HeroSection, 
     HeroContainer, HeroContent } from './home.style';
+import { useGetArticlesQuery } from '../../store';
+import { ReceivedArticle } from '../../types/article';
+import SingleBlog from '../../components/article-item/article-item.page';
  function Nav() {
     const [navbarOpen, setMenuOpen] = useState(false);
 
@@ -234,6 +237,13 @@ function FeatureSection() {
 
 
 function BlogSection() {
+    const { data } = useGetArticlesQuery();
+    const [articles, setArticles] = useState<ReceivedArticle[]>([]);
+    const receivedData = (data as unknown as Response)?.data ?? [];
+
+    useEffect(() => {
+        setArticles(receivedData);
+    }, [data]);
     return (
         <BlogsSection>
             <div>
@@ -243,9 +253,14 @@ function BlogSection() {
                     </h1>
                 </BlogsTitle>
                 <BlogsContainer>
-                    <SingleBlog />
-                    <SingleBlog />
-                    <SingleBlog />
+                    {articles?.slice(0, 3)
+                            .map((article: ReceivedArticle) => {
+                                return (
+                                    <SingleBlog
+                                        {...article}
+                                    />
+                                );
+                            })}
                 </BlogsContainer>
             </div>
         </BlogsSection>);
