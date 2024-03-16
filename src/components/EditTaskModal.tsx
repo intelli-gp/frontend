@@ -12,7 +12,7 @@ import {
 import { Task } from '../types/event';
 import { getEditTask } from '../utils/getEditTask';
 import { errorToast, successToast } from '../utils/toasts';
-import Button from './Button';
+import Button from './button/button.component';
 import { InputWithLabel } from './Input';
 import { Modal } from './modal/modal.component';
 
@@ -232,7 +232,7 @@ export const EditTaskModal: React.FC<ModalProps> = ({
                         <Button
                             type="submit"
                             select="primary"
-                            className="w-[25%] border-2 border-indigo-900 "
+                            className="!w-[25%] border-2 border-indigo-900 "
                             loading={isTaskEditing}
                         >
                             Save
@@ -242,7 +242,7 @@ export const EditTaskModal: React.FC<ModalProps> = ({
                             select="danger"
                             outline={true}
                             onClick={handleDelete}
-                            className="w-[25%]"
+                            className="!w-[25%]"
                         >
                             Delete
                         </Button>

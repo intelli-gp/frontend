@@ -8,7 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import defaultCoverImage from '../../assets/imgs/defaultCover.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
-import Button from '../../components/Button';
+import Button from '../../components/button/button.component';
 import Spinner from '../../components/Spinner';
 import Tag from '../../components/tag/tag.component';
 import { useGetArticleQuery } from '../../store';
@@ -82,7 +82,7 @@ const ViewArticlePage = () => {
                         select="warning"
                         type="button"
                         title="Edit Article"
-                        className="absolute top-4 left-4 rounded-full !text-[var(--gray-800)] !p-4"
+                        className="absolute top-4 left-4 !rounded-full !text-[var(--gray-800)] !p-4"
                         onClick={() =>
                             navigate(`/app/article/edit/${articleId}`)
                         }

@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import coverImageCamera from '../../assets/imgs/coverImageCamera.png';
-import Button from '../../components/Button';
+import Button from '../../components/button/button.component';
 import DeleteSectionModal from '../../components/DeleteGroupModal';
 import ExitModal from '../../components/ExitGroupModal';
 import { InputWithoutLabel } from '../../components/Input';
@@ -193,7 +193,7 @@ const ViewGroupPage = () => {
                         setImgModal(false);
                     }}
                     outline
-                    className="border-transparent"
+                    className="!border-transparent"
                 >
                     Cancel
                 </Button>
@@ -223,7 +223,7 @@ const ViewGroupPage = () => {
             type="button"
             select="secondary"
             title="Return"
-            className="absolute bottom-8 right-8"
+            className="!absolute bottom-8 right-8"
             onClick={() => navigate(`/app/chat-room/${groupId}`)}
         >
             Return

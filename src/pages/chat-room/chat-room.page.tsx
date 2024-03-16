@@ -18,6 +18,7 @@ import { BeatLoader } from 'react-spinners';
 
 import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
+import Button from '../../components/button/button.component';
 import { InputWithoutLabel } from '../../components/Input';
 import DropdownMenu from '../../components/Menu/menu.component';
 import ChatMessage from '../../components/message/message.component';
@@ -64,12 +65,10 @@ export const ChatroomPage = () => {
 
     const { data: _messages } = useGetGroupMessagesQuery(Number(groupId));
     const messages = _messages as SerializedMessage[];
-
     const [sendMessage] = useSendMessageMutation();
     const [sendTypingStatus] = useSendTypingMutation();
     const { data: _typingUsers } = useReceiveTypingQuery();
     const typingUsers = _typingUsers as string[];
-
     const onlineUsers =
         groupData?.GroupMembers?.filter(
             (member) => member.ConnectedStatus || member.ID === user.ID,
@@ -98,6 +97,7 @@ export const ChatroomPage = () => {
             Content: messageInput,
             GroupID: +groupId!,
         }).unwrap();
+
     };
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -276,7 +276,7 @@ export const ChatroomPage = () => {
                     <UsersContainer>
                         <h1 className="font-bold">ONLINE USERS</h1>
                         {onlineUsers.map((person) => (
-                            <UserContainer>
+                            <UserContainer key={person.ID}>
                                 <img
                                     className="object-cover"
                                     alt="username"
@@ -299,7 +299,7 @@ export const ChatroomPage = () => {
                         ))}
                         <h1 className="mt-8 font-bold">OFFLINE USERS</h1>
                         {offlineUsers.map((person) => (
-                            <UserContainer>
+                            <UserContainer key={person.ID}>
                                 <img
                                     alt="username"
                                     src={

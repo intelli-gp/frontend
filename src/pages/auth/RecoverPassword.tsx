@@ -3,7 +3,7 @@ import { IoChevronBack } from 'react-icons/io5';
 import { MdLockReset } from 'react-icons/md';
 import { Link, useSearchParams } from 'react-router-dom';
 
-import Button from '../../components/Button';
+import Button from '../../components/button/button.component';
 import { InputWithLabel } from '../../components/Input';
 import { reset, useResetPasswordConfirmMutation } from '../../store';
 import { errorToast, successToast } from '../../utils/toasts';
@@ -87,10 +87,9 @@ const RecoverPassword = () => {
                         }}
                     />
                     <Button
-                        className="!h-11 text-md text-center font-bold w-full gap-2"
+                        className="!h-11 !text-md text-center !font-bold w-full gap-2"
                         type="submit"
                         loading={isLoading}
-                        rounded
                     >
                         <MdLockReset />
                         Set new password

@@ -1,5 +1,5 @@
 import { IoIosArrowDown } from "react-icons/io";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { usePermissionGroupMutation } from "../../store";
 import { GroupUser } from "../../types/group";
 import defaultUserImage from '../../assets/imgs/user.jpg';
@@ -13,7 +13,6 @@ type GroupUserType = GroupUser & {
 
 const UserContainer =({
 ID: ID,    
-Username:username,
 ProfileImage:ProfileImage,
 FullName:FullName,
 Type:Type,
@@ -44,9 +43,16 @@ GroupID:GroupID
             errorToast('Error occurred while giving permission!');
         }
     };
+    const modalRef = useRef<HTMLDivElement>(null);
+
+    const closeModal = (e: React.MouseEvent<HTMLElement>) => {
+        if (modalRef.current === e.target) {
+            setMenu(false);
+        }
+    };
 
     return (
-        <PersonContainer key={username}>
+        <PersonContainer onClick={closeModal} ref={modalRef}>
             <img
                 alt=""
                 src={

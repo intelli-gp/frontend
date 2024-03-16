@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import Button from '../Button';
+import Button from '../button/button.component';
 
 export const CardContainer = styled.div`
     display: flex;

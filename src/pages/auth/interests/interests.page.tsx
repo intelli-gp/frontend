@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import Button from '../../../components/Button';
+import Button from '../../../components/button/button.component';
 import TagsInput from '../../../components/tagsInput/tagsInput.component';
 import { FooterButtons } from '../../../components/tagsInput/tagsInput.styles';
 import { PageTitle } from '../../../index.styles';

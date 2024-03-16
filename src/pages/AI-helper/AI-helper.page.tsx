@@ -2,7 +2,7 @@ import { IoSend } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 
 import AIimg from '../../assets/imgs/AI-profile.svg';
-import Button from '../../components/Button';
+import Button from '../../components/button/button.component';
 import { InputWithoutLabel } from '../../components/Input';
 import {
     AIicon,
@@ -69,7 +69,7 @@ const AIHelperPage = () => {
                 <Button
                     type="button"
                     select="secondary"
-                    className="text-[#312E81] h-[38px] w-[80px]"
+                    className="!text-[#312E81] !h-[38px] !w-[80px]"
                     onClick={() => navigate('/app/upgrade')}
                 >
                     Upgrade

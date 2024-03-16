@@ -27,6 +27,7 @@ export const PersonContainer = styled.div`
     &:hover {
         background: var(--indigo-50);
         border-radius: 6px;
+        padding:0;
         ${Arrow} {
             display: inline;
         }

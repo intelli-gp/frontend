@@ -7,7 +7,7 @@ import defaultSectionImage from '../../assets/imgs/camera2.png';
 import { SectionContainer } from '../../pages/create-article/create-article.styles';
 import { changeArticleSectionValue, setSectionToBeDeleted } from '../../store';
 import { ArticleSection } from '../../types/article.d';
-import Button from '../Button';
+import Button from '../button/button.component';
 import { ImageSection } from './article-image-section.styles';
 
 type ImageUploadSectionProps = {
@@ -43,7 +43,7 @@ export const ImageUploadSection = ({ section }: ImageUploadSectionProps) => {
                 <Button
                     type="button"
                     select="warning"
-                    className="!p-2 rounded-none !text-[var(--gray-800)]"
+                    className="!p-2 !rounded-none !text-[var(--gray-800)]"
                     title="Click to choose an image"
                     onClick={openFileInput}
                 >
@@ -53,7 +53,7 @@ export const ImageUploadSection = ({ section }: ImageUploadSectionProps) => {
                     type="button"
                     select="danger"
                     title="Delete this section"
-                    className="z-30 !p-2 rounded-none"
+                    className="z-30 !p-2 !rounded-none"
                     onClick={() => {
                         dispatch(setSectionToBeDeleted(section.ID!));
                     }}

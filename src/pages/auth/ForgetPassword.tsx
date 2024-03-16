@@ -4,7 +4,7 @@ import { FaEnvelope } from 'react-icons/fa';
 import { IoChevronBack } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 
-import Button from '../../components/Button';
+import Button from '../../components/button/button.component';
 import { InputWithLabel } from '../../components/Input';
 import { useLazyResetPasswordQuery } from '../../store';
 import { errorToast, successToast } from '../../utils/toasts';
@@ -66,9 +66,8 @@ export default function ForgetPasswordPage() {
                         }
                     />
                     <Button
-                        className="!h-11 text-base text-center font-bold w-full gap-2"
+                        className="!h-11 text-base text-center !font-bold w-full gap-2"
                         type="submit"
-                        rounded
                         loading={isFetching}
                     >
                         <FaEnvelope />

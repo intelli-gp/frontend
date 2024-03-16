@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { ModalTitle } from '../index.styles';
 import { useLeaveGroupMutation } from '../store';
 import { errorToast, successToast } from '../utils/toasts';
-import Button from './Button';
+import Button from './button/button.component';
 import { Modal } from './modal/modal.component';
 
 interface ModalProps {

@@ -16,7 +16,7 @@ import { RiRobot2Line } from 'react-icons/ri';
 
 import noTask from '../../assets/imgs/no-task.png';
 import { AddTaskModal } from '../../components/AddTaskModal';
-import Button from '../../components/Button';
+import Button from '../../components/button/button.component';
 import { EditTaskModal } from '../../components/EditTaskModal';
 import Skeleton from '../../components/Skeleton';
 import Spinner from '../../components/Spinner';
@@ -328,19 +328,20 @@ export default function StudyPlanner() {
                     <Button
                         select="primary300"
                         type="button"
-                        className="!p-4 rounded-full justify-center"
+                        rounded
                         onClick={(e: unknown) => {
                             (e as MouseEvent).stopPropagation();
                             openModal();
                         }}
+                        className='!w-[55px] !h-[55px]' 
                     >
                         <GoPlus size="28" color="#0D062D" />
                     </Button>
                     <Button
                         select="primary"
                         type="button"
-                        className="!p-4 rounded-full items-center justify-center"
-                    >
+                        rounded
+                        className='!w-[55px] !h-[55px]'                    >
                         <RiRobot2Line size="24" color="white" />
                     </Button>
                 </ButtonMV>
@@ -362,6 +363,7 @@ export default function StudyPlanner() {
                                 select="primary300"
                                 type="button"
                                 onClick={openModal}
+                                className='!text-txt'
                             >
                                 + Add a task
                             </Button>

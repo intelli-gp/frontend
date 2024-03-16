@@ -7,7 +7,7 @@ import { ModalContent } from '../pages/study-planner/study-planner.styles';
 import { useAddTasksMutation } from '../store';
 import { sendTask } from '../types/event';
 import { errorToast, successToast } from '../utils/toasts';
-import Button from './Button';
+import Button from './button/button.component';
 import { InputWithLabel } from './Input';
 import { Modal } from './modal/modal.component';
 
@@ -205,20 +205,21 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                         </div>
                         <div className="w-full flex flex-row gap-4 justify-end items-end pt-5">
                             <Button
-                                type="button"
-                                outline={true}
-                                onClick={() => setShowModal(false)}
-                                className="w-1/5 border-white"
-                            >
-                                Cancel
-                            </Button>
-                            <Button
                                 type="submit"
                                 select="primary"
-                                className="w-2/5"
+                                className="w-1/4"
                                 loading={isTaskCreating}
                             >
                                 Create
+                            </Button>
+                            <Button
+                                type="button"
+                                select="danger"
+                                outline={true}
+                                onClick={() => setShowModal(false)}
+                                className="w-1/4 border-white"
+                            >
+                                Cancel
                             </Button>
                         </div>
                     </form>

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import cameraImage from '../../assets/imgs/camera.png';
 import defaultProfile from '../../assets/imgs/user.jpg';
-import Button from '../../components/Button';
+import Button from '../../components/button/button.component';
 import { InputsGrid } from '../../components/Input';
 import Accordion from '../../components/accordion/accordion.component';
 import Tag from '../../components/tag/tag.component';

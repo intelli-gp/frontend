@@ -4,7 +4,7 @@ import { useUploadImage } from '../hooks/uploadImage.hook';
 import { ModalTitle } from '../index.styles';
 import { useAddGroupMutation, useGetAllTagsQuery } from '../store';
 import { errorToast, successToast } from '../utils/toasts';
-import Button from './Button';
+import Button from './button/button.component';
 import { InputWithLabel } from './Input';
 import { Modal } from './modal/modal.component';
 import OpenImage from './openImage/openImage.component';

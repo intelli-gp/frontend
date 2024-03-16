@@ -1,7 +1,7 @@
 import { FaPlus } from 'react-icons/fa';
 import { LuSearch } from 'react-icons/lu';
 
-import Button from '../Button';
+import Button from '../button/button.component';
 import { SearchBarContainer } from './explore-page-header.style';
 
 type ExplorePageHeaderProps = {
@@ -30,7 +30,8 @@ const ExplorePageHeader = ({
             </SearchBarContainer>
             <Button
                 type="button"
-                className="rounded-full"
+                className="!rounded-full"
+                rounded
                 onClick={onCreateButtonClick}
             >
                 <FaPlus size={12} className="mr-2" /> Create

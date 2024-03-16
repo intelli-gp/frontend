@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import cameraImage from '../../assets/imgs/camera.png';
 import coverImageCamera from '../../assets/imgs/coverImageCamera.png';
 import defaultUserImage from '../../assets/imgs/user.jpg';
-import Button from '../../components/Button';
+import Button from '../../components/button/button.component';
 import Skeleton from '../../components/Skeleton';
 import { Modal } from '../../components/modal/modal.component';
 import OpenImage from '../../components/openImage/openImage.component';
@@ -280,7 +280,7 @@ const ProfilePage = () => {
                         setIsOpen(false);
                     }}
                     outline
-                    className="border-transparent"
+                    className="!border-transparent"
                 >
                     Cancel
                 </Button>
@@ -325,7 +325,8 @@ const ProfilePage = () => {
                         select="warning"
                         type="button"
                         title="Edit profile"
-                        className="ml-auto gap-2 !text-[#172554] !p-4 rounded-full"
+                        className="ml-auto gap-2 !text-[#172554] !p-4"
+                        rounded
                         onClick={() => navigate('/app/settings')}
                     >
                         <FiEdit size={18} />

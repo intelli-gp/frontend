@@ -8,7 +8,7 @@ import ChatBot from '../../assets/imgs/chatBot-illustration.svg';
 import Courses from '../../assets/imgs/courses-illustration.svg';
 import StudyGroup from '../../assets/imgs/studyGroup-illustration.svg';
 import StudyPlanner from '../../assets/imgs/studyPlanner-illustration.svg';
-import Button from '../../components/Button';
+import Button from '../../components/button/button.component';
 import Feature from '../../components/Feature';
 import { faker } from '@faker-js/faker';
 import { useEffect, useMemo, useState } from 'react';
@@ -20,12 +20,12 @@ import {
     StyledFooter, FooterContainer, FooterNav, FooterLink, CopyRightText, IconContainer 
     ,FeedbackSection, BlogsContainer, BlogsSection, BlogsTitle, Body,
     AISection, AIWrapper, FeaturesSection, ImgContainer,
-    TextAIContainer, NavContainer, UpperContainer, Title, 
+    TextAIContainer, NavContainer, UpperContainer, Title, AItitle,
     Sidebar, MenuTitles, StyledLink, MenuList,  HeroSection, 
     HeroContainer, HeroContent } from './home.style';
 import { useGetArticlesQuery } from '../../store';
 import { ReceivedArticle } from '../../types/article';
-import SingleBlog from '../../components/article-item/article-item.page';
+import SingleBlog from '../../components/article-item/article-item.component';
  function Nav() {
     const [navbarOpen, setMenuOpen] = useState(false);
 
@@ -62,7 +62,7 @@ import SingleBlog from '../../components/article-item/article-item.page';
                             <Button
                                 select="primary"
                                 type="button"
-                                className="text-sm !px-8 border-indigo-900 border-2 rounded-lg gap-2"
+                                className="text-sm !px-8  !rounded-lg gap-2"
                             >
                                 <IoPersonSharp size={14} />
                                 Signup
@@ -72,7 +72,7 @@ import SingleBlog from '../../components/article-item/article-item.page';
                             <Button
                                 type="button"
                                 outline={true}
-                                className="text-sm text-white border-white !px-8 rounded-lg gap-2"
+                                className=" !px-8 !rounded-lg gap-2"
                             >
                                 <MdLogin size={15} />
                                 Login
@@ -193,9 +193,9 @@ function FeatureSection() {
                         </ImgContainer>
                         <TextAIContainer>
                             <div className="mb-2 sm:mb-10">
-                                <h1>
+                                <AItitle>
                                     AI-Powered Service
-                                </h1>
+                                </AItitle>
                             </div>
                             <p>
                                 Gain access to our cutting-edge AI-based content
@@ -207,7 +207,7 @@ function FeatureSection() {
                             <Button
                                 type="button"
                                 select="secondary"
-                                className="w-4/6 rounded-lg text-xlg px-8 py-2.5 shadow-sm md:w-max h-auto"
+                                className="w-4/6! rounded-lg text-xl! px-8 py-2.5 shadow-sm md:w-max! h-auto"
                             >
                                 See more
                             </Button>

@@ -3,7 +3,7 @@ import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBinLine } from 'react-icons/ri';
 
 import defaultImage from '../../assets/imgs/transparent-camera.png';
-import Button from '../Button';
+import Button from '../button/button.component';
 import { Image, OpenImageContainer } from './openImage.style';
 
 type OpenImageProps = {
@@ -49,7 +49,7 @@ export const OpenImage = ({
                 <Button
                     type="button"
                     select="warning"
-                    className="!p-2 rounded-none !text-[var(--gray-800)]"
+                    className="!p-2 !rounded-none !text-[var(--gray-800)]"
                     title="Click to choose an image"
                     onClick={openFileInput}
                 >
@@ -61,7 +61,7 @@ export const OpenImage = ({
                     type="button"
                     select="danger"
                     title="Delete this section"
-                    className="z-30 !p-2 rounded-none"
+                    className="z-30 !p-2 !rounded-none"
                     onClick={onDelete}
                 >
                     <RiDeleteBinLine size={14} />

@@ -2,7 +2,7 @@ import { capitalize } from 'lodash';
 import { Link } from 'react-router-dom';
 
 import { ReceivedUser } from '../../types/user';
-import Button from '../Button';
+import Button from '../button/button.component';
 import {
     UserItemContainer,
     UserItemImage,
@@ -35,7 +35,7 @@ const UserItem = ({
                     select="primary700"
                     type="button"
                     onClick={actionHandler}
-                    className="text-white text-sm ml-auto max-w-[35%]"
+                    className="!text-white !text-sm ml-auto max-w-[35%]"
                 >
                     {capitalize(action)}
                 </Button>

@@ -1,6 +1,6 @@
 import { SetStateAction, useEffect, useState } from 'react';
 
-import Button from '../../components/Button';
+import Button from '../../components/button/button.component';
 import {
     ButtonsHolder,
     CardHolder,
@@ -59,7 +59,7 @@ const UpgradePage = () => {
                 <Button
                     type="button"
                     select="primary500"
-                    className={`rounded-[15px] py-[10px] ${
+                    className={`!rounded-[15px] py-[10px] ${
                         selectedPlan === 'Monthly' ? 'text-white' : ''
                     }`}
                     outline={selectedPlan !== 'Monthly'}
@@ -70,7 +70,7 @@ const UpgradePage = () => {
                 <Button
                     type="button"
                     select="primary500"
-                    className={`rounded-[15px] py-[10px] ${
+                    className={`!rounded-[15px] py-[10px] ${
                         selectedPlan === 'Yearly' ? 'text-white' : ''
                     }`}
                     outline={selectedPlan !== 'Yearly'}

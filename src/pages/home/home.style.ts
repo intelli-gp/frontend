@@ -186,24 +186,24 @@ export const TextAIContainer = styled.div`
     text-align: left; 
   }
 
-  h1 {
-    font-weight: bold;
-    color: var(--indigo-950); 
-    font-size: 1.5rem; 
-    margin-bottom: 0.5rem;
 
-    @media (min-width: 640px) { 
-      margin-bottom: 2.5rem;
-    }
-  }
 
   p {
     color: #718096;
     margin-bottom: 1.5rem; 
-    font-size: 0.875rem; 
+    font-size: 0.975rem; 
     max-width: 700px;
   }
 `;
+export const AItitle =styled.h1` 
+  font-weight: bold;
+  color: var(--indigo-950); 
+  font-size: 1.8rem; 
+  margin-bottom: 0.5rem;
+
+  @media (min-width: 640px) { 
+    margin-bottom: 2.5rem;
+  }`
 
 export const NavContainer = styled.nav`
   position: sticky;
