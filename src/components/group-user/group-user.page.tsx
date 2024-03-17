@@ -3,7 +3,7 @@ import { usePermissionGroupMutation } from "../../store";
 import { GroupUser } from "../../types/group";
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import { successToast, errorToast } from "../../utils/toasts";
-import { PersonContainer, PersonName } from "./group-user.style";
+import { PersonContainer, PersonName,PersonImage } from "./group-user.style";
 import DropdownMenu from "../Menu/menu.component";
 type GroupUserType = GroupUser & {
     sameUser: boolean;
@@ -48,7 +48,7 @@ const UserContainer = ({
     ];
     return (
         <PersonContainer>
-            <img
+            <PersonImage
                 alt=""
                 src={
                     ProfileImage ??
