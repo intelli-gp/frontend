@@ -15,9 +15,9 @@ export const MenuElement = styled(motion.div)<{
     width?: string;
 }>`
     top: ${(props) => props.top ?? 'auto'};
-    left: ${(props) => props.left ?? '100%'};
+    left: ${(props) => props.left ?? 'auto'};
     right: ${(props) => props.right ?? 'auto'};
-    bottom: ${(props) => props.bottom ?? '100%'};
+    bottom: ${(props) => props.bottom ?? 'auto'};
     width: ${(props) => props.width ?? 'auto'};
     background-color: var(--indigo-100);
     position: absolute;
@@ -35,8 +35,11 @@ export const OptionElement = styled.div<{ fontSize?: string }>`
     padding: 0.25rem 0.5rem;
     border-radius: 0.5rem;
     transition: all 0.2s ease-in-out;
-    color: var(--gray-800);
+    color: var(--indigo-950);
     font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 
     font-size: ${({ fontSize }) => {
         switch (fontSize) {

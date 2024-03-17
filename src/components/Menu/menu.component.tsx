@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { AnimatePresence } from 'framer-motion';
 import React, { MouseEventHandler, useEffect, useState } from 'react';
 
 import { MainElement, MenuElement, OptionElement } from './menu.style';
@@ -11,7 +12,7 @@ type DropdownMenuProps = {
      * @example
      * {"Delete", handleDelete}
      */
-    options: { option: string; handler: (data: any) => void | Promise<void> }[];
+    options: { option: string | JSX.Element; handler: (data: any) => void | Promise<void> }[];
     /**
      * The component to be shown as the main element.
      */
@@ -93,33 +94,40 @@ const DropdownMenu = ({
             className={_mainElementClassName}
         >
             {children}
-            {isMenuOpen && (
-                <MenuElement
-                    top={top}
-                    left={left}
-                    right={right}
-                    bottom={bottom}
-                    width={menuWidth}
-                    className={menuElementClassName}
-                    initial={{
-                        opacity: 0,
-                    }}
-                    animate={{
-                        opacity: 1,
-                        transition: {
-                            duration: 0.2,
-                        },
-                    }}
-                >
-                    {options.map(({ option, handler }, index) => {
-                        return (
-                            <OptionElement key={index} onClick={handler}>
-                                {option}
-                            </OptionElement>
-                        );
-                    })}
-                </MenuElement>
-            )}
+            <AnimatePresence>
+                {isMenuOpen && (
+                    <MenuElement
+                        top={top}
+                        left={left}
+                        right={right}
+                        bottom={bottom}
+                        width={menuWidth}
+                        className={menuElementClassName}
+                        initial={{
+                            opacity: 0,
+                            scale: 0,
+                        }}
+                        animate={{
+                            opacity: 1,
+                            scale: 1,
+                        }}
+                        exit={{
+                            opacity: 0,
+                            transition: {
+                                duration: 0.1,
+                            },
+                        }}
+                    >
+                        {options.map(({ option, handler }, index) => {
+                            return (
+                                <OptionElement key={index} onClick={handler}>
+                                    {option}
+                                </OptionElement>
+                            );
+                        })}
+                    </MenuElement>
+                )}
+            </AnimatePresence>
         </MainElement>
     );
 };
