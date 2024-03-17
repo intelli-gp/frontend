@@ -394,10 +394,9 @@ const ViewGroupPage = () => {
                     <PeopleContainer>
                         {admins.map((admin) => {
                             return <UserContainer
-                            sameUser={admin.ID !== user.ID } 
-                            Admin={userType === Role.admin } 
+                            Admin={userType === Role.admin && admin.ID !== user.ID} 
                             GroupID={groupId} 
-                            {...admin}                            />
+                            {...admin}  />
                         })}
                     </PeopleContainer>
                     <br />
@@ -405,8 +404,7 @@ const ViewGroupPage = () => {
                     <PeopleContainer>
                         {members.map((member) => {
                             return <UserContainer
-                            sameUser={member.ID !== user.ID }
-                             Admin={userType === Role.admin } 
+                             Admin={userType === Role.admin && member.ID !== user.ID } 
                              GroupID={groupId} {...member} />
                         })}
                     </PeopleContainer>

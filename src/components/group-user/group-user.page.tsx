@@ -6,7 +6,6 @@ import { successToast, errorToast } from "../../utils/toasts";
 import { PersonContainer, PersonName,PersonImage } from "./group-user.style";
 import DropdownMenu from "../Menu/menu.component";
 type GroupUserType = GroupUser & {
-    sameUser: boolean;
     Admin: boolean;
     GroupID: string | undefined;
 };
@@ -17,7 +16,6 @@ const UserContainer = ({
     FullName: FullName,
     Type: type,
     Admin: Admin,
-    sameUser: sameUser,
     GroupID: GroupID
 }: GroupUserType) => {
 
@@ -59,7 +57,7 @@ const UserContainer = ({
                 <PersonName title={FullName}>
                     {FullName}
                 </PersonName>
-                {sameUser && Admin ? (
+                { Admin ? (
                     <>
                         <DropdownMenu
                             options={statusOption}
