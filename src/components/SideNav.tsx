@@ -10,7 +10,7 @@ import { IoPersonSharp } from 'react-icons/io5';
 import { LuListTodo, LuSearch } from 'react-icons/lu';
 import { MdLogout } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import defaultUserImage from '../assets/imgs/user.jpg';
 import { RootState, clearCredentials, useLogoutUserMutation } from '../store';
@@ -18,12 +18,6 @@ import { deleteSocket } from '../utils/socket';
 import Button from './Button';
 import DropdownMenu from './Menu/menu.component';
 import SideNavItem from './SideNavItem';
-
-type PopupUserMenuLinkPropType = {
-    text: string;
-    icon?: JSX.Element;
-    path: string;
-} & Record<string, any>;
 
 type SideNavLinkType = {
     icon: JSX.Element;
