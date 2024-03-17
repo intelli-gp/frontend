@@ -1,6 +1,6 @@
 import { SerializedMessage } from "./message";
 
-type chatNotification = {
+type ChatNotification = {
     eventName: 'chat-group-message';
     message: SerializedMessage;
 };
@@ -10,12 +10,12 @@ type chatNotification = {
 //     message: SerializedTask;
 // };
 
-type warningNotification = {
+type WarningNotification = {
     eventName: 'warning';
     message: any;
 };
 
 export type SseEvents =
-    | chatNotification
+    | ChatNotification
     // | studyPlanNotification
-    | warningNotification;
+    | WarningNotification;
