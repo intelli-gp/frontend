@@ -4,7 +4,7 @@ import defaultUserImage from '../../assets/imgs/user.jpg';
 import { usePermissionGroupMutation } from '../../store';
 import { GroupUser } from '../../types/group';
 import { errorToast, successToast } from '../../utils/toasts';
-import DropdownMenu from '../Menu/menu.component';
+import DropdownMenu from '../menu/menu.component';
 import { PersonContainer, PersonImage, PersonName } from './group-user.style';
 
 type GroupUserType = GroupUser & {

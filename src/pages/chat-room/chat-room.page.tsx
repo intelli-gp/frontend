@@ -19,7 +19,7 @@ import { BeatLoader } from 'react-spinners';
 import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import { InputWithoutLabel } from '../../components/Input';
-import DropdownMenu from '../../components/Menu/menu.component';
+import DropdownMenu from '../../components/menu/menu.component';
 import ChatMessage from '../../components/message/message.component';
 import { useGetGroupQuery } from '../../store';
 import { RootState } from '../../store';

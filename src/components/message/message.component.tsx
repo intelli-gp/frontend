@@ -12,8 +12,8 @@ import {
 } from '../../store/apis/messagesApi';
 import { SerializedMessage } from '../../types/message';
 import { InputWithoutLabel } from '../Input';
-import DropdownMenu from '../Menu/menu.component';
 import Button from '../button/button.component';
+import DropdownMenu from '../menu/menu.component';
 import { Modal } from '../modal/modal.component';
 import {
     Message,

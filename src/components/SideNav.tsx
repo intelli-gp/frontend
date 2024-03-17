@@ -15,9 +15,9 @@ import { useNavigate } from 'react-router-dom';
 import defaultUserImage from '../assets/imgs/user.jpg';
 import { RootState, clearCredentials, useLogoutUserMutation } from '../store';
 import { deleteSocket } from '../utils/socket';
-import DropdownMenu from './Menu/menu.component';
 import SideNavItem from './SideNavItem';
 import Button from './button/button.component';
+import DropdownMenu from './menu/menu.component';
 
 type SideNavLinkType = {
     icon: JSX.Element;
