@@ -128,6 +128,6 @@ export const {
     useSendMessageMutation,
     useReceiveTypingQuery,
     useSendTypingMutation,
-    useUpdateMessageMutation, 
+    useUpdateMessageMutation,
     useDeleteMessageMutation,
 } = messageApi;

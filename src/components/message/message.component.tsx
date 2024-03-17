@@ -11,9 +11,9 @@ import {
     useUpdateMessageMutation,
 } from '../../store/apis/messagesApi';
 import { SerializedMessage } from '../../types/message';
-
 import { InputWithoutLabel } from '../Input';
 import DropdownMenu from '../Menu/menu.component';
+import Button from '../button/button.component';
 import { Modal } from '../modal/modal.component';
 import {
     Message,
@@ -24,7 +24,6 @@ import {
     SenderName,
     SenderProfile,
 } from './message.style';
-import Button from '../button/button.component';
 
 type ChatMessageProps = {
     message: SerializedMessage;

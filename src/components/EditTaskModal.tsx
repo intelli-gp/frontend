@@ -12,8 +12,8 @@ import {
 import { Task } from '../types/event';
 import { getEditTask } from '../utils/getEditTask';
 import { errorToast, successToast } from '../utils/toasts';
-import Button from './button/button.component';
 import { InputWithLabel } from './Input';
+import Button from './button/button.component';
 import { Modal } from './modal/modal.component';
 
 interface ModalProps {

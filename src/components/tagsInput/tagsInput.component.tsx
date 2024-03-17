@@ -4,8 +4,8 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 
 import { useGetSuggestedTagsQuery } from '../../store';
 import { infoToast, warningToast } from '../../utils/toasts';
-import Button from '../button/button.component';
 import { InputWithLabel } from '../Input';
+import Button from '../button/button.component';
 import Tag from '../tag/tag.component';
 import {
     Dropdown,

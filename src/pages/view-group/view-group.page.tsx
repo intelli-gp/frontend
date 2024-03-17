@@ -6,11 +6,12 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import coverImageCamera from '../../assets/imgs/coverImageCamera.png';
-import Button from '../../components/button/button.component';
 import DeleteSectionModal from '../../components/DeleteGroupModal';
 import ExitModal from '../../components/ExitGroupModal';
 import { InputWithoutLabel } from '../../components/Input';
 import Spinner from '../../components/Spinner';
+import Button from '../../components/button/button.component';
+import UserContainer from '../../components/group-user/group-user.page';
 import { Modal } from '../../components/modal/modal.component';
 import OpenImage from '../../components/openImage/openImage.component';
 import Tag from '../../components/tag/tag.component';
@@ -41,7 +42,6 @@ import {
     PictureOverlay,
     RightPart,
 } from './view-group.styles';
-import UserContainer from '../../components/group-user/group-user.page';
 
 enum Role {
     member = 'MEMBER',
@@ -76,8 +76,6 @@ const ViewGroupPage = () => {
     const userType =
         groupData?.GroupMembers?.find((member) => member.ID === user.ID)
             ?.Type || Role.not_member;
-
-
 
     // DELETE GROUP
     const openDeleteModal = () => {
@@ -393,19 +391,32 @@ const ViewGroupPage = () => {
                     <p>ADMINS</p>
                     <PeopleContainer>
                         {admins.map((admin) => {
-                            return <UserContainer
-                            Admin={userType === Role.admin && admin.ID !== user.ID} 
-                            GroupID={groupId} 
-                            {...admin}  />
+                            return (
+                                <UserContainer
+                                    Admin={
+                                        userType === Role.admin &&
+                                        admin.ID !== user.ID
+                                    }
+                                    GroupID={groupId}
+                                    {...admin}
+                                />
+                            );
                         })}
                     </PeopleContainer>
                     <br />
                     <p>MEMBERS</p>
                     <PeopleContainer>
                         {members.map((member) => {
-                            return <UserContainer
-                             Admin={userType === Role.admin && member.ID !== user.ID } 
-                             GroupID={groupId} {...member} />
+                            return (
+                                <UserContainer
+                                    Admin={
+                                        userType === Role.admin &&
+                                        member.ID !== user.ID
+                                    }
+                                    GroupID={groupId}
+                                    {...member}
+                                />
+                            );
                         })}
                     </PeopleContainer>
                 </RightPart>

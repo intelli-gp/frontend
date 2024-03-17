@@ -7,7 +7,7 @@ import {
     CardsHolder,
     PageContainer,
     UpgradeButton,
-    UpgradeTitle
+    UpgradeTitle,
 } from './upgrade.styles';
 
 type Type = {
@@ -62,7 +62,9 @@ const UpgradePage = () => {
                     type="button"
                     select="primary500"
                     className={`!w-[50%] !rounded-[15px] !py-[10px] ${
-                        selectedPlan === 'Monthly' ? '' : '!text-[var(--indigo-950)]'
+                        selectedPlan === 'Monthly'
+                            ? ''
+                            : '!text-[var(--indigo-950)]'
                     }`}
                     outline={selectedPlan !== 'Monthly'}
                     onClick={() => handleButtonClick('Monthly')}
@@ -73,7 +75,9 @@ const UpgradePage = () => {
                     type="button"
                     select="primary500"
                     className={`!rounded-[15px] !py-[10px] !w-[50%] ${
-                        selectedPlan === 'Yearly' ?  '':'!text-[var(--indigo-950)]'
+                        selectedPlan === 'Yearly'
+                            ? ''
+                            : '!text-[var(--indigo-950)]'
                     }`}
                     outline={selectedPlan !== 'Yearly'}
                     onClick={() => handleButtonClick('Yearly')}

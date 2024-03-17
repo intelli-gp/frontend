@@ -3,8 +3,8 @@ import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
-import Button from '../../components/button/button.component';
 import { InputWithLabel } from '../../components/Input';
+import Button from '../../components/button/button.component';
 import { PageTitle } from '../../index.styles';
 import {
     RootState,

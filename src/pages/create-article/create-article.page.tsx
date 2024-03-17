@@ -7,8 +7,8 @@ import { RiDeleteBinLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import Button from '../../components/button/button.component';
 import { ImageUploadSection } from '../../components/article-image-section/article-image-section.component';
+import Button from '../../components/button/button.component';
 import MarkdownEditor from '../../components/markdown-editor/markdown.component';
 import { Modal } from '../../components/modal/modal.component';
 import OpenImage from '../../components/openImage/openImage.component';

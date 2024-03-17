@@ -16,21 +16,21 @@ import { RiRobot2Line } from 'react-icons/ri';
 
 import noTask from '../../assets/imgs/no-task.png';
 import { AddTaskModal } from '../../components/AddTaskModal';
-import Button from '../../components/button/button.component';
 import { EditTaskModal } from '../../components/EditTaskModal';
 import Skeleton from '../../components/Skeleton';
 import Spinner from '../../components/Spinner';
 import TaskBox from '../../components/TaskBox';
+import Button from '../../components/button/button.component';
 import '../../index.css';
 import { useFetchTasksQuery } from '../../store';
 import {
     ButtonMV,
     CalendarHolder,
     LeftButton,
+    MiddleButton,
     NoTasksContainer,
     PageContainer,
     RightButton,
-    MiddleButton,
     Searchbar,
     SideNav,
     TaskBoxContainer,
@@ -101,19 +101,13 @@ const CustomToolbar = (props: ToolbarProps) => {
 
             <div className="flex flex-row justify-end items-center	justify-items-center lg:w-1/5 w-[10%] lg:mb-0 mb-4 ">
                 <div className="flex flex-row justify-items-center ">
-                    <LeftButton
-                        onClick={goToBack}
-                    >
+                    <LeftButton onClick={goToBack}>
                         <FaChevronLeft color="white" size="12" />
                     </LeftButton>
-                    <MiddleButton
-                        onClick={cycleView}
-                    >
+                    <MiddleButton onClick={cycleView}>
                         {viewState.charAt(0).toUpperCase() + viewState.slice(1)}
                     </MiddleButton>
-                    <RightButton
-                        onClick={goToNext}
-                    >
+                    <RightButton onClick={goToNext}>
                         <FaChevronRight color="white" size="12" />
                     </RightButton>
                 </div>
@@ -333,7 +327,7 @@ export default function StudyPlanner() {
                             (e as MouseEvent).stopPropagation();
                             openModal();
                         }}
-                        className='!w-[55px] !h-[55px]' 
+                        className="!w-[55px] !h-[55px]"
                     >
                         <GoPlus size="28" color="#0D062D" />
                     </Button>
@@ -341,7 +335,8 @@ export default function StudyPlanner() {
                         select="primary"
                         type="button"
                         rounded
-                        className='!w-[55px] !h-[55px]'                    >
+                        className="!w-[55px] !h-[55px]"
+                    >
                         <RiRobot2Line size="24" color="white" />
                     </Button>
                 </ButtonMV>
@@ -363,7 +358,7 @@ export default function StudyPlanner() {
                                 select="primary300"
                                 type="button"
                                 onClick={openModal}
-                                className='!text-txt'
+                                className="!text-txt"
                             >
                                 + Add a task
                             </Button>

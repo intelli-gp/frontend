@@ -71,13 +71,12 @@ export const ChatFooter = styled.div`
     padding: 10px 32px 15px 32px;
 `;
 
-export const ChatBox = styled.div<{ incoming: boolean}>`
+export const ChatBox = styled.div<{ incoming: boolean }>`
     display: flex;
     flex-direction: row;
     width: 100%;
     justify-content: ${({ incoming }) =>
         incoming ? 'flex-end' : 'flex-start'};
-
 
     p {
         color: ${({ incoming }) => (incoming ? 'white' : ' var(--gray-800)')};
@@ -90,7 +89,7 @@ export const ChatBox = styled.div<{ incoming: boolean}>`
         color: ${({ incoming }) => (incoming ? 'white' : 'var(--slate-500)')};
     }
 `;
-export const Message =styled.div<{ incoming: boolean}>`
+export const Message = styled.div<{ incoming: boolean }>`
     background-color: ${({ incoming }) =>
         incoming ? 'var(--indigo-600)' : 'var(  --gray-200)'};
     padding: ${({ incoming }) => (incoming ? '8px  15px ' : '15px')};
@@ -101,6 +100,4 @@ export const Message =styled.div<{ incoming: boolean}>`
     gap: 8px;
     max-width: 40%;
     min-width: 20%;
-
-
-`
+`;

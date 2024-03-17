@@ -7,22 +7,20 @@ export const PageContainer = styled.div`
     align-items: center;
     justify-content: space-between;
     padding: 80px 20px;
-    gap:2rem;
-
+    gap: 2rem;
 `;
-export const UpgradeTitle =styled.h1`
-font-style: normal;
-font-weight: 600;
-font-size: 48px;
-line-height: 100%;
-display: flex;
-width:28rem;
-align-items: center;
-text-align: center;
-letter-spacing: -0.04em;
-color: #343a40;
-
-`
+export const UpgradeTitle = styled.h1`
+    font-style: normal;
+    font-weight: 600;
+    font-size: 48px;
+    line-height: 100%;
+    display: flex;
+    width: 28rem;
+    align-items: center;
+    text-align: center;
+    letter-spacing: -0.04em;
+    color: #343a40;
+`;
 export const ButtonsHolder = styled.div`
     display: flex;
     flex-direction: row;
@@ -47,7 +45,6 @@ export const CardsHolder = styled.div`
     gap: 25px;
     @media (max-width: 868px) {
         flex-direction: column;
-
     }
 `;
 
@@ -86,7 +83,7 @@ export const CardHolder = styled.div`
         width: 300px;
     }
 `;
-export const UpgradeButton = styled.button `
+export const UpgradeButton = styled.button`
     width: 100%;
     color: black;
     outline: none;
@@ -96,4 +93,5 @@ export const UpgradeButton = styled.button `
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;`
+    border-radius: 4px;
+`;

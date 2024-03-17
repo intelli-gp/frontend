@@ -2,17 +2,17 @@ import { IoSend } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 
 import AIimg from '../../assets/imgs/AI-profile.svg';
-import Button from '../../components/button/button.component';
 import { InputWithoutLabel } from '../../components/Input';
+import Button from '../../components/button/button.component';
 import {
     AIicon,
     ChatBody,
     ChatBox,
     ChatFooter,
     ChatHeader,
+    Message,
     Messagebar,
     PageContainer,
-    Message
 } from './AI-helper.style';
 
 type MessageType = {

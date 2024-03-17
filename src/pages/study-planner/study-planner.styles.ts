@@ -1,93 +1,93 @@
 import styled from 'styled-components';
 
 export const PageContainer = styled.div`
-.rbc-time-view .rbc-row:first-child {
-    font-size: 1rem;
-    min-height: 3rem !important;
-    flex-grow: 3 !important;
-}
-.rbc-header {
-    padding: 10px 0 0 0 !important;
-
-    color: #1b2547;
-    border-bottom: 0px solid !important;
-    font-size: larger;
-    font-weight: 400;
-}
-.rbc-header + .rbc-today {
-    color: #312e81;
-}
-.rbc-label {
-    color: #868e96;
-}
-.rbc-allday-cell {
-    visibility: hidden !important;
-    height: 0 !important;
-}
-.rbc-time-header-gutter {
-    border-style: solid;
-
-    border-width: 0 !important;
-}
-.rbc-today {
-    background-color: #e9eafd;
-}
-
-.rbc-event {
-    padding: 0px !important;
-    border-radius: 0px !important;
-    border: none !important;
-    background-color: transparent !important;
-    z-index: 2;
-    position: relative;
-}
-
-.rbc-background-event {
-    padding: 0px !important;
-    border-radius: 0px !important;
-    border: none !important;
-    background-color: transparent !important;
-}
-
-.rbc-event-label {
-    display: none !important;
-}
-
-.rbc-timeslot-group {
-    min-height: 80px !important;
-    border-color: transparent !important;
-}
-
-.rbc-events-container {
-    @media (min-width: 1441px) {
-        margin-right: 0px !important;
+    .rbc-time-view .rbc-row:first-child {
+        font-size: 1rem;
+        min-height: 3rem !important;
+        flex-grow: 3 !important;
     }
-}
-input[type='time']::-webkit-calendar-picker-indicator {
-    display: none;
-}
-.rbc-current-time-indicator {
-    background-color: #312e81 !important;
-}
+    .rbc-header {
+        padding: 10px 0 0 0 !important;
 
-.rbc-time-content::-webkit-scrollbar {
-    width: 0.4rem;
-}
-.rbc-time-content::-webkit-scrollbar-track {
-    background: transparent;
-}
-.rbc-time-content::-webkit-scrollbar-thumb {
-    background: var(--gray-300);
-}
+        color: #1b2547;
+        border-bottom: 0px solid !important;
+        font-size: larger;
+        font-weight: 400;
+    }
+    .rbc-header + .rbc-today {
+        color: #312e81;
+    }
+    .rbc-label {
+        color: #868e96;
+    }
+    .rbc-allday-cell {
+        visibility: hidden !important;
+        height: 0 !important;
+    }
+    .rbc-time-header-gutter {
+        border-style: solid;
 
-display: flex;
-flex-direction: column; 
-height: 100vh;
-justify-content: space-between;
-@media (min-width: 1280px) {
-    flex-direction: row;
-  }
-`
+        border-width: 0 !important;
+    }
+    .rbc-today {
+        background-color: #e9eafd;
+    }
+
+    .rbc-event {
+        padding: 0px !important;
+        border-radius: 0px !important;
+        border: none !important;
+        background-color: transparent !important;
+        z-index: 2;
+        position: relative;
+    }
+
+    .rbc-background-event {
+        padding: 0px !important;
+        border-radius: 0px !important;
+        border: none !important;
+        background-color: transparent !important;
+    }
+
+    .rbc-event-label {
+        display: none !important;
+    }
+
+    .rbc-timeslot-group {
+        min-height: 80px !important;
+        border-color: transparent !important;
+    }
+
+    .rbc-events-container {
+        @media (min-width: 1441px) {
+            margin-right: 0px !important;
+        }
+    }
+    input[type='time']::-webkit-calendar-picker-indicator {
+        display: none;
+    }
+    .rbc-current-time-indicator {
+        background-color: #312e81 !important;
+    }
+
+    .rbc-time-content::-webkit-scrollbar {
+        width: 0.4rem;
+    }
+    .rbc-time-content::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .rbc-time-content::-webkit-scrollbar-thumb {
+        background: var(--gray-300);
+    }
+
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: space-between;
+    @media (min-width: 1280px) {
+        flex-direction: row;
+    }
+`;
 export const ModalContent = styled.div`
     display: flex;
     flex-direction: column;
@@ -113,7 +113,7 @@ const hexToRgb = (hex: string | undefined) => {
     return `${r}, ${g}, ${b}`;
 };
 
-export const TaskBoxContainer = styled.div<{ color?: string}>`
+export const TaskBoxContainer = styled.div<{ color?: string }>`
     border-color: ${(props) => props.color};
     background-color: rgba(${(props) => hexToRgb(props.color)}, 0.2);
     display: flex;
@@ -128,9 +128,9 @@ export const TaskBoxContainer = styled.div<{ color?: string}>`
     padding-right: 14px;
     & > div:first-child {
         display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: flex-start
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
     }
     p {
         color: ${(props) => props.color};
@@ -148,24 +148,23 @@ export const TasksContainer = styled.div`
     padding: 0.3rem;
 `;
 export const SideNav = styled.div`
-display: flex;
-flex-basis: 18%;
-height: 100%;
-flex-direction: column;
-border-left: 2px solid #CBD5E0;
-padding: 1.8rem;
-  @media (max-width: 1024px) { 
-    display: none;
-  }
-  & > div:first-child {
     display: flex;
-    flex-direction: column; 
-    gap: 0.75rem; 
-    justify-items: center; 
-    justify-content: center; 
-    width: 100%; 
-  }
-
+    flex-basis: 18%;
+    height: 100%;
+    flex-direction: column;
+    border-left: 2px solid #cbd5e0;
+    padding: 1.8rem;
+    @media (max-width: 1024px) {
+        display: none;
+    }
+    & > div:first-child {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        justify-items: center;
+        justify-content: center;
+        width: 100%;
+    }
 `;
 export const NoTasksContainer = styled.div`
     height: 100%;
@@ -228,34 +227,34 @@ export const Searchbar = styled.div`
     }
 `;
 export const LeftButton = styled.button`
-  width: 25%;
-  background-color:  var(--indigo-900);
-  border-radius: 0.5rem 0 0 0.5rem;
-  border-right: 1px solid white;
-  display: flex;
-  padding: 8px;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+    width: 25%;
+    background-color: var(--indigo-900);
+    border-radius: 0.5rem 0 0 0.5rem;
+    border-right: 1px solid white;
+    display: flex;
+    padding: 8px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 `;
 export const MiddleButton = styled.button`
-  width: 50%;
-  background-color: var(--indigo-900);
-  color: white;
-  font-size: 0.75rem;
-  padding: 5px;
+    width: 50%;
+    background-color: var(--indigo-900);
+    color: white;
+    font-size: 0.75rem;
+    padding: 5px;
 
-  @media (min-width: 768px) {
-    font-size: 0.875rem; 
-  }
+    @media (min-width: 768px) {
+        font-size: 0.875rem;
+    }
 `;
 export const RightButton = styled.button`
-  width: 25%;
-  padding: 8px;
-  background-color:  var(--indigo-900);
-  border-left: 1px solid white;
-  border-radius: 0 0.5rem 0.5rem 0; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    width: 25%;
+    padding: 8px;
+    background-color: var(--indigo-900);
+    border-left: 1px solid white;
+    border-radius: 0 0.5rem 0.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;

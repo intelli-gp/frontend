@@ -4,8 +4,8 @@ import { FaEnvelope } from 'react-icons/fa';
 import { IoChevronBack } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 
-import Button from '../../components/button/button.component';
 import { InputWithLabel } from '../../components/Input';
+import Button from '../../components/button/button.component';
 import { useLazyResetPasswordQuery } from '../../store';
 import { errorToast, successToast } from '../../utils/toasts';
 

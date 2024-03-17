@@ -8,8 +8,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import defaultCoverImage from '../../assets/imgs/defaultCover.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
-import Button from '../../components/button/button.component';
 import Spinner from '../../components/Spinner';
+import Button from '../../components/button/button.component';
 import Tag from '../../components/tag/tag.component';
 import { useGetArticleQuery } from '../../store';
 import { RootState } from '../../store';

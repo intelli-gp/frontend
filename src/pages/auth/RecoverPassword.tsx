@@ -3,8 +3,8 @@ import { IoChevronBack } from 'react-icons/io5';
 import { MdLockReset } from 'react-icons/md';
 import { Link, useSearchParams } from 'react-router-dom';
 
-import Button from '../../components/button/button.component';
 import { InputWithLabel } from '../../components/Input';
+import Button from '../../components/button/button.component';
 import { reset, useResetPasswordConfirmMutation } from '../../store';
 import { errorToast, successToast } from '../../utils/toasts';
 

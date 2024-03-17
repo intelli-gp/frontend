@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import cameraImage from '../../assets/imgs/camera.png';
 import defaultProfile from '../../assets/imgs/user.jpg';
-import Button from '../../components/button/button.component';
 import { InputsGrid } from '../../components/Input';
 import Accordion from '../../components/accordion/accordion.component';
+import Button from '../../components/button/button.component';
 import Tag from '../../components/tag/tag.component';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import { PageTitle } from '../../index.styles';

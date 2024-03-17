@@ -1,5 +1,4 @@
-import styled from "styled-components";
-
+import styled from 'styled-components';
 
 export const PersonName = styled.p`
     margin: 0 !important;
@@ -8,7 +7,6 @@ export const PersonName = styled.p`
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-
 `;
 
 export const PersonContainer = styled.div`
@@ -16,21 +14,20 @@ export const PersonContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding:12px;
+    padding: 12px;
     gap: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out;
-    min-width:7.4rem;
+    min-width: 7.4rem;
     &:hover {
         background: var(--indigo-50);
         border-radius: 6px;
-
     }
 `;
 
-
-export const PersonImage = styled. img `
+export const PersonImage = styled.img`
     height: 70px;
     width: 70px;
     border-radius: 50%;
-    object-fit: cover;`
+    object-fit: cover;
+`;

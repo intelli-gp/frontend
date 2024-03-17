@@ -96,7 +96,6 @@ export const ChatroomPage = () => {
             Content: messageInput,
             GroupID: +groupId!,
         }).unwrap();
-
     };
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {

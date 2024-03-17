@@ -1,32 +1,62 @@
+import { faker } from '@faker-js/faker';
+import { useEffect, useMemo, useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { CiLogin } from 'react-icons/ci';
 import { IoPersonOutline, IoPersonSharp } from 'react-icons/io5';
+import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
 import { MdLogin } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+
 import Section2img from '../../assets/imgs/about-illustration1.svg';
 import ChatBot from '../../assets/imgs/chatBot-illustration.svg';
 import Courses from '../../assets/imgs/courses-illustration.svg';
+import icons from '../../assets/imgs/icons.svg';
+import Star from '../../assets/imgs/star.svg';
 import StudyGroup from '../../assets/imgs/studyGroup-illustration.svg';
 import StudyPlanner from '../../assets/imgs/studyPlanner-illustration.svg';
-import Button from '../../components/button/button.component';
 import Feature from '../../components/Feature';
-import { faker } from '@faker-js/faker';
-import { useEffect, useMemo, useState } from 'react';
-import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
-import Star from '../../assets/imgs/star.svg';
-import icons from '../../assets/imgs/icons.svg';
-import { Response } from '../../types/response';
-import {
-    StyledFooter, FooterContainer, FooterNav, FooterLink, CopyRightText, IconContainer
-    , FeedbackSection, BlogsContainer, BlogsSection, BlogsTitle, Body,
-    AISection, AIWrapper, FeaturesSection, ImgContainer,
-    TextAIContainer, NavContainer, UpperContainer, Title, AItitle,
-    Sidebar, MenuTitles, StyledLink, MenuList, HeroSection,
-    HeroContainer, HeroContent, SlideIndicator, CarouselItem, FeedbackCard, ProfilePic, ButtonRight, BodySpan, ButtonLeft
-} from './home.style';
+import SingleBlog from '../../components/article-item/article-item.component';
+import Button from '../../components/button/button.component';
 import { useGetArticlesQuery } from '../../store';
 import { ReceivedArticle } from '../../types/article';
-import SingleBlog from '../../components/article-item/article-item.component';
+import { Response } from '../../types/response';
+import {
+    AISection,
+    AIWrapper,
+    AItitle,
+    BlogsContainer,
+    BlogsSection,
+    BlogsTitle,
+    Body,
+    BodySpan,
+    ButtonLeft,
+    ButtonRight,
+    CarouselItem,
+    CopyRightText,
+    FeaturesSection,
+    FeedbackCard,
+    FeedbackSection,
+    FooterContainer,
+    FooterLink,
+    FooterNav,
+    HeroContainer,
+    HeroContent,
+    HeroSection,
+    IconContainer,
+    ImgContainer,
+    MenuList,
+    MenuTitles,
+    NavContainer,
+    ProfilePic,
+    Sidebar,
+    SlideIndicator,
+    StyledFooter,
+    StyledLink,
+    TextAIContainer,
+    Title,
+    UpperContainer,
+} from './home.style';
+
 function Nav() {
     const [navbarOpen, setMenuOpen] = useState(false);
 
@@ -39,20 +69,14 @@ function Nav() {
         <NavContainer>
             <UpperContainer>
                 <Link to="/" className="w-[130px] h-auto">
-                    <Title>
-                        Mujedd
-                    </Title>
+                    <Title>Mujedd</Title>
                 </Link>
                 <div className="flex gap-16 items-center">
                     <div className="hidden lg:flex">
                         <ul className="flex px-1 ">
                             {menuItems.map((item, index) => (
                                 <li key={index}>
-                                    <MenuTitles
-                                        href="#"
-                                    >
-                                        {item}
-                                    </MenuTitles>
+                                    <MenuTitles href="#">{item}</MenuTitles>
                                 </li>
                             ))}
                         </ul>
@@ -98,27 +122,19 @@ function Nav() {
                 <MenuList>
                     {menuItems.map((item, index) => (
                         <li key={index}>
-                            <a
-                                href="#"
-                            >
-                                {item}
-                            </a>
+                            <a href="#">{item}</a>
                         </li>
                     ))}
                     <li>
-                        <StyledLink
-                            to="/auth/signup"
-                        >
-                            <span >
+                        <StyledLink to="/auth/signup">
+                            <span>
                                 <IoPersonOutline size={14} />
                                 Sign up
                             </span>
                         </StyledLink>
                     </li>
                     <li>
-                        <StyledLink
-                            to="/auth/login"
-                        >
+                        <StyledLink to="/auth/login">
                             <span>
                                 <CiLogin size={15} />
                                 Log in
@@ -130,7 +146,6 @@ function Nav() {
         </NavContainer>
     );
 }
-
 
 function Hero() {
     return (
@@ -153,33 +168,33 @@ function Hero() {
 function FeatureSection() {
     const features = [
         {
-            color: "bg-indigo-300",
+            color: 'bg-indigo-300',
             imgURL: StudyPlanner,
-            title: "Study Planner",
-            para: "Stay organized and on track with our intuitive study planner, allowing you to schedule your study sessions, and monitor your progress.",
-            additionalClass: "text-txt font-semibold",
+            title: 'Study Planner',
+            para: 'Stay organized and on track with our intuitive study planner, allowing you to schedule your study sessions, and monitor your progress.',
+            additionalClass: 'text-txt font-semibold',
         },
         {
-            color: "bg-indigo-900",
+            color: 'bg-indigo-900',
             imgURL: Courses,
-            title: "Courses Recommendations",
-            para: "Receive tailored course recommendations based on your academic interests, ensuring you make the most informed choices.",
-            additionalClass: "text-white",
+            title: 'Courses Recommendations',
+            para: 'Receive tailored course recommendations based on your academic interests, ensuring you make the most informed choices.',
+            additionalClass: 'text-white',
         },
         {
-            color: "bg-indigo-900",
+            color: 'bg-indigo-900',
             imgURL: ChatBot,
-            title: "Chatbot Helper",
-            para: "Get instant assistance and guidance for your academic queries and challenges through our chatbot helper.",
-            additionalClass: "text-white",
+            title: 'Chatbot Helper',
+            para: 'Get instant assistance and guidance for your academic queries and challenges through our chatbot helper.',
+            additionalClass: 'text-white',
         },
         {
-            color: "bg-indigo-300",
+            color: 'bg-indigo-300',
             imgURL: StudyGroup,
-            title: "Study Group Finder",
-            para: "Connect with like-minded peers by using our study group finder, which helps you discover and join study groups for your courses.",
-            additionalClass: "text-txt font-semibold",
-        }
+            title: 'Study Group Finder',
+            para: 'Connect with like-minded peers by using our study group finder, which helps you discover and join study groups for your courses.',
+            additionalClass: 'text-txt font-semibold',
+        },
     ];
     return (
         <>
@@ -187,16 +202,11 @@ function FeatureSection() {
                 <div>
                     <AIWrapper>
                         <ImgContainer>
-                            <img
-                                src={Section2img}
-                                alt="about img"
-                            />
+                            <img src={Section2img} alt="about img" />
                         </ImgContainer>
                         <TextAIContainer>
                             <div className="mb-2 sm:mb-10">
-                                <AItitle>
-                                    AI-Powered Service
-                                </AItitle>
+                                <AItitle>AI-Powered Service</AItitle>
                             </div>
                             <p>
                                 Gain access to our cutting-edge AI-based content
@@ -236,7 +246,6 @@ function FeatureSection() {
     );
 }
 
-
 function BlogSection() {
     const { data } = useGetArticlesQuery();
     const [articles, setArticles] = useState<ReceivedArticle[]>([]);
@@ -249,22 +258,16 @@ function BlogSection() {
         <BlogsSection>
             <div>
                 <BlogsTitle>
-                    <h1>
-                        From Our Latest Blogs
-                    </h1>
+                    <h1>From Our Latest Blogs</h1>
                 </BlogsTitle>
                 <BlogsContainer>
-                    {articles?.slice(0, 3)
-                        .map((article: ReceivedArticle) => {
-                            return (
-                                <SingleBlog
-                                    {...article}
-                                />
-                            );
-                        })}
+                    {articles?.slice(0, 3).map((article: ReceivedArticle) => {
+                        return <SingleBlog {...article} />;
+                    })}
                 </BlogsContainer>
             </div>
-        </BlogsSection>);
+        </BlogsSection>
+    );
 }
 
 function Feedback() {
@@ -307,10 +310,15 @@ function Feedback() {
                 >
                     <div className="overflow-hidden relative h-auto rounded-lg ">
                         {person.map((item, index) => (
-                            <CarouselItem key={index} isActive={index === currentIndex}
+                            <CarouselItem
+                                key={index}
+                                isActive={index === currentIndex}
                             >
-                                <FeedbackCard >
-                                    <ProfilePic src={fakeProfilePic} alt="profile pic" />
+                                <FeedbackCard>
+                                    <ProfilePic
+                                        src={fakeProfilePic}
+                                        alt="profile pic"
+                                    />
                                     <div className="relative flex flex-col gap-4 items-center justify-center">
                                         <div className="flex gap-2">
                                             <h1 className="text-lg sm:text-xl lg:text-2xl">
@@ -331,8 +339,8 @@ function Feedback() {
                                             "{item.feedback}"
                                         </p>
                                     </div>
-                                </FeedbackCard >
-                            </CarouselItem >
+                                </FeedbackCard>
+                            </CarouselItem>
                         ))}
                     </div>
                     <div className="flex absolute bottom-5 left-1/2 z-30 space-x-3 -translate-x-1/2">
@@ -341,7 +349,9 @@ function Feedback() {
                                 key={index}
                                 type="button"
                                 isActive={index === currentIndex}
-                                aria-current={index === currentIndex ? 'true' : 'false'}
+                                aria-current={
+                                    index === currentIndex ? 'true' : 'false'
+                                }
                                 onClick={() => changeSlide(index)}
                             />
                         ))}
@@ -358,8 +368,8 @@ function Feedback() {
                                 className="w-6 h-6 rounded-full sm:w-8 sm:h-8 ml-1"
                                 color="white"
                             />
-                        </BodySpan>                    
-                        </ButtonRight>
+                        </BodySpan>
+                    </ButtonRight>
                     <ButtonLeft
                         type="button"
                         className="flex absolute top-0 left-0  justify-center items-center px-4 h-full cursor-pointer group "

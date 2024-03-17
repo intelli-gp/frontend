@@ -92,7 +92,7 @@ body {
 }
 
 body {
-    color: var(--gray-800)
+    color: var(--gray-800);
 }
 
 #root {
@@ -124,4 +124,3 @@ hr {
     color: #312e81 !important;
     min-width: 14rem !important;
 }
-

@@ -7,8 +7,8 @@ import { ModalContent } from '../pages/study-planner/study-planner.styles';
 import { useAddTasksMutation } from '../store';
 import { sendTask } from '../types/event';
 import { errorToast, successToast } from '../utils/toasts';
-import Button from './button/button.component';
 import { InputWithLabel } from './Input';
+import Button from './button/button.component';
 import { Modal } from './modal/modal.component';
 
 interface ModalProps {

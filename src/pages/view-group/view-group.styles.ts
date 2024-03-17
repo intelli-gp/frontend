@@ -113,7 +113,7 @@ export const EditableSectionBody = styled.div`
 `;
 
 export const RightPart = styled.div`
-    padding: 15px ;
+    padding: 15px;
     box-shadow: 0px 0px 60px 5px rgba(39, 31, 75, 0.07);
     background: white;
     height: 100%;
@@ -134,14 +134,10 @@ export const RightPart = styled.div`
 export const PeopleContainer = styled.div`
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    padding:12px;
+    padding: 12px;
     gap: 1rem;
-    width:100%; 
-
-
+    width: 100%;
 `;
-
-
 
 export const EditButton = styled.button`
     cursor: pointer;
