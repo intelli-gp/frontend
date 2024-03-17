@@ -1,58 +1,53 @@
 import { IoIosArrowDown } from "react-icons/io";
-import { useRef, useState } from "react";
 import { usePermissionGroupMutation } from "../../store";
 import { GroupUser } from "../../types/group";
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import { successToast, errorToast } from "../../utils/toasts";
-import { PersonContainer, PersonName, Arrow, Menu, MenuContent } from "./group-user.style";
+import { PersonContainer, PersonName } from "./group-user.style";
+import DropdownMenu from "../Menu/menu.component";
 type GroupUserType = GroupUser & {
-     sameUser: boolean;
-     Admin:boolean;
-     GroupID:string|undefined;
+    sameUser: boolean;
+    Admin: boolean;
+    GroupID: string | undefined;
 };
 
-const UserContainer =({
-ID: ID,    
-ProfileImage:ProfileImage,
-FullName:FullName,
-Type:Type,
-Admin:Admin,
-sameUser:sameUser,
-GroupID:GroupID
-}: GroupUserType)=>{
+const UserContainer = ({
+    ID: idUser,
+    ProfileImage: ProfileImage,
+    FullName: FullName,
+    Type: type,
+    Admin: Admin,
+    sameUser: sameUser,
+    GroupID: GroupID
+}: GroupUserType) => {
 
-    const [ShowMenu, setMenu] = useState(false);
     const [updateStatus] = usePermissionGroupMutation();
-    const handleStatus = async (
-        id: string | undefined,
-        type: 'ADMIN' | 'MEMBER',
-    ) => {
+
+    const handleStatus = async () => {
+        console.log('Heree')
         try {
-            if(GroupID){
+            if (GroupID) {
                 const updatedGroupData: Partial<GroupUser> & { id: string } = {
-                
-                    id:GroupID,
-                    ID: id,
-                    Type: type,
+
+                    id: GroupID,
+                    ID: idUser,
+                    Type: type === 'MEMBER' ? 'ADMIN' : 'MEMBER',
                 };
                 await updateStatus(updatedGroupData).unwrap();
                 successToast('Changed the permission successfully!');
-                setMenu(false);
             }
         } catch (error) {
             errorToast('Error occurred while giving permission!');
         }
     };
-    const modalRef = useRef<HTMLDivElement>(null);
-
-    const closeModal = (e: React.MouseEvent<HTMLElement>) => {
-        if (modalRef.current === e.target) {
-            setMenu(false);
-        }
-    };
-
+    const statusOption = [
+        {
+            option: type == 'MEMBER' ?'Add an admin': 'Dismiss an admin',
+            handler: () =>{ handleStatus() }
+        },
+    ];
     return (
-        <PersonContainer onClick={closeModal} ref={modalRef}>
+        <PersonContainer>
             <img
                 alt=""
                 src={
@@ -64,31 +59,18 @@ GroupID:GroupID
                 <PersonName title={FullName}>
                     {FullName}
                 </PersonName>
-                {sameUser && Admin? (
+                {sameUser && Admin ? (
                     <>
-                        <Arrow>
-                            <IoIosArrowDown
-                                onClick={() =>
-                                    setMenu((prev) => !prev)
-                                }
-                            />
-                        </Arrow>
-                        {ShowMenu && (
-                            <Menu>
-                                <MenuContent
-                                    onClick={() =>
-                                        handleStatus(
-                                            ID,
-                                            Type=='MEMBER'?'ADMIN':'MEMBER'
-                                        )
-                                    }
-                                >
-                                    <h1>
-                                       { Type=='MEMBER'?'Add an admin':' Dismiss an admin'}
-                                    </h1>
-                                </MenuContent>
-                            </Menu>
-                        )}
+                        <DropdownMenu
+                            options={statusOption}
+                            right="10%"
+                            top="100%"
+                            left="auto"
+                            bottom="auto"
+                            menuWidth="10rem"
+                        >
+                                <IoIosArrowDown/>
+                        </DropdownMenu>
                     </>
                 ) : (
                     <></>

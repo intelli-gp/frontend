@@ -66,14 +66,14 @@ export const PictureOverlay = styled.img`
 export const GroupInfoContainer = styled.div`
     flex: 1;
     display: grid;
-    grid-template-columns: 5fr 2fr;
+    grid-template-columns: 6fr 3fr;
     @media (max-width: 768px) {
         grid-template-columns: 1fr;
     }
 `;
 
 export const LeftPart = styled.div`
-    padding: 2rem 6rem;
+    padding: 2rem 4rem;
     display: flex;
     flex-direction: column;
     gap: 4rem;
@@ -113,7 +113,7 @@ export const EditableSectionBody = styled.div`
 `;
 
 export const RightPart = styled.div`
-    padding: 20px 20px 0px 20px;
+    padding: 15px ;
     box-shadow: 0px 0px 60px 5px rgba(39, 31, 75, 0.07);
     background: white;
     height: 100%;
@@ -133,8 +133,10 @@ export const RightPart = styled.div`
 
 export const PeopleContainer = styled.div`
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr ;
-    padding: 18px 0px 10px 12px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding:12px;
+    gap: 1rem;
+    width:100%; 
 
     img {
         height: 70px;
