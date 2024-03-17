@@ -91,6 +91,10 @@ body {
     }
 }
 
+body {
+    color: var(--gray-800)
+}
+
 #root {
     min-height: 100vh;
 }

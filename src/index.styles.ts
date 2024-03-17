@@ -57,3 +57,10 @@ export const CSSTextLinesCountLimit = css<{ width?: string; lines?: number }>`
     line-clamp: ${({ lines }) => lines || 'none'};
     -webkit-line-clamp: ${({ lines }) => lines || 'none'};
 `;
+
+export const CssTextLengthLimit = css<{ chars?: number; lines?: number }>`
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: ${(props) => props.chars || 10}ch;
+`;

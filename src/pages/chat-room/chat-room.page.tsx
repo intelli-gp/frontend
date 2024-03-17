@@ -18,7 +18,6 @@ import { BeatLoader } from 'react-spinners';
 
 import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
-import Button from '../../components/button/button.component';
 import { InputWithoutLabel } from '../../components/Input';
 import DropdownMenu from '../../components/Menu/menu.component';
 import ChatMessage from '../../components/message/message.component';

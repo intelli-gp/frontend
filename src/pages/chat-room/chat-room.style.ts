@@ -71,11 +71,6 @@ export const ChatBody = styled.div`
     display: flex;
     flex-direction: column;
 
-    & > div:first-child {
-        flex: 1 1 auto;
-        min-height: 6px;
-    }
-
     @media (max-width: 1024px) {
         padding: 1rem;
     }
