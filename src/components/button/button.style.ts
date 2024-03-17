@@ -21,11 +21,13 @@ export const ButtonContainer = styled.button<ButtonProps>`
   align-items: center;
   justify-content: center;
   outline: none;
-  border: none;
+  color: white;
   border-radius: ${({ rounded }) => (rounded ? '50%' : '7px')};
   cursor: ${({ loading }) => (loading ? 'not-allowed' : 'pointer')};
   ${({ className }) => className};
-
+  &:hover {
+    opacity: 0.9;
+  }
   ${({ select, outline }) => {
     if (outline) {
       switch (select) {
@@ -84,45 +86,23 @@ export const ButtonContainer = styled.button<ButtonProps>`
         case 'primary':
           return css`
             background-color: var(--indigo-800);
-            color: white;
             border: 2px solid  var(--indigo-800);
 
-            &:hover {
-              background-color: var(--indigo-800);
-              opacity: 0.8;
-            }
           `;
         case 'primary700':
           return css`
             background-color: var(--indigo-700);
-            color: white;
             border: 2px solid  var(--indigo-700);
-
-            &:hover {
-              opacity: 0.8;
-            }
           `;
         case 'primary500':
           return css`
             background-color:  var(--indigo-500);
             border: 2px solid  var(--indigo-500);
-
-            color: white;
-
-            &:hover {
-              opacity: 0.8;
-            }
           `;
         case 'primary300':
           return css`
             background-color: var(--indigo-300);
             border: 2px solid  var(--indigo-300);
-
-            color: white;
-
-            &:hover {
-              opacity: 0.9;
-            }
           `;
         case 'secondary':
           return css`
@@ -130,40 +110,18 @@ export const ButtonContainer = styled.button<ButtonProps>`
             border: 2px solid   #F1EE63;
 
             color: #252f3f;
-
-            &:hover {
-                opacity: 0.9;
-              }
           `;
         case 'success':
           return css`
             background-color: #48bb78;
-            color: white;
-
-            &:hover {
-              background-color: #48bb78;
-              opacity: 0.9;
-            }
           `;
         case 'warning':
           return css`
             background-color: #ecc94b;
-            color: white;
-
-            &:hover {
-              background-color: #f6e05e;
-              opacity: 0.9;
-            }
           `;
         case 'danger':
           return css`
             background-color: #f56565;
-            color: white;
-
-            &:hover {
-              background-color: #f56565;
-              opacity: 0.9;
-            }
           `;
         default:
           return null;

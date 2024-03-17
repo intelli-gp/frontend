@@ -138,12 +138,7 @@ export const PeopleContainer = styled.div`
     gap: 1rem;
     width:100%; 
 
-    img {
-        height: 70px;
-        width: 70px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
+
 `;
 
 

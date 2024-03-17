@@ -113,11 +113,7 @@ const hexToRgb = (hex: string | undefined) => {
     return `${r}, ${g}, ${b}`;
 };
 
-type Color = {
-    color?: string;
-};
-
-export const TaskBoxContainer = styled.div<Color>`
+export const TaskBoxContainer = styled.div<{ color?: string}>`
     border-color: ${(props) => props.color};
     background-color: rgba(${(props) => hexToRgb(props.color)}, 0.2);
     display: flex;
