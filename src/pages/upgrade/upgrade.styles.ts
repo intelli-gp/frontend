@@ -6,20 +6,23 @@ export const PageContainer = styled.div`
     height: 100vh;
     align-items: center;
     justify-content: space-between;
-    padding: 30px 0px;
-    & > h1:first-child {
-        font-style: normal;
-        font-weight: 600;
-        font-size: 48px;
-        line-height: 100%;
-        display: flex;
-        align-items: center;
-        text-align: center;
-        letter-spacing: -0.04em;
-        color: #343a40;
-    }
-`;
+    padding: 80px 20px;
+    gap:2rem;
 
+`;
+export const UpgradeTitle =styled.h1`
+font-style: normal;
+font-weight: 600;
+font-size: 48px;
+line-height: 100%;
+display: flex;
+width:28rem;
+align-items: center;
+text-align: center;
+letter-spacing: -0.04em;
+color: #343a40;
+
+`
 export const ButtonsHolder = styled.div`
     display: flex;
     flex-direction: row;
@@ -38,11 +41,14 @@ export const ButtonsHolder = styled.div`
 export const CardsHolder = styled.div`
     display: flex;
     flex-direction: row;
-    position: relative;
     justify-content: center;
     align-items: center;
     padding: 17px;
     gap: 25px;
+    @media (max-width: 868px) {
+        flex-direction: column;
+
+    }
 `;
 
 export const CardHolder = styled.div`
@@ -50,6 +56,7 @@ export const CardHolder = styled.div`
     flex-direction: column;
     padding: 20px 25px;
     align-items: left;
+    position: relative;
     justify-content: space-between;
     box-sizing: border-box;
     width: 280px;
@@ -73,20 +80,20 @@ export const CardHolder = styled.div`
     p {
         color: var(--slate-500);
     }
-    button {
-        width: 100%;
-        color: black;
-        outline: none;
-        font-weight: 500;
-        padding: 0.5rem 1.5rem;
-        text-align: center;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 4px;
-    }
+
     @media (min-height: 700px) {
         height: 430px;
         width: 300px;
     }
 `;
+export const UpgradeButton = styled.button `
+    width: 100%;
+    color: black;
+    outline: none;
+    font-weight: 500;
+    padding: 0.5rem 1.5rem;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;`

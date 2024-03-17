@@ -6,6 +6,8 @@ import {
     CardHolder,
     CardsHolder,
     PageContainer,
+    UpgradeButton,
+    UpgradeTitle
 } from './upgrade.styles';
 
 type Type = {
@@ -27,16 +29,16 @@ const Card = ({ el }: { el: Type }) => {
                 </span>
                 <p className="text-sm">lorem ipsum lorem ipsum</p>
             </div>
-            <button
+            <UpgradeButton
                 type="button"
                 className={` ${
                     el.middle
-                        ? 'bg-[#F9F8C1] hover:bg-[#F9F8C1]/90 border border-[1px] border-black'
+                        ? 'bg-[#F9F8C1] hover:opacity-[0.9] border border-[1px] border-black'
                         : 'bg-[var(--gray-400)] hover:bg-gray-400/90'
                 } `}
             >
                 Get Started Now
-            </button>
+            </UpgradeButton>
         </CardHolder>
     );
 };
@@ -54,13 +56,13 @@ const UpgradePage = () => {
 
     return (
         <PageContainer>
-            <h1>Find the plan that suit you the best</h1>
+            <UpgradeTitle>Find the plan that suit you the best</UpgradeTitle>
             <ButtonsHolder>
                 <Button
                     type="button"
                     select="primary500"
-                    className={`!rounded-[15px] py-[10px] ${
-                        selectedPlan === 'Monthly' ? 'text-white' : ''
+                    className={`!w-[50%] !rounded-[15px] !py-[10px] ${
+                        selectedPlan === 'Monthly' ? '' : '!text-[var(--indigo-950)]'
                     }`}
                     outline={selectedPlan !== 'Monthly'}
                     onClick={() => handleButtonClick('Monthly')}
@@ -70,8 +72,8 @@ const UpgradePage = () => {
                 <Button
                     type="button"
                     select="primary500"
-                    className={`!rounded-[15px] py-[10px] ${
-                        selectedPlan === 'Yearly' ? 'text-white' : ''
+                    className={`!rounded-[15px] !py-[10px] !w-[50%] ${
+                        selectedPlan === 'Yearly' ?  '':'!text-[var(--indigo-950)]'
                     }`}
                     outline={selectedPlan !== 'Yearly'}
                     onClick={() => handleButtonClick('Yearly')}
@@ -89,8 +91,8 @@ const UpgradePage = () => {
                         payment: selectedPlan,
                     }}
                 />
-                <div className="pb-8 flex flex-col justify-center items-center">
-                    <div className="absolute top-0 rounded-2xl bg-[#F9F8C1] py-2 px-[12px] text-xs border-[1px] border-black">
+                <div className="lg:pb-16 pt-8 flex flex-col justify-center items-center relative ">
+                    <div className="absolute top-[2%] z-30 rounded-2xl bg-[#F9F8C1] py-2 px-[12px] text-xs border-[1px] border-black">
                         Most Popular
                     </div>
                     <Card
