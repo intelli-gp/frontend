@@ -120,7 +120,7 @@ export const ChatroomPage = () => {
                 IsTyping: false,
                 GroupID: +groupId!,
             });
-        }, 5e3);
+        }, 1e3);
 
         setTypingTimeout(newTimeout);
     };

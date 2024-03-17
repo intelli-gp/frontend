@@ -1,4 +1,5 @@
 import { ToastPosition, toast } from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 
 import defaultUserImage from '../assets/imgs/user.jpg';
 import NotificationAudio from '../assets/sounds/Notification.mp3';
@@ -53,9 +54,13 @@ export const messageNotification = (
     notification: ChatNotification,
     position: ToastPosition = 'top-right',
 ) => {
+    console.log(notification);
     let dismiss = () => toast.dismiss(toastId);
     let toastId = toast(
-        <div className={'flex gap-4 items-center'}>
+        <Link
+            to={`/app/chat-room/${notification.message.GroupID}`}
+            className={'flex gap-4 items-center'}
+        >
             <img
                 src={
                     notification?.message?.User?.ProfileImage ||
@@ -65,7 +70,7 @@ export const messageNotification = (
                 alt="sender profile image"
             />
             <div className="flex flex-col gap-1">
-                <SenderName>Sender FullName</SenderName>
+                <SenderName>{notification?.message?.User?.FullName}</SenderName>
                 <MessageContent
                     className="!opacity-80"
                     lines={3}
@@ -82,7 +87,7 @@ export const messageNotification = (
             >
                 ✕
             </DismissButton>
-        </div>,
+        </Link>,
         {
             position,
         },

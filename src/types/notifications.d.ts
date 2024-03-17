@@ -1,8 +1,8 @@
-import { SerializedMessage } from "./message";
+import { SerializedMessage } from './message';
 
 type ChatNotification = {
     eventName: 'chat-group-message';
-    message: SerializedMessage;
+    message: SerializedMessage & { GroupID: number };
 };
 
 // type studyPlanNotification = {
