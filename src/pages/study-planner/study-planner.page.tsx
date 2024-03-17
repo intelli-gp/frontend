@@ -36,6 +36,7 @@ import {
     TaskBoxContainer,
     TasksContainer,
 } from './study-planner.styles';
+import { BetweenPageAnimation } from '../../index.styles';
 
 const formats = {
     weekdayFormat: 'ddd',
@@ -171,7 +172,7 @@ export default function StudyPlanner() {
         } else if (error) {
             content = (
                 <NoTasksContainer>
-                    <img src={noTask} className="w-[90%]" />
+                    <img alt= "" src={noTask} className="w-[90%]" />
                     <div className="flex flex-col w-full justify-center items-center mr-6">
                         <p className="text-txt text-lg font-extrabold">
                             Error loading...
@@ -315,7 +316,7 @@ export default function StudyPlanner() {
     return isLoading ? (
         <Spinner />
     ) : (
-        <PageContainer>
+        <PageContainer {...BetweenPageAnimation}>
             <CalendarHolder>
                 <Calendar className="w-[95%] h-full" />
                 <ButtonMV>

@@ -1,6 +1,7 @@
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-export const Page = styled.div`
+export const PageContainer = styled(motion.div)`
     width: 100%;
     min-height: 100vh;
     padding: 4rem;

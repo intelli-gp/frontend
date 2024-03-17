@@ -75,7 +75,7 @@
 
 body {
     color: var(--gray-800);
-
+    overflow-x: hidden;
     &::-webkit-scrollbar {
         width: 0.5rem;
     }
@@ -89,10 +89,6 @@ body {
     &::-webkit-scrollbar-thumb:hover {
         background: var(--indigo-950);
     }
-}
-
-body {
-    color: var(--gray-800);
 }
 
 #root {

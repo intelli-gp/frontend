@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { ChangeEvent, useLayoutEffect } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,7 +7,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { InputWithLabel } from '../../components/Input';
 import PhoneNumberInput from '../../components/PhoneNumberInput';
 import Button from '../../components/button/button.component';
-import { PageTitle } from '../../index.styles';
+import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
     changeSignupBirthDate,
     changeSignupConfirmPassword,
@@ -88,7 +89,10 @@ export default function SignupPage() {
     };
 
     return (
-        <div className="flex flex-col justify-center items-center w-full lg:w-3/5 py-8">
+        <motion.div
+            {...BetweenPageAnimation}
+            className="flex flex-col justify-center items-center w-full lg:w-3/5 py-8"
+        >
             <PageTitle className="text-center mb-6">Create Account</PageTitle>
 
             <form
@@ -237,6 +241,6 @@ export default function SignupPage() {
                     <Link to="/auth/login">Login</Link>
                 </p>
             </form>
-        </div>
+        </motion.div>
     );
 }

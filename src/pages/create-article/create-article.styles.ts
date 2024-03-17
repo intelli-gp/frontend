@@ -1,8 +1,9 @@
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 
 import Button from '../../components/button/button.component';
 
-export const PageContainer = styled.div`
+export const PageContainer = styled(motion.div)`
     max-width: 1000px;
     margin: 0 auto;
     padding: 2rem;

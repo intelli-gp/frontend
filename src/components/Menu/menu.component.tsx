@@ -7,12 +7,15 @@ import { MainElement, MenuElement, OptionElement } from './menu.style';
 type DropdownMenuProps = {
     /**
      * options to be showed when the
-     * dropdown button button clicked
+     * dropdown button clicked
      * and the handler of clicking this option.
      * @example
      * {"Delete", handleDelete}
      */
-    options: { option: string | JSX.Element; handler: (data: any) => void | Promise<void> }[];
+    options: {
+        option: string | JSX.Element;
+        handler: (data: any) => void | Promise<void>;
+    }[];
     /**
      * The component to be shown as the main element.
      */

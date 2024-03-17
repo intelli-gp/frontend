@@ -9,6 +9,7 @@ import {
     UpgradeButton,
     UpgradeTitle,
 } from './upgrade.styles';
+import { BetweenPageAnimation } from '../../index.styles';
 
 type Type = {
     type: string;
@@ -55,7 +56,7 @@ const UpgradePage = () => {
     }, []);
 
     return (
-        <PageContainer>
+        <PageContainer {...BetweenPageAnimation}>
             <UpgradeTitle>Find the plan that suit you the best</UpgradeTitle>
             <ButtonsHolder>
                 <Button

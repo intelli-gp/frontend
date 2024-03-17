@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import AIimg from '../../assets/imgs/AI-profile.svg';
 import { InputWithoutLabel } from '../../components/Input';
 import Button from '../../components/button/button.component';
+import { BetweenPageAnimation } from '../../index.styles';
 import {
     AIicon,
     ChatBody,
@@ -59,7 +60,7 @@ const AIHelperPage = () => {
     ];
 
     return (
-        <PageContainer>
+        <PageContainer {...BetweenPageAnimation}>
             <ChatHeader>
                 <span className="flex flex-row gap-4 items-center">
                     <AIicon src={AIimg} />

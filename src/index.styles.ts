@@ -58,9 +58,9 @@ export const CSSTextLinesCountLimit = css<{ width?: string; lines?: number }>`
     -webkit-line-clamp: ${({ lines }) => lines || 'none'};
 `;
 
-export const CssTextLengthLimit = css<{ chars?: number; lines?: number }>`
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: ${(props) => props.chars || 10}ch;
-`;
+export const BetweenPageAnimation = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
+    transition: { duration: 0.25 },
+};

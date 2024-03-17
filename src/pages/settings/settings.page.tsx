@@ -10,7 +10,7 @@ import Accordion from '../../components/accordion/accordion.component';
 import Button from '../../components/button/button.component';
 import Tag from '../../components/tag/tag.component';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
-import { PageTitle } from '../../index.styles';
+import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
     RootState,
     setCredentials,
@@ -236,7 +236,7 @@ export const SettingsPage = () => {
     }, [isSuccess]);
 
     return (
-        <PageContainer>
+        <PageContainer {...BetweenPageAnimation}>
             <PageTitle>Account Settings</PageTitle>
 
             <PageHeader>

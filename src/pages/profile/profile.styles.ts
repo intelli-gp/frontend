@@ -1,6 +1,8 @@
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 
-export const PageContainer = styled.div`
+
+export const PageContainer = styled(motion.div)`
     width: 100%;
     max-width: 1920px;
     display: flex;

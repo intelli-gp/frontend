@@ -28,6 +28,7 @@ import {
     PageContainer,
     SuggestedArticlesContainer,
 } from './view-article.styles';
+import { BetweenPageAnimation } from '../../index.styles';
 
 const ViewArticlePage = () => {
     const { articleId } = useParams();
@@ -46,7 +47,7 @@ const ViewArticlePage = () => {
     return isLoading ? (
         <Spinner />
     ) : (
-        <PageContainer>
+        <PageContainer {...BetweenPageAnimation}>
             <ArticleCoverImageContainer>
                 <ArticleCoverImage
                     src={article?.CoverImage ?? defaultCoverImage}

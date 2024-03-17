@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { IoChevronBack } from 'react-icons/io5';
 import { MdLockReset } from 'react-icons/md';
@@ -5,6 +6,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 
 import { InputWithLabel } from '../../components/Input';
 import Button from '../../components/button/button.component';
+import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import { reset, useResetPasswordConfirmMutation } from '../../store';
 import { errorToast, successToast } from '../../utils/toasts';
 
@@ -45,13 +47,12 @@ const RecoverPassword = () => {
     };
 
     return (
-        <form
+        <motion.form
+            {...BetweenPageAnimation}
             className="flex flex-col gap-4 3xs:w-[20rem] md:!w-[25rem] py-8"
             onSubmit={handleSubmit}
         >
-            <h1 className="text-5xl 3xs:max-md:text-[2.5rem] text-slate-600 font-black text-center py-10 tracking-tight">
-                Recover password
-            </h1>
+            <PageTitle className="text-center mb-6">Recover password</PageTitle>
 
             <main className="flex flex-col border rounded-md p-8 gap-2 border-slate-300">
                 <h2 className="text-2xl font-bold text-slate-600">
@@ -104,7 +105,7 @@ const RecoverPassword = () => {
                     Back to login
                 </Link>
             </main>
-        </form>
+        </motion.form>
     );
 };
 

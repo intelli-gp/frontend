@@ -1,6 +1,7 @@
+import { AnimatePresence } from 'framer-motion';
 import { useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 
 import AIHelperPage from './pages/AI-helper/AI-helper.page';
 import ForgetPasswordPage from './pages/auth/ForgetPassword';
@@ -49,43 +50,51 @@ function App() {
     }, []);
 
     return (
-        <Routes>
-            <Route index element={<HomePage />} />
-            <Route path="auth" element={<AuthTemplatePage />}>
-                <Route path="login" element={<LoginPage />} />
-                <Route path="signup" element={<SignupPage />} />
-                <Route path="interests" element={<InterestsPage />} />
-                <Route
-                    path="forget-password"
-                    element={<ForgetPasswordPage />}
-                />
-                <Route path="reset-password" element={<RecoverPassword />} />
-            </Route>
+        <AnimatePresence>
+            <Routes location={useLocation()}>
+                <Route index element={<HomePage />} />
+                <Route path="auth" element={<AuthTemplatePage />}>
+                    <Route path="login" element={<LoginPage />} />
+                    <Route path="signup" element={<SignupPage />} />
+                    <Route path="interests" element={<InterestsPage />} />
+                    <Route
+                        path="forget-password"
+                        element={<ForgetPasswordPage />}
+                    />
+                    <Route
+                        path="reset-password"
+                        element={<RecoverPassword />}
+                    />
+                </Route>
 
-            <Route path="app" element={<LoggedInTemplatePage />}>
-                <Route path="profile" element={<ProfilePage />} />
-                <Route path="study-planner" element={<StudyPlanner />} />
-                <Route path="groups" element={<ExploreGroupsPage />} />
-                <Route path="settings" element={<SettingsPage />} />
-                <Route path="articles" element={<ExploreArticlesPage />} />
-                {/* This is temporary route */}
-                <Route path="groups/:id" element={<ViewGroupPage />} />
-                <Route path="chat-room/:id" element={<ChatroomPage />} />
+                <Route path="app" element={<LoggedInTemplatePage />}>
+                    <Route path="profile" element={<ProfilePage />} />
+                    <Route path="study-planner" element={<StudyPlanner />} />
+                    <Route path="groups" element={<ExploreGroupsPage />} />
+                    <Route path="settings" element={<SettingsPage />} />
+                    <Route path="articles" element={<ExploreArticlesPage />} />
+                    {/* This is temporary route */}
+                    <Route path="groups/:id" element={<ViewGroupPage />} />
+                    <Route path="chat-room/:id" element={<ChatroomPage />} />
 
-                <Route
-                    path="articles/:articleId"
-                    element={<ViewArticlePage />}
-                />
-                <Route path="articles/create" element={<CreateArticlePage />} />
-                <Route
-                    path="article/edit/:articleId"
-                    element={<CreateArticlePage />}
-                />
-                <Route path="pomodoro" element={<PomodoroPage />} />
-                <Route path="AI-helper" element={<AIHelperPage />} />
-                <Route path="upgrade" element={<UpgradePage />} />
-            </Route>
-        </Routes>
+                    <Route
+                        path="articles/:articleId"
+                        element={<ViewArticlePage />}
+                    />
+                    <Route
+                        path="articles/create"
+                        element={<CreateArticlePage />}
+                    />
+                    <Route
+                        path="article/edit/:articleId"
+                        element={<CreateArticlePage />}
+                    />
+                    <Route path="pomodoro" element={<PomodoroPage />} />
+                    <Route path="AI-helper" element={<AIHelperPage />} />
+                    <Route path="upgrade" element={<UpgradePage />} />
+                </Route>
+            </Routes>
+        </AnimatePresence>
     );
 }
 

@@ -1,6 +1,7 @@
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-export const PageContainer = styled.div`
+export const PageContainer = styled(motion.div)`
     .rbc-time-view .rbc-row:first-child {
         font-size: 1rem;
         min-height: 3rem !important;
@@ -68,16 +69,6 @@ export const PageContainer = styled.div`
     }
     .rbc-current-time-indicator {
         background-color: #312e81 !important;
-    }
-
-    .rbc-time-content::-webkit-scrollbar {
-        width: 0.4rem;
-    }
-    .rbc-time-content::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    .rbc-time-content::-webkit-scrollbar-thumb {
-        background: var(--gray-300);
     }
 
     display: flex;

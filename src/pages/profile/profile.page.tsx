@@ -17,7 +17,7 @@ import UserItem from '../../components/userItem/user-item.component';
 import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
 import WideGroupCard from '../../components/wide-group-card/wide-group-card.component';
 import { useUploadImage } from '../../hooks/uploadImage.hook';
-import { ModalTitle } from '../../index.styles';
+import { BetweenPageAnimation, ModalTitle } from '../../index.styles';
 import {
     MainContainer,
     PageContainer,
@@ -288,7 +288,7 @@ const ProfilePage = () => {
         </Modal>
     );
     return (
-        <PageContainer>
+        <PageContainer {...BetweenPageAnimation}>
             <PageHeader>
                 <CoverImageContainer>
                     <PictureOverlay
