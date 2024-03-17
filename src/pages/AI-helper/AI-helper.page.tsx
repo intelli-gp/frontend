@@ -12,6 +12,7 @@ import {
     ChatHeader,
     Messagebar,
     PageContainer,
+    Message
 } from './AI-helper.style';
 
 type MessageType = {
@@ -24,10 +25,10 @@ type MessageType = {
 const TextMsg = ({ el }: { el: MessageType }) => {
     return (
         <ChatBox incoming={el.incoming}>
-            <div>
+            <Message incoming={el.incoming}>
                 <p>{el.message}</p>
                 <span>{el.date}</span>
-            </div>
+            </Message>
         </ChatBox>
     );
 };
@@ -69,7 +70,7 @@ const AIHelperPage = () => {
                 <Button
                     type="button"
                     select="secondary"
-                    className="!text-[#312E81] !h-[38px] !w-[80px]"
+                    className="!text-[#312E81] !text-xs !h-[38px] !w-[80px]"
                     onClick={() => navigate('/app/upgrade')}
                 >
                     Upgrade

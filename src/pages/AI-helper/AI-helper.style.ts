@@ -70,28 +70,14 @@ export const ChatFooter = styled.div`
     background: white;
     padding: 10px 32px 15px 32px;
 `;
-type userType = {
-    incoming: boolean;
-};
-export const ChatBox = styled.div<userType>`
+
+export const ChatBox = styled.div<{ incoming: boolean}>`
     display: flex;
     flex-direction: row;
     width: 100%;
     justify-content: ${({ incoming }) =>
         incoming ? 'flex-end' : 'flex-start'};
 
-    & > div:first-child {
-        background-color: ${({ incoming }) =>
-            incoming ? 'var(--indigo-600)' : 'var(  --gray-200)'};
-        padding: ${({ incoming }) => (incoming ? '8px  15px ' : '15px')};
-        border-radius: ${({ incoming }) =>
-            incoming ? '16px 16px 0px 16px' : '16px 16px 16px 0px'};
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        max-width: 40%;
-        min-width: 20%;
-    }
 
     p {
         color: ${({ incoming }) => (incoming ? 'white' : ' var(--gray-800)')};
@@ -104,3 +90,17 @@ export const ChatBox = styled.div<userType>`
         color: ${({ incoming }) => (incoming ? 'white' : 'var(--slate-500)')};
     }
 `;
+export const Message =styled.div<{ incoming: boolean}>`
+    background-color: ${({ incoming }) =>
+        incoming ? 'var(--indigo-600)' : 'var(  --gray-200)'};
+    padding: ${({ incoming }) => (incoming ? '8px  15px ' : '15px')};
+    border-radius: ${({ incoming }) =>
+        incoming ? '16px 16px 0px 16px' : '16px 16px 16px 0px'};
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 40%;
+    min-width: 20%;
+
+
+`
