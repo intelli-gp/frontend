@@ -4,7 +4,7 @@ import SideNav from '../../components/SideNav';
 
 export default function LoggedInTemplatePage() {
     return (
-        <div className="flex min-h-full w-full relative">
+        <div className="flex min-h-full w-full relative flex-col lg:flex-row">
             <SideNav />
             <main className="w-full h-full">
                 <Outlet />

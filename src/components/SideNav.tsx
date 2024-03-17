@@ -10,12 +10,13 @@ import { IoPersonSharp } from 'react-icons/io5';
 import { LuListTodo, LuSearch } from 'react-icons/lu';
 import { MdLogout } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import defaultUserImage from '../assets/imgs/user.jpg';
 import { RootState, clearCredentials, useLogoutUserMutation } from '../store';
 import { deleteSocket } from '../utils/socket';
 import Button from './Button';
+import DropdownMenu from './Menu/menu.component';
 import SideNavItem from './SideNavItem';
 
 type PopupUserMenuLinkPropType = {
@@ -110,8 +111,7 @@ export default function SideNav() {
             id: 9,
         },
     ]);
-
-    const [menuActive, setMenuActive] = useState(false);
+    const navigate = useNavigate();
 
     /**
      * This is for mobile view only. To handle the side nav open and close
@@ -124,18 +124,16 @@ export default function SideNav() {
 
     const [logoutUser] = useLogoutUserMutation();
 
-    const screenClickHandler = (e: MouseEvent) => {
-        setMenuActive(false);
-        /**
-         * This is for mobile view only. If the click is not on the side nav
-         * then close the side nav.
-         */
-        if (sideNavRef.current !== (e.target as HTMLElement)) {
-            setSideNavOpen(false);
-        }
-    };
-
     useEffect(() => {
+        const screenClickHandler = (e: MouseEvent) => {
+            /**
+             * This is for mobile view only. If the click is not on the side nav
+             * then close the side nav.
+             */
+            if (sideNavRef.current !== (e.target as HTMLElement)) {
+                setSideNavOpen(false);
+            }
+        };
         window.addEventListener('click', screenClickHandler);
         return () => {
             window.removeEventListener('click', screenClickHandler);
@@ -225,33 +223,39 @@ export default function SideNav() {
                     </div>
                 </div>
 
-                <div className="relative flex justify-center">
-                    {menuActive && (
-                        <div className="absolute bottom-[110%] bg-indigo-100 text-indigo-900 flex flex-col p-2 rounded-xl">
-                            <PopupUserMenuLink
-                                text="Profile"
-                                path="/app/profile"
-                                icon={<IoPersonSharp />}
-                            />
-                            <PopupUserMenuLink
-                                text="Settings"
-                                path="/app/settings"
-                                icon={<IoIosSettings />}
-                            />
-                            <PopupUserMenuLink
-                                onClick={handleLogout}
-                                text="Logout"
-                                icon={<MdLogout />}
-                                path="/"
-                            />
-                        </div>
-                    )}
+                <DropdownMenu
+                    mainElementClassName="relative flex justify-center"
+                    menuWidth="8rem"
+                    bottom={'110%'}
+                    options={[
+                        {
+                            option: (
+                                <>
+                                    <IoPersonSharp /> Profile
+                                </>
+                            ),
+                            handler: () => navigate('/app/profile'),
+                        },
+                        {
+                            option: (
+                                <>
+                                    <IoIosSettings /> Settings
+                                </>
+                            ),
+                            handler: () => navigate('/app/settings'),
+                        },
+                        {
+                            option: (
+                                <>
+                                    <MdLogout /> Logout
+                                </>
+                            ),
+                            handler: handleLogout,
+                        },
+                    ]}
+                >
                     <div
                         className="rounded-full bg-indigo-100/20 hover:bg-indigo-100/30 flex gap-2 justify-between items-center text-white text-sm font-bold py-2 pl-2 pr-6 hover:cursor-pointer w-3/4"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setMenuActive(!menuActive);
-                        }}
                         title={user.Username}
                     >
                         <img
@@ -263,32 +267,17 @@ export default function SideNav() {
                             {user.Username}
                         </p>
                     </div>
-                </div>
+                </DropdownMenu>
             </aside>
-            <Button
-                type="button"
-                select="primary"
-                className="absolute top-0 left-0 text-white z-10 lg:hidden rounded-none rounded-br-lg !p-2"
-                onClick={openSideNav}
-            >
-                <FiMenu size={32} />
-            </Button>
+            <nav className="lg:hidden bg-indigo-950 ">
+                <Button
+                    type="button"
+                    className="!bg-indigo-950 block text-white z-10 !p-2"
+                    onClick={openSideNav}
+                >
+                    <FiMenu size={32} />
+                </Button>
+            </nav>
         </>
-    );
-}
-
-function PopupUserMenuLink({
-    text,
-    icon,
-    path,
-    ...other
-}: PopupUserMenuLinkPropType) {
-    return (
-        <Link to={path} {...other}>
-            <div className="flex items-center gap-2 font-bold text-sm hover:bg-indigo-200 py-2 px-4 rounded-xl text-center text-indigo-800 select-none">
-                {icon}
-                {text}
-            </div>
-        </Link>
     );
 }
