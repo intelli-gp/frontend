@@ -28,7 +28,7 @@ function Button({
     children,
     type = 'button',
     select = 'primary',
-    rounded = true,
+    rounded = false,
     loading = false,
     className,
     outline,
