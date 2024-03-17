@@ -26,8 +26,11 @@ import { useFetchTasksQuery } from '../../store';
 import {
     ButtonMV,
     CalendarHolder,
+    LeftButton,
     NoTasksContainer,
     PageContainer,
+    RightButton,
+    MiddleButton,
     Searchbar,
     SideNav,
     TaskBoxContainer,
@@ -98,24 +101,21 @@ const CustomToolbar = (props: ToolbarProps) => {
 
             <div className="flex flex-row justify-end items-center	justify-items-center lg:w-1/5 w-[10%] lg:mb-0 mb-4 ">
                 <div className="flex flex-row justify-items-center ">
-                    <button
+                    <LeftButton
                         onClick={goToBack}
-                        className="w-1/4 bg-indigo-900 rounded-l-lg border-r-[1px] border-white flex p-[8px]  flex-row justify-center items-center"
                     >
                         <FaChevronLeft color="white" size="12" />
-                    </button>
-                    <button
+                    </LeftButton>
+                    <MiddleButton
                         onClick={cycleView}
-                        className="w-[50%] bg-indigo-900 text-white text-xs md:text-sm p-[5px] "
                     >
                         {viewState.charAt(0).toUpperCase() + viewState.slice(1)}
-                    </button>
-                    <button
+                    </MiddleButton>
+                    <RightButton
                         onClick={goToNext}
-                        className="w-1/4 p-[8px] bg-indigo-900 rounded-r-lg border-l-[1px] border-white flex flex-row items-center  justify-center"
                     >
                         <FaChevronRight color="white" size="12" />
-                    </button>
+                    </RightButton>
                 </div>
             </div>
         </div>

@@ -231,3 +231,35 @@ export const Searchbar = styled.div`
         border: 2px solid #4f46e5;
     }
 `;
+export const LeftButton = styled.button`
+  width: 25%;
+  background-color:  var(--indigo-900);
+  border-radius: 0.5rem 0 0 0.5rem;
+  border-right: 1px solid white;
+  display: flex;
+  padding: 8px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+export const MiddleButton = styled.button`
+  width: 50%;
+  background-color: var(--indigo-900);
+  color: white;
+  font-size: 0.75rem;
+  padding: 5px;
+
+  @media (min-width: 768px) {
+    font-size: 0.875rem; 
+  }
+`;
+export const RightButton = styled.button`
+  width: 25%;
+  padding: 8px;
+  background-color:  var(--indigo-900);
+  border-left: 1px solid white;
+  border-radius: 0 0.5rem 0.5rem 0; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
