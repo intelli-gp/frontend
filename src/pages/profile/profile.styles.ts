@@ -96,7 +96,6 @@ export const MainContainer = styled.main`
 `;
 
 export const AboutSection = styled.section`
-    color: var(--gray-800);
     background: var(--gradient-50);
     width: 100%;
     grid-column: 1;

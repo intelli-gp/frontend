@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { CssTextLengthLimit } from '../../index.styles';
+import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
 
 export const Message = styled.div<{ isMine: boolean }>`
     display: flex;
@@ -41,17 +41,19 @@ export const SenderProfile = styled.img`
     object-fit: cover;
 `;
 
-export const SenderName = styled.h2<{ isMine: boolean; chars: number }>`
+export const SenderName = styled.h2<{ isMine?: boolean; width?: string }>`
     color: var(--gray-700);
     display: ${({ isMine }) => (isMine ? 'none' : '')};
     font-weight: 700;
-    ${CssTextLengthLimit}
     font-size: 0.75rem;
+    ${CSSTextLengthLimit}
 `;
 
 export const MessageContent = styled.main<{
     isMine?: boolean;
-    isDeleted: boolean;
+    isDeleted?: boolean;
+    width?: string;
+    lines?: number;
 }>`
     margin-top: 0rem;
     font-size: 0.85rem;
@@ -61,6 +63,7 @@ export const MessageContent = styled.main<{
     display: flex;
     gap: 0.25rem;
     align-items: center;
+    ${CSSTextLinesCountLimit}
 `;
 
 export const MessageDate = styled.p<{ isMine: boolean }>`

@@ -175,6 +175,7 @@ export default function SideNav() {
         logoutUser();
         dispatch(clearCredentials());
         deleteSocket(); // Clear socket connection
+        navigate('/');
     };
 
     // This is for mobile view only.

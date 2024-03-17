@@ -75,6 +75,20 @@
 
 body {
     color: var(--gray-800);
+
+    &::-webkit-scrollbar {
+        width: 0.5rem;
+    }
+    &::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05);
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 0;
+        background: var(--indigo-950);
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background: var(--indigo-950);
+    }
 }
 
 #root {
@@ -89,33 +103,16 @@ hr {
     border-color: var(--gray-300);
 }
 
-/* width */
-body::-webkit-scrollbar {
-    width: 7px;
-}
-
-/* Track */
-body::-webkit-scrollbar-track {
-    width: 5px;
-    background: rgba(0, 0, 0, 0.025);
-}
-
-/* Handle */
-body::-webkit-scrollbar-thumb {
-    background: var(--indigo-950);
-}
-
-/* width */
-.side-nav-links::-webkit-scrollbar {
-    width: 0.5rem;
-}
-/* Handle */
-.side-nav-links::-webkit-scrollbar-thumb {
-    background: rgb(255, 255, 255, 0.2);
-}
-/* Handle on hover */
-.side-nav-links::-webkit-scrollbar-thumb:hover {
-    background: rgb(255, 255, 255, 0.3);
+.side-nav-links {
+    &::-webkit-scrollbar {
+        width: 0.5rem;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: rgb(255, 255, 255, 0.2);
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background: rgb(255, 255, 255, 0.3);
+    }
 }
 
 .slick-prev:before,

@@ -148,7 +148,7 @@ const ChatMessage = ({ message, enableOptions }: ChatMessageProps) => {
                 <SenderName
                     title={message.User.FullName}
                     isMine={isMine}
-                    chars={15}
+                    width={'90%'}
                 >
                     {message.User.FullName}
                 </SenderName>
@@ -158,9 +158,9 @@ const ChatMessage = ({ message, enableOptions }: ChatMessageProps) => {
                 <DropdownMenu
                     options={messageOptions}
                     mainElementClassName={`!absolute top-0 right-0`}
-                    right='100%'
-                    bottom='120%'
-                    left='auto'
+                    right="100%"
+                    bottom="120%"
+                    left="auto"
                     menuWidth="8rem"
                 >
                     <OptionsButton

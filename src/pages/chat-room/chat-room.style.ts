@@ -1,4 +1,6 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
+
+import { CSSTextLengthLimit } from '../../index.styles';
 
 export const PageContainer = styled.div`
     display: flex;
@@ -43,7 +45,6 @@ export const GroupName = styled.h1`
     overflow: hidden;
     max-width: 24ch;
     font-weight: 700;
-    color: var(--gray-800);
     font-size: 1rem;
 `;
 
@@ -151,23 +152,9 @@ export const UserContainer = styled.div`
     }
 `;
 
-export const GroupUserFullName = styled.h2`
+export const GroupUserFullName = styled.h2<{ width?: string }>`
     font-size: 0.8rem;
-    max-width: 12ch;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-`;
-
-export const ripple = keyframes`
-  0% {
-    transform: scale(.8);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
+    ${CSSTextLengthLimit}
 `;
 
 export const StyledBadge = styled.span<{ online: boolean }>`
