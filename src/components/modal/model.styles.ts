@@ -25,27 +25,4 @@ export const ModalWrapper = styled.div`
     @media (max-width: 500px) {
         margin: 5rem 0rem 0rem 0rem;
     }
-    /* width */
-    &::-webkit-scrollbar {
-        width: 0.4rem;
-    }
-
-    /* Track */
-    &::-webkit-scrollbar-track {
-        width: 0.5rem;
-        background: rgba(0, 0, 0, 0.1);
-    }
-
-    /* Handle */
-    &::-webkit-scrollbar-thumb {
-        background: var(--gray-400);
-        opacity: 0.2;
-        border-radius: 0.4rem;
-    }
-    /* Handle */
-    &::-webkit-scrollbar-thumb:hover {
-        background: var(--gray-500);
-        opacity: 0.2;
-        border-radius: 0.4rem;
-    }
 `;

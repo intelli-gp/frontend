@@ -66,13 +66,3 @@ input[type='time']::-webkit-calendar-picker-indicator {
 .rbc-current-time-indicator {
     background-color: #312e81 !important;
 }
-
-.rbc-time-content::-webkit-scrollbar {
-    width: 0.4rem;
-}
-.rbc-time-content::-webkit-scrollbar-track {
-    background: transparent;
-}
-.rbc-time-content::-webkit-scrollbar-thumb {
-    background: var(--gray-300);
-}

@@ -69,22 +69,6 @@ export const ChatBody = styled.div`
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    /* width */
-    &::-webkit-scrollbar {
-        width: 0.5rem;
-    }
-
-    /* Track */
-    &::-webkit-scrollbar-track {
-        width: 0.5rem;
-        background: rgba(0, 0, 0, 0.025);
-    }
-
-    /* Handle */
-    &::-webkit-scrollbar-thumb {
-        background-color: var(--gray-300);
-        border-radius: 99rem;
-    }
 
     & > div:first-child {
         flex: 1 1 auto;
@@ -96,22 +80,7 @@ export const ChatBody = styled.div`
     }
 `;
 
-const scrollbarStyles = css`
-    .epr_b8hfyo::-webkit-scrollbar {
-        width: 0.4rem;
-    }
-    .epr_b8hfyo::-webkit-scrollbar-track {
-        background: transparent;
-        background-color: rgba(0, 0, 0, 0.025);
-    }
-    .epr_b8hfyo::-webkit-scrollbar-thumb {
-        background: var(--gray-300);
-        border-radius: 1rem;
-    }
-`;
-
 export const ChatFooter = styled.div`
-    ${scrollbarStyles}
     border-radius: 0.5rem;
     box-shadow: 0px 0px 22px 10px rgba(99, 102, 241, 0.07);
     width: 100%;
@@ -153,23 +122,6 @@ export const UsersContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-
-    /* width */
-    &::-webkit-scrollbar {
-        width: 0.5rem;
-    }
-
-    /* Track */
-    &::-webkit-scrollbar-track {
-        width: 0.6rem;
-        background: transparent;
-    }
-
-    /* Handle */
-    &::-webkit-scrollbar-thumb {
-        background: var(--gray-300);
-        opacity: 0.2;
-    }
 
     @media (max-width: 1024px) {
         border-radius: 0;

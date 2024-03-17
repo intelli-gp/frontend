@@ -37,22 +37,6 @@ export const ChatBody = styled.div`
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    /* width */
-    &::-webkit-scrollbar {
-        width: 0.5rem;
-    }
-
-    /* Track */
-    &::-webkit-scrollbar-track {
-        width: 0.6rem;
-        background: transparent;
-    }
-
-    /* Handle */
-    &::-webkit-scrollbar-thumb {
-        background: var(--gray-300);
-        opacity: 0.2;
-    }
     & > div:first-child {
         flex: 1 1 auto;
         min-height: 6px;

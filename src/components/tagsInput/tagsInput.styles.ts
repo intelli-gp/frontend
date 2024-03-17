@@ -51,16 +51,6 @@ export const SelectedTagsContainer = styled.div`
     overflow-y: scroll;
     border: 1px solid rgba(0, 0, 0, 0.1);
     padding: 1rem;
-
-    &::-webkit-scrollbar {
-        width: 5px;
-    }
-    &::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    &::-webkit-scrollbar-thumb {
-        background: rgb(165, 180, 252);
-    }
 `;
 
 export const FooterButtons = styled.footer`
