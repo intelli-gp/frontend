@@ -17,16 +17,17 @@ import Star from '../../assets/imgs/star.svg';
 import icons from '../../assets/imgs/icons.svg';
 import { Response } from '../../types/response';
 import {
-    StyledFooter, FooterContainer, FooterNav, FooterLink, CopyRightText, IconContainer 
-    ,FeedbackSection, BlogsContainer, BlogsSection, BlogsTitle, Body,
+    StyledFooter, FooterContainer, FooterNav, FooterLink, CopyRightText, IconContainer
+    , FeedbackSection, BlogsContainer, BlogsSection, BlogsTitle, Body,
     AISection, AIWrapper, FeaturesSection, ImgContainer,
     TextAIContainer, NavContainer, UpperContainer, Title, AItitle,
-    Sidebar, MenuTitles, StyledLink, MenuList,  HeroSection, 
-    HeroContainer, HeroContent } from './home.style';
+    Sidebar, MenuTitles, StyledLink, MenuList, HeroSection,
+    HeroContainer, HeroContent, SlideIndicator, CarouselItem, FeedbackCard, ProfilePic, ButtonRight, BodySpan, ButtonLeft
+} from './home.style';
 import { useGetArticlesQuery } from '../../store';
 import { ReceivedArticle } from '../../types/article';
 import SingleBlog from '../../components/article-item/article-item.component';
- function Nav() {
+function Nav() {
     const [navbarOpen, setMenuOpen] = useState(false);
 
     const handleNav = () => {
@@ -45,8 +46,8 @@ import SingleBlog from '../../components/article-item/article-item.component';
                 <div className="flex gap-16 items-center">
                     <div className="hidden lg:flex">
                         <ul className="flex px-1 ">
-                            {menuItems.map((item,index) => (
-                                <li key ={index}>
+                            {menuItems.map((item, index) => (
+                                <li key={index}>
                                     <MenuTitles
                                         href="#"
                                     >
@@ -72,7 +73,7 @@ import SingleBlog from '../../components/article-item/article-item.component';
                             <Button
                                 type="button"
                                 outline={true}
-                                className=" !px-8 !rounded-lg gap-2"
+                                className=" !px-8 !rounded-lg gap-2 text-sm"
                             >
                                 <MdLogin size={15} />
                                 Login
@@ -95,8 +96,8 @@ import SingleBlog from '../../components/article-item/article-item.component';
                     </div>
                 </div>
                 <MenuList>
-                    {menuItems.map((item,index) => (
-                        <li key ={index}>
+                    {menuItems.map((item, index) => (
+                        <li key={index}>
                             <a
                                 href="#"
                             >
@@ -131,21 +132,21 @@ import SingleBlog from '../../components/article-item/article-item.component';
 }
 
 
- function Hero() {
+function Hero() {
     return (
         <HeroSection>
-        <HeroContainer>
-          <HeroContent>
-            <h1>Turn Your Ambition Into Success Story.</h1>
-            <p>
-              In our student platform, we designed features to support
-              and enhance your educational journey, enabling you to
-              thrive academically. Join us today and unlock your
-              academic potential.
-            </p>
-          </HeroContent>
-        </HeroContainer>
-      </HeroSection>
+            <HeroContainer>
+                <HeroContent>
+                    <h1>Turn Your Ambition Into Success Story.</h1>
+                    <p>
+                        In our student platform, we designed features to support
+                        and enhance your educational journey, enabling you to
+                        thrive academically. Join us today and unlock your
+                        academic potential.
+                    </p>
+                </HeroContent>
+            </HeroContainer>
+        </HeroSection>
     );
 }
 
@@ -184,7 +185,7 @@ function FeatureSection() {
         <>
             <AISection>
                 <div>
-                  <AIWrapper>
+                    <AIWrapper>
                         <ImgContainer>
                             <img
                                 src={Section2img}
@@ -217,7 +218,7 @@ function FeatureSection() {
             </AISection>
 
             <FeaturesSection>
-                  <div>
+                <div>
                     {features.map((feature, index) => (
                         <Feature
                             key={index}
@@ -254,13 +255,13 @@ function BlogSection() {
                 </BlogsTitle>
                 <BlogsContainer>
                     {articles?.slice(0, 3)
-                            .map((article: ReceivedArticle) => {
-                                return (
-                                    <SingleBlog
-                                        {...article}
-                                    />
-                                );
-                            })}
+                        .map((article: ReceivedArticle) => {
+                            return (
+                                <SingleBlog
+                                    {...article}
+                                />
+                            );
+                        })}
                 </BlogsContainer>
             </div>
         </BlogsSection>);
@@ -273,7 +274,6 @@ function Feedback() {
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const slideIndicators = [0, 1, 2];
     const person = [
         {
             name: 'Jane Smith',
@@ -307,132 +307,111 @@ function Feedback() {
                 >
                     <div className="overflow-hidden relative h-auto rounded-lg ">
                         {person.map((item, index) => (
-                            <div
-                                key={index}
-                                className={`duration-700 ease-in-out w-full my-[4rem] ${
-                                    index === currentIndex ? '' : 'hidden'
-                                }`}
-                                data-carousel-item
+                            <CarouselItem key={index} isActive={index === currentIndex}
                             >
-                                <div className="flex flex-col items-center justify-center bg-indigo-900   group shadow-lg text-white rounded-3xl  sm:py-[10rem] h-[260px] w-full ">
-                                    <div className="flex flex-col gap-6 items-center justify-center">
-                                        <img
-                                            src={fakeProfilePic}
-                                            alt="profile pic"
-                                            className="md:w-[80px] md:h-[80px] w-[50px] h-[50px] rounded-full"
-                                        />
-                                        <div className="relative flex flex-col gap-4 items-center justify-center">
-                                            <div className="flex gap-2">
-                                                <h1 className="text-lg sm:text-xl lg:text-2xl">
-                                                    {item.name}
-                                                </h1>
-                                                <div className="flex items-center pl-6">
-                                                    <img
-                                                        src={Star}
-                                                        alt="star"
-                                                        className="h-5 w-5"
-                                                    />
-                                                    <p className="ms-2  text-sm font-semibold text-white md:text-md ml-2">
-                                                        {item.rate}
-                                                    </p>
-                                                </div>
+                                <FeedbackCard >
+                                    <ProfilePic src={fakeProfilePic} alt="profile pic" />
+                                    <div className="relative flex flex-col gap-4 items-center justify-center">
+                                        <div className="flex gap-2">
+                                            <h1 className="text-lg sm:text-xl lg:text-2xl">
+                                                {item.name}
+                                            </h1>
+                                            <div className="flex items-center pl-6">
+                                                <img
+                                                    src={Star}
+                                                    alt="star"
+                                                    className="h-5 w-5"
+                                                />
+                                                <p className="ms-2  text-sm font-semibold text-white md:text-md ml-2">
+                                                    {item.rate}
+                                                </p>
                                             </div>
-                                            <p className="lg:text-lg text-slate-300 text-center text-sm">
-                                                "{item.feedback}"
-                                            </p>
                                         </div>
+                                        <p className="lg:text-lg text-slate-300 text-center text-sm">
+                                            "{item.feedback}"
+                                        </p>
                                     </div>
-                                </div>
-                            </div>
+                                </FeedbackCard >
+                            </CarouselItem >
                         ))}
                     </div>
-                    <div className="flex  absolute bottom-5 left-1/2 z-30 space-x-3 -translate-x-1/2">
-                        {slideIndicators.map((index) => (
-                            <button
+                    <div className="flex absolute bottom-5 left-1/2 z-30 space-x-3 -translate-x-1/2">
+                        {person.map((_, index) => (
+                            <SlideIndicator
                                 key={index}
                                 type="button"
-                                className={`w-3 h-3 rounded-full mt-6 ${
-                                    index === currentIndex
-                                        ? 'bg-indigo-600'
-                                        : 'bg-gray-300'
-                                }`}
-                                aria-current={
-                                    index === currentIndex ? 'true' : 'false'
-                                }
-                                aria-label={`Slide ${index + 1}`}
-                                data-carousel-slide-to={index}
+                                isActive={index === currentIndex}
+                                aria-current={index === currentIndex ? 'true' : 'false'}
                                 onClick={() => changeSlide(index)}
-                            ></button>
+                            />
                         ))}
                     </div>
 
-                    <button
+                    <ButtonRight
                         type="button"
                         className="flex absolute top-0 right-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none"
                         data-carousel-next
                         onClick={() => changeSlide(currentIndex + 1)}
                     >
-                        <span className="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-gray-800/30  hover:bg-gray-800/50">
+                        <BodySpan>
                             <IoChevronForwardOutline
-                                className="w-6 h-6 rounded-full sm:w-8 sm:h-8 ml-1  "
+                                className="w-6 h-6 rounded-full sm:w-8 sm:h-8 ml-1"
                                 color="white"
                             />
-                            <span className="hidden">Next</span>
-                        </span>
-                    </button>
-                    <button
+                        </BodySpan>                    
+                        </ButtonRight>
+                    <ButtonLeft
                         type="button"
                         className="flex absolute top-0 left-0  justify-center items-center px-4 h-full cursor-pointer group "
                         data-carousel-prev
                         onClick={() => changeSlide(currentIndex - 1)}
                     >
-                        <span className="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-gray-800/30  hover:bg-gray-800/50">
+                        <BodySpan>
                             <IoChevronBackOutline
                                 className="w-6 h-6 rounded-full sm:w-8 sm:h-8 mr-1"
                                 color="white"
                             />
-                            <span className="hidden">Previous</span>
-                        </span>
-                    </button>
+                        </BodySpan>
+                    </ButtonLeft>
                 </div>
             </div>
         </FeedbackSection>
     );
 }
 
- function Footer() {
+function Footer() {
     const menuItems = ['Blogs', 'About', 'Services', 'Projects'];
-  
+
     return (
-      <StyledFooter>
-        <FooterContainer>
-          <div>
-            <FooterNav>
-              {menuItems.map((item, index) => (
-                <li key={index}>
-                  <FooterLink href="/">{item}</FooterLink>
-                </li>
-              ))}
-            </FooterNav>
-          </div>
-          <div className="container pt-9 md:flex justify-between mt-10">
-            <CopyRightText>
-              Copyright &copy; 2022. All rights reserved.
-            </CopyRightText>
-            <IconContainer>
-              <img src={icons} alt="icons" />
-            </IconContainer>
-          </div>
-          <div className="mt-4 flex items-center space-x-4 sm:mt-0"/>
-        </FooterContainer>
-      </StyledFooter>
+        <StyledFooter>
+            <FooterContainer>
+                <div>
+                    <FooterNav>
+                        {menuItems.map((item, index) => (
+                            <li key={index}>
+                                <FooterLink href="/">{item}</FooterLink>
+                            </li>
+                        ))}
+                    </FooterNav>
+                </div>
+                <div className="container pt-9 md:flex justify-between mt-10">
+                    <CopyRightText>
+                        Copyright &copy; 2022. All rights reserved.
+                    </CopyRightText>
+                    <IconContainer>
+                        <img src={icons} alt="icons" />
+                    </IconContainer>
+                </div>
+                <div className="mt-4 flex items-center space-x-4 sm:mt-0" />
+            </FooterContainer>
+        </StyledFooter>
     );
-  }
+}
 function HomePage() {
     return (
         <div>
             <Nav />
-              <Body> 
+            <Body>
                 <Hero />
                 <FeatureSection />
                 <BlogSection />
