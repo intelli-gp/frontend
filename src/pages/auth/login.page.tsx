@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useLayoutEffect } from 'react';
-import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -19,6 +18,7 @@ import { Response } from '../../types/response';
 import { getSocket } from '../../utils/socket';
 import { connectSSE } from '../../utils/sse';
 import { errorToast } from '../../utils/toasts';
+import { FormContainer, GoogleIcon, GoogleLoginButton, GoogleLoginLink } from './auth.styles';
 
 export default function LoginPage() {
     const dispatch = useDispatch();
@@ -92,8 +92,7 @@ export default function LoginPage() {
     };
 
     return (
-        <form
-            className="flex flex-col gap-4 3xs:w-[20rem] md:!w-[25rem]"
+        <FormContainer
             onSubmit={handleSubmitLogin}
         >
             <PageTitle className="text-center mb-6">Welcome Back!</PageTitle>
@@ -143,23 +142,21 @@ export default function LoginPage() {
                 Login
             </Button>
 
-            <Button
+            <GoogleLoginButton
                 type="button"
-                className="flex items-center justify-center gap-2 text-lg h-11 py-2 w-full"
             >
-                <a
+                <GoogleLoginLink
                     href="http://localhost:3333/api/auth/login/google"
-                    className="flex items-center justify-center gap-2 text-white"
                 >
-                    <FcGoogle className="p-[1px] rounded-full bg-white box-content" />
+                    <GoogleIcon />
                     Login with google
-                </a>
-            </Button>
+                </GoogleLoginLink>
+            </GoogleLoginButton>
 
             <p className="flex gap-2 justify-center">
                 Don't have an account?
                 <Link to="/auth/signup">Create one</Link>
             </p>
-        </form>
+        </FormContainer>
     );
 }

@@ -1,13 +1,11 @@
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { ChangeEvent, useEffect, useState } from 'react';
+import  { ChangeEvent, useEffect, useState } from 'react';
 import { FaEnvelope } from 'react-icons/fa';
 import { IoChevronBack } from 'react-icons/io5';
-import { Link } from 'react-router-dom';
-
-import { InputWithLabel } from '../../components/Input';
-import Button from '../../components/button/button.component';
-import { useLazyResetPasswordQuery } from '../../store';
-import { errorToast, successToast } from '../../utils/toasts';
+import { InputWithLabel } from '../../../components/Input';
+import { useLazyResetPasswordQuery } from '../../../store';
+import { errorToast, successToast } from '../../../utils/toasts';
+import { BackToLoginLink, FormContainer, PasswordRecoveryContainer, RecoveryHeading, RecoveryMessage, RecoveryTitle, RecoveryButton } from './forget-password.styles';
 
 export default function ForgetPasswordPage() {
     const [email, setEmail] = useState<string>('');
@@ -38,21 +36,20 @@ export default function ForgetPasswordPage() {
     };
 
     return (
-        <form
-            className="flex flex-col gap-4 3xs:w-[20rem] md:!w-[25rem] py-8"
+        <FormContainer
             onSubmit={handleSubmit}
         >
-            <h1 className="text-5xl 3xs:max-md:text-[2.5rem] text-slate-600 font-black text-center py-8 tracking-tight">
+            <RecoveryHeading>
                 Forget password
-            </h1>
-            <main className="flex flex-col border rounded-md p-8 gap-2 border-slate-300">
-                <h2 className="text-2xl font-bold text-slate-600">
+            </RecoveryHeading>
+            <PasswordRecoveryContainer>
+                <RecoveryTitle>
                     Recover your password
-                </h2>
+                </RecoveryTitle>
                 <hr />
-                <p className="text-sm text-slate-500">
+                <RecoveryMessage>
                     Don't worry, happens to the best of us.
-                </p>
+                </RecoveryMessage>
 
                 <div className="flex flex-col gap-6 mt-6">
                     <InputWithLabel
@@ -65,24 +62,22 @@ export default function ForgetPasswordPage() {
                             setEmail(e.target.value)
                         }
                     />
-                    <Button
-                        className="!h-11 text-base text-center !font-bold w-full gap-2"
+                    <RecoveryButton
                         type="submit"
                         loading={isFetching}
                     >
                         <FaEnvelope />
                         Email me a recovery link
-                    </Button>
+                    </RecoveryButton>
                 </div>
 
-                <Link
+                <BackToLoginLink
                     to="/auth/login"
-                    className="flex flex-row gap-2 justify-center items-center text-sm mt-4"
                 >
                     <IoChevronBack />
                     Back to login
-                </Link>
-            </main>
-        </form>
+                </BackToLoginLink>
+            </PasswordRecoveryContainer>
+        </FormContainer>
     );
 }

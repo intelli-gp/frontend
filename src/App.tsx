@@ -3,10 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
 import AIHelperPage from './pages/AI-helper/AI-helper.page';
-import ForgetPasswordPage from './pages/auth/ForgetPassword';
-import LoginPage from './pages/auth/Login';
-import RecoverPassword from './pages/auth/RecoverPassword';
-import SignupPage from './pages/auth/Signup';
+import LoginPage from './pages/auth/login.page';
+import RecoverPassword from './pages/auth/froget-password/recover-password.page';
+import SignupPage from './pages/auth/signup.page';
 import InterestsPage from './pages/auth/interests/interests.page';
 import { ChatroomPage } from './pages/chat-room/chat-room.page';
 import CreateArticlePage from './pages/create-article/create-article.page';
@@ -25,6 +24,7 @@ import ViewGroupPage from './pages/view-group/view-group.page';
 import { RootState, setCredentials } from './store';
 import { getSocket } from './utils/socket';
 import { connectSSE } from './utils/sse';
+import ForgetPasswordPage from './pages/auth/froget-password/forget-password.page';
 
 function App() {
     const dispatch = useDispatch();

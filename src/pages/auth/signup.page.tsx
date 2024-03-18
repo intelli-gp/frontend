@@ -1,11 +1,9 @@
 import { ChangeEvent, useLayoutEffect } from 'react';
-import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { InputWithLabel } from '../../components/Input';
 import PhoneNumberInput from '../../components/PhoneNumberInput';
-import Button from '../../components/button/button.component';
 import { PageTitle } from '../../index.styles';
 import {
     changeSignupBirthDate,
@@ -25,6 +23,7 @@ import { UserToSend } from '../../types/user';
 import { getSocket } from '../../utils/socket';
 import { connectSSE } from '../../utils/sse';
 import { errorToast } from '../../utils/toasts';
+import { GoogleLoginButton, GoogleLoginLink, GoogleIcon,SignupContainer, SubmitButton,FormContainer, PasswordContainer } from './auth.styles';
 
 export default function SignupPage() {
     const dispatch = useDispatch();
@@ -88,11 +87,10 @@ export default function SignupPage() {
     };
 
     return (
-        <div className="flex flex-col justify-center items-center w-full lg:w-3/5 py-8">
+        <SignupContainer>
             <PageTitle className="text-center mb-6">Create Account</PageTitle>
-
-            <form
-                className="flex flex-col gap-2 3xs:w-[20rem] md:!w-[25rem]"
+            <FormContainer
+                className='!gap-2 !p-0'
                 onSubmit={handleSubmitForm}
             >
                 <div className="flex gap-2 w-full justify-between 3xs:max-md:flex-col">
@@ -158,7 +156,7 @@ export default function SignupPage() {
                     }}
                 />
 
-                <div className="flex gap-2 w-full justify-between 3xs:max-md:flex-col">
+                <PasswordContainer>
                     <InputWithLabel
                         required
                         type="password"
@@ -183,7 +181,7 @@ export default function SignupPage() {
                             );
                         }}
                     />
-                </div>
+                </PasswordContainer>
 
                 <div className="flex items-center gap-2 my-4">
                     <input
@@ -207,36 +205,33 @@ export default function SignupPage() {
                 </div>
 
                 <div className="flex flex-col gap-4">
-                    <Button
+                    <SubmitButton
                         select="primary700"
                         type="submit"
-                        className="flex items-center justify-center gap-2 text-lg h-11 py-2 w-full"
                         loading={isLoading}
                     >
                         Create
-                    </Button>
+                    </SubmitButton>
 
-                    <Button
+                    <GoogleLoginButton
                         type="button"
-                        className="flex items-center justify-center gap-2 text-lg h-11 py-2 w-full"
                     >
-                        <a
+                        <GoogleLoginLink
                             href={`${
                                 import.meta.env.VITE_BACKEND
                             }/api/auth/login/google`}
-                            className="flex items-center justify-center gap-2 text-white"
                         >
-                            <FcGoogle className="p-[1px] rounded-full bg-white box-content" />
+                            <GoogleIcon />
                             Sign up with google
-                        </a>
-                    </Button>
+                        </GoogleLoginLink>
+                    </GoogleLoginButton>
                 </div>
 
                 <p className="flex gap-2 justify-center my-3">
                     Already has an account?
                     <Link to="/auth/login">Login</Link>
                 </p>
-            </form>
-        </div>
+            </FormContainer>
+        </SignupContainer>
     );
 }

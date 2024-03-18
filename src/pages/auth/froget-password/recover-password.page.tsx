@@ -3,10 +3,10 @@ import { IoChevronBack } from 'react-icons/io5';
 import { MdLockReset } from 'react-icons/md';
 import { Link, useSearchParams } from 'react-router-dom';
 
-import { InputWithLabel } from '../../components/Input';
-import Button from '../../components/button/button.component';
-import { reset, useResetPasswordConfirmMutation } from '../../store';
-import { errorToast, successToast } from '../../utils/toasts';
+import { InputWithLabel } from '../../../components/Input';
+import { reset, useResetPasswordConfirmMutation } from '../../../store';
+import { errorToast, successToast } from '../../../utils/toasts';
+import { FormContainer, RecoveryButton,PasswordRecoveryContainer,RecoveryTitle,RecoveryHeading } from './forget-password.styles';
 
 const RecoverPassword = () => {
     const [newPassword, setNewPassword] = useState('');
@@ -45,18 +45,16 @@ const RecoverPassword = () => {
     };
 
     return (
-        <form
-            className="flex flex-col gap-4 3xs:w-[20rem] md:!w-[25rem] py-8"
+        <FormContainer
             onSubmit={handleSubmit}
         >
-            <h1 className="text-5xl 3xs:max-md:text-[2.5rem] text-slate-600 font-black text-center py-10 tracking-tight">
+            <RecoveryHeading>
                 Recover password
-            </h1>
-
-            <main className="flex flex-col border rounded-md p-8 gap-2 border-slate-300">
-                <h2 className="text-2xl font-bold text-slate-600">
+            </RecoveryHeading>
+            <PasswordRecoveryContainer>
+                <RecoveryTitle>
                     Creating your new password
-                </h2>
+                </RecoveryTitle>
                 <hr />
 
                 <div className="flex flex-col gap-6 mt-4">
@@ -86,14 +84,13 @@ const RecoverPassword = () => {
                             }
                         }}
                     />
-                    <Button
-                        className="!h-11 !text-md text-center !font-bold w-full gap-2"
+                    <RecoveryButton
                         type="submit"
                         loading={isLoading}
                     >
                         <MdLockReset />
                         Set new password
-                    </Button>
+                    </RecoveryButton>
                 </div>
 
                 <Link
@@ -103,8 +100,8 @@ const RecoverPassword = () => {
                     <IoChevronBack />
                     Back to login
                 </Link>
-            </main>
-        </form>
+            </PasswordRecoveryContainer>
+        </FormContainer>
     );
 };
 
