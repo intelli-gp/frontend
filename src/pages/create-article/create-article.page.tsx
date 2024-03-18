@@ -10,11 +10,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ImageUploadSection } from '../../components/article-image-section/article-image-section.component';
 import Button from '../../components/button/button.component';
 import MarkdownEditor from '../../components/markdown-editor/markdown.component';
+import DropdownMenu from '../../components/menu/menu.component';
 import { Modal } from '../../components/modal/modal.component';
 import OpenImage from '../../components/openImage/openImage.component';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import { useUploadImage } from '../../hooks/uploadImage.hook';
-import { BetweenPageAnimation, PageTitle } from '../../index.styles';
+import {
+    BetweenPageAnimation,
+    ModalTitle,
+    PageTitle,
+} from '../../index.styles';
 import {
     RootState,
     addArticleSection,
@@ -43,8 +48,6 @@ import {
 import { Response } from '../../types/response';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
-    AddSectionItem,
-    AddSectionMenu,
     ArticleCoverImageContainer,
     ArticleTitleInput,
     PageContainer,
@@ -55,7 +58,6 @@ const CreateArticlePage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const addSectionButtonRef = useRef<HTMLDivElement>(null);
-    const [addSectionMenuIsOpen, setAddSectionMenuIsOpen] = useState(false);
     const [removeArticle] = useDeleteArticleMutation();
     const [deleteArticleModalIsOpen, setDeleteArticleModalIsOpen] =
         useState(false);
@@ -128,22 +130,23 @@ const CreateArticlePage = () => {
             title,
         };
 
-        if (cover) {
-            try {
-                article.coverImageUrl = await imageUploadTrigger(cover);
-            } catch (err) {
-                errorToast(
-                    'Error uploading cover image while publishing article!',
-                );
+        try {
+            if (!cover) {
+                errorToast('Please add a cover image for your article!');
                 return;
-            } finally {
-                imageUploadReset();
             }
+            article.coverImageUrl = await imageUploadTrigger(cover);
+        } catch (err) {
+            errorToast('Error uploading cover image while publishing article!');
+            return;
+        } finally {
+            imageUploadReset();
         }
 
         let sectionsToSend: ArticleSectionToSend[] = [];
 
         for (const section of sections) {
+            if (!section.Value) continue; // skip empty sections
             if (section.ContentType === ArticleSectionType.Image) {
                 try {
                     let remoteURL = await imageUploadTrigger(section.Value);
@@ -287,18 +290,6 @@ const CreateArticlePage = () => {
             });
     }, []);
 
-    useEffect(() => {
-        function hideAddSectionMenu() {
-            setAddSectionMenuIsOpen(false);
-        }
-
-        document.addEventListener('click', hideAddSectionMenu);
-
-        return () => {
-            document.removeEventListener('click', hideAddSectionMenu);
-        };
-    }, []);
-
     /**
      * This useEffect is used to clear the state of page when the user
      * come here to edit an article then leave the page either by editing
@@ -323,24 +314,25 @@ const CreateArticlePage = () => {
             }}
         >
             <div className="flex flex-col gap-8">
-                <p className="text-2xl font-bold text-[var(--gray-800)] text-center">
+                <ModalTitle>
                     Are you sure you want to delete this section?
-                </p>
-                <div className="flex gap-4 justify-center">
-                    <Button
-                        type="button"
-                        className="!px-8"
-                        onClick={() => dispatch(openDeleteSectionModal(false))}
-                    >
-                        Cancel
-                    </Button>
+                </ModalTitle>
+                <div className="flex gap-4 flex-row-reverse">
                     <Button
                         className="!px-8"
                         type="button"
                         select="danger"
+                        outline
                         onClick={() => dispatch(executeSectionDeletion())}
                     >
                         Yes
+                    </Button>
+                    <Button
+                        type="button"
+                        className="!px-6"
+                        onClick={() => dispatch(openDeleteSectionModal(false))}
+                    >
+                        Cancel
                     </Button>
                 </div>
             </div>
@@ -353,24 +345,25 @@ const CreateArticlePage = () => {
             setIsOpen={setDeleteArticleModalIsOpen}
         >
             <div className="flex flex-col gap-8">
-                <p className="text-2xl font-bold text-[var(--gray-800)] text-center">
+                <ModalTitle>
                     Are you sure you want to delete this Article?
-                </p>
-                <div className="flex gap-4 justify-center">
-                    <Button
-                        type="button"
-                        className="!px-8"
-                        onClick={() => setDeleteArticleModalIsOpen(false)}
-                    >
-                        Cancel
-                    </Button>
+                </ModalTitle>
+                <div className="flex gap-4 flex-row-reverse">
                     <Button
                         className="!px-8"
                         type="button"
                         select="danger"
+                        outline
                         onClick={deleteArticle}
                     >
                         Yes
+                    </Button>
+                    <Button
+                        type="button"
+                        className="!px-6"
+                        onClick={() => setDeleteArticleModalIsOpen(false)}
+                    >
+                        Cancel
                     </Button>
                 </div>
             </div>
@@ -412,6 +405,7 @@ const CreateArticlePage = () => {
             </ArticleCoverImageContainer>
 
             <ArticleTitleInput
+                rows={1}
                 placeholder="Type article title..."
                 value={title}
                 onChange={(e) => {
@@ -445,29 +439,30 @@ const CreateArticlePage = () => {
             })}
 
             <div className="flex flex-col items-center gap-2 fixed bottom-4 right-4 z-40">
-                {addSectionMenuIsOpen && (
-                    <AddSectionMenu>
-                        <AddSectionItem onClick={addMarkdownSection}>
-                            Markdown
-                        </AddSectionItem>
-                        <AddSectionItem onClick={addImageSection}>
-                            Image
-                        </AddSectionItem>
-                    </AddSectionMenu>
-                )}
-
-                <Button
-                    type="button"
-                    className="!p-4 !rounded-full justify-center"
-                    onClick={(e: unknown) => {
-                        (e as MouseEvent).stopPropagation();
-                        setAddSectionMenuIsOpen(true);
-                    }}
-                    title="Add New section"
-                    ref={addSectionButtonRef}
+                <DropdownMenu
+                    options={[
+                        {
+                            option: 'Markdown',
+                            handler: addMarkdownSection,
+                        },
+                        {
+                            option: 'Image',
+                            handler: addImageSection,
+                        },
+                    ]}
+                    bottom="90%"
+                    right="90%"
                 >
-                    <FaPlus size={18} />
-                </Button>
+                    <Button
+                        type="button"
+                        className="!p-4 !rounded-full justify-center"
+                        title="Add New section"
+                        ref={addSectionButtonRef}
+                    >
+                        <FaPlus size={18} />
+                    </Button>
+                </DropdownMenu>
+
                 <Button
                     select="success"
                     type="button"

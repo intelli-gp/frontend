@@ -39,7 +39,7 @@ export const EditButton = styled(Button)`
     border-radius: 0;
 `;
 
-export const ArticleTitleInput = styled.input`
+export const ArticleTitleInput = styled.textarea`
     font-size: 2rem;
     font-weight: 700;
     border: none;
