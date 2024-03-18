@@ -1,5 +1,8 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+
+import { CSSTextLengthLimit } from '../../index.styles';
 
 export const PageContainer = styled(motion.div)`
     display: flex;
@@ -24,7 +27,7 @@ export const AuthorDataContainer = styled.div`
     border-radius: 1.5rem;
     padding: 2rem;
     position: absolute;
-    bottom: 10px;
+    bottom: -1rem;
     left: 0;
     right: 0;
     width: 400px;
@@ -34,22 +37,31 @@ export const AuthorDataContainer = styled.div`
     align-items: center;
     background-color: white;
     gap: 1rem;
+    box-shadow: 0px 0px 24px 5px rgba(0, 0, 0, 0.25);
 
     transition: all 0.3s ease-in-out;
-
-    &:hover {
-        background-color: var(--indigo-50);
-        cursor: pointer;
-    }
 `;
 
 export const AuthorProfileImage = styled.img`
+    aspect-ratio: 1/1;
     width: 75px;
     height: 75px;
     border-radius: 50%;
     object-fit: cover;
     object-position: center;
     box-shadow: var(--gray-shadow);
+`;
+
+export const AuthorName = styled(Link)<{ width?: string }>`
+    color: var(--gray-800);
+    font-weight: 700;
+    font-size: 1.2rem;
+    ${CSSTextLengthLimit}
+`;
+
+export const PublishDate = styled.time`
+    font-size: 0.8rem;
+    opacity: 0.8;
 `;
 
 export const ArticleBodyContainer = styled.div`

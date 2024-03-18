@@ -1,4 +1,5 @@
 import MDEditor from '@uiw/react-md-editor';
+import moment from 'moment';
 import { CiBookmark, CiStar } from 'react-icons/ci';
 import { FiEdit, FiPlus } from 'react-icons/fi';
 import { IoShareSocial } from 'react-icons/io5';
@@ -11,6 +12,7 @@ import defaultUserImage from '../../assets/imgs/user.jpg';
 import Spinner from '../../components/Spinner';
 import Button from '../../components/button/button.component';
 import Tag from '../../components/tag/tag.component';
+import { BetweenPageAnimation } from '../../index.styles';
 import { useGetArticleQuery } from '../../store';
 import { RootState } from '../../store';
 import { ArticleSectionType, ReceivedArticle } from '../../types/article.d';
@@ -24,11 +26,12 @@ import {
     ArticleToolbar,
     AuthorDataContainer,
     AuthorMoreInfoContainer,
+    AuthorName,
     AuthorProfileImage,
     PageContainer,
+    PublishDate,
     SuggestedArticlesContainer,
 } from './view-article.styles';
-import { BetweenPageAnimation } from '../../index.styles';
 
 const ViewArticlePage = () => {
     const { articleId } = useParams();
@@ -58,14 +61,12 @@ const ViewArticlePage = () => {
                         src={article?.Author?.ProfileImage ?? defaultUserImage}
                         alt="author profile image"
                     />
-                    <div>
-                        <p className="text-md font-black text-[var(--gray-800)]">
-                            {article?.Author?.FullName}
-                        </p>
-                        <p className="text-xs text-[var(--gray-700)]">
+                    <div className='flex flex-col gap-0'>
+                        <AuthorName to={"#"}>{article?.Author?.FullName}</AuthorName>
+                        <PublishDate>
                             {article?.UpdatedAt &&
-                                new Date(article.UpdatedAt).toDateString()}
-                        </p>
+                                moment(new Date(article.UpdatedAt)).fromNow()}
+                        </PublishDate>
                     </div>
 
                     <Button
@@ -101,7 +102,7 @@ const ViewArticlePage = () => {
                 {/* Article Tags */}
                 <div className="flex gap-2 items-center justify-center">
                     {article?.ArticleTags.map((tag) => {
-                        return <Tag text={tag} size="sm" />;
+                        return <Tag text={tag}/>;
                     })}
                 </div>
 
