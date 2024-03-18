@@ -36,11 +36,13 @@ import {
     GroupCoverImage,
     GroupCoverImageContainer,
     GroupInfoContainer,
+    GroupTitleHolder,
     LeftPart,
     PageContainer,
     PeopleContainer,
     PictureOverlay,
     RightPart,
+    StatusTitle,
 } from './view-group.styles';
 
 enum Role {
@@ -270,14 +272,14 @@ const ViewGroupPage = () => {
                     />
                 )}
 
-                <div>
-                    <h1 className="lg:text-5xl text-3xl text-white">
+                <GroupTitleHolder>
+                    <h1 className="lg:text-5xl text-3xl text-white font-bold">
                         {groupData?.GroupTitle}
                     </h1>
                     <p className="lg:text-2xl text-md text-white ml-2">
                         {groupData?.GroupMembers?.length + ' Members'}
                     </p>
-                </div>
+                </GroupTitleHolder>
 
                 {userType === Role.admin || userType === Role.member
                     ? returnButton
@@ -388,7 +390,7 @@ const ViewGroupPage = () => {
                 </LeftPart>
 
                 <RightPart>
-                    <p>ADMINS</p>
+                    <StatusTitle>ADMINS</StatusTitle>
                     <PeopleContainer>
                         {admins.map((admin) => {
                             return (
@@ -404,7 +406,7 @@ const ViewGroupPage = () => {
                         })}
                     </PeopleContainer>
                     <br />
-                    <p>MEMBERS</p>
+                    <StatusTitle>MEMBERS</StatusTitle>
                     <PeopleContainer>
                         {members.map((member) => {
                             return (

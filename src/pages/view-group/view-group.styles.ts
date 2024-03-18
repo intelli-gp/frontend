@@ -12,28 +12,21 @@ export const GroupCoverImageContainer = styled.div`
     position: relative;
     width: 100%;
 
-    div {
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        left: 4rem;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-
-    @media (max-width: 1024px) {
-        height: 20vh;
-        div {
-            position: absolute;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            left: 3rem;
-        }
-    }
 `;
+export const GroupTitleHolder=styled.div`
+position: absolute;
+display: flex;
+flex-direction: column;
+gap: 20px;
+left: 4rem;
+top: 50%;
+transform: translateY(-50%);
+@media (max-width: 1024px) {
+        gap: 15px;
+        left: 3rem;
+}
 
+`
 export const GroupCoverImage = styled.img`
     width: 100%;
     height: 100%;
@@ -117,19 +110,16 @@ export const RightPart = styled.div`
     box-shadow: 0px 0px 60px 5px rgba(39, 31, 75, 0.07);
     background: white;
     height: 100%;
-
-    p {
-        margin: 0px 15px 0px 5px;
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--gray-700);
-    }
-    @media (max-width: 768px) {
-        box-shadow: 0px;
-
-        background: transparent;
-    }
 `;
+export const StatusTitle =styled.p`
+
+    margin: 0px 15px 0px 5px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gray-700);
+
+
+`
 
 export const PeopleContainer = styled.div`
     display: grid;
@@ -137,6 +127,14 @@ export const PeopleContainer = styled.div`
     padding: 12px;
     gap: 1rem;
     width: 100%;
+    @media (max-width: 1284px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    }
+    @media (max-width: 768px) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    }
 `;
 
 export const EditButton = styled.button`
