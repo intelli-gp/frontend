@@ -11,15 +11,16 @@ export const TagContainer = styled.div<{ size?: string; deletable?: boolean }>`
     font-size: ${({ size }) => {
         switch (size) {
             case 'xs':
-                return '0.6rem';
+                return '0.65rem';
             case 'sm':
-                return '0.8rem';
+                return '0.75rem';
             case 'md':
-                return '1rem';
+            case undefined:
+                return '0.85rem';
             case 'lg':
-                return '1.2rem';
-            default:
                 return '1rem';
+            default:
+                return '0.85rem';
         }
     }};
     background-color: var(--indigo-200);
