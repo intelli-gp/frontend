@@ -3,8 +3,8 @@ import styled, { css } from 'styled-components';
 export const PageTitle = styled.h1`
     user-select: none;
     line-height: 1.25;
-    font-weight: 700;
-    font-size: 2.75rem;
+    font-weight: 900;
+    font-size: 2.5rem;
 
     @media (max-width: 768px) {
         line-height: 0.9;
@@ -12,8 +12,10 @@ export const PageTitle = styled.h1`
 `;
 
 export const ModalTitle = styled.h2<{ fontSize?: 'sm' | 'md' | 'lg' | string }>`
+    color: var(--gray-800);
     user-select: none;
     font-weight: 700;
+    line-height: 1.25;
     font-size: ${({ fontSize }) => {
         switch (fontSize) {
             case 'sm':
@@ -62,5 +64,5 @@ export const BetweenPageAnimation = {
     initial: { opacity: 0 },
     animate: { opacity: 1 },
     exit: { opacity: 0 },
-    transition: { duration: 0.25 },
+    transition: { duration: 0.5 },
 };
