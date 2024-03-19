@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { ChangeEvent, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { MdDoNotDisturb } from 'react-icons/md';
@@ -8,6 +9,7 @@ import { ModalTitle } from '../../index.styles';
 import { RootState } from '../../store';
 import {
     useDeleteMessageMutation,
+    useLazyGetMessageInfoQuery,
     useUpdateMessageMutation,
 } from '../../store/apis/messagesApi';
 import { SerializedMessage } from '../../types/message';
@@ -36,9 +38,12 @@ const ChatMessage = ({ message, enableOptions }: ChatMessageProps) => {
     const isMine = message.User.ID === user.ID; // Does this message belongs to me.
     const [editMessageIsOpen, setEditMessageIsOpen] = useState(false);
     const [deleteMessageIsOpen, setDeleteMessageIsOpen] = useState(false);
+    const [messageInfoIsOpen, setMessageInfoIsOpen] = useState(false);
     const [editMessageText, setEditMessageText] = useState(message.Content);
     const [updateMessage] = useUpdateMessageMutation();
     const [deleteMessage] = useDeleteMessageMutation();
+    const [getMessageInfo, { data: messageInfo }] =
+        useLazyGetMessageInfoQuery();
 
     const handleUpdateMessage = async () => {
         try {
@@ -66,9 +71,15 @@ const ChatMessage = ({ message, enableOptions }: ChatMessageProps) => {
         }
     };
 
+    const handleGetMessageInfo = async () => {
+        setMessageInfoIsOpen(true);
+        getMessageInfo(message.MessageID);
+    };
+
     let messageOptions = [
         { option: 'Edit', handler: () => setEditMessageIsOpen(true) },
         { option: 'Delete', handler: () => setDeleteMessageIsOpen(true) },
+        { option: 'Info', handler: handleGetMessageInfo },
     ];
 
     const UpdateMessageModal = (
@@ -135,10 +146,39 @@ const ChatMessage = ({ message, enableOptions }: ChatMessageProps) => {
         </Modal>
     );
 
+    const MessageInfoModal = (
+        <Modal isOpen={messageInfoIsOpen} setIsOpen={setMessageInfoIsOpen}>
+            <ModalTitle
+                fontSize="sm"
+                className="mb-8"
+            >{`Message is read by: (${message.MessageID})`}</ModalTitle>
+            <div className="flex flex-col gap-4">
+                {(messageInfo as any[])?.map((info: any) => {
+                    return (
+                        <div key={info.ID} className="flex gap-2 items-center">
+                            <img
+                                src={info?.ProfileImage ?? ''}
+                                alt="user profile image"
+                                className="aspect-square rounded-full object-cover w-8 h-8"
+                            />
+                            <span>{info?.FullName ?? ''}</span>
+                            <span className="text-xs opacity-60">
+                                {moment(
+                                    new Date(info?.ReadAt ?? Date.now()),
+                                ).fromNow()}
+                            </span>
+                        </div>
+                    );
+                })}
+            </div>
+        </Modal>
+    );
+
     return (
         <Message isMine={isMine}>
             {editMessageIsOpen && UpdateMessageModal}
             {deleteMessageIsOpen && DeleteMessageModal}
+            {messageInfoIsOpen && MessageInfoModal}
 
             <MessageHeader isMine={isMine}>
                 <SenderProfile

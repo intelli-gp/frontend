@@ -39,6 +39,7 @@ export const SenderProfile = styled.img`
     height: 24px;
     border-radius: 50%;
     object-fit: cover;
+    aspect-ratio: 1/1;
 `;
 
 export const SenderName = styled.h2<{ isMine?: boolean; width?: string }>`

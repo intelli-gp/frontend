@@ -120,6 +120,34 @@ const messageApi = appApi.injectEndpoints({
                 }
             },
         }),
+        getMessageInfo: builder.query<unknown, number>({
+            queryFn: () => ({ data: [] }),
+            async onCacheEntryAdded(
+                MessageID,
+                { updateCachedData, cacheEntryRemoved },
+            ) {
+                try {
+                    let socket = await getSocket();
+                    socket.emit('getMessageInfo', { MessageID });
+                    socket.on('messageInfo', (messages: any) => {
+                        console.log(messages);
+                        updateCachedData(() => {
+                            return messages;
+                        });
+                    });
+                    socket.on('newMessageReadInfo', (message: any) => {
+                        console.log(message);
+                        updateCachedData((draft) => {
+                            (draft as any).push(message);
+                        });
+                    });
+                    await cacheEntryRemoved;
+                    socket.off('messageInfo');
+                } catch (error) {
+                    console.error(error);
+                }
+            },
+        }),
     }),
 });
 
@@ -130,4 +158,6 @@ export const {
     useSendTypingMutation,
     useUpdateMessageMutation,
     useDeleteMessageMutation,
+    useGetMessageInfoQuery,
+    useLazyGetMessageInfoQuery
 } = messageApi;

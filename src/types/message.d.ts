@@ -39,6 +39,7 @@ export type ClientToServerEvents = {
     typing: (data: SendIsTypingDTO) => void;
     deleteMessage: (data: DeleteMessageDTO) => void;
     editMessage: (data: UpdateMessageDTO) => void;
+    getMessageInfo: (data: DeleteMessageDTO) => void;
 };
 
 export type ServerToClientEvents = {
@@ -46,6 +47,8 @@ export type ServerToClientEvents = {
     newMessage: (message: SerializedMessage) => void;
     allMessages: (messages: SerializedMessage[]) => void;
     error: (data: any) => void; // TODO: fix this
+    messageInfo: (data: any) => void; // TODO: fix this
+    newMessageReadInfo: (data: any) => void; // TODO: fix this
     userStatus: (data: {
         username: string;
         status: 'online' | 'offline';
