@@ -19,8 +19,8 @@ export const ModalWrapper = styled(motion.div)`
     max-height: 95vh;
     overflow-y: auto;
     background: #fff;
-    border-radius: 0.75rem;
-    padding: 2rem;
+    border-radius: 0.5rem;
+    padding: 1rem 2rem;
 
     @media (max-width: 768px) {
         padding: 1rem;

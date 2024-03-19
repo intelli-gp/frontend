@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -9,18 +9,24 @@ interface ModalProps {
     setIsOpen: (show: boolean) => void;
     children: React.ReactNode;
     className?: string;
+    /**
+     * a function called when modal is closed.
+     */
+    cleanupFn?: () => void;
 }
 export const Modal = ({
     isOpen,
     setIsOpen,
     children,
     className,
+    cleanupFn,
 }: ModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
 
     const closeModal = (e: React.MouseEvent<HTMLElement>) => {
         if (modalRef.current === e.target) {
             setIsOpen(false);
+            if (cleanupFn) cleanupFn();
         }
     };
 
@@ -55,7 +61,7 @@ export const Modal = ({
                         }}
                         exit={{
                             opacity: 0,
-                            y: 200,
+                            y: 25,
                         }}
                     >
                         {children}
