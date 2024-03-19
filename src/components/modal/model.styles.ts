@@ -1,6 +1,7 @@
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-export const Background = styled.div`
+export const Background = styled(motion.div)`
     inset: 0;
     height: 100%;
     background: rgba(0, 0, 0, 0.75);
@@ -12,17 +13,17 @@ export const Background = styled.div`
     inset: 0;
 `;
 
-export const ModalWrapper = styled.div`
+export const ModalWrapper = styled(motion.div)`
     user-select: none;
-    width: 600px;
+    max-width: 600px;
     max-height: 95vh;
     overflow-y: auto;
-    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
     background: #fff;
-    color: #000;
     border-radius: 0.75rem;
-    padding: 1.5rem 3.5rem;
-    @media (max-width: 500px) {
-        margin: 5rem 0rem 0rem 0rem;
+    padding: 2rem;
+
+    @media (max-width: 768px) {
+        padding: 1rem;
+        max-width: 400px;
     }
 `;

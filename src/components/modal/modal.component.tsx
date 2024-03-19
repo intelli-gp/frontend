@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -34,29 +34,35 @@ export const Modal = ({
     }, [isOpen]);
 
     return ReactDOM.createPortal(
-        <>
+        <AnimatePresence>
             {isOpen && (
-                <Background onClick={closeModal} ref={modalRef}>
-                    <motion.div
+                <Background
+                    onClick={closeModal}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    ref={modalRef}
+                >
+                    <ModalWrapper
+                        className={className ?? ''}
                         initial={{
                             opacity: 0,
-                            y: 100,
+                            scale: 0,
                         }}
                         animate={{
                             opacity: 1,
-                            y: 0,
+                            scale: 1,
                         }}
-                        transition={{
-                            duration: 0.15,
+                        exit={{
+                            opacity: 0,
+                            y: 200,
                         }}
                     >
-                        <ModalWrapper className={className ?? ''}>
-                            {children}
-                        </ModalWrapper>
-                    </motion.div>
+                        {children}
+                    </ModalWrapper>
                 </Background>
             )}
-        </>,
+        </AnimatePresence>,
         document.getElementById('modal-container')!,
     );
 };
