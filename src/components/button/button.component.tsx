@@ -3,7 +3,7 @@ import React, { ButtonHTMLAttributes } from 'react';
 import { ButtonContainer, ButtonIcon } from './button.style';
 
 type ButtonType = 'button' | 'submit' | 'reset' | undefined;
-type Choice =
+export type Choice =
     | 'primary'
     | 'secondary'
     | 'success'
@@ -11,7 +11,9 @@ type Choice =
     | 'danger'
     | 'primary700'
     | 'primary500'
-    | 'primary300';
+    | 'primary300'
+    | 'primary200'
+    | 'primary100';
 
 interface ButtonProps
     extends ButtonHTMLAttributes<HTMLButtonElement>,

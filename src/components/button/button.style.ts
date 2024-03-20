@@ -1,18 +1,11 @@
 import { GoSync } from 'react-icons/go';
 import styled, { css } from 'styled-components';
+import { Choice } from './button.component';
 
 interface ButtonProps {
     children: React.ReactNode;
     type: 'button' | 'submit' | 'reset';
-    select?:
-        | 'primary'
-        | 'primary700'
-        | 'primary500'
-        | 'primary300'
-        | 'secondary'
-        | 'success'
-        | 'warning'
-        | 'danger';
+    select?: Choice;
     rounded?: boolean;
     loading?: boolean;
     className?: string;
@@ -109,6 +102,19 @@ export const ButtonContainer = styled.button<ButtonProps>`
                     return css`
                         background-color: var(--indigo-300);
                         border: 2px solid var(--indigo-300);
+                        color: var(--indigo-950);
+                    `;
+                case 'primary200':
+                    return css`
+                        background-color: var(--indigo-200);
+                        border: 2px solid var(--indigo-200);
+                        color: var(--indigo-950);
+                    `;
+                 case 'primary100':
+                    return css`
+                        background-color: var(--indigo-100);
+                        border: 2px solid var(--indigo-100);
+                        color: var(--indigo-950);
                     `;
                 case 'secondary':
                     return css`
