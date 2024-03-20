@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { FaBirthdayCake, FaEnvelope } from 'react-icons/fa';
 import { FaPhoneAlt } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
-import { IoMdPin } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,6 +18,7 @@ import WideGroupCard from '../../components/wide-group-card/wide-group-card.comp
 import { useUploadImage } from '../../hooks/uploadImage.hook';
 import { BetweenPageAnimation, ModalTitle } from '../../index.styles';
 import {
+    AboutListItemText,
     MainContainer,
     PageContainer,
     PageHeader,
@@ -93,6 +93,21 @@ const ProfilePage = () => {
         (groupData as unknown as Response)?.data ?? [];
     const [showGroups, setGroups] = useState<ReceivedGroup[]>([]);
 
+    const aboutListItems = [
+        {
+            icon: <FaBirthdayCake />,
+            text: new Date(user.DOB).toLocaleDateString(),
+        },
+        {
+            icon: <FaEnvelope />,
+            text: user.Email,
+        },
+        {
+            icon: <FaPhoneAlt />,
+            text: user.PhoneNumber,
+        },
+    ];
+
     useEffect(() => {
         setUserImg(user.ProfileImage);
         setUserCover(user.CoverImage);
@@ -102,7 +117,7 @@ const ProfilePage = () => {
 
     const [youMayKnow] = useState<any[]>([
         {
-            FullName: 'Ahmed',
+            FullName: 'Ahmed Mohamed Mohamed',
             Username: 'ahmedali',
             ProfileImage: defaultUserImage,
         },
@@ -320,31 +335,19 @@ const ProfilePage = () => {
 
             <MainContainer>
                 <AboutSection>
-                    <h1 className="text-xl font-bold text-[var(--gray-700)]">
-                        About
-                    </h1>
+                    <h1 className="text-xl font-bold">About</h1>
                     <hr />
-                    <p className="text-[var(--gray-700)]">
-                        {user.Bio ?? 'This user has no bio.'}
-                    </p>
+                    <p>{user.Bio ?? 'This user has no bio.'}</p>
                     <hr />
                     <AboutList>
-                        <AboutListItem>
-                            <FaBirthdayCake />
-                            {new Date(user.DOB).toLocaleDateString()}
-                        </AboutListItem>
-                        <AboutListItem>
-                            <IoMdPin />
-                            Cairo, Egypt
-                        </AboutListItem>
-                        <AboutListItem>
-                            <FaEnvelope />
-                            {user.Email}
-                        </AboutListItem>
-                        <AboutListItem>
-                            <FaPhoneAlt />
-                            {user.PhoneNumber}
-                        </AboutListItem>
+                        {aboutListItems.map(({ icon, text }) => (
+                            <AboutListItem>
+                                {icon}
+                                <AboutListItemText title={text}>
+                                    {text}
+                                </AboutListItemText>
+                            </AboutListItem>
+                        ))}
                     </AboutList>
                 </AboutSection>
 
@@ -367,17 +370,16 @@ const ProfilePage = () => {
                 </MainSection>
 
                 <YouMayNowSection>
-                    <h1 className="text-xl font-semibold text-[var(--gray-700)]">
-                        You may know
-                    </h1>
+                    <h1 className="text-xl font-semibold">You may know</h1>
                     <hr />
-                    <ul className="flex flex-col gap-4 ">
+                    <ul className="flex flex-col gap-6">
                         {youMayKnow.map((user) => (
                             <UserItem {...user} action="follow" />
                         ))}
                     </ul>
                 </YouMayNowSection>
             </MainContainer>
+
             <ModalUploadImage
                 isOpen={showImgModal}
                 setIsOpen={setImgModal}

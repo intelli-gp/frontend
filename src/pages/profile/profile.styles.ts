@@ -94,12 +94,12 @@ export const UserFullName = styled.h2<{ width?: string }>`
 export const MainContainer = styled.main`
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr) minmax(0, 1fr);
     grid-auto-rows: auto;
     align-items: start;
     gap: 1.25rem;
     padding: 0 1.25rem;
-    @media (max-width: 1700px) {
+    @media (max-width: 1440px) {
         align-items: stretch;
         grid-template-columns: 1fr 1fr;
     }
@@ -119,7 +119,7 @@ export const AboutSection = styled.section`
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    @media (max-width: 1700px) {
+    @media (max-width: 1440px) {
         grid-column: 1;
         padding: 2rem;
     }
@@ -137,10 +137,14 @@ export const AboutList = styled.ul`
 
 export const AboutListItem = styled.li`
     list-style: none;
-    margin-bottom: 10px;
+    margin-bottom: 0.75rem;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
+`;
+
+export const AboutListItemText = styled.p<{ width?: string }>`
+    ${CSSTextLengthLimit}
 `;
 
 export const MainSection = styled.section`
@@ -153,7 +157,7 @@ export const MainSection = styled.section`
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    @media (max-width: 1700px) {
+    @media (max-width: 1440px) {
         grid-column: 1/3;
         grid-row: 2;
     }
@@ -202,11 +206,11 @@ export const YouMayNowSection = styled.section`
     width: 100%;
     background-color: var(--indigo-50);
     border-radius: 10px;
-    padding: 1.5rem;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    @media (max-width: 1700px) {
+    @media (max-width: 1440px) {
         grid-column: 2;
     }
     @media (max-width: 768px) {
