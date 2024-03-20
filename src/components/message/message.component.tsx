@@ -12,7 +12,7 @@ import {
     useLazyGetMessageInfoQuery,
     useUpdateMessageMutation,
 } from '../../store/apis/messagesApi';
-import { SerializedMessage } from '../../types/message';
+import { MessageInfo, SerializedMessage } from '../../types/message';
 import { InputWithoutLabel } from '../Input';
 import Button from '../button/button.component';
 import DropdownMenu from '../menu/menu.component';
@@ -22,6 +22,13 @@ import {
     MessageContent,
     MessageDate,
     MessageHeader,
+    MessageInfoModalContainer,
+    MessageInfoReadContainer,
+    MessageInfoSectionLabel,
+    MessageInfoUserContainer,
+    MessageInfoUserFullName,
+    MessageInfoUserProfile,
+    MessageInfoUserReadTime,
     OptionsButton,
     SenderName,
     SenderProfile,
@@ -29,10 +36,22 @@ import {
 
 type ChatMessageProps = {
     message: SerializedMessage;
-    enableOptions: boolean;
+    /**
+     * Enable options for message like edit, delete, info.
+     * @default true
+     */
+    enableOptions?: boolean;
+    /**
+     * className for the message container.
+     */
+    className?: string;
 };
 
-const ChatMessage = ({ message, enableOptions }: ChatMessageProps) => {
+const ChatMessage = ({
+    message,
+    enableOptions = true,
+    className,
+}: ChatMessageProps) => {
     const { user } = useSelector((state: RootState) => state.auth);
 
     const isMine = message.User.ID === user.ID; // Does this message belongs to me.
@@ -73,7 +92,11 @@ const ChatMessage = ({ message, enableOptions }: ChatMessageProps) => {
 
     const handleGetMessageInfo = async () => {
         setMessageInfoIsOpen(true);
-        getMessageInfo(message.MessageID);
+        await getMessageInfo(message.MessageID).unwrap();
+    };
+
+    const messageInfoModalCleanup = async () => {
+        getMessageInfo(message.MessageID).unsubscribe();
     };
 
     let messageOptions = [
@@ -147,38 +170,58 @@ const ChatMessage = ({ message, enableOptions }: ChatMessageProps) => {
     );
 
     const MessageInfoModal = (
-        <Modal isOpen={messageInfoIsOpen} setIsOpen={setMessageInfoIsOpen}>
-            <ModalTitle
-                fontSize="sm"
-                className="mb-8"
-            >{`Message is read by: (${message.MessageID})`}</ModalTitle>
-            <div className="flex flex-col gap-4">
-                {(messageInfo as any[])?.map((info: any) => {
-                    return (
-                        <div key={info.ID} className="flex gap-2 items-center">
-                            <img
-                                src={info?.ProfileImage ?? ''}
-                                alt="user profile image"
-                                className="aspect-square rounded-full object-cover w-8 h-8"
-                            />
-                            <span>{info?.FullName ?? ''}</span>
-                            <span className="text-xs opacity-60">
-                                {moment(
-                                    new Date(info?.ReadAt ?? Date.now()),
-                                ).fromNow()}
-                            </span>
-                        </div>
-                    );
-                })}
-            </div>
+        <Modal
+            isOpen={messageInfoIsOpen}
+            setIsOpen={setMessageInfoIsOpen}
+            className="w-[350px]"
+            cleanupFn={messageInfoModalCleanup}
+        >
+            <ModalTitle fontSize="sm" className="mb-6">
+                Message Info {message.MessageID}
+            </ModalTitle>
+
+            <ChatMessage
+                message={message}
+                enableOptions={false}
+                className="!max-w-full mx-auto mb-4"
+            />
+
+            <MessageInfoModalContainer>
+                <MessageInfoReadContainer>
+                    <MessageInfoSectionLabel>Read by</MessageInfoSectionLabel>
+                    {(messageInfo as MessageInfo[])?.map((info: any) => {
+                        return (
+                            <MessageInfoUserContainer key={info.ID}>
+                                <MessageInfoUserProfile
+                                    src={info?.ProfileImage ?? ''}
+                                    alt="user profile image"
+                                    className="aspect-square rounded-full object-cover w-8 h-8"
+                                />
+                                <div>
+                                    <MessageInfoUserFullName>
+                                        {info?.FullName ?? ''}
+                                    </MessageInfoUserFullName>
+                                    <MessageInfoUserReadTime>
+                                        {moment(
+                                            new Date(
+                                                info?.ReadAt ?? Date.now(),
+                                            ),
+                                        ).fromNow()}
+                                    </MessageInfoUserReadTime>
+                                </div>
+                            </MessageInfoUserContainer>
+                        );
+                    })}
+                </MessageInfoReadContainer>
+            </MessageInfoModalContainer>
         </Modal>
     );
 
     return (
-        <Message isMine={isMine}>
-            {editMessageIsOpen && UpdateMessageModal}
-            {deleteMessageIsOpen && DeleteMessageModal}
-            {messageInfoIsOpen && MessageInfoModal}
+        <Message isMine={isMine} className={className || ''}>
+            {UpdateMessageModal}
+            {DeleteMessageModal}
+            {MessageInfoModal}
 
             <MessageHeader isMine={isMine}>
                 <SenderProfile
@@ -198,8 +241,8 @@ const ChatMessage = ({ message, enableOptions }: ChatMessageProps) => {
                 <DropdownMenu
                     options={messageOptions}
                     mainElementClassName={`!absolute top-0 right-0`}
-                    right="100%"
-                    bottom="120%"
+                    right="80%"
+                    bottom="80%"
                     left="auto"
                     menuWidth="8rem"
                 >

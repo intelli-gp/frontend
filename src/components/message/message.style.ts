@@ -82,3 +82,46 @@ export const OptionsButton = styled.button`
     border-top-right-radius: 1rem;
     background-color: var(--indigo-700);
 `;
+
+export const MessageInfoModalContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+`;
+
+export const MessageInfoReadContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+`;
+
+export const MessageInfoSectionLabel = styled.label`
+    font-size: 0.875rem;
+    opacity: 0.6;
+    border-bottom: 1px solid var(--gray-300);
+    padding-bottom: 0.25rem;
+`;
+
+export const MessageInfoUserContainer = styled.div`
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+`;
+
+export const MessageInfoUserProfile = styled.img`
+    width: 50px;
+    height: 50px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    object-fit: cover;
+`;
+
+export const MessageInfoUserFullName = styled.p`
+    font-weight: 700;
+    font-size: 1rem;
+`;
+
+export const MessageInfoUserReadTime = styled.p`
+    font-size: 0.75rem;
+    opacity: 0.6;
+`;

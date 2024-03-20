@@ -1,5 +1,6 @@
 import {
     CreateMessageDTO,
+    MessageInfo,
     ReceivedTypingDTO,
     SerializedMessage,
 } from '../../types/message';
@@ -120,33 +121,39 @@ const messageApi = appApi.injectEndpoints({
                 }
             },
         }),
-        getMessageInfo: builder.query<unknown, number>({
+        getMessageInfo: builder.query<MessageInfo[], number>({
             queryFn: () => ({ data: [] }),
-            async onCacheEntryAdded(
-                MessageID,
-                { updateCachedData, cacheEntryRemoved },
-            ) {
+            async onCacheEntryAdded(MessageID, { cacheEntryRemoved }) {
+                // runs when a new component subscribe to the query
                 try {
                     let socket = await getSocket();
-                    socket.emit('getMessageInfo', { MessageID });
-                    socket.on('messageInfo', (messages: any) => {
-                        console.log(messages);
-                        updateCachedData(() => {
-                            return messages;
-                        });
-                    });
-                    socket.on('newMessageReadInfo', (message: any) => {
-                        console.log(message);
-                        updateCachedData((draft) => {
-                            (draft as any).push(message);
-                        });
-                    });
                     await cacheEntryRemoved;
+                    socket.emit('leaveMessageInfoRoom', { MessageID });
+                    socket.off('newMessageReadInfo');
                     socket.off('messageInfo');
                 } catch (error) {
                     console.error(error);
                 }
             },
+            async onQueryStarted(MessageID, { updateCachedData }) {
+                // runs when the query is called
+                try {
+                    let socket = await getSocket();
+                    socket.emit('getMessageInfo', { MessageID });
+                    socket.on('messageInfo', (messages: MessageInfo[]) => {
+                        updateCachedData(() => messages);
+                    });
+                    socket.on(
+                        'newMessageReadInfo',
+                        (messages: MessageInfo[]) => {
+                            updateCachedData(() => messages);
+                        },
+                    );
+                } catch (error) {
+                    console.error(error);
+                }
+            },
+            keepUnusedDataFor: 0, // Invalidate the data once the component is unmounted.
         }),
     }),
 });
@@ -159,5 +166,5 @@ export const {
     useUpdateMessageMutation,
     useDeleteMessageMutation,
     useGetMessageInfoQuery,
-    useLazyGetMessageInfoQuery
+    useLazyGetMessageInfoQuery,
 } = messageApi;
