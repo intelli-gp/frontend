@@ -1,8 +1,11 @@
 import { FaPlus } from 'react-icons/fa';
 import { LuSearch } from 'react-icons/lu';
 
-import Button from '../button/button.component';
-import { SearchBarContainer } from './explore-page-header.style';
+import {
+    Container,
+    CreateButton,
+    SearchBarContainer,
+} from './explore-page-header.style';
 
 type ExplorePageHeaderProps = {
     searchValue: string;
@@ -18,7 +21,7 @@ const ExplorePageHeader = ({
     placeholder,
 }: ExplorePageHeaderProps) => {
     return (
-        <div className="flex w-full items-center gap-2 justify-center max-w-[700px]">
+        <Container>
             <SearchBarContainer>
                 <LuSearch />
                 <input
@@ -28,15 +31,10 @@ const ExplorePageHeader = ({
                     onChange={(e) => onSearchValueChange(e.target.value)}
                 />
             </SearchBarContainer>
-            <Button
-                type="button"
-                className="!rounded-full"
-                rounded
-                onClick={onCreateButtonClick}
-            >
-                <FaPlus size={12} className="mr-2" /> Create
-            </Button>
-        </div>
+            <CreateButton select="primary200" onClick={onCreateButtonClick}>
+                <FaPlus size={12} className="mr-1" /> Create
+            </CreateButton>
+        </Container>
     );
 };
 
