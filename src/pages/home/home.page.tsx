@@ -419,11 +419,12 @@ function Footer() {
         </StyledFooter>
     );
 }
+
 function HomePage() {
     return (
-        <PageContainer {...BetweenPageAnimation}>
+        <PageContainer>
             <Nav />
-            <Body>
+            <Body {...BetweenPageAnimation}>
                 <Hero />
                 <FeatureSection />
                 <BlogSection />

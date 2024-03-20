@@ -507,7 +507,7 @@ export const IconContainer = styled.div`
     height: 2rem;
 `;
 
-export const Body = styled.div`
+export const Body = styled(motion.div)`
     display: flex;
     flex-direction: column;
     justify-content: center;
