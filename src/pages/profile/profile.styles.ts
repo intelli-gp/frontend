@@ -1,6 +1,7 @@
-import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import styled from 'styled-components';
 
+import { CSSTextLengthLimit } from '../../index.styles';
 
 export const PageContainer = styled(motion.div)`
     width: 100%;
@@ -41,6 +42,7 @@ export const ProfilePictureContainer = styled.div`
 `;
 
 export const ProfilePicture = styled.img`
+    aspect-ratio: 1/1;
     object-fit: cover;
     width: 100%;
     height: 100%;
@@ -76,6 +78,16 @@ export const UserDataContainer = styled.div`
     @media (max-width: 500px) {
         padding: 0 1rem;
         gap: 0.5rem;
+    }
+`;
+
+export const UserFullName = styled.h2<{ width?: string }>`
+    font-weight: 700;
+    font-size: 1.75rem;
+    ${CSSTextLengthLimit}
+    width: 15ch;
+    @media (max-width: 425px) {
+        width: 10ch;
     }
 `;
 

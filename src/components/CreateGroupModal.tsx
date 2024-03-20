@@ -74,9 +74,10 @@ const CreateGroupModal = ({ isOpen, setIsOpen }: CreateGroupModalProps) => {
             isOpen={isOpen}
             setIsOpen={setIsOpen}
         >
-            <ModalTitle className="mb-6">Create New Group</ModalTitle>
+            <ModalTitle className="mb-2">Create New Group</ModalTitle>
             <OpenImage
                 height="250px"
+                width="400px"
                 value={groupImage}
                 onChange={(newImage) => setGroupImage(newImage)}
                 editButton

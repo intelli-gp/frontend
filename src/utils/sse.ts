@@ -27,15 +27,12 @@ export function connectSSE(token?: string) {
                 if (eventData?.message?.User?.ID === user.ID) return; // If message sent by me don't show me the notification.
                 if (
                     !user?.GroupsJoined?.reduce((acc, cur) => {
-                        acc.push((cur as any).GroupID);
+                        acc.push(cur.ID);
                         return acc;
                     }, [] as string[]).includes(eventData?.message?.Group?.ID)
                 )
                     return; // If I am not part of the group that received the message, don't show me the message.
-                return MessageNotification(
-                    eventData as ChatNotification,
-                    'bottom-right',
-                );
+                return MessageNotification(eventData as ChatNotification);
             }
             default:
                 return infoToast(

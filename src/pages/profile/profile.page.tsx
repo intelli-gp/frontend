@@ -25,6 +25,7 @@ import {
     PictureOverlay,
     ProfilePictureContainer,
     UserDataContainer,
+    UserFullName,
 } from '../../pages/profile/profile.styles';
 import {
     RootState,
@@ -243,28 +244,25 @@ const ProfilePage = () => {
         title,
     }) => (
         <Modal
-            className="flex flex-col gap-10"
+            className="flex flex-col gap-12"
             isOpen={isOpen}
             setIsOpen={setIsOpen}
         >
             <ModalTitle>Edit {title} Image</ModalTitle>
-            <div className="flex justify-center w-full">
-                <OpenImage
-                    height="280px"
-                    width={title === 'Cover' ? '480px' : '280px'}
-                    value={image}
-                    onChange={setImage}
-                    radius={title === 'Cover' ? '5px' : '50%'}
-                    cover={title === 'Cover' ? 'contain' : 'cover'}
-                />
-            </div>
-            <div className="flex flex-row-reverse pt-6 items-center gap-4">
+            <OpenImage
+                height="250px"
+                width={title === 'Cover' ? '450px' : '250px'}
+                value={image}
+                onChange={setImage}
+                radius={title === 'Cover' ? '5px' : '50%'}
+                cover={title === 'Cover' ? 'contain' : 'cover'}
+            />
+            <div className="flex flex-row-reverse items-center gap-4">
                 <Button
                     type="button"
                     select="primary"
                     loading={isImageLoading || isLoading}
                     onClick={handleUpdate}
-                    className="w-[102px]"
                 >
                     Apply
                 </Button>
@@ -280,13 +278,13 @@ const ProfilePage = () => {
                         setIsOpen(false);
                     }}
                     outline
-                    className="!border-transparent"
                 >
                     Cancel
                 </Button>
             </div>
         </Modal>
     );
+
     return (
         <PageContainer {...BetweenPageAnimation}>
             <PageHeader>
@@ -314,9 +312,9 @@ const ProfilePage = () => {
                         />
                     </ProfilePictureContainer>
                     <div className="flex flex-col justify-between h-[75px] p-2">
-                        <h2 className="font-semibold text-[var(--gray-700)] overflow-hidden whitespace-nowrap text-ellipsis 3xs:max-w-[7ch] 3xs:text-2xl md:max-w-full md:text-3xl ">
+                        <UserFullName title={user.FullName}>
                             {user.FullName}
-                        </h2>
+                        </UserFullName>
                         <p className="text-[var(--gray-600)]">
                             @{user.Username}
                         </p>

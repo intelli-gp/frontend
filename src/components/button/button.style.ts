@@ -30,6 +30,7 @@ export const ButtonContainer = styled.button<ButtonProps>`
     justify-content: center;
     outline: none;
     color: white;
+    transition: all 0.25s ease-in-out;
     border-radius: ${({ rounded }) => (rounded ? '50%' : '7px')};
     cursor: ${({ loading }) => (loading ? 'not-allowed' : 'pointer')};
     ${({ className }) => className};
