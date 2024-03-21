@@ -5,6 +5,10 @@ import { DeleteTagButton, TagContainer, TagText } from './tag.styles';
 type TagProps = {
     text: string;
     deletable?: boolean;
+    /**
+     * @default
+     * 'md'
+     */
     size?: 'xs' | 'sm' | 'md' | 'lg';
     deleteHandler?: React.MouseEventHandler;
     clickHandler?: React.MouseEventHandler;

@@ -1,8 +1,9 @@
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 
 import image from '../../assets/imgs/AI-helper.svg';
 
-export const PageContainer = styled.div`
+export const PageContainer = styled(motion.div)`
     display: flex;
     flex-direction: column;
     background: var(--indigo-50);

@@ -1,12 +1,13 @@
+import { motion } from 'framer-motion';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { IoChevronBack } from 'react-icons/io5';
 import { MdLockReset } from 'react-icons/md';
 import { Link, useSearchParams } from 'react-router-dom';
-
 import { InputWithLabel } from '../../../components/Input';
-import { reset, useResetPasswordConfirmMutation } from '../../../store';
-import { errorToast, successToast } from '../../../utils/toasts';
-import { FormContainer, RecoveryButton,PasswordRecoveryContainer,RecoveryTitle,RecoveryHeading } from './forget-password.styles';
+import { BetweenPageAnimation, PageTitle } from '../../../index.styles';
+import { useResetPasswordConfirmMutation, reset } from '../../../store';
+import { successToast, errorToast } from '../../../utils/toasts';
+import { RecoveryTitle, RecoveryButton } from './forget-password.styles';
 
 const RecoverPassword = () => {
     const [newPassword, setNewPassword] = useState('');
@@ -45,13 +46,14 @@ const RecoverPassword = () => {
     };
 
     return (
-        <FormContainer
+        <motion.form
+            {...BetweenPageAnimation}
+            className="flex flex-col gap-4 3xs:w-[20rem] md:!w-[25rem] py-8"
             onSubmit={handleSubmit}
         >
-            <RecoveryHeading>
-                Recover password
-            </RecoveryHeading>
-            <PasswordRecoveryContainer>
+            <PageTitle className="text-center mb-6">Recover password</PageTitle>
+
+            <main className="flex flex-col border rounded-md p-8 gap-2 border-slate-300">
                 <RecoveryTitle>
                     Creating your new password
                 </RecoveryTitle>
@@ -100,8 +102,8 @@ const RecoverPassword = () => {
                     <IoChevronBack />
                     Back to login
                 </Link>
-            </PasswordRecoveryContainer>
-        </FormContainer>
+            </main>
+        </motion.form>
     );
 };
 

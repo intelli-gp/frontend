@@ -17,7 +17,7 @@ import OpenImage from '../../components/openImage/openImage.component';
 import Tag from '../../components/tag/tag.component';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import { useUploadImage } from '../../hooks/uploadImage.hook';
-import { ModalTitle } from '../../index.styles';
+import { BetweenPageAnimation, ModalTitle } from '../../index.styles';
 import {
     useGetAllTagsQuery,
     useGetGroupQuery,
@@ -260,7 +260,7 @@ const ViewGroupPage = () => {
     }
 
     return (
-        <PageContainer>
+        <PageContainer {...BetweenPageAnimation}>
             <GroupCoverImageContainer>
                 <GroupCoverImage src={coverImg} />
 

@@ -1,8 +1,9 @@
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
 import { CSSTextLengthLimit } from '../../index.styles';
 
-export const PageContainer = styled.div`
+export const PageContainer = styled(motion.div)`
     display: flex;
     height: 100vh;
     gap: 0.5rem;

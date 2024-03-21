@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -9,18 +9,24 @@ interface ModalProps {
     setIsOpen: (show: boolean) => void;
     children: React.ReactNode;
     className?: string;
+    /**
+     * a function called when modal is closed.
+     */
+    cleanupFn?: () => void;
 }
 export const Modal = ({
     isOpen,
     setIsOpen,
     children,
     className,
+    cleanupFn,
 }: ModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
 
     const closeModal = (e: React.MouseEvent<HTMLElement>) => {
         if (modalRef.current === e.target) {
             setIsOpen(false);
+            if (cleanupFn) cleanupFn();
         }
     };
 
@@ -34,29 +40,35 @@ export const Modal = ({
     }, [isOpen]);
 
     return ReactDOM.createPortal(
-        <>
+        <AnimatePresence>
             {isOpen && (
-                <Background onClick={closeModal} ref={modalRef}>
-                    <motion.div
+                <Background
+                    onClick={closeModal}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    ref={modalRef}
+                >
+                    <ModalWrapper
+                        className={className ?? ''}
                         initial={{
                             opacity: 0,
-                            y: 100,
+                            scale: 0,
                         }}
                         animate={{
                             opacity: 1,
-                            y: 0,
+                            scale: 1,
                         }}
-                        transition={{
-                            duration: 0.15,
+                        exit={{
+                            opacity: 0,
+                            y: 25,
                         }}
                     >
-                        <ModalWrapper className={className ?? ''}>
-                            {children}
-                        </ModalWrapper>
-                    </motion.div>
+                        {children}
+                    </ModalWrapper>
                 </Background>
             )}
-        </>,
+        </AnimatePresence>,
         document.getElementById('modal-container')!,
     );
 };

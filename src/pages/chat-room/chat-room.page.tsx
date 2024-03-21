@@ -49,6 +49,7 @@ import {
     UserContainer,
     UsersContainer,
 } from './chat-room.style';
+import { BetweenPageAnimation } from '../../index.styles';
 
 export const ChatroomPage = () => {
     const { id: groupId } = useParams();
@@ -158,7 +159,7 @@ export const ChatroomPage = () => {
     }, []);
 
     return (
-        <PageContainer>
+        <PageContainer {...BetweenPageAnimation}>
             <div className="my-0 mx-auto max-w-[1200px] w-full flex gap-2">
                 <LeftPart>
                     <ChatHeader>

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/button/button.component';
 import TagsInput from '../../../components/tagsInput/tagsInput.component';
 import { FooterButtons } from '../../../components/tagsInput/tagsInput.styles';
-import { PageTitle } from '../../../index.styles';
+import { BetweenPageAnimation, PageTitle } from '../../../index.styles';
 import {
     RootState,
     setCredentials,
@@ -13,7 +13,7 @@ import {
 } from '../../../store';
 import { useGetAllTagsQuery } from '../../../store';
 import { errorToast } from '../../../utils/toasts';
-import { Page } from './interests.styles';
+import { PageContainer } from './interests.styles';
 
 const InterestsPage = () => {
     const { data: getTagsRes } = useGetAllTagsQuery(undefined);
@@ -63,7 +63,7 @@ const InterestsPage = () => {
     };
 
     return (
-        <Page>
+        <PageContainer {...BetweenPageAnimation}>
             <header>
                 <PageTitle className="text-center">
                     Add your interests
@@ -91,7 +91,7 @@ const InterestsPage = () => {
                     Continue
                 </Button>
             </FooterButtons>
-        </Page>
+        </PageContainer>
     );
 };
 

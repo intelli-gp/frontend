@@ -30,6 +30,14 @@ export type ReceivedTypingDTO = {
     FullName: string;
 };
 
+export type MessageInfo = {
+    MessageID: number;
+    UserID: number;
+    Username: string;
+    ProfileImage: string;
+    ReadAt: string; // Date
+};
+
 export type SendIsTypingDTO = { IsTyping: boolean; GroupID: number };
 
 export type ClientToServerEvents = {
@@ -39,6 +47,8 @@ export type ClientToServerEvents = {
     typing: (data: SendIsTypingDTO) => void;
     deleteMessage: (data: DeleteMessageDTO) => void;
     editMessage: (data: UpdateMessageDTO) => void;
+    getMessageInfo: (data: DeleteMessageDTO) => void;
+    leaveMessageInfoRoom: (data: DeleteMessageDTO) => void;
 };
 
 export type ServerToClientEvents = {
@@ -46,6 +56,8 @@ export type ServerToClientEvents = {
     newMessage: (message: SerializedMessage) => void;
     allMessages: (messages: SerializedMessage[]) => void;
     error: (data: any) => void; // TODO: fix this
+    messageInfo: (data: any) => void; // TODO: fix this
+    newMessageReadInfo: (data: any) => void; // TODO: fix this
     userStatus: (data: {
         username: string;
         status: 'online' | 'offline';

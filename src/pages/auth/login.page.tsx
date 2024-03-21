@@ -4,7 +4,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { InputWithLabel } from '../../components/Input';
 import Button from '../../components/button/button.component';
-import { PageTitle } from '../../index.styles';
+import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
     RootState,
     changeEmail,
@@ -18,7 +18,8 @@ import { Response } from '../../types/response';
 import { getSocket } from '../../utils/socket';
 import { connectSSE } from '../../utils/sse';
 import { errorToast } from '../../utils/toasts';
-import { FormContainer, GoogleIcon, GoogleLoginButton, GoogleLoginLink } from './auth.styles';
+import { motion } from 'framer-motion';
+import { GoogleLoginButton, GoogleLoginLink, GoogleIcon } from './auth.styles';
 
 export default function LoginPage() {
     const dispatch = useDispatch();
@@ -92,7 +93,9 @@ export default function LoginPage() {
     };
 
     return (
-        <FormContainer
+        <motion.form
+            {...BetweenPageAnimation}
+            className="flex flex-col gap-4 3xs:w-[20rem] md:!w-[25rem]"
             onSubmit={handleSubmitLogin}
         >
             <PageTitle className="text-center mb-6">Welcome Back!</PageTitle>
@@ -157,6 +160,6 @@ export default function LoginPage() {
                 Don't have an account?
                 <Link to="/auth/signup">Create one</Link>
             </p>
-        </FormContainer>
+        </motion.form>
     );
 }

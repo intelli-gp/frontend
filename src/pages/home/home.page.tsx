@@ -17,6 +17,7 @@ import StudyPlanner from '../../assets/imgs/studyPlanner-illustration.svg';
 import Feature from '../../components/Feature';
 import SingleBlog from '../../components/article-item/article-item.component';
 import Button from '../../components/button/button.component';
+import { BetweenPageAnimation } from '../../index.styles';
 import { useGetArticlesQuery } from '../../store';
 import { ReceivedArticle } from '../../types/article';
 import { Response } from '../../types/response';
@@ -47,6 +48,7 @@ import {
     MenuList,
     MenuTitles,
     NavContainer,
+    PageContainer,
     ProfilePic,
     Sidebar,
     SlideIndicator,
@@ -417,18 +419,19 @@ function Footer() {
         </StyledFooter>
     );
 }
+
 function HomePage() {
     return (
-        <div>
+        <PageContainer>
             <Nav />
-            <Body>
+            <Body {...BetweenPageAnimation}>
                 <Hero />
                 <FeatureSection />
                 <BlogSection />
                 <Feedback />
             </Body>
             <Footer />
-        </div>
+        </PageContainer>
     );
 }
 export default HomePage;

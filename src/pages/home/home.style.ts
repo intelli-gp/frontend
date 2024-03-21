@@ -2,10 +2,15 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import image from '../../assets/imgs/Hero-illustration.svg';
+import { motion } from 'framer-motion';
 
 type navType = {
     $navbarOpen: boolean;
 };
+
+export const PageContainer = styled(motion.div)`
+`
+
 export const Sidebar = styled.div<navType>`
     position: fixed;
     right: 0;
@@ -24,6 +29,7 @@ export const Sidebar = styled.div<navType>`
         display: none;
     }
 `;
+
 export const MenuList = styled.ul`
     display: flex;
     flex-direction: column;
@@ -52,6 +58,7 @@ export const MenuList = styled.ul`
         }
     }
 `;
+
 export const StyledLink = styled(Link)`
     border-bottom: 1px solid var(--slate-300);
     padding: 0.5rem 2.5rem;
@@ -70,6 +77,7 @@ export const StyledLink = styled(Link)`
         gap: 0.5rem;
     }
 `;
+
 export const FeaturesSection = styled.section`
     display: flex;
     justify-content: center;
@@ -110,6 +118,7 @@ export const FeaturesSection = styled.section`
         }
     }
 `;
+
 export const AISection = styled.section`
     padding-top: 3rem; /* py-12 */
     padding-bottom: 3rem; /* py-12 */
@@ -187,6 +196,7 @@ export const TextAIContainer = styled.div`
         max-width: 700px;
     }
 `;
+
 export const AItitle = styled.h1`
     font-weight: bold;
     color: var(--indigo-950);
@@ -209,6 +219,7 @@ export const NavContainer = styled.nav`
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
 `;
+
 export const UpperContainer = styled.div`
     padding-left: 1.5rem;
     padding-right: 1.5rem;
@@ -273,6 +284,7 @@ export const BlogsSection = styled.div`
         }
     }
 `;
+
 export const BlogsContainer = styled.div`
     display: grid;
     width: 92%;
@@ -292,25 +304,27 @@ export const BlogsContainer = styled.div`
         width: 80%;
     }
 `;
+
 export const BlogsTitle = styled.div`
-margin-bottom: 1.25rem; 
-display: flex;
-flex-direction: column;
-align-items: center;
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-h1 {
-  font-size: 2rem; 
-  font-weight: bold;
-  color:  var(--indigo-950); 
+    h1 {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--indigo-950);
+    }
 
-@media (min-width: 640px) { 
-  margin-bottom: 3rem; 
-  margin-top: 1.25rem; 
+    @media (min-width: 640px) {
+        margin-bottom: 3rem;
+        margin-top: 1.25rem;
 
-  h1 {
-    font-size: 1.875rem; 
-  }
-}
+        h1 {
+            font-size: 1.875rem;
+        }
+    }
 `;
 
 export const HeroSection = styled.section`
@@ -492,13 +506,15 @@ export const IconContainer = styled.div`
     justify-content: right;
     height: 2rem;
 `;
-export const Body = styled.div`
+
+export const Body = styled(motion.div)`
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: white;
 `;
+
 export const CarouselItem = styled.div<{ isActive: boolean }>`
     transition-duration: 700ms;
     transition-timing-function: ease-in-out;
@@ -576,6 +592,7 @@ export const BodySpan = styled.span`
         height: 2.5rem;
     }
 `;
+
 export const ButtonLeft = styled.button`
     display: flex;
     position: absolute;

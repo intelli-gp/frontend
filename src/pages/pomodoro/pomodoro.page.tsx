@@ -3,13 +3,14 @@ import { useDispatch } from 'react-redux';
 
 import button from '../../assets/sounds/button-press.wav';
 import usePomodoroTimer from '../../hooks/pomodoroTimer.hook';
+import { BetweenPageAnimation } from '../../index.styles';
 import { setMode } from '../../store';
 import { player } from '../../utils/sounds';
 import {
-    CenterElement,
     ControlButton,
     ModeButton,
     ModesContainer,
+    PageContainer,
     PomodoroContainer,
     Timer,
 } from './pomodoro.styles';
@@ -33,7 +34,7 @@ const PomodoroPage = () => {
     const dispatch = useDispatch();
 
     return (
-        <CenterElement>
+        <PageContainer {...BetweenPageAnimation}>
             <PomodoroContainer mode={time.mode}>
                 <ModesContainer>
                     <ModeButton
@@ -66,7 +67,7 @@ const PomodoroPage = () => {
                     <p>Round #{time.round}</p>
                 </div>
             </PomodoroContainer>
-        </CenterElement>
+        </PageContainer>
     );
 };
 export default PomodoroPage;
