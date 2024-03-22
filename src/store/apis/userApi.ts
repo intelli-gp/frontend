@@ -4,15 +4,13 @@ import { appApi } from './appApi';
 
 const userApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
-        fetchUser: builder.query<Response, number>({
-            providesTags: (_result, _error, id) => [{ type: 'User', id }],
-            query: (id) => {
+        fetchUser: builder.query<Response, string>({
+            providesTags: (_result, _error, Username) => [{ type: 'User', Username }],
+            query: (Username) => {
                 return {
-                    url: '/users',
+                    url: `/users/${Username}`,
                     method: 'GET',
-                    params: {
-                        userId: id,
-                    },
+
                 };
             },
         }),
