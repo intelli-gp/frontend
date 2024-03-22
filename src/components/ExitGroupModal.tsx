@@ -49,18 +49,17 @@ const ExitSectionModal: React.FC<ModalProps> = ({
                 <ModalTitle>
                     Are you sure you want to exit this group?
                 </ModalTitle>
-                <div className="flex gap-4 justify-center">
+                <div className="flex gap-4 flex-row-reverse">
                     <Button
                         className="!px-8"
-                        type="button"
                         select="danger"
+                        outline
                         loading={isGroupLeaving}
                         onClick={handleExitGroup}
                     >
                         Yes
                     </Button>
                     <Button
-                        type="button"
                         className="!px-6"
                         onClick={() => setShowModal(false)}
                     >
