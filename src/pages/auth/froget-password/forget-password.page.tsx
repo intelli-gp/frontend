@@ -1,11 +1,14 @@
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import  { ChangeEvent, useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { FaEnvelope } from 'react-icons/fa';
 import { IoChevronBack } from 'react-icons/io5';
 import { InputWithLabel } from '../../../components/Input';
+import { BetweenPageAnimation, PageTitle } from '../../../index.styles';
 import { useLazyResetPasswordQuery } from '../../../store';
-import { errorToast, successToast } from '../../../utils/toasts';
-import { BackToLoginLink, FormContainer, PasswordRecoveryContainer, RecoveryHeading, RecoveryMessage, RecoveryTitle, RecoveryButton } from './forget-password.styles';
+import { successToast, errorToast } from '../../../utils/toasts';
+import { RecoveryTitle, RecoveryMessage, RecoveryButton, BackToLoginLink } from './forget-password.styles';
+
 
 export default function ForgetPasswordPage() {
     const [email, setEmail] = useState<string>('');
@@ -36,13 +39,13 @@ export default function ForgetPasswordPage() {
     };
 
     return (
-        <FormContainer
+        <motion.form
+            {...BetweenPageAnimation}
+            className="flex flex-col gap-4 3xs:w-[20rem] md:!w-[25rem] py-8"
             onSubmit={handleSubmit}
         >
-            <RecoveryHeading>
-                Forget password
-            </RecoveryHeading>
-            <PasswordRecoveryContainer>
+            <PageTitle className="text-center mb-6">Forget password</PageTitle>
+            <main className="flex flex-col border rounded-md p-8 gap-2 border-slate-300">
                 <RecoveryTitle>
                     Recover your password
                 </RecoveryTitle>
@@ -77,8 +80,7 @@ export default function ForgetPasswordPage() {
                     <IoChevronBack />
                     Back to login
                 </BackToLoginLink>
-            </PasswordRecoveryContainer>
-        </FormContainer>
+            </main>
+        </motion.form>
     );
 }
-
