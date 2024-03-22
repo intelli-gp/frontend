@@ -1,35 +1,47 @@
 import { useNavigate } from 'react-router-dom';
 
 import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
+import { useJoinGroupMutation } from '../../store';
 import { ReceivedGroup } from '../../types/group';
+import { errorToast } from '../../utils/toasts';
+import Button from '../button/button.component';
 import Tag from '../tag/tag.component';
 import {
+    ButtonsContainer,
     CardContainer,
     CardImage,
     CardImageContainer,
     GroupTitle,
     GroupTitleGradient,
-    JoinButton,
     TagsContainer,
 } from './chat-group-card.style';
 
 const GroupCard = ({
-    ID: group_id,
+    ID,
     GroupTitle: title,
-    GroupCoverImage: cover_image_url,
+    GroupCoverImage,
     GroupTags,
     GroupMembers,
 }: Partial<ReceivedGroup>) => {
     const navigate = useNavigate();
+    const [joinGroup] = useJoinGroupMutation();
+    const handleJoiningGroup = async () => {
+        try {
+            await joinGroup(ID!).unwrap();
+            navigate(`/app/chat-room/${ID}`);
+        } catch (error) {
+            errorToast('Error occurred while joining the group');
+        }
+    };
     return (
         <CardContainer
             onClick={() => {
-                navigate(`/app/groups/${group_id}`);
+                navigate(`/app/groups/${ID}`);
             }}
         >
             <CardImageContainer>
                 <CardImage
-                    src={cover_image_url || defaultGroupImage}
+                    src={GroupCoverImage || defaultGroupImage}
                     alt={title}
                 />
                 <GroupTitleGradient>
@@ -45,9 +57,14 @@ const GroupCard = ({
                 ))}
             </TagsContainer>
 
-            <JoinButton type="button" title="Become a member of this group">
-                Join
-            </JoinButton>
+            <ButtonsContainer>
+                <Button
+                    title="Become a member of this group"
+                    onClick={handleJoiningGroup}
+                >
+                    Join
+                </Button>
+            </ButtonsContainer>
         </CardContainer>
     );
 };

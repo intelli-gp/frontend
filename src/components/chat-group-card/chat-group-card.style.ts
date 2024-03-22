@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import Button from '../button/button.component';
+import { CSSTextLengthLimit } from '../../index.styles';
 
 export const CardContainer = styled.div`
     display: flex;
@@ -10,12 +10,13 @@ export const CardContainer = styled.div`
     width: 250px;
     height: fit-content;
     height: -moz-fit-content;
-    border-radius: 10px;
-    background-color: var(--gray-100);
+    border-radius: 0.5rem;
     transition: all 0.25s ease-in-out;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     cursor: pointer;
+
     &:hover {
-        background-color: var(--indigo-50);
+        scale: 1.025;
     }
 `;
 
@@ -41,19 +42,21 @@ export const GroupTitleGradient = styled.div`
     left: 0;
     background: linear-gradient(
         to top,
-        rgba(255, 255, 255, 0.85),
+        rgba(255, 255, 255, 0.8),
         rgba(255, 255, 255, 0)
     );
 `;
 
-export const GroupTitle = styled.h3`
-    color: var(--gray-700);
-    font-weight: bold;
+export const GroupTitle = styled.h3<{ width?: string }>`
+    padding: 0 0.5rem;
+    font-weight: 700;
+    letter-spacing: -1px;
     position: absolute;
     text-align: center;
     width: 100%;
     bottom: -25%;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
+    ${CSSTextLengthLimit}
 `;
 
 export const TagsContainer = styled.div`
@@ -62,12 +65,17 @@ export const TagsContainer = styled.div`
     padding: 0 0.5rem;
 `;
 
-export const JoinButton = styled(Button)`
-    padding: 0.25rem 2rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
-    transition: all 0.25s ease-in-out;
-    &:hover {
-        background-color: var(--indigo-950);
+export const ButtonsContainer = styled.div`
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding-bottom: 1rem;
+    & button {
+        border-radius: 99rem;
+        padding: 0.25rem 4rem;
+        font-size: 0.875rem;
+        &:hover {
+            filter: brightness(0.95);
+        }
     }
 `;
