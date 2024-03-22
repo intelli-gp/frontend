@@ -7,8 +7,8 @@ export const PageContainer = styled(motion.div)`
     height: 100vh;
     align-items: center;
     justify-content: space-between;
-    padding: 80px 20px;
-    gap: 2rem;
+    padding:  20px;
+    gap: 1.7rem;
 `;
 export const UpgradeTitle = styled.h1`
     font-style: normal;
