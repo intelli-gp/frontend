@@ -284,7 +284,10 @@ export const ChatroomPage = () => {
                                     }
                                 />
                                 <span>
-                                    <GroupUserFullName title={person.FullName}>
+                                    <GroupUserFullName 
+                                    title={person.FullName}
+                                    onClick={() => {navigate(`/app/profile/${person.Username}`)}}
+                                    >
                                         {person.FullName}
                                     </GroupUserFullName>
                                     <div className="flex flex-row gap-[6px] items-center">
@@ -307,7 +310,9 @@ export const ChatroomPage = () => {
                                     className="object-cover"
                                 />
                                 <span>
-                                    <GroupUserFullName title={person.FullName}>
+                                    <GroupUserFullName 
+                                     onClick={() => {navigate(`/app/profile/${person.Username}`)}}
+                                     title={person.FullName}>
                                         {person.FullName}
                                     </GroupUserFullName>
                                     <div className="flex flex-row gap-[6px] items-center">

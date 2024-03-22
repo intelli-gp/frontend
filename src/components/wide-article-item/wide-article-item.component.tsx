@@ -13,6 +13,7 @@ import {
     AuthorPicture,
     TagsContainer,
 } from './wide-article-item.styles';
+import { useNavigate } from 'react-router-dom';
 
 type WideArticleItemProps = ReceivedArticle & {
     onClick?: React.MouseEventHandler<HTMLDivElement>;
@@ -26,11 +27,14 @@ const WideArticleItem = ({
     UpdatedAt: updatedAt,
     onClick,
 }: WideArticleItemProps) => {
+    const navigate = useNavigate();
     return (
         <ArticleContainer onClick={onClick} title={title}>
             <div className="flex justify-between items-center w-full gap-4">
                 <div className="flex flex-col gap-4 max-w-[70%]">
-                    <AuthorData>
+                    <AuthorData
+                      onClick={() => {navigate(`/app/profile/${author.Username}`)}}
+                    >
                         <AuthorPicture
                             src={author?.ProfileImage ?? defaultUserImage}
                             alt="user profile picture"
