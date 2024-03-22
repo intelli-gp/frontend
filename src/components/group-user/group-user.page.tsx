@@ -6,6 +6,7 @@ import { GroupUser } from '../../types/group';
 import { errorToast, successToast } from '../../utils/toasts';
 import DropdownMenu from '../menu/menu.component';
 import { PersonContainer, PersonImage, PersonName } from './group-user.style';
+import { useNavigate } from 'react-router-dom';
 
 type GroupUserType = GroupUser & {
     Admin: boolean;
@@ -16,6 +17,7 @@ const UserContainer = ({
     ID: idUser,
     ProfileImage: ProfileImage,
     FullName: FullName,
+    Username:username,
     Type: type,
     Admin: Admin,
     GroupID: GroupID,
@@ -23,7 +25,6 @@ const UserContainer = ({
     const [updateStatus] = usePermissionGroupMutation();
 
     const handleStatus = async () => {
-        console.log('Heree');
         try {
             if (GroupID) {
                 const updatedGroupData: Partial<GroupUser> & { id: string } = {
@@ -38,12 +39,28 @@ const UserContainer = ({
             errorToast('Error occurred while giving permission!');
         }
     };
-    const statusOption = [
+    const navigate = useNavigate();
+
+    const statusOptionAdmin = [
         {
             option: type == 'MEMBER' ? 'Add an admin' : 'Dismiss an admin',
             handler: () => {
                 handleStatus();
             },
+        },
+        {
+            option: 'View Profile',
+            handler: () => {
+                 navigate(`/app/profile/${username}`)}
+            ,
+        },
+    ];
+    const statusOptionMember = [
+        {
+            option: 'View Profile',
+            handler: () => {
+                 navigate(`/app/profile/${username}`)}
+            ,
         },
     ];
     return (
@@ -54,7 +71,7 @@ const UserContainer = ({
                 {Admin ? (
                     <>
                         <DropdownMenu
-                            options={statusOption}
+                            options={statusOptionAdmin}
                             right="10%"
                             top="100%"
                             left="auto"
@@ -64,9 +81,20 @@ const UserContainer = ({
                             <IoIosArrowDown />
                         </DropdownMenu>
                     </>
-                ) : (
-                    <></>
-                )}
+                ) : (type ==='MEMBER'? (
+                    <>
+                         <DropdownMenu
+                            options={statusOptionMember}
+                            right="10%"
+                            top="100%"
+                            left="auto"
+                            bottom="auto"
+                            menuWidth="10rem"
+                        >
+                            <IoIosArrowDown />
+                        </DropdownMenu>
+                    </>):(<></>
+                ))}
             </span>
         </PersonContainer>
     );
