@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 
-export const TagContainer = styled.div<{ size?: string; deletable?: boolean }>`
+import { CSSTextLengthLimit } from '../../index.styles';
+
+export const TagContainer = styled.div<{
+    size?: string;
+    deletable?: boolean;
+    variant: string;
+}>`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,23 +29,30 @@ export const TagContainer = styled.div<{ size?: string; deletable?: boolean }>`
                 return '0.85rem';
         }
     }};
-    background-color: var(--indigo-200);
+    background-color: ${({ variant }) => {
+        switch (variant) {
+            case 'normal':
+            case undefined:
+                return 'var(--indigo-100)';
+            case 'darker':
+                return 'var(--indigo-200)';
+            default:
+                return 'black';
+        }
+    }};
     cursor: pointer;
 
     &:hover {
-        background-color: #1e40af;
+        background-color: var(--indigo-600);
         color: white;
-        box-shadow: var(--tag-shadow);
     }
-    transition: background-color linear 100ms;
+    transition: all 0.25s ease-in-out;
 `;
 
-export const TagText = styled.p`
-    max-width: 12ch;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+export const TagText = styled.p<{ width?: string }>`
     font-weight: bold;
+    ${CSSTextLengthLimit}
+    max-width: 12ch;
 `;
 
 export const DeleteTagButton = styled.button`
@@ -49,7 +62,7 @@ export const DeleteTagButton = styled.button`
     border-radius: 10000px;
     padding: 0.2rem 0.5rem;
     color: var(--indigo-900);
-    background-color: var(--indigo-50);
+    background-color: white;
     font-weight: bolder;
     transition: all 0.25s ease-in-out;
     &:hover {

@@ -10,6 +10,12 @@ type TagProps = {
      * 'md'
      */
     size?: 'xs' | 'sm' | 'md' | 'lg';
+    /**
+     * The color of the tag
+     * @default
+     * 'normal'
+     */
+    variant?: 'normal' | 'darker';
     deleteHandler?: React.MouseEventHandler;
     clickHandler?: React.MouseEventHandler;
 };
@@ -18,6 +24,7 @@ const Tag = ({
     text,
     deletable,
     size,
+    variant = 'normal',
     deleteHandler,
     clickHandler,
 }: TagProps) => {
@@ -27,6 +34,7 @@ const Tag = ({
             deletable={deletable}
             onClick={clickHandler}
             title={text}
+            variant={variant}
         >
             <TagText>{text}</TagText>
             {deletable && (
