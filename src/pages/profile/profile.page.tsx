@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaBirthdayCake, FaEnvelope } from 'react-icons/fa';
 import { FaPhoneAlt } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
@@ -30,8 +30,8 @@ import {
 import {
     RootState,
     setCredentials,
-    useGetAllGroupsQuery,
-    useGetArticlesQuery,
+    useGetUserArticlesQuery,
+    useGetUserGroupsQuery,
     useUpdateUserMutation,
 } from '../../store';
 import { ReceivedArticle } from '../../types/article.d';
@@ -77,42 +77,28 @@ const ProfilePage = () => {
         (state: RootState) => state.auth.user,
     ) as ReceivedUser;
     const userToken = useSelector((state: RootState) => state.auth.token);
-
     const [userImg, setUserImg] = useState(user.ProfileImage);
     const [userCover, setUserCover] = useState(user.CoverImage);
     const [_followers] = useState<any[]>([]);
     const [_following] = useState<any[]>([]);
-
-    const { data: postsData, isLoading: PostsLoading } = useGetArticlesQuery();
+    console.log(user.ID);
+    const { data: postsData, isLoading: PostsLoading } = useGetUserArticlesQuery();
     const [posts, setArticles] = useState<ReceivedArticle[]>([]);
-    const receivedData: ReceivedArticle[] =
+    const articles: ReceivedArticle[] =
         (postsData as unknown as Response)?.data ?? [];
-    const filteredPosts = useMemo(() => {
-        return receivedData.filter(
-            (post) => user.Username === post?.Author?.Username,
-        );
-    }, [receivedData, user.ID]);
 
     const { data: groupData, isLoading: GroupsLoading } =
-        useGetAllGroupsQuery();
+        useGetUserGroupsQuery();
     const groups: ReceivedGroup[] =
         (groupData as unknown as Response)?.data ?? [];
     const [showGroups, setGroups] = useState<ReceivedGroup[]>([]);
-    const filteredGroups = useMemo(() => {
-        return groups.filter((group) => {
-            const isUserAssigned = group.GroupMembers.some(
-                (member) => member.ID === user.ID,
-            );
-            return isUserAssigned;
-        });
-    }, [groups, user.ID]);
 
     useEffect(() => {
         setUserImg(user.ProfileImage);
         setUserCover(user.CoverImage);
-        setGroups(filteredGroups);
-        setArticles(filteredPosts);
-    }, [filteredPosts, filteredGroups, user.ProfileImage, user.CoverImage]);
+        setGroups(groups);
+        setArticles(articles);
+    }, [articles, groups, user.ProfileImage, user.CoverImage]);
 
     const [youMayKnow] = useState<any[]>([
         {
