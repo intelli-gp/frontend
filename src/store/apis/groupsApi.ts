@@ -32,6 +32,14 @@ export const groupsApi = appApi.injectEndpoints({
                 },
             }),
         }),
+       //Ask Them to add Id
+        getUserGroups: builder.query<Response, void>({
+            providesTags: ['Group'],
+            query: () => ({
+                url: '/chat-groups/joined',
+                method: 'GET',
+            }),
+        }),
         updateGroup: builder.mutation<
             Response,
             Partial<GroupToSend> & { id: string }
@@ -98,4 +106,5 @@ export const {
     useJoinGroupMutation,
     useLeaveGroupMutation,
     usePermissionGroupMutation,
+    useGetUserGroupsQuery,
 } = groupsApi;
