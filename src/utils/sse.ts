@@ -24,14 +24,22 @@ export function connectSSE(token?: string) {
         switch (eventData.eventName) {
             case 'chat-group-message': {
                 let { user } = store.getState().auth;
-                if (eventData?.message?.User?.ID === user.ID) return; // If message sent by me don't show me the notification.
+                if (eventData?.message?.User?.ID === user.ID) {
+                    console.log('Message sent by me');
+                    return;
+                }
+
                 if (
                     !user?.GroupsJoined?.reduce((acc, cur) => {
                         acc.push(cur.ID);
                         return acc;
                     }, [] as string[]).includes(eventData?.message?.Group?.ID)
-                )
-                    return; // If I am not part of the group that received the message, don't show me the message.
+                ) {
+                    console.log(
+                        'I am not part of the group that received the message',
+                    );
+                    return;
+                }
                 return MessageNotification(eventData as ChatNotification);
             }
             default:
