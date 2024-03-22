@@ -9,8 +9,6 @@ export const ArticleContainer = styled.article`
     background-color: white;
     cursor: pointer;
     border-radius: 0.5rem;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
     padding: 1.5rem 2rem;
     display: flex;
     gap: 0.5rem;
@@ -18,7 +16,7 @@ export const ArticleContainer = styled.article`
     align-items: center;
     background-color: white;
     transition: background-color 0.2s ease-in-out;
-    border-bottom: 1px solid var(--gray-400);
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     &:hover {
         background-color: var(--indigo-50);
         border-radius: 0.5rem;
@@ -80,7 +78,7 @@ export const TagsContainer = styled.div`
 `;
 
 export const ArticleDate = styled.time`
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     opacity: 0.9;
     @media (max-width: 768px) {
         font-size: 0.75rem;
@@ -89,6 +87,7 @@ export const ArticleDate = styled.time`
 
 export const ArticleThumbnail = styled.img`
     max-width: 150px;
+    border-radius: 0.25rem;
     object-fit: cover;
     border: none;
     aspect-ratio: 1/1;
