@@ -8,12 +8,11 @@ export const AccordionContainer = styled.div`
 
 export const AccordionHeader = styled.header<{ isOpen?: boolean }>`
     cursor: pointer;
-    background-color: #a5b4fc;
+    background-color: var(--indigo-300);
     padding: 1rem;
     border-radius: ${(props) => (props.isOpen ? '10px 10px 0 0' : '10px')};
     font-size: 1.5rem;
     font-weight: bold;
-    color: #312e81;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -22,7 +21,6 @@ export const AccordionHeader = styled.header<{ isOpen?: boolean }>`
 export const AccordionContent = styled.main`
     padding: 2rem;
     font-size: 1rem;
-    color: #4b5563;
     display: flex;
     flex-direction: column;
     gap: 1rem;
