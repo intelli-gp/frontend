@@ -1,7 +1,7 @@
 import { AnimatePresence } from 'framer-motion';
 import { useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import AIHelperPage from './pages/AI-helper/AI-helper.page';
 import LoginPage from './pages/auth/login.page';
@@ -26,6 +26,8 @@ import { RootState, setCredentials } from './store';
 import { getSocket } from './utils/socket';
 import { connectSSE } from './utils/sse';
 import ForgetPasswordPage from './pages/auth/froget-password/forget-password.page';
+import UserProfilePage from './pages/user-profile/user-profile.page';
+import NotFoundPage from './pages/not-found-page/not-found.page';
 
 function App() {
     const dispatch = useDispatch();
@@ -69,11 +71,11 @@ function App() {
 
                 <Route path="app" element={<LoggedInTemplatePage />}>
                     <Route path="profile" element={<ProfilePage />} />
+                    <Route path="profile/:id" element={<UserProfilePage />} />
                     <Route path="study-planner" element={<StudyPlanner />} />
                     <Route path="groups" element={<ExploreGroupsPage />} />
                     <Route path="settings" element={<SettingsPage />} />
                     <Route path="articles" element={<ExploreArticlesPage />} />
-                    {/* This is temporary route */}
                     <Route path="groups/:id" element={<ViewGroupPage />} />
                     <Route path="chat-room/:id" element={<ChatroomPage />} />
 
@@ -93,6 +95,8 @@ function App() {
                     <Route path="AI-helper" element={<AIHelperPage />} />
                     <Route path="upgrade" element={<UpgradePage />} />
                 </Route>
+                <Route path="*" element={<Navigate to="/404" replace />} />
+                <Route path="/404" element={<NotFoundPage />} />
             </Routes>
         </AnimatePresence>
     );
