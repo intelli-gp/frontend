@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { FiEdit, FiSave } from 'react-icons/fi';
 import { GoSync } from 'react-icons/go';
+import { MdMessage } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -218,33 +219,36 @@ const ViewGroupPage = () => {
         }
     }, [isGroupJoinedSuccessfully, isGroupUpdatedSuccessfully]);
 
-    const returnButton = (
+    const chatRoomButton = (
         <Button
-            type="button"
             select="secondary"
-            title="Return"
+            title="Go to chat room"
             className="!absolute bottom-8 right-8"
             onClick={() => navigate(`/app/chat-room/${groupId}`)}
         >
-            Return
+            <MdMessage size={24} />
         </Button>
     );
 
     const deleteButton = (
-        <Button select="danger" outline type="button" onClick={openDeleteModal}>
+        <Button
+            select="danger"
+            outline
+            onClick={openDeleteModal}
+            className="mt-auto"
+        >
             Delete Group
         </Button>
     );
 
     const exitButton = (
-        <Button select="danger" outline type="button" onClick={openExitModal}>
+        <Button select="danger" outline onClick={openExitModal}>
             Exit Group
         </Button>
     );
 
     const joinButton = (
         <Button
-            type="button"
             select="secondary"
             title="Return"
             className="absolute bottom-8 right-8 px-4"
@@ -282,7 +286,7 @@ const ViewGroupPage = () => {
                 </GroupTitleHolder>
 
                 {userType === Role.admin || userType === Role.member
-                    ? returnButton
+                    ? chatRoomButton
                     : joinButton}
             </GroupCoverImageContainer>
 

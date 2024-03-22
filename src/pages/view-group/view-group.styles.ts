@@ -72,6 +72,7 @@ export const LeftPart = styled.div`
     flex-direction: column;
     gap: 4rem;
     width: 100%;
+    height: 100%;
     @media (max-width: 768px) {
         padding: 2rem;
     }
