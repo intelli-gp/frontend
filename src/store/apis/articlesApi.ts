@@ -27,6 +27,13 @@ const articleApi = appApi.injectEndpoints({
                 method: 'GET',
             }),
         }),
+        //Ask Them to add Id
+        getUserArticles: builder.query<Response, void>({
+            query: () => ({
+                url: '/articles/created',
+                method: 'GET',
+            }),
+        }),
         updateArticle: builder.mutation<
             Response,
             Partial<ArticleToSend> & { id: number }
@@ -57,4 +64,5 @@ export const {
     useLazyGetArticleQuery,
     useUpdateArticleMutation,
     useDeleteArticleMutation,
+    useGetUserArticlesQuery,
 } = articleApi;
