@@ -33,7 +33,7 @@ export const MessageNotification = (
                 to={`/app/chat-room/${notification?.message?.Group?.ID}`}
                 onClick={dismiss}
             >
-                <NotificationTitle>
+                <NotificationTitle title={notification?.message?.Group?.GroupName}>
                     {notification?.message?.Group?.GroupName}
                 </NotificationTitle>
 
