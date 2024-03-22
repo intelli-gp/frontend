@@ -3,7 +3,6 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 
-import cameraImage from '../../assets/imgs/camera.png';
 import defaultProfile from '../../assets/imgs/user.jpg';
 import { InputsGrid } from '../../components/Input';
 import Accordion from '../../components/accordion/accordion.component';
@@ -22,12 +21,12 @@ import {
     SerializedInput,
 } from '../../types/serialized-input';
 import { ReceivedUser, UserToSend } from '../../types/user';
-import { successToast } from '../../utils/toasts';
+import { errorToast, successToast } from '../../utils/toasts';
 import {
     EditButton,
+    HeaderTagsContainer,
     PageContainer,
     PageHeader,
-    PictureOverlay,
     ProfilePicture,
     ProfilePictureContainer,
 } from './settings.styles';
@@ -37,8 +36,7 @@ export const SettingsPage = () => {
 
     // Network calls
     const { data: tagsRes } = useGetAllTagsQuery();
-    const [triggerUpdateUser, { isLoading, isSuccess, reset }] =
-        useUpdateUserMutation();
+    const [triggerUpdateUser, { isLoading, reset }] = useUpdateUserMutation();
 
     // Local state
     const [isEditingPersonalInfo, setIsEditingPersonalInfo] = useState(false);
@@ -202,16 +200,26 @@ export const SettingsPage = () => {
         }
 
         if (Object.keys(diff).length > 0) {
-            const {
-                data: { updatedUser },
-            } = await triggerUpdateUser(diff).unwrap();
+            try {
+                const {
+                    data: { updatedUser },
+                } = await triggerUpdateUser(diff).unwrap();
 
-            dispatch(
-                setCredentials({
-                    user: updatedUser,
-                    token: userToken,
-                }),
-            );
+                dispatch(
+                    setCredentials({
+                        user: updatedUser,
+                        token: userToken,
+                    }),
+                );
+
+                successToast(
+                    'Your personal data has been updated successfully!',
+                );
+            } catch (error) {
+                errorToast('An error occurred while updating your data.');
+            } finally {
+                reset();
+            }
         }
     };
 
@@ -228,13 +236,6 @@ export const SettingsPage = () => {
         setInterests(storedUser.UserTags);
     }, [storedUser]);
 
-    useEffect(() => {
-        if (isSuccess) {
-            successToast('Your personal data has been updated successfully!');
-            reset();
-        }
-    }, [isSuccess]);
-
     return (
         <PageContainer {...BetweenPageAnimation}>
             <PageTitle>Account Settings</PageTitle>
@@ -245,7 +246,6 @@ export const SettingsPage = () => {
                         <ProfilePicture
                             src={storedUser.ProfileImage ?? defaultProfile}
                         />
-                        <PictureOverlay src={cameraImage} />
                     </ProfilePictureContainer>
                     <h2 className="text-xl font-bold mt-4">
                         {storedUser.FullName ?? 'Delete me'}
@@ -260,11 +260,16 @@ export const SettingsPage = () => {
                         {storedUser.Bio ?? "You don't have bio yet."}
                     </p>
 
-                    <div className="flex gap-4 flex-wrap">
+                    <HeaderTagsContainer>
                         {storedUser.UserTags?.map((tag) => (
-                            <Tag key={tag} text={tag} size="sm" />
+                            <Tag
+                                key={tag}
+                                text={tag}
+                                size="sm"
+                                variant="darker"
+                            />
                         ))}
-                    </div>
+                    </HeaderTagsContainer>
                 </section>
             </PageHeader>
 
@@ -305,7 +310,7 @@ export const SettingsPage = () => {
                 type="button"
                 outline
                 select="danger"
-                className="self-start text-xs"
+                className="self-start mt-auto"
             >
                 Delete Account
             </Button>

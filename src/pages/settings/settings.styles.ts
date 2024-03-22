@@ -1,9 +1,10 @@
-import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import styled from 'styled-components';
 
 import Button from '../../components/button/button.component';
 
 export const PageContainer = styled(motion.div)`
+    min-height: 100vh;
     width: 100%;
     max-width: 1000px;
     padding: 2rem;
@@ -30,6 +31,11 @@ export const PageHeader = styled.header`
     @media (max-width: 768px) {
         grid-template-columns: 1fr;
     }
+`;
+
+export const HeaderTagsContainer = styled.div`
+    display: flex;
+    gap: 0.5rem;
 `;
 
 export const ProfilePictureContainer = styled.div`
@@ -62,9 +68,10 @@ export const PictureOverlay = styled(ProfilePicture)`
 
 export const EditButton = styled(Button)<{ editing: boolean }>`
     align-self: end;
+    height: 2.5rem;
     padding: ${({ editing }) => (editing ? '0.5rem 2rem' : '1rem')};
     border-radius: ${({ editing }) => (editing ? '20px' : '1000px')};
     font-size: 1rem;
-    color: #334155;
+    color: var(--gray-800);
     gap: 0.5rem;
 `;
