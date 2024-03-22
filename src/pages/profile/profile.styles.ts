@@ -185,6 +185,9 @@ export const MainSectionHeaderTab = styled.button<{ isActive: boolean }>`
 `;
 
 export const MainSectionContent = styled.div`
+    max-width: 750px;
+    min-width: 0;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 1rem;

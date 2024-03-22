@@ -82,7 +82,8 @@ const ProfilePage = () => {
     const [_followers] = useState<any[]>([]);
     const [_following] = useState<any[]>([]);
     console.log(user.ID);
-    const { data: postsData, isLoading: PostsLoading } = useGetUserArticlesQuery();
+    const { data: postsData, isLoading: PostsLoading } =
+        useGetUserArticlesQuery();
     const [posts, setArticles] = useState<ReceivedArticle[]>([]);
     const articles: ReceivedArticle[] =
         (postsData as unknown as Response)?.data ?? [];
@@ -92,6 +93,20 @@ const ProfilePage = () => {
     const groups: ReceivedGroup[] =
         (groupData as unknown as Response)?.data ?? [];
     const [showGroups, setGroups] = useState<ReceivedGroup[]>([]);
+
+    let groupsEnhanced: Partial<ReceivedGroup> & {
+        UserRole: string;
+    }[] = groups.map((group: ReceivedGroup) => {
+        if (group.GroupOwner.ID === user.ID)
+            return { ...group, UserRole: 'owner' };
+        const userRole = group.GroupMembers.find(
+            (member) => member.ID === user.ID,
+        )?.Type;
+        return {
+            ...group,
+            UserRole: userRole?.toLocaleLowerCase() ?? 'member',
+        };
+    });
 
     const aboutListItems = [
         {
@@ -143,27 +158,32 @@ const ProfilePage = () => {
             if (tab.title === 'Posts' && tab.isActive) {
                 return PostsLoading ? (
                     <div className="px-8 py-4">
-                        <Skeleton times={3} className="h-[180px] w-full mb-4" />
+                        <Skeleton times={2} className="h-[180px] w-full mb-4" />
                     </div>
                 ) : (
-                    <div className="grid xl:grid-cols-2 gap-4 grid-cols-1">
+                    <>
                         {posts.map((post) => (
-                            <WideArticleItem {...post} />
+                            <WideArticleItem
+                                {...post}
+                                onClick={() =>
+                                    navigate(`/app/articles/${post.ID}`)
+                                }
+                            />
                         ))}
-                    </div>
+                    </>
                 );
             }
             if (tab.title === 'Groups' && tab.isActive) {
                 return GroupsLoading ? (
                     <div className="px-8 py-4">
-                        <Skeleton times={3} className="h-[180px] w-full mb-4" />
+                        <Skeleton times={2} className="h-[180px] w-full mb-4" />
                     </div>
                 ) : (
-                    <div className="grid xl:grid-cols-2 gap-4 grid-cols-1">
-                        {showGroups.map((group) => (
+                    <>
+                        {groupsEnhanced.map((group) => (
                             <WideGroupCard {...group} />
                         ))}
-                    </div>
+                    </>
                 );
             }
             return null;
