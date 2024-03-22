@@ -24,7 +24,7 @@ export const Container = styled.div`
     background-color: transparent;
     display: flex;
     width: 100%;
-    max-width: 700px;
+    max-width: 750px;
     min-width: 0px;
     gap: 0.5rem;
     justify-content: center;
