@@ -18,7 +18,7 @@ export const ArticleContainer = styled.article`
     transition: background-color 0.2s ease-in-out;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     &:hover {
-        background-color: var(--indigo-50);
+        background-color: var(--indigo-25);
         border-radius: 0.5rem;
     }
     @media (max-width: 768px) {

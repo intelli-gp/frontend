@@ -16,7 +16,7 @@ export const CardContainer = styled.div`
     cursor: pointer;
 
     &:hover {
-        scale: 1.025;
+        background-color: var(--indigo-25);
     }
 `;
 

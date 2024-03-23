@@ -2,8 +2,9 @@ import styled, { css } from 'styled-components';
 
 import { CSSTextLinesCountLimit } from '../../index.styles';
 import Button from '../button/button.component';
+import { motion } from 'framer-motion';
 
-export const CardContainer = styled.div`
+export const CardContainer = styled(motion.div)`
     width: min(500px, 100%);
     gap: 1.25rem;
     margin: 0 auto;
@@ -16,7 +17,7 @@ export const CardContainer = styled.div`
     transition: all 0.25s ease-in-out;
     cursor: pointer;
     &:hover {
-        background-color: var(--indigo-50);
+        background-color: var(--indigo-25);
     }
 `;
 
