@@ -3,7 +3,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import ReactDOM from 'react-dom/client';
 import { Toaster } from 'react-hot-toast';
 import { Provider } from 'react-redux';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 
@@ -15,7 +15,7 @@ let persistor = persistStore(store);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <HashRouter>
+        <BrowserRouter>
             <Provider store={store}>
                 <PersistGate persistor={persistor}>
                     <Toaster
@@ -26,6 +26,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                     <App />
                 </PersistGate>
             </Provider>
-        </HashRouter>
+        </BrowserRouter>
     </React.StrictMode>,
 );

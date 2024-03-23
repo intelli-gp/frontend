@@ -73,7 +73,7 @@ const CreateArticlePage = () => {
         useSelector((state: RootState) => state['article-creator']);
 
     // These only used when editing an article
-    const isEdit = new URL(window.location.href).hash.includes('edit');
+    const isEdit = new URL(window.location.href).pathname.includes('edit');
     const { articleId } = useParams();
     const [getArticle, { data }] = useLazyGetArticleQuery();
     const articleBeforeEdit = (data as unknown as Response)
