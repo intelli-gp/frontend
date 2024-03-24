@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
-import { FaBirthdayCake, FaEnvelope } from 'react-icons/fa';
+import { FaBirthdayCake, FaEnvelope, FaPlus } from 'react-icons/fa';
 import { FaPhoneAlt } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import cameraImage from '../../assets/imgs/camera.png';
 import coverImageCamera from '../../assets/imgs/coverImageCamera.png';
 import defaultUserImage from '../../assets/imgs/user.jpg';
-import Skeleton from '../../components/Skeleton';
+import Spinner from '../../components/Spinner';
 import Button from '../../components/button/button.component';
 import { Modal } from '../../components/modal/modal.component';
 import OpenImage from '../../components/openImage/openImage.component';
@@ -24,6 +24,7 @@ import {
     PageHeader,
     PictureOverlay,
     ProfilePictureContainer,
+    UserBio,
     UserDataContainer,
     UserFullName,
 } from '../../pages/profile/profile.styles';
@@ -32,10 +33,11 @@ import {
     setCredentials,
     useGetUserArticlesQuery,
     useGetUserGroupsQuery,
+    useLazyFetchUserQuery,
     useUpdateUserMutation,
 } from '../../store';
 import { ReceivedArticle } from '../../types/article.d';
-import { ReceivedGroup } from '../../types/group';
+import { GroupWithRole, ReceivedGroup } from '../../types/group';
 import { Response } from '../../types/response';
 import { ReceivedUser, UserToSend } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
@@ -64,72 +66,63 @@ type ModalProps = {
 };
 
 const ProfilePage = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const location = useLocation();
+
+    const { token, user: loggedInUser } = useSelector(
+        (state: RootState) => state.auth,
+    );
+
+    /**
+     * Check if the user is viewing another user's profile
+     */
+    const isAnotherUserProfile = window.location.pathname.includes('/user/');
+    const anotherUserUsername = useParams().username;
+    if (anotherUserUsername && anotherUserUsername === loggedInUser.Username) {
+        navigate('/app/profile');
+    }
+
+    const { isLoading: isImageLoading, trigger: uploadImage } =
+        useUploadImage();
+    const [
+        getUserData,
+        { data: _anotherUserData, isLoading: anotherUserIsLoading },
+    ] = useLazyFetchUserQuery();
+    const [updateUser, { isLoading: updateUserIsLoading }] =
+        useUpdateUserMutation();
+    const { data: _articles, isLoading: isArticlesLoading } =
+        useGetUserArticlesQuery();
+    const { data: _groups, isLoading: isGroupsLoading } =
+        useGetUserGroupsQuery();
+
+    const loggedInUserArticles: ReceivedArticle[] =
+        (_articles as unknown as Response)?.data ?? [];
+    const loggedInUserGroups: ReceivedGroup[] =
+        (_groups as unknown as Response)?.data ?? [];
+    const anotherUserData: ReceivedUser =
+        (_anotherUserData as unknown as Response)?.data?.user ?? {};
+
+    const [loggedInUserProfileImage, setLoggedInUserProfileImage] = useState(
+        loggedInUser.ProfileImage,
+    );
+    const [loggedInUserCoverImage, setLoggedInUserCoverImage] = useState(
+        loggedInUser.CoverImage,
+    );
+
+    const [showCoverModal, setCoverModal] = useState(false);
+    const [showImgModal, setImgModal] = useState(false);
+    const [userData, setUserData] = useState<Partial<ReceivedUser>>({});
+    const [userGroups, setUserGroups] = useState<Partial<ReceivedGroup>[]>([]);
+    const [userArticles, setUserArticles] = useState<
+        Partial<ReceivedArticle>[]
+    >([]);
     const [mainSectionHeaderTabs, setMainSectionHeaderTabs] = useState([
         { title: 'Posts', isActive: false, label: 'posts' },
         { title: 'Groups', isActive: true, label: 'groups' },
         { title: 'Followers', isActive: false, label: 'followers' },
         { title: 'Following', isActive: false, label: 'following' },
     ]);
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-
-    const user = useSelector(
-        (state: RootState) => state.auth.user,
-    ) as ReceivedUser;
-    const userToken = useSelector((state: RootState) => state.auth.token);
-    const [userImg, setUserImg] = useState(user.ProfileImage);
-    const [userCover, setUserCover] = useState(user.CoverImage);
-    const [_followers] = useState<any[]>([]);
-    const [_following] = useState<any[]>([]);
-    console.log(user.ID);
-    const { data: postsData, isLoading: PostsLoading } =
-        useGetUserArticlesQuery();
-    const [posts, setArticles] = useState<ReceivedArticle[]>([]);
-    const articles: ReceivedArticle[] =
-        (postsData as unknown as Response)?.data ?? [];
-
-    const { data: groupData, isLoading: GroupsLoading } =
-        useGetUserGroupsQuery();
-    const groups: ReceivedGroup[] =
-        (groupData as unknown as Response)?.data ?? [];
-    const [showGroups, setGroups] = useState<ReceivedGroup[]>([]);
-
-    let groupsEnhanced: Partial<ReceivedGroup> & {
-        UserRole: string;
-    }[] = groups.map((group: ReceivedGroup) => {
-        if (group.GroupOwner.ID === user.ID)
-            return { ...group, UserRole: 'owner' };
-        const userRole = group.GroupMembers.find(
-            (member) => member.ID === user.ID,
-        )?.Type;
-        return {
-            ...group,
-            UserRole: userRole?.toLocaleLowerCase() ?? 'member',
-        };
-    });
-
-    const aboutListItems = [
-        {
-            icon: <FaBirthdayCake />,
-            text: new Date(user.DOB).toLocaleDateString(),
-        },
-        {
-            icon: <FaEnvelope />,
-            text: user.Email,
-        },
-        {
-            icon: <FaPhoneAlt />,
-            text: user.PhoneNumber,
-        },
-    ];
-
-    useEffect(() => {
-        setUserImg(user.ProfileImage);
-        setUserCover(user.CoverImage);
-        setGroups(groups);
-        setArticles(articles);
-    }, [articles, groups, user.ProfileImage, user.CoverImage]);
-
     const [youMayKnow] = useState<any[]>([
         {
             FullName: 'Ahmed Mohamed Mohamed',
@@ -152,35 +145,104 @@ const ProfilePage = () => {
             ProfileImage: defaultUserImage,
         },
     ]);
+    const [CommonFollowers] = useState<any[]>([
+        {
+            FullName: 'Ahmed',
+            Username: 'ahmedali',
+            ProfileImage: defaultUserImage,
+        },
+        {
+            FullName: 'Ahmed',
+            Username: 'ahmedali',
+            ProfileImage: defaultUserImage,
+        },
+        {
+            FullName: 'Ahmed',
+            Username: 'ahmedali',
+            ProfileImage: defaultUserImage,
+        },
+        {
+            FullName: 'Ahmed',
+            Username: 'ahmedali',
+            ProfileImage: defaultUserImage,
+        },
+    ]);
+
+    let groupsWithRole: GroupWithRole[] = userGroups?.map(
+        (group: Partial<ReceivedGroup>) => {
+            if (group?.GroupOwner?.ID === userData.ID)
+                return { ...group, UserRole: 'owner' };
+            const userRole = group?.GroupMembers?.find(
+                (member) => member.ID === userData.ID,
+            )?.Type;
+            return {
+                ...group,
+                UserRole: userRole?.toLocaleLowerCase() ?? 'member',
+            };
+        },
+    );
+
+    const aboutListItems = [
+        {
+            icon: <FaBirthdayCake />,
+            text: new Date(userData.DOB!).toLocaleDateString(),
+        },
+        {
+            icon: <FaEnvelope />,
+            text: userData.Email,
+        },
+        {
+            icon: <FaPhoneAlt />,
+            text: userData.PhoneNumber,
+        },
+    ];
+
+    // For logged in user profile
+    useEffect(() => {
+        setLoggedInUserProfileImage(loggedInUser.ProfileImage!);
+        setLoggedInUserCoverImage(loggedInUser.CoverImage!);
+    }, [loggedInUser.ProfileImage, loggedInUser.CoverImage]);
+
+    useEffect(() => {
+        if (isAnotherUserProfile) {
+            console.log(anotherUserData);
+            setUserData(anotherUserData);
+            setUserGroups(anotherUserData.GroupsJoined);
+            setUserArticles(anotherUserData.Articles);
+        } else {
+            setUserData(loggedInUser);
+            setUserGroups(loggedInUserGroups);
+            setUserArticles(loggedInUserArticles);
+        }
+    }, [_anotherUserData, _articles, _groups, location]);
+
+    useEffect(() => {
+        if (isAnotherUserProfile) {
+            getUserData(anotherUserUsername!);
+        }
+    }, []);
 
     const mainContent = () => {
         return mainSectionHeaderTabs.map((tab) => {
-            if (tab.title === 'Posts' && tab.isActive) {
-                return PostsLoading ? (
-                    <div className="px-8 py-4">
-                        <Skeleton times={2} className="h-[180px] w-full mb-4" />
-                    </div>
-                ) : (
+            if (!tab.isActive) return null;
+            if (tab.title === 'Posts') {
+                return (
                     <>
-                        {posts.map((post) => (
+                        {userArticles?.map((article) => (
                             <WideArticleItem
-                                {...post}
+                                {...article}
                                 onClick={() =>
-                                    navigate(`/app/articles/${post.ID}`)
+                                    navigate(`/app/articles/${article.ID}`)
                                 }
                             />
                         ))}
                     </>
                 );
             }
-            if (tab.title === 'Groups' && tab.isActive) {
-                return GroupsLoading ? (
-                    <div className="px-8 py-4">
-                        <Skeleton times={2} className="h-[180px] w-full mb-4" />
-                    </div>
-                ) : (
+            if (tab.title === 'Groups') {
+                return (
                     <>
-                        {groupsEnhanced.map((group) => (
+                        {groupsWithRole?.map((group) => (
                             <WideGroupCard {...group} />
                         ))}
                     </>
@@ -200,37 +262,38 @@ const ProfilePage = () => {
             }),
         );
     };
-    const [triggerUpdateUser, { isLoading }] = useUpdateUserMutation();
+
     const handleUpdate = async () => {
         try {
             const update: Partial<UserToSend> = {};
 
-            if (user?.ProfileImage !== userImg) {
-                const imageURL = await uploadImage(userImg);
+            if (loggedInUser?.ProfileImage !== loggedInUserProfileImage) {
+                const imageURL = await uploadImage(loggedInUserProfileImage!);
                 update.image = imageURL;
                 const {
                     data: { updatedUser },
-                } = await triggerUpdateUser(update).unwrap();
+                } = await updateUser(update).unwrap();
 
                 dispatch(
                     setCredentials({
                         user: updatedUser,
-                        token: userToken,
+                        token: token,
                     }),
                 );
+
                 successToast('Image uploaded successfully');
             }
-            if (user?.CoverImage !== userCover) {
-                const imageURL = await uploadImage(userCover);
+            if (loggedInUser?.CoverImage !== loggedInUserCoverImage) {
+                const imageURL = await uploadImage(loggedInUserCoverImage!);
                 update.coverImage = imageURL;
                 const {
                     data: { updatedUser },
-                } = await triggerUpdateUser(update).unwrap();
+                } = await updateUser(update).unwrap();
 
                 dispatch(
                     setCredentials({
                         user: updatedUser,
-                        token: userToken,
+                        token: token,
                     }),
                 );
                 successToast('Image uploaded successfully');
@@ -245,14 +308,11 @@ const ProfilePage = () => {
             }
         }
     };
-    const { isLoading: isImageLoading, trigger: uploadImage } =
-        useUploadImage();
-    const [showImgModal, setImgModal] = useState(false);
+
     const openImgModal = () => {
         setImgModal((prev) => !prev);
     };
 
-    const [showCoverModal, setCoverModal] = useState(false);
     const openCoverModal = () => {
         setCoverModal((prev) => !prev);
     };
@@ -282,7 +342,7 @@ const ProfilePage = () => {
                 <Button
                     type="button"
                     select="primary"
-                    loading={isImageLoading || isLoading}
+                    loading={isImageLoading || updateUserIsLoading}
                     onClick={handleUpdate}
                 >
                     Apply
@@ -293,8 +353,8 @@ const ProfilePage = () => {
                     onClick={() => {
                         setImage(
                             title === 'Cover'
-                                ? user.CoverImage
-                                : user.ProfileImage,
+                                ? loggedInUser.CoverImage!
+                                : loggedInUser.ProfileImage!,
                         );
                         setIsOpen(false);
                     }}
@@ -306,6 +366,60 @@ const ProfilePage = () => {
         </Modal>
     );
 
+    const YouMayKnowSection = (
+        <YouMayNowSection>
+            <h1 className="text-xl font-semibold">You may know</h1>
+            <hr />
+            <ul className="flex flex-col gap-6">
+                {youMayKnow.map((user) => (
+                    <UserItem {...user} action="follow" />
+                ))}
+            </ul>
+        </YouMayNowSection>
+    );
+
+    const MutualFollowersSection = (
+        <YouMayNowSection>
+            <h1 className="text-xl font-semibold text-[var(--gray-700)]">
+                Mutual Followers
+            </h1>
+            <hr />
+            <ul className="flex flex-col gap-4 ">
+                {CommonFollowers.map((user) => (
+                    <UserItem {...user} />
+                ))}
+            </ul>
+        </YouMayNowSection>
+    );
+
+    const EditButton = (
+        <Button
+            select="warning"
+            type="button"
+            title="Edit profile"
+            className="ml-auto gap-2 !p-4 !text-inherit"
+            rounded
+            onClick={() => navigate('/app/settings')}
+        >
+            <FiEdit size={18} />
+        </Button>
+    );
+
+    const FollowButton = (
+        <Button
+            select="primary"
+            type="button"
+            title="Follow"
+            className="ml-auto gap-2"
+        >
+            <FaPlus size={14} /> Follow
+        </Button>
+    );
+
+    if (isAnotherUserProfile && anotherUserIsLoading) {
+        return <Spinner />;
+    }
+
     return (
         <PageContainer {...BetweenPageAnimation}>
             <PageHeader>
@@ -313,11 +427,13 @@ const ProfilePage = () => {
                     <PictureOverlay
                         src={coverImageCamera}
                         title="Edit cover image"
-                        className="!rounded-none"
+                        className={`!rounded-none ${
+                            isAnotherUserProfile && 'hidden'
+                        }`}
                         onClick={openCoverModal}
                     />
-                    {userCover ? (
-                        <CoverImage src={userCover} />
+                    {userData?.CoverImage ? (
+                        <CoverImage src={userData?.CoverImage} />
                     ) : (
                         <div className="bg-indigo-900 h-[200px]" />
                     )}
@@ -325,31 +441,24 @@ const ProfilePage = () => {
 
                 <UserDataContainer>
                     <ProfilePictureContainer>
-                        <ProfilePicture src={userImg ?? defaultUserImage} />
+                        <ProfilePicture
+                            src={userData?.ProfileImage ?? defaultUserImage}
+                        />
                         <PictureOverlay
                             src={cameraImage}
                             title="Edit profile picture"
                             onClick={openImgModal}
+                            className={`${isAnotherUserProfile && 'hidden'}`}
                         />
                     </ProfilePictureContainer>
                     <div className="flex flex-col justify-between h-[75px] p-2">
-                        <UserFullName title={user.FullName}>
-                            {user.FullName}
+                        <UserFullName title={userData.FullName}>
+                            {userData.FullName}
                         </UserFullName>
-                        <p className="text-[var(--gray-600)]">
-                            @{user.Username}
-                        </p>
+                        <p className="opacity-60">@{userData.Username}</p>
                     </div>
-                    <Button
-                        select="warning"
-                        type="button"
-                        title="Edit profile"
-                        className="ml-auto gap-2 !text-[#172554] !p-4"
-                        rounded
-                        onClick={() => navigate('/app/settings')}
-                    >
-                        <FiEdit size={18} />
-                    </Button>
+
+                    {isAnotherUserProfile ? FollowButton : EditButton}
                 </UserDataContainer>
             </PageHeader>
 
@@ -357,7 +466,7 @@ const ProfilePage = () => {
                 <AboutSection>
                     <h1 className="text-xl font-bold">About</h1>
                     <hr />
-                    <p>{user.Bio ?? 'This user has no bio.'}</p>
+                    <UserBio>{userData.Bio ?? 'This user has no bio.'}</UserBio>
                     <hr />
                     <AboutList>
                         {aboutListItems.map(({ icon, text }) => (
@@ -389,29 +498,24 @@ const ProfilePage = () => {
                     <MainSectionContent>{mainContent()}</MainSectionContent>
                 </MainSection>
 
-                <YouMayNowSection>
-                    <h1 className="text-xl font-semibold">You may know</h1>
-                    <hr />
-                    <ul className="flex flex-col gap-6">
-                        {youMayKnow.map((user) => (
-                            <UserItem {...user} action="follow" />
-                        ))}
-                    </ul>
-                </YouMayNowSection>
+                {isAnotherUserProfile
+                    ? MutualFollowersSection
+                    : YouMayKnowSection}
             </MainContainer>
 
             <ModalUploadImage
                 isOpen={showImgModal}
                 setIsOpen={setImgModal}
-                image={userImg}
-                setImage={setUserImg}
+                image={loggedInUserProfileImage!}
+                setImage={setLoggedInUserProfileImage}
                 title="Profile"
             />
+
             <ModalUploadImage
                 isOpen={showCoverModal}
                 setIsOpen={setCoverModal}
-                image={userCover}
-                setImage={setUserCover}
+                image={loggedInUserCoverImage!}
+                setImage={setLoggedInUserCoverImage}
                 title="Cover"
             />
         </PageContainer>

@@ -129,6 +129,12 @@ export const AboutSection = styled.section`
     }
 `;
 
+export const UserBio = styled.pre`
+    white-space: break-spaces;
+    font-size: 1rem;
+    font-family: inherit;
+`;
+
 export const AboutList = styled.ul`
     display: flex;
     flex-direction: column;
@@ -185,8 +191,7 @@ export const MainSectionHeaderTab = styled.button<{ isActive: boolean }>`
 `;
 
 export const MainSectionContent = styled.div`
-    max-width: 750px;
-    min-width: 0;
+    width: min(750px, 100%);
     margin: 0 auto;
     display: flex;
     flex-direction: column;

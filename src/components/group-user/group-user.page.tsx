@@ -51,7 +51,7 @@ const UserContainer = ({
         {
             option: 'View Profile',
             handler: () => {
-                 navigate(`/app/profile/${username}`)}
+                 navigate(`/app/user/${username}`)}
             ,
         },
     ];
@@ -59,7 +59,7 @@ const UserContainer = ({
         {
             option: 'View Profile',
             handler: () => {
-                 navigate(`/app/profile/${username}`)}
+                 navigate(`/app/user/${username}`)}
             ,
         },
     ];
