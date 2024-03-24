@@ -22,6 +22,7 @@ export type ReceivedArticle = {
     Title: string;
     Sections: ArticleSection[];
     UpdatedAt: string;
+    CreatedAt: string;
 };
 
 // Send to server

@@ -1,3 +1,4 @@
+import { ReceivedArticle } from './article';
 import { ReceivedGroup } from './group';
 
 export type ReceivedUser = {
@@ -25,6 +26,10 @@ export type ReceivedUser = {
             'ID' | 'GroupTitle' | 'GroupCoverImage' | 'GroupUserCont'
         >
     >;
+    Articles: Pick<
+        ReceivedArticle,
+        'ID' | 'Title' | 'CoverImage' | 'CreatedAt' | 'ArticleTags'
+    >[];
 };
 
 export type UserToSend = {

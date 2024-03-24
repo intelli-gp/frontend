@@ -22,6 +22,13 @@ export type ReceivedGroup = {
     GroupUserCont: number;
 };
 
+export type GroupWithRole = Partial<ReceivedGroup> & {
+    /**
+     * 'admin' | 'member' | 'owner'
+     */
+    UserRole: string;
+};
+
 export type GroupToSend = {
     GroupTitle: string;
     GroupDescription: string;
