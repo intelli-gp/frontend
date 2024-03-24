@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import { ReceivedArticle } from '../../types/article';
@@ -10,21 +11,22 @@ import {
     ArticleThumbnail,
     ArticleTitle,
     AuthorData,
+    AuthorFullName,
     AuthorPicture,
     TagsContainer,
 } from './wide-article-item.styles';
-import { useNavigate } from 'react-router-dom';
 
-type WideArticleItemProps = ReceivedArticle & {
+type WideArticleItemProps = Partial<ReceivedArticle> & {
     onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
 const WideArticleItem = ({
-    Author: author,
-    CoverImage: coverImageUrl,
-    ArticleTags: tags,
+    Author,
+    CoverImage,
+    ArticleTags,
     Title: title,
-    UpdatedAt: updatedAt,
+    UpdatedAt,
+    CreatedAt,
     onClick,
 }: WideArticleItemProps) => {
     const navigate = useNavigate();
@@ -33,27 +35,33 @@ const WideArticleItem = ({
             <div className="flex justify-between items-center w-full gap-4">
                 <div className="flex flex-col gap-4 max-w-[70%]">
                     <AuthorData
-                      onClick={() => {navigate(`/app/profile/${author.Username}`)}}
+                        onClick={(e: React.MouseEvent) => {
+                            e.stopPropagation();
+                            navigate(`/app/user/${Author?.Username}`);
+                        }}
+                        title={`View ${Author?.FullName}'s profile`}
                     >
                         <AuthorPicture
-                            src={author?.ProfileImage ?? defaultUserImage}
+                            src={Author?.ProfileImage ?? defaultUserImage}
                             alt="user profile picture"
                         />
-                        {author?.FullName}
+                        <AuthorFullName>{Author?.FullName}</AuthorFullName>
                     </AuthorData>
                     <ArticleTitle lines={2}>{title}</ArticleTitle>
                     <ArticleFooter>
                         <TagsContainer>
-                            {tags
-                                ?.slice(0, 3)
-                                .map((tag) => <Tag text={tag} size="xs" />)}
+                            {ArticleTags?.slice(0, 3).map((tag) => (
+                                <Tag text={tag} size="xs" />
+                            ))}
                         </TagsContainer>
                         <ArticleDate>
-                            {moment(new Date(updatedAt)).fromNow()}
+                            {moment(
+                                new Date(UpdatedAt! || CreatedAt!),
+                            ).fromNow()}
                         </ArticleDate>
                     </ArticleFooter>
                 </div>
-                <ArticleThumbnail src={coverImageUrl} alt={'thumbnail'} />
+                <ArticleThumbnail src={CoverImage} alt={'thumbnail'} />
             </div>
         </ArticleContainer>
     );

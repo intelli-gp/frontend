@@ -33,9 +33,22 @@ export const ArticleContainer = styled.article`
 export const AuthorData = styled.header`
     display: flex;
     align-items: center;
+    align-self: flex-start;
     font-size: 0.875rem; // 14px
     font-weight: 500;
     gap: 0.75rem;
+
+    &:hover {
+        span {
+            border-color: var(--indigo-800);
+        }
+    }
+`;
+
+export const AuthorFullName = styled.span`
+    line-height: 1.15;
+    transition: border-color 0.2s ease-in-out;
+    border-bottom: 1px solid transparent;
 `;
 
 export const ArticleTitle = styled.h1<{ lines?: number }>`
