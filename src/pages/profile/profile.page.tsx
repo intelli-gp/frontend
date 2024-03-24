@@ -91,10 +91,8 @@ const ProfilePage = () => {
     ] = useLazyFetchUserQuery();
     const [updateUser, { isLoading: updateUserIsLoading }] =
         useUpdateUserMutation();
-    const { data: _articles, isLoading: isArticlesLoading } =
-        useGetUserArticlesQuery();
-    const { data: _groups, isLoading: isGroupsLoading } =
-        useGetUserGroupsQuery();
+    const { data: _articles } = useGetUserArticlesQuery();
+    const { data: _groups } = useGetUserGroupsQuery();
 
     const loggedInUserArticles: ReceivedArticle[] =
         (_articles as unknown as Response)?.data ?? [];
