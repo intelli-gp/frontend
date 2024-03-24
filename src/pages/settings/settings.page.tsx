@@ -22,6 +22,7 @@ import {
 } from '../../types/serialized-input';
 import { ReceivedUser, UserToSend } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
+import { UserBio } from '../profile/profile.styles';
 import {
     EditButton,
     HeaderTagsContainer,
@@ -256,9 +257,9 @@ export const SettingsPage = () => {
                 </section>
 
                 <section className="flex flex-col gap-6">
-                    <p className="max-w-[70ch]">
+                    <UserBio className="max-w-[70ch]">
                         {storedUser.Bio ?? "You don't have bio yet."}
-                    </p>
+                    </UserBio>
 
                     <HeaderTagsContainer>
                         {storedUser.UserTags?.map((tag) => (
