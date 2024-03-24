@@ -24,7 +24,17 @@ body .w-md-editor-text-input {
     }
 }
 
-.wmde-markdown > *:not(code, pre) {
-    font-family: 'Merriweather', serif;
+.wmde-markdown {
+    * {
+        font-family: 'Merriweather', serif;
+    }
 }
 
+.wmde-markdown {
+    ol {
+        list-style: decimal-leading-zero;
+    }
+    ul {
+        list-style: outside;
+    }
+}
