@@ -311,7 +311,7 @@ export const ChatroomPage = () => {
                                 />
                                 <span>
                                     <GroupUserFullName 
-                                     onClick={() => {navigate(`/app/profile/${person.Username}`)}}
+                                     onClick={() => {navigate(`/app/user/${person.Username}`)}}
                                      title={person.FullName}>
                                         {person.FullName}
                                     </GroupUserFullName>
