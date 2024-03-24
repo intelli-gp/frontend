@@ -1,6 +1,4 @@
 import { AnimatePresence } from 'framer-motion';
-import { useLayoutEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import ProtectedRoutes from './components/ProtectedRoutes';
@@ -23,35 +21,10 @@ import StudyPlanner from './pages/study-planner/study-planner.page';
 import AuthTemplatePage from './pages/templates/Auth';
 import LoggedInTemplatePage from './pages/templates/LoggedIn';
 import UpgradePage from './pages/upgrade/upgrade.page';
-import UserProfilePage from './pages/user-profile/user-profile.page';
 import ViewArticlePage from './pages/view-article/view-article.page';
 import ViewGroupPage from './pages/view-group/view-group.page';
-import { RootState, setCredentials } from './store';
-import { getSocket } from './utils/socket';
-import { connectSSE } from './utils/sse';
 
 function App() {
-    const dispatch = useDispatch();
-    const { token } = useSelector((state: RootState) => state.auth);
-
-    useLayoutEffect(() => {
-        if (!token) {
-            let savedToken = window.localStorage.getItem('token');
-            let user = window.localStorage.getItem('user');
-            if (savedToken) {
-                dispatch(
-                    setCredentials({
-                        token: savedToken,
-                        user: JSON.parse(user as string),
-                    }),
-                );
-                // Initialize socket connection on reload.
-                getSocket(savedToken);
-                connectSSE(savedToken);
-            }
-        }
-    }, []);
-
     return (
         <AnimatePresence>
             <Routes location={useLocation()}>
@@ -74,8 +47,8 @@ function App() {
                     <Route path="app" element={<LoggedInTemplatePage />}>
                         <Route path="profile" element={<ProfilePage />} />
                         <Route
-                            path="profile/:id"
-                            element={<UserProfilePage />}
+                            path="user/:username"
+                            element={<ProfilePage />}
                         />
                         <Route
                             path="study-planner"
