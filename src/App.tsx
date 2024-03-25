@@ -23,6 +23,7 @@ import LoggedInTemplatePage from './pages/templates/LoggedIn';
 import UpgradePage from './pages/upgrade/upgrade.page';
 import ViewArticlePage from './pages/view-article/view-article.page';
 import ViewGroupPage from './pages/view-group/view-group.page';
+import { ChatsPage } from './pages/chats/chats.page';
 
 function App() {
     return (
@@ -81,6 +82,7 @@ function App() {
                         <Route path="pomodoro" element={<PomodoroPage />} />
                         <Route path="AI-helper" element={<AIHelperPage />} />
                         <Route path="upgrade" element={<UpgradePage />} />
+                        <Route path="chats" element={<ChatsPage />} />
                     </Route>
                 </Route>
                 <Route path="*" element={<Navigate to="/404" replace />} />
