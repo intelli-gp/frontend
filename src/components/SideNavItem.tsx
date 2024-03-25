@@ -6,7 +6,7 @@ type SideNavItemPropType = {
     icon: JSX.Element;
     extendable: boolean;
     path: string;
-    text: string;
+    text?: string;
     active: boolean;
     extended?: boolean;
     subItems?: string[];

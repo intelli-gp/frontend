@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
-import SideNav from '../../components/SideNav';
+import SideNav from '../../components/side-nav/side-nav.component';
 
 export default function LoggedInTemplatePage() {
     return (

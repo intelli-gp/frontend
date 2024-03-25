@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
 import { BsFillPostcardFill } from 'react-icons/bs';
 import { FaHandsHelping } from 'react-icons/fa';
@@ -8,25 +7,27 @@ import { HiMiniUserGroup } from 'react-icons/hi2';
 import { IoIosSettings } from 'react-icons/io';
 import { IoPersonSharp } from 'react-icons/io5';
 import { LuListTodo, LuSearch } from 'react-icons/lu';
-import { MdLogout } from 'react-icons/md';
+import { MdLogout, MdMessage } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import defaultUserImage from '../assets/imgs/user.jpg';
-import { RootState, clearCredentials, useLogoutUserMutation } from '../store';
-import { deleteSocket } from '../utils/socket';
-import SideNavItem from './SideNavItem';
-import Button from './button/button.component';
-import DropdownMenu from './menu/menu.component';
+import defaultUserImage from '../../assets/imgs/user.jpg';
+import { RootState, clearCredentials, useLogoutUserMutation } from '../../store';
+import { deleteSocket } from '../../utils/socket';
+import SideNavItem from '../SideNavItem';
+import Button from '../button/button.component';
+import DropdownMenu from '../menu/menu.component';
+import { ChatsLink, Logo, SideNavContainer, UserContainer } from './side-nav.styles';
 
 type SideNavLinkType = {
     icon: JSX.Element;
     extendable: boolean;
     path: string;
-    text: string;
+    text?: string;
     active: boolean;
     extended?: boolean;
     subItems?: string[];
+    notScroll?:boolean;
     id: number;
 };
 
@@ -103,6 +104,15 @@ export default function SideNav() {
             text: 'Pomodoro',
             active: false,
             id: 9,
+        },
+        {
+            icon: <MdMessage size={24} color='white' />,
+            extendable: false,
+            path: '/app/chats',
+            active: false,
+            notScroll:true,
+            id: 10,
+
         },
     ]);
     const navigate = useNavigate();
@@ -184,25 +194,15 @@ export default function SideNav() {
         setSideNavOpen(true);
     };
 
-    const sideNavClassNames = classNames(
-        'bg-indigo-950  w-[300px] h-screen max-h-screen flex flex-col fixed lg:sticky top-0 px-2 py-6 justify-between gap-4 overflow-y-hidden z-20',
-        'transition-all duration-500 linear',
-        {
-            'left-[-100%]': !sideNavOpen,
-            'left-0': sideNavOpen,
-        },
-    );
-
     return (
         <>
-            <aside className={sideNavClassNames} ref={sideNavRef}>
-                <div className="side-nav-links min-h-0">
-                    <h1 className="font-black text-white text-4xl sticky top-0 pb-8 min-h-0 flex justify-center font-serif select-none">
+            <SideNavContainer sideNavOpen={sideNavOpen} ref={sideNavRef}>
+                <div className="side-nav-links min-h-0 flex justify-between flex-col">
+                    <Logo>
                         Mujedd
-                    </h1>
-
-                    <div className="flex flex-col gap-2 overflow-y-scroll max-h-[70vh] side-nav-links px-2">
-                        {links.map((link) => (
+                    </Logo>
+                    <div className="flex flex-col gap-2 overflow-y-scroll max-h-[68vh] side-nav-links p-2">
+                        {links.filter((link)=>!link.notScroll).map((link) => (
                             <SideNavItem
                                 key={link.text}
                                 icon={link.icon}
@@ -217,7 +217,18 @@ export default function SideNav() {
                         ))}
                     </div>
                 </div>
+                <div className=' flex justify-center items-center p-2 '>
+                        <ChatsLink
+                            active= {links[9].active}
+                            onClick={() => {
+                                handleSideLinkClick(10);
+                                navigate(links[9].path);
+                            }}
 
+                        >
+                            {links[9].icon}
+                        </ChatsLink>
+                    </div>
                 <DropdownMenu
                     mainElementClassName="relative flex justify-center"
                     menuWidth="8rem"
@@ -249,8 +260,7 @@ export default function SideNav() {
                         },
                     ]}
                 >
-                    <div
-                        className="rounded-full bg-indigo-100/20 hover:bg-indigo-100/30 flex gap-2 justify-between items-center text-white text-sm font-bold py-2 pl-2 pr-6 hover:cursor-pointer w-3/4"
+                    <UserContainer
                         title={user.Username}
                     >
                         <img
@@ -261,13 +271,13 @@ export default function SideNav() {
                         <p className="select-none text-ellipsis overflow-hidden whitespace-nowrap">
                             {user.Username}
                         </p>
-                    </div>
+                    </UserContainer>
                 </DropdownMenu>
-            </aside>
+            </SideNavContainer>
             <nav className="lg:hidden bg-indigo-950 ">
                 <Button
                     type="button"
-                    className="!bg-indigo-950 block text-white z-10 !p-2"
+                    className="!bg-indigo-950 block text-white z-10 !p-2 !border-indigo-950"
                     onClick={openSideNav}
                 >
                     <FiMenu size={32} />
