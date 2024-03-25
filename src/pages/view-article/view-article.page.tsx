@@ -32,10 +32,12 @@ import {
     PublishDate,
     SuggestedArticlesContainer,
 } from './view-article.styles';
+import { profileURL } from '../../utils/profileUrlBuilder';
 
 const ViewArticlePage = () => {
-    const { articleId } = useParams();
     const navigate = useNavigate();
+
+    const { articleId } = useParams();
     const user = useSelector((state: RootState) => state.auth.user);
 
     if (!articleId) {
@@ -51,7 +53,9 @@ const ViewArticlePage = () => {
         <Spinner />
     ) : (
         <PageContainer {...BetweenPageAnimation}>
+
             <ArticleCoverImageContainer>
+
                 <ArticleCoverImage
                     src={article?.CoverImage ?? defaultCoverImage}
                 />
@@ -61,8 +65,13 @@ const ViewArticlePage = () => {
                         src={article?.Author?.ProfileImage ?? defaultUserImage}
                         alt="author profile image"
                     />
-                    <div className='flex flex-col gap-0'>
-                        <AuthorName to={"#"}>{article?.Author?.FullName}</AuthorName>
+                    <div className="flex flex-col gap-0">
+                        <AuthorName
+                            title={`View ${article?.Author?.FullName}'s profile`}
+                            to={profileURL(article?.Author?.Username)}
+                        >
+                            {article?.Author?.FullName}
+                        </AuthorName>
                         <PublishDate>
                             {article?.UpdatedAt &&
                                 moment(new Date(article.UpdatedAt)).fromNow()}
@@ -71,10 +80,10 @@ const ViewArticlePage = () => {
 
                     <Button
                         type="button"
-                        className="text-xs !px-4 !py-2 ml-auto !rounded-full"
+                        className="text-xs !p-2 ml-auto !rounded-full"
                         select="primary700"
                     >
-                        <FiPlus size={16} className="mr-1" />
+                        <FiPlus size={18} className="mr-1" />
                         Follow
                     </Button>
                 </AuthorDataContainer>
@@ -92,6 +101,7 @@ const ViewArticlePage = () => {
                         <FiEdit size={18} />
                     </Button>
                 )}
+
             </ArticleCoverImageContainer>
 
             <ArticleBodyContainer data-color-mode="light">
@@ -102,7 +112,7 @@ const ViewArticlePage = () => {
                 {/* Article Tags */}
                 <div className="flex gap-2 items-center justify-center">
                     {article?.ArticleTags.map((tag) => {
-                        return <Tag text={tag}/>;
+                        return <Tag text={tag} />;
                     })}
                 </div>
 

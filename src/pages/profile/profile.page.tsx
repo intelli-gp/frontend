@@ -79,9 +79,6 @@ const ProfilePage = () => {
      */
     const isAnotherUserProfile = window.location.pathname.includes('/user/');
     const anotherUserUsername = useParams().username;
-    if (anotherUserUsername && anotherUserUsername === loggedInUser.Username) {
-        navigate('/app/profile');
-    }
 
     const { isLoading: isImageLoading, trigger: uploadImage } =
         useUploadImage();
@@ -100,14 +97,13 @@ const ProfilePage = () => {
         (_groups as unknown as Response)?.data ?? [];
     const anotherUserData: ReceivedUser =
         (_anotherUserData as unknown as Response)?.data?.user ?? {};
-
+        
     const [loggedInUserProfileImage, setLoggedInUserProfileImage] = useState(
         loggedInUser.ProfileImage,
     );
     const [loggedInUserCoverImage, setLoggedInUserCoverImage] = useState(
         loggedInUser.CoverImage,
     );
-
     const [showCoverModal, setCoverModal] = useState(false);
     const [showImgModal, setImgModal] = useState(false);
     const [userData, setUserData] = useState<Partial<ReceivedUser>>({});
@@ -203,7 +199,6 @@ const ProfilePage = () => {
 
     useEffect(() => {
         if (isAnotherUserProfile) {
-            console.log(anotherUserData);
             setUserData(anotherUserData);
             setUserGroups(anotherUserData.GroupsJoined);
             setUserArticles(anotherUserData.Articles);
@@ -215,12 +210,12 @@ const ProfilePage = () => {
     }, [_anotherUserData, _articles, _groups, location]);
 
     useEffect(() => {
-        if (isAnotherUserProfile) {
-            getUserData(anotherUserUsername!);
+        if (isAnotherUserProfile && anotherUserUsername) {
+            getUserData(anotherUserUsername);
         }
     }, []);
 
-    const mainContent = () => {
+    const MainContent = () => {
         return mainSectionHeaderTabs.map((tab) => {
             if (!tab.isActive) return null;
             if (tab.title === 'Posts') {
@@ -493,7 +488,7 @@ const ProfilePage = () => {
                             ),
                         )}
                     </MainSectionHeader>
-                    <MainSectionContent>{mainContent()}</MainSectionContent>
+                    <MainSectionContent>{MainContent()}</MainSectionContent>
                 </MainSection>
 
                 {isAnotherUserProfile

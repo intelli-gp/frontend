@@ -21,6 +21,7 @@ import defaultUserImage from '../../assets/imgs/user.jpg';
 import { InputWithoutLabel } from '../../components/Input';
 import DropdownMenu from '../../components/menu/menu.component';
 import ChatMessage from '../../components/message/message.component';
+import { BetweenPageAnimation } from '../../index.styles';
 import { useGetGroupQuery } from '../../store';
 import { RootState } from '../../store';
 import {
@@ -32,6 +33,7 @@ import {
 import { ReceivedGroup } from '../../types/group';
 import { SerializedMessage } from '../../types/message';
 import { Response } from '../../types/response';
+import { profileURL } from '../../utils/profileUrlBuilder';
 import { successToast } from '../../utils/toasts';
 import {
     ChatBody,
@@ -49,7 +51,6 @@ import {
     UserContainer,
     UsersContainer,
 } from './chat-room.style';
-import { BetweenPageAnimation } from '../../index.styles';
 
 export const ChatroomPage = () => {
     const { id: groupId } = useParams();
@@ -284,9 +285,13 @@ export const ChatroomPage = () => {
                                     }
                                 />
                                 <span>
-                                    <GroupUserFullName 
-                                    title={person.FullName}
-                                    onClick={() => {navigate(`/app/user/${person.Username}`)}}
+                                    <GroupUserFullName
+                                        title={person.FullName}
+                                        onClick={() => {
+                                            navigate(
+                                                profileURL(person.Username),
+                                            );
+                                        }}
                                     >
                                         {person.FullName}
                                     </GroupUserFullName>
@@ -310,9 +315,14 @@ export const ChatroomPage = () => {
                                     className="object-cover"
                                 />
                                 <span>
-                                    <GroupUserFullName 
-                                     onClick={() => {navigate(`/app/user/${person.Username}`)}}
-                                     title={person.FullName}>
+                                    <GroupUserFullName
+                                        onClick={() => {
+                                            navigate(
+                                                profileURL(person.Username),
+                                            );
+                                        }}
+                                        title={person.FullName}
+                                    >
                                         {person.FullName}
                                     </GroupUserFullName>
                                     <div className="flex flex-row gap-[6px] items-center">

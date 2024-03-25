@@ -30,7 +30,7 @@ export const AuthorDataContainer = styled.div`
     bottom: -1rem;
     left: 0;
     right: 0;
-    width: 400px;
+    width: min(400px, 90%);
     max-width: 100%;
     margin: 0 auto;
     display: flex;
@@ -38,8 +38,6 @@ export const AuthorDataContainer = styled.div`
     background-color: white;
     gap: 1rem;
     box-shadow: 0px 0px 24px 5px rgba(0, 0, 0, 0.25);
-
-    transition: all 0.3s ease-in-out;
 `;
 
 export const AuthorProfileImage = styled.img`
@@ -56,6 +54,12 @@ export const AuthorName = styled(Link)<{ width?: string }>`
     color: var(--gray-800);
     font-weight: 700;
     font-size: 1.2rem;
+    line-height: 1.15;
+    border-bottom: 1px solid transparent;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+        border-bottom: 1px solid var(--gray-800);
+    }
     ${CSSTextLengthLimit}
 `;
 

@@ -160,6 +160,7 @@ export const MainSection = styled.section`
     background-color: var(--indigo-50);
     border-radius: 10px;
     padding: 1.5rem;
+    padding-top: 0.5rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -177,17 +178,25 @@ export const MainSection = styled.section`
 export const MainSectionHeader = styled.header`
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 1rem;
     margin-bottom: 1rem;
 `;
 
 export const MainSectionHeaderTab = styled.button<{ isActive: boolean }>`
-    padding: 0.1rem 0.5rem;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease-in-out;
     border-bottom: ${(props) =>
-        props.isActive ? '3px solid var(--indigo-700)' : 'none'};
-    font-weight: ${(props) => (props.isActive ? 'bold' : 'normal')};
-    color: var(--indigo-700);
-    opacity: ${(props) => (props.isActive ? '1' : '0.75')};
+        props.isActive
+            ? '3px solid var(--indigo-700)'
+            : '3px solid transparent'};
+    color: ${(props) =>
+        props.isActive ? 'var(--indigo-700)' : 'var(--gray-800)'};
+    font-weight: 700;
+    &:hover {
+        cursor: pointer;
+        opacity: 1;
+        backdrop-filter: brightness(0.95);
+    }
 `;
 
 export const MainSectionContent = styled.div`

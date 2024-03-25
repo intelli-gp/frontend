@@ -15,6 +15,7 @@ import {
     AuthorPicture,
     TagsContainer,
 } from './wide-article-item.styles';
+import { profileURL } from '../../utils/profileUrlBuilder';
 
 type WideArticleItemProps = Partial<ReceivedArticle> & {
     onClick?: React.MouseEventHandler<HTMLDivElement>;
@@ -37,7 +38,7 @@ const WideArticleItem = ({
                     <AuthorData
                         onClick={(e: React.MouseEvent) => {
                             e.stopPropagation();
-                            navigate(`/app/user/${Author?.Username}`);
+                            navigate(profileURL(Author?.Username!));
                         }}
                         title={`View ${Author?.FullName}'s profile`}
                     >
