@@ -47,7 +47,7 @@ export const ProfilePicture = styled.img`
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    box-shadow: var(--black-shadow);
+    outline: 0.35rem solid var(--indigo-50);
 `;
 
 export const PictureOverlay = styled(ProfilePicture)`
@@ -70,7 +70,7 @@ export const UserDataContainer = styled.div`
     max-height: 75px;
     padding: 0 4rem;
     gap: 1.5rem;
-    background: var(--gradient-50);
+    background: var(--indigo-50);
     @media (max-width: 768px) {
         padding: 0 2rem;
         gap: 1rem;
@@ -110,7 +110,7 @@ export const MainContainer = styled.main`
 `;
 
 export const AboutSection = styled.section`
-    background: var(--gradient-50);
+    background: var(--indigo-50);
     width: 100%;
     grid-column: 1;
     background-color: var(--indigo-50);
@@ -154,7 +154,7 @@ export const AboutListItemText = styled.p<{ width?: string }>`
 `;
 
 export const MainSection = styled.section`
-    background: var(--gradient-50);
+    background: var(--indigo-50);
     grid-column: 2;
     width: 100%;
     background-color: var(--indigo-50);
@@ -218,7 +218,7 @@ export const EmptyContent = styled.div`
 `;
 
 export const YouMayNowSection = styled.section`
-    background: var(--gradient-50);
+    background: var(--indigo-50);
     grid-column: 3;
     width: 100%;
     background-color: var(--indigo-50);

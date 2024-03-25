@@ -97,7 +97,7 @@ const ProfilePage = () => {
         (_groups as unknown as Response)?.data ?? [];
     const anotherUserData: ReceivedUser =
         (_anotherUserData as unknown as Response)?.data?.user ?? {};
-        
+
     const [loggedInUserProfileImage, setLoggedInUserProfileImage] = useState(
         loggedInUser.ProfileImage,
     );

@@ -14,6 +14,7 @@ export const SideNavContainer = styled.aside<{sideNavOpen: boolean}>`
   gap: 1rem;
   overflow-y: hidden;
   z-index: 20;
+  position: sticky;
   transition: all 0.5s linear;
   @media (max-width: 1024px) {
 

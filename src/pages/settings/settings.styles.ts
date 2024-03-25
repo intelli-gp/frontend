@@ -24,7 +24,7 @@ export const PageHeader = styled.header`
     grid-template-columns: 1fr 3fr;
     align-items: center;
     gap: 2rem;
-    background: var(--gradient-75-top);
+    background: var(--indigo-25);
     padding: 4rem 2rem;
     border-radius: 10px;
     position: relative;

@@ -42,14 +42,6 @@
     --gray-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
     --black-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
     --tag-shadow: rgb(30, 64, 175, 0.5) 0px 1px 4px;
-
-    --gradient-50: linear-gradient(var(--indigo-50), rgba(199, 210, 254, 0.5));
-    --gradient-75: linear-gradient(var(--indigo-50), rgba(199, 210, 254, 0.75));
-    --gradient-75-top: linear-gradient(
-        to top,
-        var(--indigo-50),
-        rgba(199, 210, 254, 0.75)
-    );
 }
 
 * {
@@ -67,7 +59,6 @@
     &::-webkit-scrollbar-thumb {
         background: var(--gray-300);
         border-radius: 1rem;
-        cursor: grab;
     }
     &::-webkit-scrollbar-thumb:hover {
         background: var(--gray-400);
@@ -77,9 +68,6 @@
 body {
     color: var(--gray-800);
     overflow-x: hidden;
-    &::-webkit-scrollbar {
-        width: 0.5rem;
-    }
     &::-webkit-scrollbar-track {
         background: rgba(0, 0, 0, 0.05);
     }
@@ -105,9 +93,6 @@ hr {
 }
 
 .side-nav-links {
-    &::-webkit-scrollbar {
-        width: 0.5rem;
-    }
     &::-webkit-scrollbar-thumb {
         background: rgb(255, 255, 255, 0.2);
     }
