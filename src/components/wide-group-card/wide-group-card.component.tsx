@@ -1,9 +1,12 @@
+import { FaCrown, FaUser } from 'react-icons/fa';
+import { MdAdminPanelSettings } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
 import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
 import { ReceivedGroup } from '../../types/group';
 import Tag from '../tag/tag.component';
 import {
+    BadgeContainer,
     CardContainer,
     CardImage,
     GroupTitle,
@@ -21,12 +24,22 @@ interface WideGroupCardProps extends Partial<ReceivedGroup> {
 const WideGroupCard = ({
     ID,
     GroupTitle: title,
-    GroupCoverImage: cover_image_url,
+    GroupCoverImage,
     GroupTags,
     GroupMembers,
     UserRole,
 }: WideGroupCardProps) => {
     const navigate = useNavigate();
+
+    let badgeIcon: JSX.Element = <FaUser />; // Default badge as a member.
+    switch (UserRole) {
+        case 'owner':
+            badgeIcon = <FaCrown />;
+            break;
+        case 'admin':
+            badgeIcon = <MdAdminPanelSettings />;
+            break;
+    }
 
     return (
         <CardContainer
@@ -34,7 +47,7 @@ const WideGroupCard = ({
                 navigate(`/app/groups/${ID}`);
             }}
         >
-            <CardImage src={cover_image_url || defaultGroupImage} alt={title} />
+            <CardImage src={GroupCoverImage || defaultGroupImage} alt={title} />
             <TypographyContainer role={UserRole}>
                 <GroupTitle title={title} lines={1}>
                     {title}
@@ -49,6 +62,9 @@ const WideGroupCard = ({
                     ))}
                 </TagsContainer>
             </TypographyContainer>
+            <BadgeContainer role={UserRole} title={UserRole}>
+                {badgeIcon}
+            </BadgeContainer>
         </CardContainer>
     );
 };

@@ -1,10 +1,11 @@
+import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 
 import { CSSTextLinesCountLimit } from '../../index.styles';
 import Button from '../button/button.component';
-import { motion } from 'framer-motion';
 
 export const CardContainer = styled(motion.div)`
+    position: relative;
     width: min(500px, 100%);
     gap: 1.25rem;
     margin: 0 auto;
@@ -39,36 +40,31 @@ export const TypographyContainer = styled.div<{ role?: string }>`
     height: 100%;
     flex-direction: column;
     align-content: flex-start;
-    position: relative;
+`;
 
-    &:after {
-        content: '${({ role }) => role || 'member'}';
-        text-transform: uppercase;
-        font-weight: 900;
-        border-radius: 0.5rem;
-        position: absolute;
-        top: -2rem;
-        right: -2rem;
-        padding: 0.25rem 0.5rem;
-        font-size: 0.65rem;
-        color: white;
-        ${({ role }) => {
-            switch (role) {
-                case 'owner':
-                    return css`
-                        background-color: #74c0fc;
-                    `;
-                case 'admin': 
-                    return css`
-                        background-color: #68d391;
-                    `;
-                case 'member':
-                case undefined:
-                    return css`
-                        background-color: #fab005;
-                    `;         
-            }}}
-    }
+export const BadgeContainer = styled.div<{ role: string }>`
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    ${({ role }) => {
+        switch (role) {
+            case 'owner':
+                return css`
+                    background-color: #fab005;
+                `;
+            case 'admin':
+                return css`
+                    background-color: #74c0fc;
+                `;
+            case 'member':
+            case undefined:
+                return css`
+                    background-color: #68d391;
+                `;
+        }
+    }}
 `;
 
 export const GroupTitle = styled.h3<{ width?: string; lines?: number }>`
