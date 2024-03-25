@@ -6,6 +6,7 @@ export type ReceivedUser = {
     FullName: string;
     Username: string;
     Email: string;
+    Headline: string;
     DOB: string;
     UserLevel: unknown;
     SubscriptionsPlan: unknown;

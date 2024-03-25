@@ -53,6 +53,7 @@ export const SettingsPage = () => {
     );
     const [username, setUsername] = useState(storedUser.Username ?? '');
     const [email, setEmail] = useState(storedUser.Email ?? '');
+    const [headline, setHeadline] = useState(storedUser.Headline ?? '');
     const [phone, setPhone] = useState(storedUser.PhoneNumber);
     const [birthDate, setBirthDate] = useState(
         new Date(storedUser.DOB ?? Date.now()).toISOString().split('T')[0],
@@ -96,6 +97,16 @@ export const SettingsPage = () => {
             disabled: !isEditingPersonalInfo,
         },
         {
+            label: "Headline",
+            type: 'text',
+            value: headline,
+            placeholder: "Add your title.",
+            onChange: (e: ChangeEvent<HTMLInputElement>) => {
+                setHeadline(e.target.value);
+            },
+            disabled: !isEditingPersonalInfo,
+        },
+        {
             label: 'Phone',
             value: phone,
             onChange: (e: ChangeEvent<HTMLInputElement>) => {
@@ -118,7 +129,7 @@ export const SettingsPage = () => {
             value: bio,
             multiline: true,
             rows: 4,
-            maxLength: 512,
+            maxLength: 2000,
             onChange: (e: ChangeEvent<HTMLTextAreaElement>) => {
                 setBio(e.target.value);
             },
