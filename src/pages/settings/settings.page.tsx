@@ -22,7 +22,7 @@ import {
 } from '../../types/serialized-input';
 import { ReceivedUser, UserToSend } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
-import { UserBio } from '../profile/profile.styles';
+import { UserBio, UserFullName, UserUserName } from '../profile/profile.styles';
 import {
     EditButton,
     HeaderTagsContainer,
@@ -37,7 +37,8 @@ export const SettingsPage = () => {
 
     // Network calls
     const { data: tagsRes } = useGetAllTagsQuery();
-    const [triggerUpdateUser, { isLoading, reset }] = useUpdateUserMutation();
+    const [triggerUpdateUser, { isLoading, reset: resetUserUpdateMutation }] =
+        useUpdateUserMutation();
 
     // Local state
     const [isEditingPersonalInfo, setIsEditingPersonalInfo] = useState(false);
@@ -97,10 +98,10 @@ export const SettingsPage = () => {
             disabled: !isEditingPersonalInfo,
         },
         {
-            label: "Headline",
+            label: 'Headline',
             type: 'text',
             value: headline,
-            placeholder: "Add your title.",
+            placeholder: 'Add your title.',
             onChange: (e: ChangeEvent<HTMLInputElement>) => {
                 setHeadline(e.target.value);
             },
@@ -195,6 +196,9 @@ export const SettingsPage = () => {
         if (storedUser.PhoneNumber !== phone) {
             diff.phoneNumber = phone;
         }
+        if (storedUser.Headline !== headline) {
+            diff.headline = headline;
+        }
         if (
             new Date(storedUser.DOB).getTime() !== new Date(birthDate).getTime()
         ) {
@@ -230,7 +234,7 @@ export const SettingsPage = () => {
             } catch (error) {
                 errorToast('An error occurred while updating your data.');
             } finally {
-                reset();
+                resetUserUpdateMutation();
             }
         }
     };
@@ -253,22 +257,22 @@ export const SettingsPage = () => {
             <PageTitle>Account Settings</PageTitle>
 
             <PageHeader>
-                <section className="flex flex-col items-center">
+                <section className="flex flex-col items-center gap-2">
                     <ProfilePictureContainer>
                         <ProfilePicture
                             src={storedUser.ProfileImage ?? defaultProfile}
                         />
                     </ProfilePictureContainer>
-                    <h2 className="text-xl font-bold mt-4">
+                    <UserFullName>
                         {storedUser.FullName ?? 'Delete me'}
-                    </h2>
-                    <h2 className="text-md opacity-75 font-thin">
+                    </UserFullName>
+                    <UserUserName>
                         @{storedUser.Username ?? 'Delete me'}
-                    </h2>
+                    </UserUserName>
                 </section>
 
                 <section className="flex flex-col gap-6">
-                    <UserBio className="max-w-[70ch]">
+                    <UserBio lines={4}>
                         {storedUser.Bio ?? "You don't have bio yet."}
                     </UserBio>
 

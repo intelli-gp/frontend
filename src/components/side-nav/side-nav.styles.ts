@@ -33,7 +33,7 @@ export const Logo = styled.h1`
   min-height: 0;
   display: flex;
   justify-content: center;
-  font-family: serif;
+  font-family: Merriweather, serif;
   user-select: none;
 `;
 
