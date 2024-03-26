@@ -7,11 +7,13 @@ import { GroupUser } from '../../types/group';
 import { profileURL } from '../../utils/profileUrlBuilder';
 import { errorToast, successToast } from '../../utils/toasts';
 import DropdownMenu from '../menu/menu.component';
-import { PersonContainer, PersonImage, PersonName } from './group-user.style';
+import { PersonContainer, PersonImage, PersonName, CrownHolder } from './group-user.style';
+import { FaCrown } from "react-icons/fa";
 
 type GroupUserType = GroupUser & {
     Admin: boolean;
     GroupID: string | undefined;
+    Owner?: boolean;
 };
 
 const UserContainer = ({
@@ -19,9 +21,10 @@ const UserContainer = ({
     ProfileImage,
     FullName,
     Username,
-    Type: type,
-    Admin: Admin,
-    GroupID: GroupID,
+    Type,
+    Admin,
+    Owner,
+    GroupID,
 }: GroupUserType) => {
     const navigate = useNavigate();
     const [updateStatus] = usePermissionGroupMutation();
@@ -32,7 +35,7 @@ const UserContainer = ({
                 const updatedGroupData: Partial<GroupUser> & { id: string } = {
                     id: GroupID,
                     ID: idUser,
-                    Type: type === 'MEMBER' ? 'ADMIN' : 'MEMBER',
+                    Type: Type === 'MEMBER' ? 'ADMIN' : 'MEMBER',
                 };
                 await updateStatus(updatedGroupData).unwrap();
                 successToast('Changed the permission successfully!');
@@ -44,7 +47,7 @@ const UserContainer = ({
 
     const statusOptionAdmin = [
         {
-            option: type == 'MEMBER' ? 'Add an admin' : 'Dismiss an admin',
+            option: Type == 'MEMBER' ? 'Add an admin' : 'Dismiss an admin',
             handler: () => {
                 handleStatus();
             },
@@ -66,10 +69,18 @@ const UserContainer = ({
     ];
     return (
         <PersonContainer>
+            {Owner ? (
+                <CrownHolder>
+                    <FaCrown size={18} color='#FFBB48' />
+                </CrownHolder>
+            ) : (
+                <>
+                </>
+            )}
             <PersonImage alt="" src={ProfileImage ?? defaultUserImage} />
             <span className="flex flex-row items-center gap-2 relative">
                 <PersonName title={FullName}>{FullName}</PersonName>
-                {Admin ? (
+                {Admin && !Owner ? (
                     <>
                         <DropdownMenu
                             options={statusOptionAdmin}
@@ -82,7 +93,7 @@ const UserContainer = ({
                             <IoIosArrowDown />
                         </DropdownMenu>
                     </>
-                ) : type === 'MEMBER' ? (
+                ) : Type === 'MEMBER' || Owner ? (
                     <>
                         <DropdownMenu
                             options={statusOptionMember}
