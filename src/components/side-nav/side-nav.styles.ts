@@ -29,7 +29,7 @@ export const Logo = styled.h1`
   font-size: 2.25rem;
   position: sticky;
   top: 0;
-  padding-bottom: 0.85rem;
+  padding-bottom: 1.5rem;
   min-height: 0;
   display: flex;
   justify-content: center;

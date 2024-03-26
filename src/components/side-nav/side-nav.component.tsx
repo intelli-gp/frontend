@@ -106,7 +106,7 @@ export default function SideNav() {
             id: 9,
         },
         {
-            icon: <MdMessage size={24} color='white' />,
+            icon: <MdMessage color='white' />,
             extendable: false,
             path: '/app/chats',
             active: false,
@@ -201,7 +201,7 @@ export default function SideNav() {
                     <Logo>
                         Mujedd
                     </Logo>
-                    <div className="flex flex-col gap-2 overflow-y-scroll max-h-[68vh] side-nav-links p-2">
+                    <div className="flex flex-col gap-2 overflow-y-scroll max-h-[70vh] side-nav-links p-2">
                         {links.filter((link)=>!link.notScroll).map((link) => (
                             <SideNavItem
                                 key={link.text}
@@ -217,7 +217,7 @@ export default function SideNav() {
                         ))}
                     </div>
                 </div>
-                <div className=' flex justify-center items-center p-2 '>
+                <div className=' flex justify-center items-center'>
                         <ChatsLink
                             active= {links[9].active}
                             onClick={() => {
