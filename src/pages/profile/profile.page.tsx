@@ -1,7 +1,9 @@
+import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { FaBirthdayCake, FaEnvelope, FaPlus } from 'react-icons/fa';
+import { FaCalendarAlt, FaEnvelope, FaPlus } from 'react-icons/fa';
 import { FaPhoneAlt } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
+import { LuDot } from 'react-icons/lu';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
@@ -19,6 +21,8 @@ import { useUploadImage } from '../../hooks/uploadImage.hook';
 import { BetweenPageAnimation, ModalTitle } from '../../index.styles';
 import {
     AboutListItemText,
+    EmptyContent,
+    GroupsContainer,
     MainContainer,
     PageContainer,
     PageHeader,
@@ -27,6 +31,8 @@ import {
     UserBio,
     UserDataContainer,
     UserFullName,
+    UserHeadline,
+    UserUserName,
 } from '../../pages/profile/profile.styles';
 import {
     RootState,
@@ -41,6 +47,7 @@ import { GroupWithRole, ReceivedGroup } from '../../types/group';
 import { Response } from '../../types/response';
 import { ReceivedUser, UserToSend } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
+import { ContactInfoLink } from './profile.styles';
 import {
     AboutList,
     AboutListItem,
@@ -106,6 +113,7 @@ const ProfilePage = () => {
     );
     const [showCoverModal, setCoverModal] = useState(false);
     const [showImgModal, setImgModal] = useState(false);
+    const [contactInfoModal, setContactInfoModal] = useState(false);
     const [userData, setUserData] = useState<Partial<ReceivedUser>>({});
     const [userGroups, setUserGroups] = useState<Partial<ReceivedGroup>[]>([]);
     const [userArticles, setUserArticles] = useState<
@@ -178,16 +186,18 @@ const ProfilePage = () => {
 
     const aboutListItems = [
         {
-            icon: <FaBirthdayCake />,
-            text: new Date(userData.DOB!).toLocaleDateString(),
-        },
-        {
             icon: <FaEnvelope />,
             text: userData.Email,
         },
         {
             icon: <FaPhoneAlt />,
             text: userData.PhoneNumber,
+        },
+        {
+            icon: <FaCalendarAlt title={'Birthday'} />,
+            text: moment(new Date(userData?.DOB || Date.now())).format(
+                'MMMM Do YYYY',
+            ),
         },
     ];
 
@@ -234,14 +244,14 @@ const ProfilePage = () => {
             }
             if (tab.title === 'Groups') {
                 return (
-                    <>
+                    <GroupsContainer>
                         {groupsWithRole?.map((group) => (
                             <WideGroupCard {...group} />
                         ))}
-                    </>
+                    </GroupsContainer>
                 );
             }
-            return null;
+            return <EmptyContent>Nothing here.</EmptyContent>;
         });
     };
 
@@ -359,6 +369,24 @@ const ProfilePage = () => {
         </Modal>
     );
 
+    const ContactInfoModal = (
+        <Modal isOpen={contactInfoModal} setIsOpen={setContactInfoModal}>
+            <ModalTitle className="mb-8">
+                Contact info of {userData.FullName}
+            </ModalTitle>
+            <AboutList>
+                {aboutListItems.map(({ icon, text }) => (
+                    <AboutListItem>
+                        {icon}
+                        <AboutListItemText title={text}>
+                            {text}
+                        </AboutListItemText>
+                    </AboutListItem>
+                ))}
+            </AboutList>
+        </Modal>
+    );
+
     const YouMayKnowSection = (
         <YouMayNowSection>
             <h1 className="text-xl font-semibold">You may know</h1>
@@ -390,7 +418,7 @@ const ProfilePage = () => {
             select="warning"
             type="button"
             title="Edit profile"
-            className="ml-auto gap-2 !p-4 !text-inherit"
+            className="ml-auto gap-2 !p-4 !text-inherit self-start"
             rounded
             onClick={() => navigate('/app/settings')}
         >
@@ -403,7 +431,7 @@ const ProfilePage = () => {
             select="primary"
             type="button"
             title="Follow"
-            className="ml-auto gap-2"
+            className="ml-auto gap-2 self-start"
         >
             <FaPlus size={14} /> Follow
         </Button>
@@ -444,11 +472,24 @@ const ProfilePage = () => {
                             className={`${isAnotherUserProfile && 'hidden'}`}
                         />
                     </ProfilePictureContainer>
-                    <div className="flex flex-col justify-between h-[75px] p-2">
+                    <div className="flex flex-col justify-between">
                         <UserFullName title={userData.FullName}>
                             {userData.FullName}
                         </UserFullName>
-                        <p className="opacity-60">@{userData.Username}</p>
+                        <div className="flex">
+                            <UserUserName title={userData.Username}>
+                                @{userData.Username}
+                            </UserUserName>
+                            <LuDot />
+                            <ContactInfoLink
+                                onClick={() => setContactInfoModal(true)}
+                            >
+                                Contact Info
+                            </ContactInfoLink>
+                        </div>
+                        <UserHeadline title={userData.Headline} lines={2}>
+                            {userData.Headline}
+                        </UserHeadline>
                     </div>
 
                     {isAnotherUserProfile ? FollowButton : EditButton}
@@ -459,18 +500,9 @@ const ProfilePage = () => {
                 <AboutSection>
                     <h1 className="text-xl font-bold">About</h1>
                     <hr />
-                    <UserBio>{userData.Bio ?? 'This user has no bio.'}</UserBio>
-                    <hr />
-                    <AboutList>
-                        {aboutListItems.map(({ icon, text }) => (
-                            <AboutListItem>
-                                {icon}
-                                <AboutListItemText title={text}>
-                                    {text}
-                                </AboutListItemText>
-                            </AboutListItem>
-                        ))}
-                    </AboutList>
+                    <UserBio lines={5}>
+                        {userData.Bio ?? 'This user has no bio.'}
+                    </UserBio>
                 </AboutSection>
 
                 <MainSection>
@@ -495,6 +527,8 @@ const ProfilePage = () => {
                     ? MutualFollowersSection
                     : YouMayKnowSection}
             </MainContainer>
+
+            {ContactInfoModal}
 
             <ModalUploadImage
                 isOpen={showImgModal}

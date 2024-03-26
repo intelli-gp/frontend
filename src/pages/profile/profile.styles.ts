@@ -1,7 +1,11 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-import { CSSTextLengthLimit } from '../../index.styles';
+import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
+
+const SECTION_SHADOW = '';
+const SECTION_BACKGROUND = 'var(--indigo-50)';
+const BORDER_RADIUS = '1rem';
 
 export const PageContainer = styled(motion.div)`
     width: 100%;
@@ -14,9 +18,13 @@ export const PageContainer = styled(motion.div)`
 `;
 
 export const PageHeader = styled.header`
+    max-width: 1366px;
+    margin: 0 auto;
     width: 100%;
-    background-color: var(--indigo-50);
+    background-color: ${SECTION_BACKGROUND};
     position: relative;
+    border-radius: ${BORDER_RADIUS};
+    box-shadow: ${SECTION_SHADOW};
 `;
 
 export const CoverImageContainer = styled.div`
@@ -26,18 +34,19 @@ export const CoverImageContainer = styled.div`
 
 export const CoverImage = styled.img`
     width: 100%;
-    max-height: 200px;
+    height: 250px;
     object-fit: cover;
     border: none;
 `;
 
 export const ProfilePictureContainer = styled.div`
-    position: relative;
-    width: 150px;
-    height: 150px;
+    position: absolute;
+    top: 30%;
+    width: 175px;
+    height: 175px;
     @media (max-width: 768px) {
-        width: 100px;
-        height: 100px;
+        width: 150px;
+        height: 150px;
     }
 `;
 
@@ -48,6 +57,7 @@ export const ProfilePicture = styled.img`
     height: 100%;
     border-radius: 50%;
     outline: 0.35rem solid var(--indigo-50);
+    outline-offset: -1px;
 `;
 
 export const PictureOverlay = styled(ProfilePicture)`
@@ -67,78 +77,100 @@ export const PictureOverlay = styled(ProfilePicture)`
 export const UserDataContainer = styled.div`
     display: flex;
     align-items: center;
-    max-height: 75px;
-    padding: 0 4rem;
+    padding: 2.5rem 4rem 1rem 4rem;
     gap: 1.5rem;
-    background: var(--indigo-50);
+    background-color: ${SECTION_BACKGROUND};
+    border-radius: ${BORDER_RADIUS};
+    box-shadow: ${SECTION_SHADOW};
+
     @media (max-width: 768px) {
-        padding: 0 2rem;
+        padding: 1rem 2rem;
         gap: 1rem;
     }
     @media (max-width: 500px) {
-        padding: 0 1rem;
+        padding: 1rem;
         gap: 0.5rem;
     }
 `;
 
 export const UserFullName = styled.h2<{ width?: string }>`
-    font-weight: 700;
-    font-size: 1.75rem;
+    line-height: 1.25;
+    font-weight: 900;
+    font-size: 2rem;
     ${CSSTextLengthLimit}
-    width: 15ch;
-    @media (max-width: 425px) {
-        width: 10ch;
+`;
+
+export const UserHeadline = styled.h3<{ width?: string; lines?: number }>`
+    font-weight: 500;
+    font-size: 1.25rem;
+    line-height: 1.25;
+    ${CSSTextLinesCountLimit}
+    max-width: 90vw;
+`;
+
+export const UserUserName = styled.p`
+    margin-top: -0.25rem;
+    opacity: 0.75;
+    font-size: 1rem;
+`;
+
+export const ContactInfoLink = styled.a`
+    cursor: pointer;
+    color: var(--indigo-700);
+    border-bottom: 1px solid transparent;
+    align-self: flex-start;
+    transition: all 0.2s ease-in-out;
+    line-height: 1.1;
+
+    &:hover {
+        color: var(--indigo-900);
+        border-bottom-color: var(--indigo-900);
     }
 `;
 
 export const MainContainer = styled.main`
     width: 100%;
+    max-width: 1366px;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
     grid-auto-rows: auto;
     align-items: start;
     gap: 1.25rem;
     padding: 0 1.25rem;
-    @media (max-width: 1440px) {
-        align-items: stretch;
-        grid-template-columns: 1fr 1fr;
-    }
+    margin: 0 auto;
+
     @media (max-width: 768px) {
-        grid-template-columns: 1fr;
-        padding: 0 0.5rem;
+        grid-template-columns: minmax(0, 1fr);
     }
 `;
 
 export const AboutSection = styled.section`
-    background: var(--indigo-50);
+    box-shadow: ${SECTION_SHADOW};
     width: 100%;
     grid-column: 1;
-    background-color: var(--indigo-50);
-    border-radius: 10px;
+    background-color: ${SECTION_BACKGROUND};
+    border-radius: ${BORDER_RADIUS};
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    @media (max-width: 1440px) {
-        grid-column: 1;
-        padding: 2rem;
-    }
+
     @media (max-width: 768px) {
-        grid-column: 1;
         grid-row: 1;
     }
 `;
 
-export const UserBio = styled.pre`
+export const UserBio = styled.pre<{ width?: string; lines?: number }>`
     white-space: break-spaces;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-family: inherit;
+    ${CSSTextLinesCountLimit}
+    max-width: 750px;
 `;
 
 export const AboutList = styled.ul`
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
 `;
 
 export const AboutListItem = styled.li`
@@ -147,6 +179,10 @@ export const AboutListItem = styled.li`
     display: flex;
     align-items: center;
     gap: 0.75rem;
+
+    &:not(last-child) {
+        border-bottom: 1px solid var(--indigo-100);
+    }
 `;
 
 export const AboutListItemText = styled.p<{ width?: string }>`
@@ -154,30 +190,25 @@ export const AboutListItemText = styled.p<{ width?: string }>`
 `;
 
 export const MainSection = styled.section`
-    background: var(--indigo-50);
-    grid-column: 2;
+    grid-column: 1;
     width: 100%;
-    background-color: var(--indigo-50);
-    border-radius: 10px;
+    background-color: ${SECTION_BACKGROUND};
+    box-shadow: ${SECTION_SHADOW};
+    border-radius: ${BORDER_RADIUS};
     padding: 1.5rem;
     padding-top: 0.5rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    @media (max-width: 1440px) {
-        grid-column: 1/3;
-        grid-row: 2;
-    }
     @media (max-width: 768px) {
-        grid-column: 1;
         grid-row: 3;
-        padding: 1.5rem 0.5rem;
     }
 `;
 
 export const MainSectionHeader = styled.header`
     display: flex;
     align-items: center;
+    overflow-x: auto;
     gap: 1rem;
     margin-bottom: 1rem;
 `;
@@ -200,7 +231,7 @@ export const MainSectionHeaderTab = styled.button<{ isActive: boolean }>`
 `;
 
 export const MainSectionContent = styled.div`
-    width: min(750px, 100%);
+    width: min(800px, 100%);
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -208,28 +239,33 @@ export const MainSectionContent = styled.div`
     flex: 1;
 `;
 
+export const GroupsContainer = styled.div`
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1rem;
+`;
+
 export const EmptyContent = styled.div`
     font-size: 1.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex: 1;
+    height: 300px;
     opacity: 0.5;
 `;
 
 export const YouMayNowSection = styled.section`
-    background: var(--indigo-50);
-    grid-column: 3;
+    box-shadow: ${SECTION_SHADOW};
+    background-color: ${SECTION_BACKGROUND};
+    grid-column: 2;
+    grid-row: 1/3;
     width: 100%;
-    background-color: var(--indigo-50);
-    border-radius: 10px;
-    padding: 1rem;
+    border-radius: ${BORDER_RADIUS};
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    @media (max-width: 1440px) {
-        grid-column: 2;
-    }
+
     @media (max-width: 768px) {
         grid-column: 1;
         grid-row: 2;
