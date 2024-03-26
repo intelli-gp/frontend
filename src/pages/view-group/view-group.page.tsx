@@ -12,7 +12,7 @@ import ExitModal from '../../components/ExitGroupModal';
 import { InputWithoutLabel } from '../../components/Input';
 import Spinner from '../../components/Spinner';
 import Button from '../../components/button/button.component';
-import UserContainer from '../../components/group-user/group-user.page';
+import UserContainer from '../../components/group-user/group-user.component';
 import { Modal } from '../../components/modal/modal.component';
 import OpenImage from '../../components/openImage/openImage.component';
 import Tag from '../../components/tag/tag.component';
@@ -403,6 +403,7 @@ const ViewGroupPage = () => {
                                         userType === Role.admin &&
                                         admin.ID !== user.ID
                                     }
+                                    Owner={admin.ID ===groupData.GroupOwner.ID}
                                     GroupID={groupId}
                                     {...admin}
                                 />
