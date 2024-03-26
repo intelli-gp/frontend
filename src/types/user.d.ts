@@ -46,6 +46,7 @@ export type UserToSend = {
     addedInterests: string[];
     removedInterests: string[];
     password: string;
+    headline: string;
 };
 
 export type UserCredentials = {

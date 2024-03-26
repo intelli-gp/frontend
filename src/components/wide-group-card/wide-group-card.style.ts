@@ -6,7 +6,7 @@ import Button from '../button/button.component';
 
 export const CardContainer = styled(motion.div)`
     position: relative;
-    width: min(500px, 100%);
+    width: min(400px, 100%);
     gap: 1.25rem;
     margin: 0 auto;
     display: flex;
