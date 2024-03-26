@@ -1,15 +1,14 @@
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import image from '../../assets/imgs/Hero-illustration.svg';
-import { motion } from 'framer-motion';
 
 type navType = {
     $navbarOpen: boolean;
 };
 
-export const PageContainer = styled(motion.div)`
-`
+export const PageContainer = styled(motion.div)``;
 
 export const Sidebar = styled.div<navType>`
     position: fixed;
@@ -244,7 +243,7 @@ export const Title = styled.h1`
     min-height: 0;
     display: flex;
     justify-content: center;
-    font-family: serif;
+    font-family: Merriweather, serif;
     user-select: none;
 `;
 
