@@ -10,6 +10,7 @@ export const PersonName = styled.p`
 `;
 
 export const PersonContainer = styled.div`
+position :relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -30,4 +31,10 @@ export const PersonImage = styled.img`
     width: 70px;
     border-radius: 50%;
     object-fit: cover;
+`;
+
+export const CrownHolder = styled.div`
+    position: absolute;
+    top:0;
+    right:10%;
 `;
