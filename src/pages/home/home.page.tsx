@@ -1,5 +1,4 @@
-import { faker } from '@faker-js/faker';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { CiLogin } from 'react-icons/ci';
 import { IoPersonOutline, IoPersonSharp } from 'react-icons/io5';
@@ -14,6 +13,7 @@ import icons from '../../assets/imgs/icons.svg';
 import Star from '../../assets/imgs/star.svg';
 import StudyGroup from '../../assets/imgs/studyGroup-illustration.svg';
 import StudyPlanner from '../../assets/imgs/studyPlanner-illustration.svg';
+import defaultProfileImage from '../../assets/imgs/user.jpg';
 import Feature from '../../components/Feature';
 import SingleBlog from '../../components/article-item/article-item.component';
 import Button from '../../components/button/button.component';
@@ -273,10 +273,6 @@ function BlogSection() {
 }
 
 function Feedback() {
-    const fakeProfilePic = useMemo(() => {
-        return faker.image.urlLoremFlickr({ category: 'people' });
-    }, []);
-
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const person = [
@@ -318,7 +314,7 @@ function Feedback() {
                             >
                                 <FeedbackCard>
                                     <ProfilePic
-                                        src={fakeProfilePic}
+                                        src={defaultProfileImage}
                                         alt="profile pic"
                                     />
                                     <div className="relative flex flex-col gap-4 items-center justify-center">
