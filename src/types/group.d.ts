@@ -5,7 +5,7 @@ export type GroupUser = Pick<
     'Username' | 'ID' | 'ProfileImage' | 'FullName'
 > & {
     Type: 'ADMIN' | 'MEMBER';
-    ConnectedStatus: boolean;
+    Connected: boolean;
 };
 
 export type ReceivedGroup = {

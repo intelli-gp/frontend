@@ -72,12 +72,12 @@ export const ChatroomPage = () => {
     const typingUsers = _typingUsers as string[];
     const onlineUsers =
         groupData?.GroupMembers?.filter(
-            (member) => member.ConnectedStatus || member.ID === user.ID,
+            (member) => member.Connected || member.ID === user.ID,
         ) ?? [];
 
     const offlineUsers =
         groupData?.GroupMembers?.filter(
-            (member) => !member.ConnectedStatus && member.ID !== user.ID,
+            (member) => !member.Connected && member.ID !== user.ID,
         ) ?? [];
 
     const [messageInput, setMessageInput] = useState('');
