@@ -1,13 +1,14 @@
-import classNames from 'classnames';
 import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 
-type SideNavItemPropType = {
-    icon: JSX.Element;
-    extendable: boolean;
+import { ItemContainer, MainItemContent } from './sidenav-item.styles';
+
+export type SideNavItemProps = {
+    icon?: JSX.Element;
+    extendable?: boolean;
     path: string;
     text?: string;
-    active: boolean;
+    active?: boolean;
     extended?: boolean;
     subItems?: string[];
     onClick?: React.MouseEventHandler<HTMLAnchorElement>;
@@ -15,29 +16,22 @@ type SideNavItemPropType = {
 
 export default function SideNavItem({
     icon,
-    extendable,
+    extendable = false,
     path,
     text,
-    active,
+    active = false,
     extended,
     subItems,
     onClick,
-}: SideNavItemPropType) {
-    const className = classNames(
-        'flex flex-col w-full text-white text-base gap-4 rounded p-3 px-4 hover:bg-indigo-100/10',
-        {
-            'bg-indigo-100/10': active,
-            'bg-indigo-950': !active,
-        },
-    );
-
+}: SideNavItemProps) {
     return (
-        <Link className={className} onClick={onClick} to={path}>
+        <ItemContainer onClick={onClick} to={path} active={active}>
             <div className="flex items-center justify-between">
-                <div className="flex gap-4 items-center">
+                <MainItemContent>
                     {icon}
                     {text}
-                </div>
+                </MainItemContent>
+
                 {extendable && extended ? (
                     <IoIosArrowBack />
                 ) : (
@@ -60,6 +54,6 @@ export default function SideNavItem({
                     })}
                 </div>
             )}
-        </Link>
+        </ItemContainer>
     );
 }

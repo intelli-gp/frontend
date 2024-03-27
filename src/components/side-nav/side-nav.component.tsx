@@ -7,115 +7,96 @@ import { HiMiniUserGroup } from 'react-icons/hi2';
 import { IoIosSettings } from 'react-icons/io';
 import { IoPersonSharp } from 'react-icons/io5';
 import { LuListTodo, LuSearch } from 'react-icons/lu';
-import { MdLogout, MdMessage } from 'react-icons/md';
+import { MdLogout, MdNotifications } from 'react-icons/md';
+import { TbMessage2 } from 'react-icons/tb';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import defaultUserImage from '../../assets/imgs/user.jpg';
-import { RootState, clearCredentials, useLogoutUserMutation } from '../../store';
+import {
+    RootState,
+    clearCredentials,
+    useLogoutUserMutation,
+} from '../../store';
 import { deleteSocket } from '../../utils/socket';
-import SideNavItem from '../SideNavItem';
+import { disconnectSSE } from '../../utils/sse';
 import Button from '../button/button.component';
 import DropdownMenu from '../menu/menu.component';
-import { ChatsLink, Logo, SideNavContainer, UserContainer } from './side-nav.styles';
-
-type SideNavLinkType = {
-    icon: JSX.Element;
-    extendable: boolean;
-    path: string;
-    text?: string;
-    active: boolean;
-    extended?: boolean;
-    subItems?: string[];
-    notScroll?:boolean;
-    id: number;
-};
+import SideNavItem, {
+    SideNavItemProps,
+} from '../sidenav-item/sidenav-item.component';
+import {
+    Brand,
+    IconsContainer,
+    LinksContainer,
+    SideNavContainer,
+    SideNavFooter,
+    UserContainer,
+    UserFullName,
+    UserImage,
+} from './side-nav.styles';
 
 export default function SideNav() {
-    const [links, setLinks] = useState<SideNavLinkType[]>([
+    const [links, setLinks] = useState<
+        Array<SideNavItemProps & { id: number }>
+    >([
         {
             icon: <LuSearch />,
-            extendable: false,
-            path: '/app',
+            path: '/app/search',
             text: 'Search',
-            active: false,
             id: 2,
         },
         {
             icon: <LuListTodo />,
-            extendable: false,
             path: '/app/study-planner',
             text: 'Study Planner',
-            active: false,
             id: 1,
         },
         {
             icon: <HiMiniUserGroup />,
-            extendable: false,
             path: '/app/groups',
             text: 'Chat Groups',
-            active: false,
             id: 3,
         },
         {
             icon: <BsFillPostcardFill />,
-            extendable: false,
             path: '/app/articles',
             text: 'Articles',
-            active: false,
             id: 4,
         },
         {
             icon: <GiBookshelf />,
-            extendable: false,
-            path: '/app',
+            path: '/app/courses',
             text: 'Courses',
-            active: false,
             id: 5,
         },
         {
             icon: <FaHandsHelping />,
-            extendable: false,
             path: '/app/AI-helper',
             text: 'AI helper',
-            active: false,
             id: 6,
         },
         {
             icon: <GiRobotGolem />,
-            extendable: false,
-            path: '/app',
+            path: '/app/ai-service',
             text: 'AI Service',
-            active: false,
             id: 7,
         },
         {
             icon: <GiUpgrade />,
-            extendable: false,
             path: '/app/upgrade',
             text: 'Upgrade',
-            active: false,
             id: 8,
         },
         {
             icon: <GiTomato />,
-            extendable: false,
             path: '/app/pomodoro',
             text: 'Pomodoro',
-            active: false,
             id: 9,
-        },
-        {
-            icon: <MdMessage color='white' />,
-            extendable: false,
-            path: '/app/chats',
-            active: false,
-            notScroll:true,
-            id: 10,
-
         },
     ]);
     const navigate = useNavigate();
+    const location = useLocation();
 
     /**
      * This is for mobile view only. To handle the side nav open and close
@@ -156,26 +137,19 @@ export default function SideNav() {
         }
     }, [sideNavOpen]);
 
-    const handleSideLinkClick = (id: number) => {
+    /**
+     * Activate link based on the current location
+     */
+    useEffect(() => {
         setLinks(
             links.map((link) => {
-                if (link.id === id) {
-                    link.extendable &&
-                        (link.extended = !(link.extended ?? false));
-                    return {
-                        ...link,
-                        active: true,
-                    };
-                } else {
-                    link.extendable && (link.extended = false);
-                    return {
-                        ...link,
-                        active: false,
-                    };
-                }
+                return {
+                    ...link,
+                    active: link.path === location.pathname,
+                };
             }),
         );
-    };
+    }, [location.pathname]);
 
     const handleLogout = async () => {
         /**
@@ -185,6 +159,7 @@ export default function SideNav() {
         logoutUser();
         dispatch(clearCredentials());
         deleteSocket(); // Clear socket connection
+        disconnectSSE(); // Clear SSE connection
         navigate('/');
     };
 
@@ -197,83 +172,80 @@ export default function SideNav() {
     return (
         <>
             <SideNavContainer sideNavOpen={sideNavOpen} ref={sideNavRef}>
-                <div className="side-nav-links min-h-0 flex justify-between flex-col">
-                    <Logo>
-                        Mujedd
-                    </Logo>
-                    <div className="flex flex-col gap-2 overflow-y-scroll max-h-[70vh] side-nav-links p-2">
-                        {links.filter((link)=>!link.notScroll).map((link) => (
-                            <SideNavItem
-                                key={link.text}
-                                icon={link.icon}
-                                extendable={link.extendable}
-                                extended={link.extended}
-                                subItems={link.subItems}
-                                path={link.path}
-                                text={link.text}
-                                active={link.active}
-                                onClick={() => handleSideLinkClick(link.id)}
-                            />
-                        ))}
-                    </div>
-                </div>
-                <div className=' flex justify-center items-center'>
-                        <ChatsLink
-                            active= {links[9].active}
-                            onClick={() => {
-                                handleSideLinkClick(10);
-                                navigate(links[9].path);
-                            }}
+                <Brand>Mujedd</Brand>
 
-                        >
-                            {links[9].icon}
-                        </ChatsLink>
-                    </div>
-                <DropdownMenu
-                    mainElementClassName="relative flex justify-center"
-                    menuWidth="8rem"
-                    bottom={'110%'}
-                    options={[
-                        {
-                            option: (
-                                <>
-                                    <IoPersonSharp /> Profile
-                                </>
-                            ),
-                            handler: () => navigate('/app/profile'),
-                        },
-                        {
-                            option: (
-                                <>
-                                    <IoIosSettings /> Settings
-                                </>
-                            ),
-                            handler: () => navigate('/app/settings'),
-                        },
-                        {
-                            option: (
-                                <>
-                                    <MdLogout /> Logout
-                                </>
-                            ),
-                            handler: handleLogout,
-                        },
-                    ]}
-                >
-                    <UserContainer
-                        title={user.Username}
-                    >
-                        <img
-                            src={user.ProfileImage ?? defaultUserImage}
-                            alt="profile pic"
-                            className="w-10 h-10 rounded-full object-cover"
+                <LinksContainer>
+                    {links.map((link) => (
+                        <SideNavItem
+                            key={link.text}
+                            icon={link.icon}
+                            extendable={link?.extendable}
+                            extended={link?.extended}
+                            subItems={link?.subItems}
+                            path={link.path}
+                            text={link.text}
+                            active={link?.active}
                         />
-                        <p className="select-none text-ellipsis overflow-hidden whitespace-nowrap">
-                            {user.Username}
-                        </p>
-                    </UserContainer>
-                </DropdownMenu>
+                    ))}
+                </LinksContainer>
+
+                <SideNavFooter>
+                    <IconsContainer>
+                        <MdNotifications
+                            size={24}
+                            title="Notifications"
+                            onClick={() => navigate('/app/notifications')}
+                        />
+                        <TbMessage2
+                            size={24}
+                            title="Messages"
+                            onClick={() => navigate('/app/chats')}
+                        />
+                    </IconsContainer>
+                    {/* <Separator /> */}
+                    <DropdownMenu
+                        mainElementClassName="relative flex justify-center"
+                        menuWidth="8rem"
+                        bottom={'110%'}
+                        options={[
+                            {
+                                option: (
+                                    <>
+                                        <IoPersonSharp /> Profile
+                                    </>
+                                ),
+                                handler: () => navigate('/app/profile'),
+                            },
+                            {
+                                option: (
+                                    <>
+                                        <IoIosSettings /> Settings
+                                    </>
+                                ),
+                                handler: () => navigate('/app/settings'),
+                            },
+                            {
+                                option: (
+                                    <>
+                                        <MdLogout /> Logout
+                                    </>
+                                ),
+                                handler: handleLogout,
+                            },
+                        ]}
+                    >
+                        <UserContainer title={user?.FullName}>
+                            <UserImage
+                                src={user.ProfileImage ?? defaultUserImage}
+                                alt="profile pic"
+                                className="w-10 h-10 rounded-full object-cover"
+                            />
+                            <UserFullName>{user?.FullName}</UserFullName>
+                        </UserContainer>
+                    </DropdownMenu>
+                </SideNavFooter>
             </SideNavContainer>
+
             <nav className="lg:hidden bg-indigo-950 ">
                 <Button
                     type="button"
