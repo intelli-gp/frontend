@@ -41,7 +41,7 @@ export const CoverImage = styled.img`
 
 export const ProfilePictureContainer = styled.div`
     position: absolute;
-    top: 30%;
+    bottom: 72.5%;
     width: 175px;
     height: 175px;
     @media (max-width: 768px) {
@@ -77,6 +77,7 @@ export const PictureOverlay = styled(ProfilePicture)`
 export const UserDataContainer = styled.div`
     display: flex;
     align-items: center;
+    position: relative;
     padding: 2.5rem 4rem 1rem 4rem;
     gap: 1.5rem;
     background-color: ${SECTION_BACKGROUND};
@@ -84,11 +85,11 @@ export const UserDataContainer = styled.div`
     box-shadow: ${SECTION_SHADOW};
 
     @media (max-width: 768px) {
-        padding: 1rem 2rem;
+        padding: 2.5rem 2rem 1rem 2rem;
         gap: 1rem;
     }
     @media (max-width: 500px) {
-        padding: 1rem;
+        padding: 2.5rem 1rem 1rem 1rem;
         gap: 0.5rem;
     }
 `;
