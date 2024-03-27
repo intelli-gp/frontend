@@ -25,18 +25,15 @@ export const PageContainer = styled(motion.div)`
 
 export const Sidebar = styled.div<navType>`
     position: fixed;
-    right: 0;
     top: 0;
-    width: 50%;
+    width: 300px;
     height: 100vh;
     background-color: #e0e7ff;
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
-    box-shadow: var(--tag-shadow);
-    transition: all 0.3s ease-in;
-    display: ${({ $navbarOpen }) => ($navbarOpen ? 'block' : 'none')};
-    @media (min-width: 860px) {
-    }
+    transition: all 0.3s ease-in-out;
+    right: ${({ $navbarOpen }) => ($navbarOpen ? '0' : '-100%')};
+
     @media (min-width: 1024px) {
         display: none;
     }
@@ -222,6 +219,7 @@ export const AItitle = styled.h1`
 
 export const NavContainer = styled.nav`
     z-index: 50;
+    position: relative;
     width: 100%;
     background-color: var(--indigo-950);
     backdrop-filter: blur(10px);

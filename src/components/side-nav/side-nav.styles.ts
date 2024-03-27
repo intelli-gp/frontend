@@ -16,7 +16,7 @@ export const SideNavContainer = styled.aside<{ sideNavOpen: boolean }>`
     overflow-y: hidden;
     z-index: 20;
     position: sticky;
-    transition: all 0.5s linear;
+    transition: all 0.3s ease-in-out;
     @media (max-width: 1024px) {
         position: fixed;
     }
