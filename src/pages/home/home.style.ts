@@ -8,7 +8,20 @@ type navType = {
     $navbarOpen: boolean;
 };
 
-export const PageContainer = styled(motion.div)``;
+export const PageContainer = styled(motion.div)`
+    height: calc(100vh - 78px);
+    overflow-y: auto;
+    &::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05);
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 0;
+        background: var(--indigo-950);
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background: var(--indigo-950);
+    }
+`;
 
 export const Sidebar = styled.div<navType>`
     position: fixed;
@@ -208,9 +221,6 @@ export const AItitle = styled.h1`
 `;
 
 export const NavContainer = styled.nav`
-    position: sticky;
-    left: 0;
-    top: 0;
     z-index: 50;
     width: 100%;
     background-color: var(--indigo-950);
@@ -330,6 +340,7 @@ export const HeroSection = styled.section`
     min-height: calc(100vh - 64px);
     width: 100%;
     display: flex;
+    position: relative;
     justify-content: center;
     background: var(--indigo-50);
     height: calc(100vh - 64px);

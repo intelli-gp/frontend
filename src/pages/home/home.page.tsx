@@ -422,16 +422,18 @@ function Footer() {
 
 function HomePage() {
     return (
-        <PageContainer>
+        <>
             <Nav />
-            <Body {...BetweenPageAnimation}>
-                <Hero />
-                <FeatureSection />
-                <BlogSection />
-                <Feedback />
-            </Body>
-            <Footer />
-        </PageContainer>
+            <PageContainer>
+                <Body {...BetweenPageAnimation}>
+                    <Hero />
+                    <FeatureSection />
+                    <BlogSection />
+                    <Feedback />
+                </Body>
+                <Footer />
+            </PageContainer>
+        </>
     );
 }
 export default HomePage;
