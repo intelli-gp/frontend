@@ -29,11 +29,13 @@ import {
     Brand,
     IconsContainer,
     LinksContainer,
+    Separator,
     SideNavContainer,
     SideNavFooter,
     UserContainer,
     UserFullName,
     UserImage,
+    UserUsername,
 } from './side-nav.styles';
 
 export default function SideNav() {
@@ -202,7 +204,7 @@ export default function SideNav() {
                             onClick={() => navigate('/app/chats')}
                         />
                     </IconsContainer>
-                    {/* <Separator /> */}
+                    <Separator />
                     <DropdownMenu
                         mainElementClassName="relative flex justify-center"
                         menuWidth="8rem"
@@ -240,7 +242,10 @@ export default function SideNav() {
                                 alt="profile pic"
                                 className="w-10 h-10 rounded-full object-cover"
                             />
-                            <UserFullName>{user?.FullName}</UserFullName>
+                            <div>
+                                <UserFullName width="17ch">{user?.FullName}</UserFullName>
+                                <UserUsername width="17ch">@{user?.Username}</UserUsername>
+                            </div>
                         </UserContainer>
                     </DropdownMenu>
                 </SideNavFooter>

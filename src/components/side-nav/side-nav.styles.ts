@@ -4,8 +4,9 @@ import { CSSTextLengthLimit } from '../../index.styles';
 
 export const SideNavContainer = styled.aside<{ sideNavOpen: boolean }>`
     background-color: var(--indigo-950);
-    width: 250px;
+    width: 275px;
     height: 100vh;
+    justify-content: center;
     max-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -76,22 +77,30 @@ export const IconsContainer = styled.div`
     }
 `;
 
+export const Separator = styled.hr`
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 0;
+    width: 80%;
+    margin: 0 auto;
+`;
+
 export const UserContainer = styled.div`
-    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 1rem;
     display: flex;
     gap: 0.75rem;
+    justify-content: center;
     align-items: center;
     color: white;
     font-size: 0.875rem;
     font-weight: bold;
     padding: 0.5rem;
-    width: 100%;
+    padding-right: 1rem;
+    width: min(90%, fit-content);
     cursor: pointer;
     transition: all 0.2s ease-out;
 
     &:hover {
-        background-color: rgba(255, 255, 255, 0.2);
+        background-color: rgba(255, 255, 255, 0.1);
     }
 `;
 
@@ -106,4 +115,11 @@ export const UserImage = styled.img`
 export const UserFullName = styled.p<{ width?: string }>`
     user-select: none;
     ${CSSTextLengthLimit}
+`;
+
+export const UserUsername = styled.p<{ width?: string }>`
+    font-size: 0.75rem;
+    color: white;
+    opacity: 0.75;
+    margin-top: -0.2rem;
 `;
