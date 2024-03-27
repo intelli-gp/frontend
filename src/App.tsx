@@ -9,13 +9,16 @@ import InterestsPage from './pages/auth/interests/interests.page';
 import LoginPage from './pages/auth/login.page';
 import SignupPage from './pages/auth/signup.page';
 import { ChatroomPage } from './pages/chat-room/chat-room.page';
+import { ChatsPage } from './pages/chats/chats.page';
 import CreateArticlePage from './pages/create-article/create-article.page';
 import ExploreArticlesPage from './pages/explore-articles/explore-articles.page';
 import ExploreGroupsPage from './pages/explore-groups/explore-groups.page';
 import HomePage from './pages/home/home.page';
 import NotFoundPage from './pages/not-found-page/not-found.page';
+import NotificationsPage from './pages/notifications/notifications.page';
 import PomodoroPage from './pages/pomodoro/pomodoro.page';
 import ProfilePage from './pages/profile/profile.page';
+import SearchPage from './pages/search/search.page';
 import { SettingsPage } from './pages/settings/settings.page';
 import StudyPlanner from './pages/study-planner/study-planner.page';
 import AuthTemplatePage from './pages/templates/Auth';
@@ -23,7 +26,8 @@ import LoggedInTemplatePage from './pages/templates/LoggedIn';
 import UpgradePage from './pages/upgrade/upgrade.page';
 import ViewArticlePage from './pages/view-article/view-article.page';
 import ViewGroupPage from './pages/view-group/view-group.page';
-import { ChatsPage } from './pages/chats/chats.page';
+import { CoursesPage } from './pages/courses/courses.page';
+import { AIServicePage } from './pages/ai-service/ai-service.page';
 
 function App() {
     return (
@@ -51,11 +55,14 @@ function App() {
                             path="user/:username"
                             element={<ProfilePage />}
                         />
+                        <Route path="search" element={<SearchPage />} />
                         <Route
                             path="study-planner"
                             element={<StudyPlanner />}
                         />
                         <Route path="groups" element={<ExploreGroupsPage />} />
+                        <Route path="courses" element={<CoursesPage />} />
+                        <Route path='ai-service' element={<AIServicePage />} />
                         <Route path="settings" element={<SettingsPage />} />
                         <Route
                             path="articles"
@@ -83,6 +90,10 @@ function App() {
                         <Route path="AI-helper" element={<AIHelperPage />} />
                         <Route path="upgrade" element={<UpgradePage />} />
                         <Route path="chats" element={<ChatsPage />} />
+                        <Route
+                            path="notifications"
+                            element={<NotificationsPage />}
+                        />
                     </Route>
                 </Route>
                 <Route path="*" element={<Navigate to="/404" replace />} />
