@@ -27,7 +27,7 @@ export const Brand = styled.h1`
     text-align: center;
     color: #ffffff;
     font-weight: 900;
-    font-size: 2.25rem;
+    font-size: 2.5rem;
     position: sticky;
     top: 0;
     min-height: 0;
@@ -41,6 +41,12 @@ export const LinksContainer = styled.div`
     flex-direction: column;
     gap: 0.5rem;
     overflow-y: auto;
+    &::-webkit-scrollbar-thumb {
+        background: rgb(255, 255, 255, 0.2);
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background: rgb(255, 255, 255, 0.3);
+    }
 `;
 
 export const SideNavFooter = styled.footer`

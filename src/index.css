@@ -92,14 +92,6 @@ hr {
     border-color: var(--gray-300);
 }
 
-.side-nav-links {
-    &::-webkit-scrollbar-thumb {
-        background: rgb(255, 255, 255, 0.2);
-    }
-    &::-webkit-scrollbar-thumb:hover {
-        background: rgb(255, 255, 255, 0.3);
-    }
-}
 
 .slick-prev:before,
 .slick-next:before {
