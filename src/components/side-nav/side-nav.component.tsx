@@ -29,6 +29,7 @@ import {
     Brand,
     IconsContainer,
     LinksContainer,
+    MobileNav,
     Separator,
     SideNavContainer,
     SideNavFooter,
@@ -39,6 +40,9 @@ import {
 } from './side-nav.styles';
 
 export default function SideNav() {
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const [links, setLinks] = useState<
         Array<SideNavItemProps & { id: number }>
     >([
@@ -97,14 +101,13 @@ export default function SideNav() {
             id: 9,
         },
     ]);
-    const navigate = useNavigate();
-    const location = useLocation();
 
     /**
      * This is for mobile view only. To handle the side nav open and close
      */
     const [sideNavOpen, setSideNavOpen] = useState(false);
     const sideNavRef = useRef<HTMLElement>(null);
+    const verticalNavRef = useRef<HTMLElement>(null);
 
     const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.auth.user);
@@ -243,23 +246,26 @@ export default function SideNav() {
                                 className="w-10 h-10 rounded-full object-cover"
                             />
                             <div>
-                                <UserFullName width="17ch">{user?.FullName}</UserFullName>
-                                <UserUsername width="17ch">@{user?.Username}</UserUsername>
+                                <UserFullName width="17ch">
+                                    {user?.FullName}
+                                </UserFullName>
+                                <UserUsername width="17ch">
+                                    @{user?.Username}
+                                </UserUsername>
                             </div>
                         </UserContainer>
                     </DropdownMenu>
                 </SideNavFooter>
             </SideNavContainer>
 
-            <nav className="lg:hidden bg-indigo-950 ">
+            <MobileNav ref={verticalNavRef}>
                 <Button
-                    type="button"
-                    className="!bg-indigo-950 block text-white z-10 !p-2 !border-indigo-950"
+                    className="text-white z-10 !border-none !bg-transparent"
                     onClick={openSideNav}
                 >
                     <FiMenu size={32} />
                 </Button>
-            </nav>
+            </MobileNav>
         </>
     );
 }

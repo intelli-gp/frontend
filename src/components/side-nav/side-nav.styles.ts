@@ -123,3 +123,20 @@ export const UserUsername = styled.p<{ width?: string }>`
     opacity: 0.75;
     margin-top: -0.2rem;
 `;
+
+export const MobileNav = styled.nav`
+    background-color: var(--indigo-950);
+    padding-right: 2.5rem;
+    display: none;
+
+    @media (max-width: 1024px) {
+        display: flex;
+        justify-content: space-between;
+        height: 60px;
+    }
+
+    & h1 {
+        /* Brand */
+        font-size: 2rem;
+    }
+`;
