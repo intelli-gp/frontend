@@ -109,9 +109,14 @@ const ChatMessage = ({
         <Modal
             isOpen={editMessageIsOpen}
             setIsOpen={setEditMessageIsOpen}
-            className="flex flex-col gap-8"
+            className="flex flex-col gap-8 w-[350px]"
         >
             <ModalTitle fontSize="sm">{`Edit message (${message.MessageID})`}</ModalTitle>
+            <ChatMessage
+                message={message}
+                enableOptions={false}
+                className="!max-w-full w-full"
+            />
             <InputWithoutLabel
                 value={editMessageText}
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -173,8 +178,8 @@ const ChatMessage = ({
         <Modal
             isOpen={messageInfoIsOpen}
             setIsOpen={setMessageInfoIsOpen}
-            className="w-[350px]"
             cleanupFn={messageInfoModalCleanup}
+            className="w-[350px]"
         >
             <ModalTitle fontSize="sm" className="mb-6">
                 Message Info {message.MessageID}
@@ -241,8 +246,8 @@ const ChatMessage = ({
                 <DropdownMenu
                     options={messageOptions}
                     mainElementClassName={`!absolute top-0 right-0`}
-                    right="80%"
-                    bottom="80%"
+                    right="100%"
+                    top="10%"
                     left="auto"
                     menuWidth="8rem"
                 >
