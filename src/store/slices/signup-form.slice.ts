@@ -1,44 +1,50 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+const initialState = {
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    phone: '',
+    birthDate: '',
+    password: '',
+    confirmPassword: '',
+    profileImage: '',
+    termsOfServiceAgreement: false,
+};
 
 const signupFormSlice = createSlice({
     name: 'signup-form',
-    initialState: {
-        firstName: '',
-        lastName: '',
-        username: '',
-        email: '',
-        phone: '',
-        birthDate: '',
-        password: '',
-        confirmPassword: '',
-        termsOfServiceAgreement: false,
-    },
+    initialState,
     reducers: {
-        changeSignupFirstName(state, action) {
+        changeSignupFirstName(state, action: PayloadAction<string>) {
             state.firstName = action.payload;
         },
-        changeSignupLastName(state, action) {
+        changeSignupLastName(state, action: PayloadAction<string>) {
             state.lastName = action.payload;
         },
-        changeSignupUsername(state, action) {
+        changeSignupUsername(state, action: PayloadAction<string>) {
             state.username = action.payload;
         },
-        changeSignupEmail(state, action) {
+        changeSignupEmail(state, action: PayloadAction<string>) {
             state.email = action.payload;
         },
-        changeSignupPhone(state, action) {
+        changeSignupPhone(state, action: PayloadAction<string>) {
             state.phone = action.payload;
         },
-        changeSignupBirthDate(state, action) {
+        changeSignupBirthDate(state, action: PayloadAction<string>) {
             state.birthDate = action.payload;
         },
-        changeSignupPassword(state, action) {
+        changeSignupPassword(state, action: PayloadAction<string>) {
             state.password = action.payload;
         },
-        changeSignupConfirmPassword(state, action) {
+        changeSignupConfirmPassword(state, action: PayloadAction<string>) {
             state.confirmPassword = action.payload;
         },
-        changeTermsOfServiceAgreement(state, action) {
+        changeSignUpUserProfileImage(state, action: PayloadAction<string>) {
+            state.profileImage = action.payload;
+        },
+        changeTermsOfServiceAgreement(state, action: PayloadAction<boolean>) {
             state.termsOfServiceAgreement = action.payload;
         },
         resetSignupForm(state) {
@@ -49,6 +55,8 @@ const signupFormSlice = createSlice({
             state.birthDate = '';
             state.password = '';
             state.confirmPassword = '';
+            state.username = '';
+            state.profileImage = '';
             state.termsOfServiceAgreement = false;
         },
     },
@@ -64,6 +72,7 @@ export const {
     changeSignupLastName,
     changeSignupPassword,
     changeSignupPhone,
+    changeSignUpUserProfileImage,
     changeTermsOfServiceAgreement,
     resetSignupForm,
 } = signupFormSlice.actions;

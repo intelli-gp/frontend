@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import _ from 'lodash';
 import { ChangeEvent, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
@@ -7,6 +8,7 @@ import { InputWithLabel } from '../../components/Input';
 import PhoneNumberInput from '../../components/PhoneNumberInput';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
+    changeSignUpUserProfileImage,
     changeSignupBirthDate,
     changeSignupConfirmPassword,
     changeSignupEmail,
@@ -20,11 +22,18 @@ import {
     useSignUpUserMutation,
 } from '../../store';
 import { RootState } from '../../store/index';
-import { UserToSend } from '../../types/user';
+import { ReceivedUser, UserToSend } from '../../types/user';
 import { getSocket } from '../../utils/socket';
 import { connectSSE } from '../../utils/sse';
 import { errorToast } from '../../utils/toasts';
-import { GoogleLoginButton, GoogleLoginLink, GoogleIcon, SubmitButton,FormContainer, PasswordContainer } from './auth.styles';
+import {
+    FormContainer,
+    GoogleIcon,
+    GoogleLoginButton,
+    GoogleLoginLink,
+    PasswordContainer,
+    SubmitButton,
+} from './auth.styles';
 
 export default function SignupPage() {
     const dispatch = useDispatch();
@@ -39,6 +48,7 @@ export default function SignupPage() {
         birthDate,
         password,
         confirmPassword,
+        profileImage,
         termsOfServiceAgreement,
     } = useSelector((state: RootState) => state['signup-form']);
     const [searchParams, setSearchParams] = useSearchParams();
@@ -47,15 +57,20 @@ export default function SignupPage() {
 
     // Google oauth
     useLayoutEffect(() => {
-        const user = searchParams.get('userData');
+        const user: string = searchParams.get('userData') ?? '';
         if (user) {
             setSearchParams({}, { replace: true });
-            const userData = JSON.parse(user);
-            const [fname, ...lname] = userData.full_name.split(' ');
-            dispatch(changeSignupEmail(userData.email));
-            dispatch(changeSignupUsername(userData.username));
+            const userData: Partial<ReceivedUser> = JSON.parse(user);
+            const [fname, ...lname] = userData.FullName?.split(' ') ?? [];
+            dispatch(changeSignupEmail(userData.Email!));
+            dispatch(
+                changeSignupUsername(
+                    _.kebabCase(userData.Username).replaceAll('-', '_'),
+                ),
+            );
             dispatch(changeSignupFirstName(fname));
             dispatch(changeSignupLastName(lname.join(' ')));
+            dispatch(changeSignUpUserProfileImage(userData.ProfileImage!));
         }
     }, []);
 
@@ -68,6 +83,7 @@ export default function SignupPage() {
             email,
             phoneNumber: `+${phone}`,
             password,
+            image: profileImage ?? '',
         };
 
         try {
@@ -83,6 +99,7 @@ export default function SignupPage() {
         } catch (err) {
             errorToast(JSON.stringify(err));
             console.log(err);
+        } finally {
             resetMutation();
         }
     };
@@ -93,10 +110,7 @@ export default function SignupPage() {
             className="flex flex-col justify-center items-center w-full lg:w-3/5 py-8"
         >
             <PageTitle className="text-center mb-6">Create Account</PageTitle>
-            <FormContainer
-                className='!gap-2 !p-0'
-                onSubmit={handleSubmitForm}
-            >
+            <FormContainer className="!gap-2 !p-0" onSubmit={handleSubmitForm}>
                 <div className="flex gap-2 w-full justify-between 3xs:max-md:flex-col">
                     <InputWithLabel
                         required
@@ -217,9 +231,7 @@ export default function SignupPage() {
                         Create
                     </SubmitButton>
 
-                    <GoogleLoginButton
-                        type="button"
-                    >
+                    <GoogleLoginButton type="button">
                         <GoogleLoginLink
                             href={`${
                                 import.meta.env.VITE_BACKEND
