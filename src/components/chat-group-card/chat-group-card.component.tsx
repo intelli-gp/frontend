@@ -1,3 +1,4 @@
+import { LuDot } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 
 import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
@@ -11,8 +12,9 @@ import {
     CardContainer,
     CardImage,
     CardImageContainer,
+    GroupInfo,
     GroupTitle,
-    GroupTitleGradient,
+    MembersCount,
     TagsContainer,
 } from './chat-group-card.style';
 
@@ -44,27 +46,29 @@ const GroupCard = ({
                     src={GroupCoverImage || defaultGroupImage}
                     alt={title}
                 />
-                <GroupTitleGradient>
-                    <GroupTitle title={title}>{title}</GroupTitle>
-                </GroupTitleGradient>
             </CardImageContainer>
 
-            <p className="text-sm">{GroupMembers?.length ?? 0} Members</p>
+            <GroupInfo>
+                <GroupTitle title={title}>{title}</GroupTitle>
+                <MembersCount>
+                    {GroupMembers?.length ?? 0} Members {<LuDot />} Online group
+                </MembersCount>
+                <TagsContainer>
+                    {GroupTags?.slice(0, 2).map((tag) => (
+                        <Tag key={tag} text={tag} size="xs" />
+                    ))}
+                </TagsContainer>
 
-            <TagsContainer>
-                {GroupTags?.slice(0, 2).map((tag) => (
-                    <Tag key={tag} text={tag} size="xs" />
-                ))}
-            </TagsContainer>
-
-            <ButtonsContainer>
-                <Button
-                    title="Become a member of this group"
-                    onClick={handleJoiningGroup}
-                >
-                    Join
-                </Button>
-            </ButtonsContainer>
+                <ButtonsContainer>
+                    <Button
+                        select="primary500"
+                        title="Become a member of this group"
+                        onClick={handleJoiningGroup}
+                    >
+                        Join group
+                    </Button>
+                </ButtonsContainer>
+            </GroupInfo>
         </CardContainer>
     );
 };

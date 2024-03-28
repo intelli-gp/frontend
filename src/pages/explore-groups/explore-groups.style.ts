@@ -14,7 +14,7 @@ export const PageContainer = styled(motion.div)`
 export const GroupsGrid = styled.div`
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fill, 250px);
+    grid-template-columns: repeat(auto-fill, 225px);
     justify-content: center;
-    gap: 2rem;
+    gap: 1rem;
 `;
