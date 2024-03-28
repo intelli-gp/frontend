@@ -398,6 +398,7 @@ export default function StudyPlanner() {
             </SideNav>
             {editShow && (
                 <EditTaskModal
+                    Tasks={data}
                     showModal={editShow}
                     setShowModal={setEdit}
                     ID={id}
@@ -405,6 +406,7 @@ export default function StudyPlanner() {
             )}
             {showModal && (
                 <AddTaskModal
+                    Tasks={data}
                     showModal={showModal}
                     setShowModal={setShowModal}
                 />

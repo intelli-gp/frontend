@@ -5,21 +5,23 @@ import { GoDash } from 'react-icons/go';
 import { ModalTitle } from '../index.styles';
 import { ModalContent } from '../pages/study-planner/study-planner.styles';
 import { useAddTasksMutation } from '../store';
-import { sendTask } from '../types/event';
+import { Task, sendTask } from '../types/event';
 import { errorToast, successToast } from '../utils/toasts';
 import { InputWithLabel } from './Input';
 import Button from './button/button.component';
 import { Modal } from './modal/modal.component';
 
-interface ModalProps {
+type ModalProps=  {
+    Tasks: Task[];
     showModal: boolean;
-    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+    setShowModal:  React.Dispatch<React.SetStateAction<boolean>>;
 }
 // type Status = {
 //     icon: JSX.Element;
 //     status: string;
 // };
 export const AddTaskModal: React.FC<ModalProps> = ({
+    Tasks,
     showModal,
     setShowModal,
 }) => {
@@ -88,14 +90,51 @@ export const AddTaskModal: React.FC<ModalProps> = ({
 
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const selectedDueDateTime = new Date(`${due_date}T${due_start}`);
+        const StartDateTime = new Date(`${due_date}T${due_start}`);
+        const EndDateTime = new Date(`${due_date}T${due_end}`);
         const nowDate = new Date();
-
-        if (selectedDueDateTime < nowDate) {
-            errorToast('This is an old date!!');
+        const differenceInMonths = moment(StartDateTime).add(1, 'days').diff(moment(nowDate), 'months');
+        if (differenceInMonths >= 1) {
+            errorToast('Date exceeds 1 month ahead!');
+            return;
+        }
+        if(due_start===due_end){
+            errorToast('Start and due date can not match!');
             return;
         }
 
+        if (StartDateTime < nowDate) {
+            errorToast('This is an old date!!');
+            return;
+        }
+        for (const task of Tasks) {
+            
+            if (task.DueDate && task.StartDate) {
+                const taskStartDate = new Date(task.StartDate);
+                const taskDueDate = new Date(task.DueDate);
+            // if start date is in the interval of other task
+            if (StartDateTime >= taskStartDate && StartDateTime < taskDueDate){
+                errorToast('Task start time overlaps with another task. Please choose a different time.');
+                return;
+            }
+             
+            // if end date is in the interval of other task
+            if (EndDateTime >= taskStartDate && EndDateTime < taskDueDate){
+            errorToast('Task end time overlaps with another task. Please choose a different time.');  
+            return;           
+      }
+            // if some other task interval is inside this interval
+            if (
+                StartDateTime <= taskStartDate &&
+                EndDateTime >= taskStartDate &&
+                EndDateTime >= taskDueDate
+            )
+            {errorToast('Task duration overlaps with another task. Please adjust the start or end time.');      
+        
+        return;}   
+            }
+          }
+        
         const task: Partial<sendTask> = {
             Title: title,
             Description: description,
