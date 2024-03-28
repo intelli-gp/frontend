@@ -33,7 +33,9 @@ export const MessageNotification = (
                 to={`/app/chat-room/${notification?.message?.Group?.ID}`}
                 onClick={dismiss}
             >
-                <NotificationTitle title={notification?.message?.Group?.GroupName}>
+                <NotificationTitle
+                    title={notification?.message?.Group?.GroupName}
+                >
                     {notification?.message?.Group?.GroupName}
                 </NotificationTitle>
 
@@ -49,14 +51,13 @@ export const MessageNotification = (
             </Link>
 
             <DismissButton
-                type="button"
                 onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                     console.log('button clicked');
                     event.nativeEvent.preventDefault();
                     event.nativeEvent.stopImmediatePropagation();
                     dismiss();
                 }}
-                className="!rounded-lg z-50"
+                className="z-50"
                 title="Dismiss"
             >
                 ✕

@@ -5,8 +5,8 @@ import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
 export const NotificationImage = styled.img`
     object-fit: cover;
     aspect-ratio: 1/1;
-    width: 3rem;
-    height: 3rem;
+    width: 4rem;
+    height: 4rem;
     border-radius: 99rem;
 `;
 
@@ -22,20 +22,22 @@ export const NotificationContent = styled.p<{ width?: string; lines?: number }>`
     word-break: break-word;
     ${CSSTextLinesCountLimit}
 `;
+
 export const SenderName = styled.span`
     font-weight: 700;
     color: var(--gray-700);
 `;
 
-export const DismissButton = styled.button`
-    padding: 0.5rem;
-    color: red;
-    transition: all 0.3s;
+export const DismissButton = styled.span`
+    cursor: pointer;
     position: absolute;
-    right: 0.1rem;
-    top: 0.1rem;
-
+    line-height: 1;
+    right: 0.25rem;
+    top: 0.25rem;
+    padding: 0.35rem;
+    border-radius: 50%;
+    transition: all 0.25s ease-in-out;
     &:hover {
-        font-weight: 700;
+        background-color: rgba(0, 0, 0, 0.1);
     }
 `;
