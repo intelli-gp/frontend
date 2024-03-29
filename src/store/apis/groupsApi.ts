@@ -61,6 +61,9 @@ export const groupsApi = appApi.injectEndpoints({
             }),
         }),
         joinGroup: builder.mutation<Response, string>({
+            invalidatesTags: (_result, _error) => [
+                { type: 'Group'},
+            ],
             query: (groupId) => ({
                 url: `/chat-groups/join`,
                 method: 'POST',
@@ -70,6 +73,9 @@ export const groupsApi = appApi.injectEndpoints({
             }),
         }),
         leaveGroup: builder.mutation<Response, string>({
+            invalidatesTags: (_result, _error) => [
+                { type: 'Group'},
+            ],
             query: (groupId) => ({
                 url: `/chat-groups/leave`,
                 method: 'PATCH',
