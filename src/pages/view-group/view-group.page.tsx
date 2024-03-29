@@ -250,7 +250,7 @@ const ViewGroupPage = () => {
     const joinButton = (
         <Button
             select="secondary"
-            title="Return"
+            title="Join"
             className="absolute bottom-8 right-8 px-4"
             loading={isGroupUpJoining}
             onClick={handleJoiningGroup}
@@ -399,11 +399,9 @@ const ViewGroupPage = () => {
                         {admins.map((admin) => {
                             return (
                                 <UserContainer
-                                    Admin={
-                                        userType === Role.admin &&
-                                        admin.ID !== user.ID
-                                    }
-                                    Owner={admin.ID ===groupData.GroupOwner.ID}
+                                    Admin={userType === Role.admin }
+                                    IsMe={admin.ID === user.ID}
+                                    Owner ={admin.ID ===groupData.GroupOwner.ID}
                                     GroupID={groupId}
                                     {...admin}
                                 />
@@ -416,10 +414,8 @@ const ViewGroupPage = () => {
                         {members.map((member) => {
                             return (
                                 <UserContainer
-                                    Admin={
-                                        userType === Role.admin &&
-                                        member.ID !== user.ID
-                                    }
+                                    IsMe={member.ID === user.ID}
+                                    Admin={userType === Role.admin }
                                     GroupID={groupId}
                                     {...member}
                                 />

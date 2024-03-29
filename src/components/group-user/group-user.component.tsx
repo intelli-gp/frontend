@@ -11,9 +11,11 @@ import { PersonContainer, PersonImage, PersonName, CrownHolder } from './group-u
 import { FaCrown } from "react-icons/fa";
 
 type GroupUserType = GroupUser & {
-    Admin: boolean;
     GroupID: string | undefined;
+    Admin?: boolean;
+    IsMe?: boolean;
     Owner?: boolean;
+
 };
 
 const UserContainer = ({
@@ -23,8 +25,9 @@ const UserContainer = ({
     Username,
     Type,
     Admin,
-    Owner,
     GroupID,
+    IsMe,
+    Owner
 }: GroupUserType) => {
     const navigate = useNavigate();
     const [updateStatus] = usePermissionGroupMutation();
@@ -80,7 +83,10 @@ const UserContainer = ({
             <PersonImage alt="" src={ProfileImage ?? defaultUserImage} />
             <span className="flex flex-row items-center gap-2 relative">
                 <PersonName title={FullName}>{FullName}</PersonName>
-                {Admin && !Owner ? (
+                { IsMe? (
+                    <>   
+                    </>
+                ):Admin && !Owner ? (
                     <>
                         <DropdownMenu
                             options={statusOptionAdmin}
@@ -93,9 +99,9 @@ const UserContainer = ({
                             <IoIosArrowDown />
                         </DropdownMenu>
                     </>
-                ) : Type === 'MEMBER' || Owner ? (
+                )  : (
                     <>
-                        <DropdownMenu
+                    <DropdownMenu
                             options={statusOptionMember}
                             right="10%"
                             top="100%"
@@ -106,8 +112,6 @@ const UserContainer = ({
                             <IoIosArrowDown />
                         </DropdownMenu>
                     </>
-                ) : (
-                    <></>
                 )}
             </span>
         </PersonContainer>
