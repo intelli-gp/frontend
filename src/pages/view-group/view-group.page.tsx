@@ -383,9 +383,9 @@ const ViewGroupPage = () => {
                     </EditableSection>
 
                     <div className="flex gap-2 items-end">
-                        {userType === Role.admin ? (
+                        {user.ID ===groupData.GroupOwner.ID ? (
                             deleteButton
-                        ) : userType === Role.member ? (
+                        ) : (userType === Role.member|| userType === Role.admin) ? (
                             exitButton
                         ) : (
                             <></>
