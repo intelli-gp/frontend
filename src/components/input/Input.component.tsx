@@ -7,12 +7,13 @@ import {
     SerializedInput,
 } from '../../types/serialized-input';
 import {
+    GridContainer,
     Input,
-    InputWithLabelWrapper,
     Label,
     TextAreaContainer,
-    TextAreaCounter,
     Textarea,
+    TextareaCounter,
+    Wrapper,
 } from './input.styles';
 
 type InputsGridProps = {
@@ -30,7 +31,7 @@ export const CustomInput = ({
     multiline,
     ...other
 }: SerializedInput) => {
-    const [textAreaCounter, setTextAreaCounter] = useState(0);
+    const [textAreaCounter, setTextAreaCounter] = useState(value.length ?? 0);
     const id = _.kebabCase(label ?? v4());
     const handleTextAreaChange = (
         e: React.ChangeEvent<HTMLTextAreaElement>,
@@ -39,7 +40,7 @@ export const CustomInput = ({
         onChange(e);
     };
     return (
-        <InputWithLabelWrapper className={wrapperClassName}>
+        <Wrapper className={wrapperClassName}>
             {label && <Label htmlFor={id}>{label}:</Label>}
             {multiline ? (
                 <TextAreaContainer>
@@ -52,9 +53,9 @@ export const CustomInput = ({
                         {...other}
                     />
                     {limit && (
-                        <TextAreaCounter>
+                        <TextareaCounter>
                             {textAreaCounter}/{limit}
-                        </TextAreaCounter>
+                        </TextareaCounter>
                     )}
                 </TextAreaContainer>
             ) : (
@@ -69,7 +70,7 @@ export const CustomInput = ({
             )}
 
             {error && <span className="text-red-600 text-sm">{error}</span>}
-        </InputWithLabelWrapper>
+        </Wrapper>
     );
 };
 
@@ -78,24 +79,22 @@ export const CustomInput = ({
  */
 export const InputsGrid = ({ inputs }: InputsGridProps) => {
     return (
-        <div className="grid grid-col-4 lg:grid-cols-5 gap-y-4 g-x-1 items-center">
+        <GridContainer>
             {inputs.map(({ label, custom, customComponent, ...other }) => (
                 <>
-                    <label
-                        htmlFor={label?.toLowerCase()}
-                        className="col-start-1 max-w-[90%] text-slate-700"
-                    >
-                        {label}
-                    </label>
-                    <div className="col-start-2 col-span-3" key={label}>
+                    <Label htmlFor={label?.toLowerCase()}>{label}</Label>
+                    <div key={label}>
                         {custom ? (
                             customComponent
                         ) : (
-                            <CustomInput id={label?.toLowerCase()} {...other} />
+                            <CustomInput
+                                id={_.kebabCase(label ?? v4())}
+                                {...other}
+                            />
                         )}
                     </div>
                 </>
             ))}
-        </div>
+        </GridContainer>
     );
 };
