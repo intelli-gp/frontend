@@ -8,7 +8,7 @@ export const AccordionContainer = styled.div`
 
 export const AccordionHeader = styled.header<{ isOpen?: boolean }>`
     cursor: pointer;
-    background-color: var(--indigo-300);
+    background-color: var(--indigo-200);
     padding: 1rem;
     border-radius: ${(props) => (props.isOpen ? '10px 10px 0 0' : '10px')};
     font-size: 1.5rem;
@@ -19,7 +19,7 @@ export const AccordionHeader = styled.header<{ isOpen?: boolean }>`
 `;
 
 export const AccordionContent = styled.main`
-    padding: 2rem;
+    padding: 2.5rem;
     font-size: 1rem;
     display: flex;
     flex-direction: column;

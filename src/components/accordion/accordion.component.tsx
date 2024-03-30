@@ -11,9 +11,13 @@ import {
 type AccordionProps = {
     title: string;
     children: React.ReactNode;
+    /**
+     * Optional className to apply to the accordion content container
+     */
+    className?: string;
 };
 
-const Accordion = ({ title, children }: AccordionProps) => {
+const Accordion = ({ title, children, className }: AccordionProps) => {
     const [isOpen, setIsOpen] = React.useState(true);
 
     return (
@@ -31,7 +35,11 @@ const Accordion = ({ title, children }: AccordionProps) => {
                     <MdKeyboardArrowLeft size={28} />
                 )}
             </AccordionHeader>
-            {isOpen && <AccordionContent>{children}</AccordionContent>}
+            {isOpen && (
+                <AccordionContent className={className}>
+                    {children}
+                </AccordionContent>
+            )}
         </AccordionContainer>
     );
 };
