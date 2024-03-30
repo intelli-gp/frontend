@@ -177,7 +177,10 @@ export default function SideNav() {
     return (
         <>
             <SideNavContainer sideNavOpen={sideNavOpen} ref={sideNavRef}>
-                <Brand>Mujedd</Brand>
+                <div>
+                    <Brand>Mujedd</Brand>
+                    <Separator />
+                </div>
 
                 <LinksContainer>
                     {links.map((link) => (

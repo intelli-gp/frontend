@@ -4,7 +4,7 @@ import { CSSTextLengthLimit } from '../../index.styles';
 
 export const SideNavContainer = styled.aside<{ sideNavOpen: boolean }>`
     background-color: var(--indigo-950);
-    width: 275px;
+    width: 250px;
     height: 100vh;
     justify-content: center;
     max-height: 100vh;
@@ -12,7 +12,7 @@ export const SideNavContainer = styled.aside<{ sideNavOpen: boolean }>`
     flex-direction: column;
     top: 0;
     padding: 0.5rem;
-    gap: 0.5rem;
+    gap: 1rem;
     overflow-y: hidden;
     z-index: 20;
     position: sticky;
@@ -33,6 +33,7 @@ export const Brand = styled.h1`
     top: 0;
     min-height: 0;
     padding: 0.5rem 0;
+    line-height: 1.2;
     font-family: Merriweather, serif;
     user-select: none;
 `;
