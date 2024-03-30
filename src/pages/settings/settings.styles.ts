@@ -11,67 +11,42 @@ export const PageContainer = styled(motion.div)`
     display: flex;
     flex-direction: column;
     margin: 0 auto;
-    gap: 2rem;
+    gap: 1.5rem;
 
     @media (max-width: 768px) {
-        padding: 6rem 1rem 2rem 1rem;
+        padding: 1rem;
     }
 `;
 
-export const PageHeader = styled.header`
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-    align-items: center;
-    gap: 2rem;
-    background: var(--indigo-25);
-    padding: 4rem 2rem;
-    border-radius: 10px;
-    position: relative;
-    @media (max-width: 768px) {
-        grid-template-columns: 1fr;
-    }
+export const SectionTitle = styled.h2`
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    font-weight: 900;
+    opacity: 0.5;
 `;
 
-export const HeaderTagsContainer = styled.div`
+export const SectionContainer = styled.div`
     display: flex;
+    flex-direction: column;
     gap: 0.5rem;
 `;
 
-export const ProfilePictureContainer = styled.div`
-    position: relative;
-    width: 150px;
-    height: 150px;
-`;
+export const InlineInputsContainer = styled.div`
+    display: flex;
+    gap: 1rem;
 
-export const ProfilePicture = styled.img`
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    box-shadow: var(--gray-shadow);
-`;
-
-export const PictureOverlay = styled(ProfilePicture)`
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    position: absolute;
-    transition: opacity 0.3s ease-in-out;
-    &:hover {
-        opacity: 0.2;
-        cursor: pointer;
+    @media (max-width: 768px) {
+        flex-direction: column;
     }
 `;
 
-export const EditButton = styled(Button)<{ editing: boolean }>`
+export const EditButton = styled(Button)`
     align-self: end;
-    height: 2.5rem;
-    padding: ${({ editing }) => (editing ? '0.5rem 2rem' : '1rem')};
-    border-radius: ${({ editing }) => (editing ? '20px' : '1000px')};
-    font-size: 1rem;
-    color: var(--gray-800);
-    gap: 0.5rem;
+    width: 80px;
+    height: 35px;
+    font-size: 0.875em;
+    margin-top: 1rem;
+    color: inherit;
 `;

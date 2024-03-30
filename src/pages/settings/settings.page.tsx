@@ -1,13 +1,10 @@
 import _ from 'lodash';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { FiEdit } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 
-import defaultProfile from '../../assets/imgs/user.jpg';
-import { InputsGrid } from '../../components/Input';
 import Accordion from '../../components/accordion/accordion.component';
 import Button from '../../components/button/button.component';
-import Tag from '../../components/tag/tag.component';
+import { CustomInput } from '../../components/input/Input.component';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
@@ -16,20 +13,14 @@ import {
     useGetAllTagsQuery,
     useUpdateUserMutation,
 } from '../../store';
-import {
-    SerializedCustomInput,
-    SerializedInput,
-} from '../../types/serialized-input';
 import { ReceivedUser, UserToSend } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
-import { UserBio, UserFullName, UserUserName } from '../profile/profile.styles';
 import {
     EditButton,
-    HeaderTagsContainer,
+    InlineInputsContainer,
     PageContainer,
-    PageHeader,
-    ProfilePicture,
-    ProfilePictureContainer,
+    SectionContainer,
+    SectionTitle,
 } from './settings.styles';
 
 export const SettingsPage = () => {
@@ -61,120 +52,6 @@ export const SettingsPage = () => {
     );
     const [bio, setBio] = useState(storedUser.Bio);
     const [interests, setInterests] = useState(storedUser.UserTags);
-
-    // Serialized inputs
-    const personalInfoInputs: SerializedCustomInput[] = [
-        {
-            label: 'First Name',
-            value: firstName,
-            onChange: (e: ChangeEvent<HTMLInputElement>) => {
-                setFirstName(e.target.value);
-            },
-            disabled: !isEditingPersonalInfo,
-        },
-        {
-            label: 'Last Name',
-            value: lastName,
-            onChange: (e: ChangeEvent<HTMLInputElement>) => {
-                setLastName(e.target.value);
-            },
-            disabled: !isEditingPersonalInfo,
-        },
-        {
-            label: 'Username',
-            value: username,
-            onChange: (e: ChangeEvent<HTMLInputElement>) => {
-                setUsername(e.target.value);
-            },
-            disabled: !isEditingPersonalInfo,
-        },
-        {
-            label: 'Email',
-            type: 'email',
-            value: email,
-            onChange: (e: ChangeEvent<HTMLInputElement>) => {
-                setEmail(e.target.value);
-            },
-            disabled: !isEditingPersonalInfo,
-        },
-        {
-            label: 'Headline',
-            type: 'text',
-            value: headline,
-            placeholder: 'Add your title.',
-            onChange: (e: ChangeEvent<HTMLInputElement>) => {
-                setHeadline(e.target.value);
-            },
-            disabled: !isEditingPersonalInfo,
-        },
-        {
-            label: 'Phone',
-            value: phone,
-            onChange: (e: ChangeEvent<HTMLInputElement>) => {
-                setPhone(e.target.value);
-            },
-            disabled: !isEditingPersonalInfo,
-        },
-        {
-            label: 'Birth Date',
-            type: 'date',
-            value: birthDate,
-            onChange: (e: ChangeEvent<HTMLInputElement>) => {
-                setBirthDate(e.target.value);
-            },
-            disabled: !isEditingPersonalInfo,
-        },
-        {
-            label: 'Bio',
-            placeholder: 'Tell us about yourself',
-            value: bio,
-            multiline: true,
-            rows: 4,
-            maxLength: 2000,
-            onChange: (e: ChangeEvent<HTMLTextAreaElement>) => {
-                setBio(e.target.value);
-            },
-            disabled: !isEditingPersonalInfo,
-        },
-        {
-            label: 'Interests',
-            value: interests,
-            custom: true,
-            customComponent: (
-                <TagsInput2
-                    updateSelectedTags={(tags: string[]) => setInterests(tags)}
-                    availableTags={tagsRes?.data ?? []}
-                    selectedTags={interests}
-                    disabled={!isEditingPersonalInfo}
-                />
-            ),
-            onChange: () => {},
-            disabled: !isEditingPersonalInfo,
-        },
-    ];
-    const securityInputs: SerializedInput[] = [
-        {
-            label: 'Current Password',
-            value: '',
-            type: 'password',
-            placeholder: 'your current password',
-            onChange: () => {},
-        },
-        {
-            label: 'New Password',
-            value: '',
-            placeholder: 'your new password',
-            type: 'password',
-            onChange: () => {},
-        },
-        {
-            label: 'Repeat New Password',
-            value: '',
-            placeholder: 'repeat your new password',
-            type: 'password',
-            onChange: () => {},
-        },
-    ];
 
     const handleUpdatePersonalInformation = async () => {
         /**
@@ -254,43 +131,122 @@ export const SettingsPage = () => {
 
     return (
         <PageContainer {...BetweenPageAnimation}>
-            <PageTitle>Account Settings</PageTitle>
+            <PageTitle>Settings</PageTitle>
 
-            <PageHeader>
-                <section className="flex flex-col items-center gap-2">
-                    <ProfilePictureContainer>
-                        <ProfilePicture
-                            src={storedUser.ProfileImage ?? defaultProfile}
+            <Accordion title="Account Information" className="!gap-6">
+                <SectionContainer>
+                    <SectionTitle>FullName and username</SectionTitle>
+                    <InlineInputsContainer>
+                        <CustomInput
+                            label={'First name'}
+                            value={firstName}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                setFirstName(e.target.value);
+                            }}
                         />
-                    </ProfilePictureContainer>
-                    <UserFullName>
-                        {storedUser.FullName ?? 'Delete me'}
-                    </UserFullName>
-                    <UserUserName>
-                        @{storedUser.Username ?? 'Delete me'}
-                    </UserUserName>
-                </section>
+                        <CustomInput
+                            label={'Last name'}
+                            value={lastName}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                setLastName(e.target.value);
+                            }}
+                        />
+                    </InlineInputsContainer>
+                    <CustomInput
+                        label={'Username'}
+                        value={username}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                            setUsername(e.target.value);
+                        }}
+                    />
+                </SectionContainer>
 
-                <section className="flex flex-col gap-6">
-                    <UserBio lines={4}>
-                        {storedUser.Bio ?? "You don't have bio yet."}
-                    </UserBio>
+                <SectionContainer>
+                    <SectionTitle>Contact Information</SectionTitle>
+                    <InlineInputsContainer>
+                        <CustomInput
+                            label={'Email'}
+                            value={email}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                setEmail(e.target.value);
+                            }}
+                        />
+                        <CustomInput
+                            label={'Phone'}
+                            value={phone}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                setPhone(e.target.value);
+                            }}
+                        />
+                    </InlineInputsContainer>
+                </SectionContainer>
 
-                    <HeaderTagsContainer>
-                        {storedUser.UserTags?.map((tag) => (
-                            <Tag
-                                key={tag}
-                                text={tag}
-                                size="sm"
-                                variant="darker"
-                            />
-                        ))}
-                    </HeaderTagsContainer>
-                </section>
-            </PageHeader>
+                <SectionContainer>
+                    <SectionTitle>About</SectionTitle>
+                    <CustomInput
+                        label={'Headline or Title'}
+                        value={headline}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                            setHeadline(e.target.value);
+                        }}
+                    />
+                    <CustomInput
+                        label={'Bio'}
+                        value={bio}
+                        multiline
+                        rows={6}
+                        limit={2000}
+                        maxLength={2000}
+                        onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
+                            setBio(e.target.value);
+                        }}
+                    />
+                </SectionContainer>
 
-            <Accordion title="Personal Information">
-                <InputsGrid inputs={personalInfoInputs} />
+                <SectionContainer>
+                    <SectionTitle>Other</SectionTitle>
+                    <TagsInput2
+                        label={'Interests'}
+                        updateSelectedTags={(tags: string[]) =>
+                            setInterests(tags)
+                        }
+                        availableTags={tagsRes?.data ?? []}
+                        selectedTags={interests}
+                    />
+                    <CustomInput
+                        type="date"
+                        label={'Birth Date'}
+                        value={birthDate}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                            setHeadline(e.target.value);
+                        }}
+                    />
+                </SectionContainer>
+
+                <SectionContainer>
+                    <SectionTitle>password</SectionTitle>
+                    <CustomInput
+                        type="password"
+                        label={'Current Password'}
+                        value=""
+                        onChange={() => {}}
+                    />
+                    <InlineInputsContainer>
+                        <CustomInput
+                            type="password"
+                            label={'New Password'}
+                            value=""
+                            onChange={() => {}}
+                        />
+                        <CustomInput
+                            type="password"
+                            label={'Repeat New Password'}
+                            value=""
+                            onChange={() => {}}
+                        />
+                    </InlineInputsContainer>
+                </SectionContainer>
+
                 <EditButton
                     type="button"
                     select="warning"
@@ -306,17 +262,35 @@ export const SettingsPage = () => {
                         });
                     }}
                 >
-                    {isEditingPersonalInfo ? 'Save' : <FiEdit size={18} />}
+                    Save{' '}
                 </EditButton>
             </Accordion>
 
-            <Accordion title="Security">
-                <InputsGrid inputs={securityInputs} />
+            <Accordion title="Notifications">
                 <EditButton
                     type="button"
                     select="warning"
                     title="Edit this section"
-                    editing={true}
+                >
+                    Save
+                </EditButton>
+            </Accordion>
+
+            <Accordion title="Payment">
+                <EditButton
+                    type="button"
+                    select="warning"
+                    title="Edit this section"
+                >
+                    Save
+                </EditButton>
+            </Accordion>
+
+            <Accordion title="Security">
+                <EditButton
+                    type="button"
+                    select="warning"
+                    title="Edit this section"
                 >
                     Save
                 </EditButton>
