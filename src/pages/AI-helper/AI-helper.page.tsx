@@ -77,7 +77,7 @@ const AIHelperPage = () => {
                     Upgrade
                 </Button>
             </ChatHeader>
-            <div className="flex flex-col md:px-[120px] px-[50px] h-[calc(100vh-70px)]">
+            <div className="flex flex-col md:px-[120px] px-[50px] h-[calc(100%-70px)]">
                 <ChatBody>
                     <div />
                     {data1.map((text) => (

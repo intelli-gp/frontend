@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import styled from 'styled-components';
 
 import image from '../../assets/imgs/AI-helper.svg';
 
@@ -7,7 +7,7 @@ export const PageContainer = styled(motion.div)`
     display: flex;
     flex-direction: column;
     background: var(--indigo-50);
-    height: 100vh;
+    height: 100%;
     background-image: url(${image});
     background-size: cover;
     background-repeat: no-repeat;
@@ -24,11 +24,13 @@ export const ChatHeader = styled.div`
     justify-content: space-between;
     align-items: center;
 `;
+
 export const AIicon = styled.img`
     border-radius: 50%;
     height: 50px;
     width: 50px;
 `;
+
 export const ChatBody = styled.div`
     width: 100%;
     padding: 34px;

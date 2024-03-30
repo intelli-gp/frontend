@@ -5,8 +5,8 @@ import { CSSTextLengthLimit } from '../../index.styles';
 
 export const PageContainer = styled(motion.div)`
     display: flex;
-    height: 100vh;
     gap: 0.5rem;
+    height: 100%;
     background: var(--indigo-50);
     padding: 1rem;
 

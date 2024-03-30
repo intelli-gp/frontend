@@ -73,7 +73,7 @@ export const PageContainer = styled(motion.div)`
 
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100%;
     justify-content: space-between;
     @media (min-width: 1280px) {
         flex-direction: row;
