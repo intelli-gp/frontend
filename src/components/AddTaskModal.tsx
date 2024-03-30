@@ -2,7 +2,6 @@ import moment from 'moment';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { GoDash } from 'react-icons/go';
 
-import { ModalTitle } from '../index.styles';
 import { ModalContent } from '../pages/study-planner/study-planner.styles';
 import { useAddTasksMutation } from '../store';
 import { Task, sendTask } from '../types/event';
@@ -167,10 +166,8 @@ export const AddTaskModal: React.FC<ModalProps> = ({
     };
 
     return (
-        <div className="flex justify-between h-[100vh]">
-            <Modal isOpen={showModal} setIsOpen={setShowModal}>
+            <Modal isOpen={showModal} setIsOpen={setShowModal} title={'Add task'} width="lg">
                 <ModalContent>
-                    <ModalTitle>Add Task</ModalTitle>
                     <form onSubmit={handleSubmitForm}>
                         <div className="w-full">
                             <CustomInput
@@ -221,7 +218,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                                     ) => setDueDate(e.target.value)}
                                 />
                             </div>
-                            <div className="flex flex-row justify-between pt-9 w-1/2">
+                            <div className="flex flex-row justify-between w-1/2 mt-auto">
                                 <input
                                     type="time"
                                     className="rounded border border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 mr-1"
@@ -275,6 +272,5 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                     </form>
                 </ModalContent>
             </Modal>
-        </div>
     );
 };

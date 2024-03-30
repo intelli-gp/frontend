@@ -42,23 +42,24 @@ const DeleteSectionModal: React.FC<ModalProps> = ({
     }, [groupDeletedSuccessfully]);
 
     return (
-        <Modal isOpen={showModal} setIsOpen={setShowModal}>
+        <Modal
+            isOpen={showModal}
+            setIsOpen={setShowModal}
+            width="lg"
+            title="Are you sure you want to delete this group?"
+        >
             <div className="flex flex-col gap-8">
-                <p className="text-2xl font-bold text-[var(--gray-800)] text-center">
-                    Are you sure you want to delete this group?
-                </p>
-                <div className="flex gap-4 justify-center">
+                <div className="flex gap-4 flex-row-reverse">
                     <Button
                         className="!px-8"
-                        type="button"
                         select="danger"
+                        outline
                         loading={isDeletingGroup}
                         onClick={handleDeleteGroup}
                     >
                         Yes
                     </Button>
                     <Button
-                        type="button"
                         className="!px-6"
                         onClick={() => setShowModal(false)}
                     >

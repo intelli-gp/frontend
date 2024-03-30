@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 
-import { ModalTitle } from '../index.styles';
 import { useLeaveGroupMutation } from '../store';
 import { errorToast, successToast } from '../utils/toasts';
 import Button from './button/button.component';
@@ -44,28 +43,25 @@ const ExitSectionModal: React.FC<ModalProps> = ({
     }, [isGroupLeaveSuccessfully]);
 
     return (
-        <Modal isOpen={showModal} setIsOpen={setShowModal}>
-            <div className="flex flex-col gap-8">
-                <ModalTitle>
-                    Are you sure you want to exit this group?
-                </ModalTitle>
-                <div className="flex gap-4 flex-row-reverse">
-                    <Button
-                        className="!px-8"
-                        select="danger"
-                        outline
-                        loading={isGroupLeaving}
-                        onClick={handleExitGroup}
-                    >
-                        Yes
-                    </Button>
-                    <Button
-                        className="!px-6"
-                        onClick={() => setShowModal(false)}
-                    >
-                        Cancel
-                    </Button>
-                </div>
+        <Modal
+            isOpen={showModal}
+            setIsOpen={setShowModal}
+            title={'Are you sure you want to exit this group?'}
+            width='lg'
+        >
+            <div className="flex gap-4 flex-row-reverse">
+                <Button
+                    className="!px-8"
+                    select="danger"
+                    outline
+                    loading={isGroupLeaving}
+                    onClick={handleExitGroup}
+                >
+                    Yes
+                </Button>
+                <Button className="!px-6" onClick={() => setShowModal(false)}>
+                    Cancel
+                </Button>
             </div>
         </Modal>
     );

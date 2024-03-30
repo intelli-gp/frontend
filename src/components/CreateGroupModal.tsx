@@ -1,7 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 
 import { useUploadImage } from '../hooks/uploadImage.hook';
-import { ModalTitle } from '../index.styles';
 import { useAddGroupMutation, useGetAllTagsQuery } from '../store';
 import { errorToast, successToast } from '../utils/toasts';
 import Button from './button/button.component';
@@ -73,11 +72,12 @@ const CreateGroupModal = ({ isOpen, setIsOpen }: CreateGroupModalProps) => {
             className="flex flex-col gap-4"
             isOpen={isOpen}
             setIsOpen={setIsOpen}
+            title="Create New Group"
+            width="lg"
         >
-            <ModalTitle className="mb-2">Create New Group</ModalTitle>
             <OpenImage
                 height="250px"
-                width="400px"
+                width="100%"
                 value={groupImage}
                 onChange={(newImage) => setGroupImage(newImage)}
                 editButton

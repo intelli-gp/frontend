@@ -18,7 +18,7 @@ import UserItem from '../../components/userItem/user-item.component';
 import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
 import WideGroupCard from '../../components/wide-group-card/wide-group-card.component';
 import { useUploadImage } from '../../hooks/uploadImage.hook';
-import { BetweenPageAnimation, ModalTitle } from '../../index.styles';
+import { BetweenPageAnimation } from '../../index.styles';
 import {
     AboutListItemText,
     EmptyContent,
@@ -328,11 +328,12 @@ const ProfilePage = () => {
         title,
     }) => (
         <Modal
-            className="flex flex-col gap-12"
+            className="items-center"
             isOpen={isOpen}
             setIsOpen={setIsOpen}
+            title={`Edit ${title} Image`}
+            width='lg'
         >
-            <ModalTitle>Edit {title} Image</ModalTitle>
             <OpenImage
                 height="250px"
                 width={title === 'Cover' ? '450px' : '250px'}
@@ -341,7 +342,7 @@ const ProfilePage = () => {
                 radius={title === 'Cover' ? '5px' : '50%'}
                 cover={title === 'Cover' ? 'contain' : 'cover'}
             />
-            <div className="flex flex-row-reverse items-center gap-4">
+            <div className="flex flex-row-reverse gap-4 w-full mt-4">
                 <Button
                     type="button"
                     select="primary"
@@ -370,10 +371,11 @@ const ProfilePage = () => {
     );
 
     const ContactInfoModal = (
-        <Modal isOpen={contactInfoModal} setIsOpen={setContactInfoModal}>
-            <ModalTitle className="mb-8">
-                Contact info of {userData.FullName}
-            </ModalTitle>
+        <Modal
+            isOpen={contactInfoModal}
+            setIsOpen={setContactInfoModal}
+            title={userData.FullName}
+        >
             <AboutList>
                 {aboutListItems.map(({ icon, text }) => (
                     <AboutListItem>

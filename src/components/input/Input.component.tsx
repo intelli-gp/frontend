@@ -31,7 +31,7 @@ export const CustomInput = ({
     multiline,
     ...other
 }: SerializedInput) => {
-    const [textAreaCounter, setTextAreaCounter] = useState(value.length ?? 0);
+    const [textAreaCounter, setTextAreaCounter] = useState(value?.length ?? 0);
     const id = _.kebabCase(label ?? v4());
     const handleTextAreaChange = (
         e: React.ChangeEvent<HTMLTextAreaElement>,

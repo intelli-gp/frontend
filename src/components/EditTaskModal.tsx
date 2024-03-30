@@ -2,7 +2,6 @@ import moment from 'moment';
 import { SetStateAction, useEffect, useState } from 'react';
 import { GoDash } from 'react-icons/go';
 
-import { ModalTitle } from '../index.styles';
 import { ModalContent } from '../pages/study-planner/study-planner.styles';
 import {
     useEditTaskMutation,
@@ -195,9 +194,13 @@ export const EditTaskModal: React.FC<ModalProps> = ({
     };
 
     return (
-        <Modal isOpen={showModal} setIsOpen={setShowModal}>
+        <Modal
+            isOpen={showModal}
+            setIsOpen={setShowModal}
+            title={'Edit Task'}
+            width="lg"
+        >
             <ModalContent>
-                <ModalTitle> Edit Task </ModalTitle>
                 <form onSubmit={handleEditForm}>
                     <div className="w-full">
                         <CustomInput
@@ -248,7 +251,7 @@ export const EditTaskModal: React.FC<ModalProps> = ({
                                 }) => setDueDate(e.target.value)}
                             />
                         </div>
-                        <div className="flex flex-row justify-between pt-9 w-1/2">
+                        <div className="flex flex-row justify-between mt-auto w-1/2">
                             <input
                                 type="time"
                                 className="rounded border border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 mr-1"

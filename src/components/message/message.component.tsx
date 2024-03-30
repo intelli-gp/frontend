@@ -5,7 +5,6 @@ import { MdDoNotDisturb } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
 import defaultUserImage from '../../assets/imgs/user.jpg';
-import { ModalTitle } from '../../index.styles';
 import { RootState } from '../../store';
 import {
     useDeleteMessageMutation,
@@ -109,9 +108,8 @@ const ChatMessage = ({
         <Modal
             isOpen={editMessageIsOpen}
             setIsOpen={setEditMessageIsOpen}
-            className="flex flex-col gap-8 w-[350px]"
+            title={`Edit message (${message.MessageID})`}
         >
-            <ModalTitle fontSize="sm">{`Edit message (${message.MessageID})`}</ModalTitle>
             <ChatMessage
                 message={message}
                 enableOptions={false}
@@ -149,11 +147,9 @@ const ChatMessage = ({
             isOpen={deleteMessageIsOpen}
             setIsOpen={setDeleteMessageIsOpen}
             className="flex flex-col gap-8"
+            title={'Are you sure you want to delete this message?'}
         >
-            <ModalTitle fontSize="sm">
-                Are you sure you want to delete this message?
-            </ModalTitle>
-            <div className="flex gap-4 flex-row-reverse">
+            <div className="flex gap-4 justify-center">
                 <Button
                     type="button"
                     outline
@@ -179,16 +175,12 @@ const ChatMessage = ({
             isOpen={messageInfoIsOpen}
             setIsOpen={setMessageInfoIsOpen}
             cleanupFn={messageInfoModalCleanup}
-            className="w-[350px]"
+            title={`Message Info ${message.MessageID}`}
         >
-            <ModalTitle fontSize="sm" className="mb-6">
-                Message Info {message.MessageID}
-            </ModalTitle>
-
             <ChatMessage
                 message={message}
                 enableOptions={false}
-                className="!max-w-full mx-auto mb-4"
+                className="!max-w-full w-full mb-4"
             />
 
             <MessageInfoModalContainer>

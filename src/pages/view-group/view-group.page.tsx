@@ -18,7 +18,7 @@ import OpenImage from '../../components/openImage/openImage.component';
 import Tag from '../../components/tag/tag.component';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import { useUploadImage } from '../../hooks/uploadImage.hook';
-import { BetweenPageAnimation, ModalTitle } from '../../index.styles';
+import { BetweenPageAnimation } from '../../index.styles';
 import {
     useGetAllTagsQuery,
     useGetGroupQuery,
@@ -169,8 +169,9 @@ const ViewGroupPage = () => {
             className="flex flex-col gap-4"
             isOpen={showImgModal}
             setIsOpen={setImgModal}
+            width="lg"
+            title="Edit Cover Image"
         >
-            <ModalTitle>Edit Cover Image</ModalTitle>
             <OpenImage
                 height="280px"
                 value={coverImg}
@@ -383,9 +384,10 @@ const ViewGroupPage = () => {
                     </EditableSection>
 
                     <div className="flex gap-2 items-end">
-                        {user.ID ===groupData.GroupOwner.ID ? (
+                        {user.ID === groupData.GroupOwner.ID ? (
                             deleteButton
-                        ) : (userType === Role.member|| userType === Role.admin) ? (
+                        ) : userType === Role.member ||
+                          userType === Role.admin ? (
                             exitButton
                         ) : (
                             <></>
@@ -399,9 +401,9 @@ const ViewGroupPage = () => {
                         {admins.map((admin) => {
                             return (
                                 <UserContainer
-                                    Admin={userType === Role.admin }
+                                    Admin={userType === Role.admin}
                                     IsMe={admin.ID === user.ID}
-                                    Owner ={admin.ID ===groupData.GroupOwner.ID}
+                                    Owner={admin.ID === groupData.GroupOwner.ID}
                                     GroupID={groupId}
                                     {...admin}
                                 />
@@ -415,7 +417,7 @@ const ViewGroupPage = () => {
                             return (
                                 <UserContainer
                                     IsMe={member.ID === user.ID}
-                                    Admin={userType === Role.admin }
+                                    Admin={userType === Role.admin}
                                     GroupID={groupId}
                                     {...member}
                                 />

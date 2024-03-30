@@ -17,7 +17,6 @@ import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import { useUploadImage } from '../../hooks/uploadImage.hook';
 import {
     BetweenPageAnimation,
-    ModalTitle,
     PageTitle,
 } from '../../index.styles';
 import {
@@ -312,29 +311,26 @@ const CreateArticlePage = () => {
             setIsOpen={(show: boolean) => {
                 dispatch(openDeleteSectionModal(show));
             }}
+            title={'Are you sure you want to delete this section?'}
+            width="lg"
         >
-            <div className="flex flex-col gap-8">
-                <ModalTitle>
-                    Are you sure you want to delete this section?
-                </ModalTitle>
-                <div className="flex gap-4 flex-row-reverse">
-                    <Button
-                        className="!px-8"
-                        type="button"
-                        select="danger"
-                        outline
-                        onClick={() => dispatch(executeSectionDeletion())}
-                    >
-                        Yes
-                    </Button>
-                    <Button
-                        type="button"
-                        className="!px-6"
-                        onClick={() => dispatch(openDeleteSectionModal(false))}
-                    >
-                        Cancel
-                    </Button>
-                </div>
+            <div className="flex gap-4 flex-row-reverse">
+                <Button
+                    className="!px-8"
+                    type="button"
+                    select="danger"
+                    outline
+                    onClick={() => dispatch(executeSectionDeletion())}
+                >
+                    Yes
+                </Button>
+                <Button
+                    type="button"
+                    className="!px-6"
+                    onClick={() => dispatch(openDeleteSectionModal(false))}
+                >
+                    Cancel
+                </Button>
             </div>
         </Modal>
     );
@@ -343,29 +339,26 @@ const CreateArticlePage = () => {
         <Modal
             isOpen={deleteArticleModalIsOpen}
             setIsOpen={setDeleteArticleModalIsOpen}
+            title="Are you sure you want to delete this Article?"
+            width="lg"
         >
-            <div className="flex flex-col gap-8">
-                <ModalTitle>
-                    Are you sure you want to delete this Article?
-                </ModalTitle>
-                <div className="flex gap-4 flex-row-reverse">
-                    <Button
-                        className="!px-8"
-                        type="button"
-                        select="danger"
-                        outline
-                        onClick={deleteArticle}
-                    >
-                        Yes
-                    </Button>
-                    <Button
-                        type="button"
-                        className="!px-6"
-                        onClick={() => setDeleteArticleModalIsOpen(false)}
-                    >
-                        Cancel
-                    </Button>
-                </div>
+            <div className="flex gap-4 flex-row-reverse">
+                <Button
+                    className="!px-8"
+                    type="button"
+                    select="danger"
+                    outline
+                    onClick={deleteArticle}
+                >
+                    Yes
+                </Button>
+                <Button
+                    type="button"
+                    className="!px-6"
+                    onClick={() => setDeleteArticleModalIsOpen(false)}
+                >
+                    Cancel
+                </Button>
             </div>
         </Modal>
     );
