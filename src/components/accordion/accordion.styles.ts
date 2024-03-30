@@ -4,6 +4,9 @@ export const AccordionContainer = styled.div`
     width: 100%;
     border-radius: 10px;
     border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow:
+        rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+        rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 `;
 
 export const AccordionHeader = styled.header<{ isOpen?: boolean }>`
@@ -16,6 +19,7 @@ export const AccordionHeader = styled.header<{ isOpen?: boolean }>`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    user-select: none;
 `;
 
 export const AccordionContent = styled.main`

@@ -255,7 +255,7 @@ export const ChatroomPage = () => {
                             onSubmit={handleSendMessage}
                         >
                             <CustomInput
-                                className="bg-[var(--gray-100)] border-none focus-visible:!outline-none"
+                                className="bg-[var(--gray-100)] !border-none focus-visible:!outline-none"
                                 placeholder="Type a message..."
                                 value={messageInput}
                                 onChange={handleInputChange}
@@ -284,7 +284,7 @@ export const ChatroomPage = () => {
                                         person?.ProfileImage ?? defaultUserImage
                                     }
                                 />
-                                <span>
+                                <div className="max-w-[60%]">
                                     <GroupUserFullName
                                         title={person.FullName}
                                         onClick={() => {
@@ -301,7 +301,7 @@ export const ChatroomPage = () => {
                                             online
                                         </p>
                                     </div>
-                                </span>
+                                </div>
                             </UserContainer>
                         ))}
                         <h1 className="mt-8 font-bold">OFFLINE USERS</h1>
