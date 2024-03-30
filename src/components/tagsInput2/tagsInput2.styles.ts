@@ -5,7 +5,7 @@ export const TagsContainer = styled.div<{ disabled?: boolean }>`
     cursor: ${({ disabled }) => (disabled ? 'auto' : 'text')};
     background-color: ${({ disabled }) => disabled && '#FAFAFA'};
     border-radius: 5px;
-    border: 1px solid var(--slate-400);
+    border: 1px solid var(--gray-600);
     padding: 1rem;
     display: flex;
     flex-wrap: wrap;

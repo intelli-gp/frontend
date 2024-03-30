@@ -2,6 +2,7 @@ import Fuse from 'fuse.js';
 import _ from 'lodash';
 import { KeyboardEvent, useEffect, useRef, useState } from 'react';
 
+import { Label } from '../input/input.styles';
 import Tag from '../tag/tag.component';
 import { Dropdown, TagListItem, TagsContainer } from './tagsInput2.styles';
 
@@ -75,15 +76,8 @@ const TagsInput2 = ({
     };
 
     return (
-        <div className="flex flex-col gap-1">
-            {label && (
-                <label
-                    htmlFor={label}
-                    className="font-bold text-[var(--gray-700)]"
-                >
-                    {label}:
-                </label>
-            )}
+        <div className="flex flex-col gap-0">
+            {label && <Label htmlFor={label}>{label}:</Label>}
             <TagsContainer
                 onClick={() => {
                     inputRef.current?.focus();
@@ -113,7 +107,7 @@ const TagsInput2 = ({
                     onChange={handleUserTyping}
                     value={typing}
                     id={label || 'tags-input-2'}
-                    placeholder={`Type a tag name and press "Enter"`}
+                    placeholder={`Add tag...`}
                 />
                 {isOpen && (
                     <Dropdown>
