@@ -2,8 +2,8 @@ import { IoSend } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 
 import AIimg from '../../assets/imgs/AI-profile.svg';
-import { InputWithoutLabel } from '../../components/Input';
 import Button from '../../components/button/button.component';
+import { CustomInput } from '../../components/input/Input.component';
 import { BetweenPageAnimation } from '../../index.styles';
 import {
     AIicon,
@@ -86,7 +86,7 @@ const AIHelperPage = () => {
                 </ChatBody>
                 <ChatFooter>
                     <Messagebar>
-                        <InputWithoutLabel
+                        <CustomInput
                             className="shadow-none bg-[var(--slate-100)] border-none "
                             placeholder="Type a message..."
                         />

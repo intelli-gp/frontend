@@ -7,15 +7,15 @@ import { ModalContent } from '../pages/study-planner/study-planner.styles';
 import { useAddTasksMutation } from '../store';
 import { Task, sendTask } from '../types/event';
 import { errorToast, successToast } from '../utils/toasts';
-import { InputWithLabel } from './Input';
 import Button from './button/button.component';
+import { CustomInput } from './input/Input.component';
 import { Modal } from './modal/modal.component';
 
-type ModalProps=  {
+type ModalProps = {
     Tasks: Task[];
     showModal: boolean;
-    setShowModal:  React.Dispatch<React.SetStateAction<boolean>>;
-}
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
 // type Status = {
 //     icon: JSX.Element;
 //     status: string;
@@ -93,12 +93,14 @@ export const AddTaskModal: React.FC<ModalProps> = ({
         const StartDateTime = new Date(`${due_date}T${due_start}`);
         const EndDateTime = new Date(`${due_date}T${due_end}`);
         const nowDate = new Date();
-        const differenceInMonths = moment(StartDateTime).add(1, 'days').diff(moment(nowDate), 'months');
+        const differenceInMonths = moment(StartDateTime)
+            .add(1, 'days')
+            .diff(moment(nowDate), 'months');
         if (differenceInMonths >= 1) {
             errorToast('Date exceeds 1 month ahead!');
             return;
         }
-        if(due_start===due_end){
+        if (due_start === due_end) {
             errorToast('Start and due date can not match!');
             return;
         }
@@ -108,33 +110,42 @@ export const AddTaskModal: React.FC<ModalProps> = ({
             return;
         }
         for (const task of Tasks) {
-            
             if (task.DueDate && task.StartDate) {
                 const taskStartDate = new Date(task.StartDate);
                 const taskDueDate = new Date(task.DueDate);
-            // if start date is in the interval of other task
-            if (StartDateTime >= taskStartDate && StartDateTime < taskDueDate){
-                errorToast('Task start time overlaps with another task. Please choose a different time.');
-                return;
+                // if start date is in the interval of other task
+                if (
+                    StartDateTime >= taskStartDate &&
+                    StartDateTime < taskDueDate
+                ) {
+                    errorToast(
+                        'Task start time overlaps with another task. Please choose a different time.',
+                    );
+                    return;
+                }
+
+                // if end date is in the interval of other task
+                if (EndDateTime >= taskStartDate && EndDateTime < taskDueDate) {
+                    errorToast(
+                        'Task end time overlaps with another task. Please choose a different time.',
+                    );
+                    return;
+                }
+                // if some other task interval is inside this interval
+                if (
+                    StartDateTime <= taskStartDate &&
+                    EndDateTime >= taskStartDate &&
+                    EndDateTime >= taskDueDate
+                ) {
+                    errorToast(
+                        'Task duration overlaps with another task. Please adjust the start or end time.',
+                    );
+
+                    return;
+                }
             }
-             
-            // if end date is in the interval of other task
-            if (EndDateTime >= taskStartDate && EndDateTime < taskDueDate){
-            errorToast('Task end time overlaps with another task. Please choose a different time.');  
-            return;           
-      }
-            // if some other task interval is inside this interval
-            if (
-                StartDateTime <= taskStartDate &&
-                EndDateTime >= taskStartDate &&
-                EndDateTime >= taskDueDate
-            )
-            {errorToast('Task duration overlaps with another task. Please adjust the start or end time.');      
-        
-        return;}   
-            }
-          }
-        
+        }
+
         const task: Partial<sendTask> = {
             Title: title,
             Description: description,
@@ -162,7 +173,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                     <ModalTitle>Add Task</ModalTitle>
                     <form onSubmit={handleSubmitForm}>
                         <div className="w-full">
-                            <InputWithLabel
+                            <CustomInput
                                 required
                                 label="Task name"
                                 type="text"
@@ -174,7 +185,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                         </div>
                         <div className="flex w-full justify-between pt-[6px] gap-6">
                             <div className="w-1/2">
-                                <InputWithLabel
+                                <CustomInput
                                     required
                                     label="Status"
                                     type="text"
@@ -185,7 +196,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                                 />
                             </div>
                             <div className="w-1/2">
-                                <InputWithLabel
+                                <CustomInput
                                     required
                                     label="Select color"
                                     id="color"
@@ -200,7 +211,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                         </div>
                         <div className="flex w-full justify-between pt-[6px] gap-6">
                             <div className="w-1/2 flex flex-col justify-between">
-                                <InputWithLabel
+                                <CustomInput
                                     required
                                     value={due_date}
                                     type="date"
@@ -229,7 +240,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                             </div>
                         </div>
                         <div className="flex flex-col gap-2 pt-[6px]">
-                            <InputWithLabel
+                            <CustomInput
                                 label="Description"
                                 value={description}
                                 onChange={(e: { target: { value: any } }) =>

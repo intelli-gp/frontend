@@ -18,7 +18,7 @@ import { BeatLoader } from 'react-spinners';
 
 import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
-import { InputWithoutLabel } from '../../components/Input';
+import { CustomInput } from '../../components/input/Input.component';
 import DropdownMenu from '../../components/menu/menu.component';
 import ChatMessage from '../../components/message/message.component';
 import { BetweenPageAnimation } from '../../index.styles';
@@ -254,7 +254,7 @@ export const ChatroomPage = () => {
                             className="flex gap-2 flex-1"
                             onSubmit={handleSendMessage}
                         >
-                            <InputWithoutLabel
+                            <CustomInput
                                 className="bg-[var(--gray-100)] border-none focus-visible:!outline-none"
                                 placeholder="Type a message..."
                                 value={messageInput}

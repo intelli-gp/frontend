@@ -13,8 +13,8 @@ import {
     useUpdateMessageMutation,
 } from '../../store/apis/messagesApi';
 import { MessageInfo, SerializedMessage } from '../../types/message';
-import { InputWithoutLabel } from '../Input';
 import Button from '../button/button.component';
+import { CustomInput } from '../input/Input.component';
 import DropdownMenu from '../menu/menu.component';
 import { Modal } from '../modal/modal.component';
 import {
@@ -117,7 +117,7 @@ const ChatMessage = ({
                 enableOptions={false}
                 className="!max-w-full w-full"
             />
-            <InputWithoutLabel
+            <CustomInput
                 value={editMessageText}
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     setEditMessageText(e.target.value)

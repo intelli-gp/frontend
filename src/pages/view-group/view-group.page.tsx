@@ -9,10 +9,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import coverImageCamera from '../../assets/imgs/coverImageCamera.png';
 import DeleteSectionModal from '../../components/DeleteGroupModal';
 import ExitModal from '../../components/ExitGroupModal';
-import { InputWithoutLabel } from '../../components/Input';
 import Spinner from '../../components/Spinner';
 import Button from '../../components/button/button.component';
 import UserContainer from '../../components/group-user/group-user.component';
+import { CustomInput } from '../../components/input/Input.component';
 import { Modal } from '../../components/modal/modal.component';
 import OpenImage from '../../components/openImage/openImage.component';
 import Tag from '../../components/tag/tag.component';
@@ -367,7 +367,7 @@ const ViewGroupPage = () => {
 
                         <EditableSectionBody>
                             {isEditingDescription ? (
-                                <InputWithoutLabel
+                                <CustomInput
                                     value={description}
                                     onChange={(
                                         e: ChangeEvent<HTMLInputElement>,

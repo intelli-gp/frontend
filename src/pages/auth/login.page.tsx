@@ -1,9 +1,10 @@
+import { motion } from 'framer-motion';
 import React, { ChangeEvent, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { InputWithLabel } from '../../components/Input';
 import Button from '../../components/button/button.component';
+import { CustomInput } from '../../components/input/Input.component';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
     RootState,
@@ -18,8 +19,7 @@ import { Response } from '../../types/response';
 import { getSocket } from '../../utils/socket';
 import { connectSSE } from '../../utils/sse';
 import { errorToast } from '../../utils/toasts';
-import { motion } from 'framer-motion';
-import { GoogleLoginButton, GoogleLoginLink, GoogleIcon } from './auth.styles';
+import { GoogleIcon, GoogleLoginButton, GoogleLoginLink } from './auth.styles';
 
 export default function LoginPage() {
     const dispatch = useDispatch();
@@ -100,7 +100,7 @@ export default function LoginPage() {
         >
             <PageTitle className="text-center mb-6">Welcome Back!</PageTitle>
 
-            <InputWithLabel
+            <CustomInput
                 required
                 type="email"
                 value={email}
@@ -110,7 +110,7 @@ export default function LoginPage() {
                 }
             />
 
-            <InputWithLabel
+            <CustomInput
                 required
                 type="password"
                 value={password}
@@ -145,12 +145,8 @@ export default function LoginPage() {
                 Login
             </Button>
 
-            <GoogleLoginButton
-                type="button"
-            >
-                <GoogleLoginLink
-                    href="http://localhost:3333/api/auth/login/google"
-                >
+            <GoogleLoginButton type="button">
+                <GoogleLoginLink href="http://localhost:3333/api/auth/login/google">
                     <GoogleIcon />
                     Login with google
                 </GoogleLoginLink>

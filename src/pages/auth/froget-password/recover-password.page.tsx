@@ -3,11 +3,12 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { IoChevronBack } from 'react-icons/io5';
 import { MdLockReset } from 'react-icons/md';
 import { Link, useSearchParams } from 'react-router-dom';
-import { InputWithLabel } from '../../../components/Input';
+
+import { CustomInput } from '../../../components/input/Input.component';
 import { BetweenPageAnimation, PageTitle } from '../../../index.styles';
-import { useResetPasswordConfirmMutation, reset } from '../../../store';
-import { successToast, errorToast } from '../../../utils/toasts';
-import { RecoveryTitle, RecoveryButton } from './forget-password.styles';
+import { reset, useResetPasswordConfirmMutation } from '../../../store';
+import { errorToast, successToast } from '../../../utils/toasts';
+import { RecoveryButton, RecoveryTitle } from './forget-password.styles';
 
 const RecoverPassword = () => {
     const [newPassword, setNewPassword] = useState('');
@@ -54,13 +55,11 @@ const RecoverPassword = () => {
             <PageTitle className="text-center mb-6">Recover password</PageTitle>
 
             <main className="flex flex-col border rounded-md p-8 gap-2 border-slate-300">
-                <RecoveryTitle>
-                    Creating your new password
-                </RecoveryTitle>
+                <RecoveryTitle>Creating your new password</RecoveryTitle>
                 <hr />
 
                 <div className="flex flex-col gap-6 mt-4">
-                    <InputWithLabel
+                    <CustomInput
                         type="password"
                         label="New password"
                         value={newPassword}
@@ -70,7 +69,7 @@ const RecoverPassword = () => {
                             setNewPassword(e.target.value)
                         }
                     />
-                    <InputWithLabel
+                    <CustomInput
                         type="password"
                         label="Confirm password"
                         value={confirmPassword}
@@ -86,10 +85,7 @@ const RecoverPassword = () => {
                             }
                         }}
                     />
-                    <RecoveryButton
-                        type="submit"
-                        loading={isLoading}
-                    >
+                    <RecoveryButton type="submit" loading={isLoading}>
                         <MdLockReset />
                         Set new password
                     </RecoveryButton>

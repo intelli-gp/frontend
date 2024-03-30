@@ -4,8 +4,8 @@ import { ChangeEvent, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { InputWithLabel } from '../../components/Input';
 import PhoneNumberInput from '../../components/PhoneNumberInput';
+import { CustomInput } from '../../components/input/Input.component';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
     changeSignUpUserProfileImage,
@@ -112,7 +112,7 @@ export default function SignupPage() {
             <PageTitle className="text-center mb-6">Create Account</PageTitle>
             <FormContainer className="!gap-2 !p-0" onSubmit={handleSubmitForm}>
                 <div className="flex gap-2 w-full justify-between 3xs:max-md:flex-col">
-                    <InputWithLabel
+                    <CustomInput
                         required
                         label="First Name"
                         pattern="^[a-zA-Z0-9 ]{3,20}$"
@@ -122,7 +122,7 @@ export default function SignupPage() {
                             dispatch(changeSignupFirstName(e.target.value));
                         }}
                     />
-                    <InputWithLabel
+                    <CustomInput
                         required
                         label="Last Name"
                         pattern="^[a-zA-Z0-9 ]{3,20}$"
@@ -134,7 +134,7 @@ export default function SignupPage() {
                     />
                 </div>
 
-                <InputWithLabel
+                <CustomInput
                     required
                     label="Username"
                     pattern="^[a-z0-9_.]{3,}$"
@@ -146,7 +146,7 @@ export default function SignupPage() {
                     }}
                 />
 
-                <InputWithLabel
+                <CustomInput
                     required
                     label="Email"
                     type="email"
@@ -156,7 +156,7 @@ export default function SignupPage() {
                     }}
                 />
 
-                <InputWithLabel
+                <CustomInput
                     required
                     value={birthDate}
                     type="date"
@@ -175,7 +175,7 @@ export default function SignupPage() {
                 />
 
                 <PasswordContainer>
-                    <InputWithLabel
+                    <CustomInput
                         required
                         type="password"
                         label="Password"
@@ -186,7 +186,7 @@ export default function SignupPage() {
                             dispatch(changeSignupPassword(e.target.value));
                         }}
                     />
-                    <InputWithLabel
+                    <CustomInput
                         required
                         type="password"
                         label="Confirm Password"

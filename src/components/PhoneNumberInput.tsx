@@ -26,7 +26,7 @@ function PhoneNumberInput({ value, onChange }: PhoneInputProps): JSX.Element {
     };
 
     return (
-        <div className="flex flex-col  gap-2">
+        <div className="flex flex-col gap-0">
             <label htmlFor="Phone Number" className="font-bold">
                 Phone Number:
             </label>

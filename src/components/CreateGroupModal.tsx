@@ -4,8 +4,8 @@ import { useUploadImage } from '../hooks/uploadImage.hook';
 import { ModalTitle } from '../index.styles';
 import { useAddGroupMutation, useGetAllTagsQuery } from '../store';
 import { errorToast, successToast } from '../utils/toasts';
-import { InputWithLabel } from './Input';
 import Button from './button/button.component';
+import { CustomInput } from './input/Input.component';
 import { Modal } from './modal/modal.component';
 import OpenImage from './openImage/openImage.component';
 import TagsInput2 from './tagsInput2/tagsInput2.component';
@@ -83,7 +83,7 @@ const CreateGroupModal = ({ isOpen, setIsOpen }: CreateGroupModalProps) => {
                 editButton
             />
             <form className="flex flex-col gap-4" onSubmit={handleCreateGroup}>
-                <InputWithLabel
+                <CustomInput
                     required
                     label={'Group Name'}
                     placeholder={'Enter group name...'}
@@ -92,10 +92,11 @@ const CreateGroupModal = ({ isOpen, setIsOpen }: CreateGroupModalProps) => {
                         setGroupName(e.target.value)
                     }
                 />
-                <InputWithLabel
+                <CustomInput
                     required
                     multiline
-                    label={'Group Description (max 512 characters)'}
+                    limit={512}
+                    label={'Group Description'}
                     placeholder={'Describe what this groups is about...'}
                     maxLength={512}
                     rows={5}

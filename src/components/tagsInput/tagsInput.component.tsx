@@ -4,8 +4,8 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 
 import { useGetSuggestedTagsQuery } from '../../store';
 import { infoToast, warningToast } from '../../utils/toasts';
-import { InputWithLabel } from '../Input';
 import Button from '../button/button.component';
+import { CustomInput } from '../input/Input.component';
 import Tag from '../tag/tag.component';
 import {
     Dropdown,
@@ -120,7 +120,7 @@ const TagsInput = ({
     return (
         <div className="3xs:w-[20rem] md:!w-[25rem] flex flex-col gap-6">
             <TypingSection>
-                <InputWithLabel
+                <CustomInput
                     label="Select at least 3 tags"
                     value={typing}
                     autoComplete="off"

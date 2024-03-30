@@ -8,6 +8,10 @@ import {
 export type SerializedInput = {
     label: string;
     value: string;
+    /**
+     * Character limit for the input, usually for textarea.
+     */
+    limit?: number;
     wrapperClassName?: string;
     multiline?: boolean;
     error?: string;
