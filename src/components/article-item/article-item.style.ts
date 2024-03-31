@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import EnhancedImage from '../image/image.component';
 
 export const Title = styled.h1`
     padding-top: 0.4rem;
@@ -12,7 +13,7 @@ export const Title = styled.h1`
     -webkit-line-clamp: 3;
     display: -webkit-box;
 `;
-export const ArticleImg = styled.img`
+export const ArticleImg = styled(EnhancedImage)`
   width: 100%;
   border-radius:  0.75rem 0.75rem 0 0;
   height: 45%;

@@ -1,13 +1,14 @@
 import styled from 'styled-components';
 
 import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
+import EnhancedImage from "../image/image.component"
 
-export const NotificationImage = styled.img`
+export const NotificationImage = styled(EnhancedImage)`
     object-fit: cover;
     aspect-ratio: 1/1;
     width: 4rem;
     height: 4rem;
-    border-radius: 99rem;
+    border-radius: 50%;
 `;
 
 export const NotificationTitle = styled.h2<{ width?: string }>`

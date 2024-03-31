@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import { CSSTextLengthLimit } from '../../index.styles';
+import EnhancedImage from '../image/image.component';
 
 export const SideNavContainer = styled.aside<{ sideNavOpen: boolean }>`
     background-color: var(--indigo-950);
@@ -105,12 +106,11 @@ export const UserContainer = styled.div`
     }
 `;
 
-export const UserImage = styled.img`
+export const UserImage = styled(EnhancedImage)`
     width: 50px;
     height: 50px;
     aspect-ratio: 1/1;
     border-radius: 50%;
-    object-fit: cover;
 `;
 
 export const UserFullName = styled.p<{ width?: string }>`

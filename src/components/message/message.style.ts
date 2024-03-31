@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
+import EnhancedImage from '../image/image.component';
 
 export const Message = styled.div<{ isMine: boolean }>`
     display: flex;
@@ -34,11 +35,10 @@ export const MessageHeader = styled.header<{ isMine: boolean }>`
     align-items: center;
 `;
 
-export const SenderProfile = styled.img`
+export const SenderProfile = styled(EnhancedImage)`
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    object-fit: cover;
     aspect-ratio: 1/1;
 `;
 

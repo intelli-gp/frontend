@@ -12,21 +12,20 @@ export const GroupCoverImageContainer = styled.div`
     height: 30vh;
     position: relative;
     width: 100%;
-
 `;
-export const GroupTitleHolder=styled.div`
-position: absolute;
-display: flex;
-flex-direction: column;
-gap: 20px;
-left: 4rem;
-top: 50%;
-transform: translateY(-50%);
-@media (max-width: 1024px) {
-        gap: 15px;
-        left: 3rem;
-}
 
+export const GroupTitleHolder=styled.div`
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    left: 4rem;
+    top: 50%;
+    transform: translateY(-50%);
+    @media (max-width: 1024px) {
+            gap: 15px;
+            left: 3rem;
+    }
 `
 export const GroupCoverImage = styled.img`
     width: 100%;
@@ -67,21 +66,23 @@ export const GroupInfoContainer = styled.div`
 `;
 
 export const LeftPart = styled.div`
-    padding: 2rem 4rem;
+    padding: 2rem;
+    margin: 0 auto;
+    width: min(600px, 100%);
     display: flex;
     flex-direction: column;
-    gap: 4rem;
-    width: 100%;
+    gap: 2rem;
     height: 100%;
     @media (max-width: 768px) {
-        padding: 2rem;
+        padding: 1rem;
+        grid-row: 2;
     }
 `;
 
 export const EditableSection = styled.section`
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
     width: 100%;
 `;
 
@@ -89,15 +90,15 @@ export const EditableSectionHeader = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0.25rem;
     h2 {
         font-size: 1.5rem;
-        color: var(--gray-700);
         font-weight: 700;
     }
 `;
 
 export const EditableSectionBody = styled.div`
-    width: 80%;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -112,15 +113,17 @@ export const RightPart = styled.div`
     box-shadow: 0px 0px 60px 5px rgba(39, 31, 75, 0.07);
     background: white;
     height: 100%;
+    @media (max-width: 768px) {
+        padding: 1rem;
+        grid-row: 1;
+    }
 `;
-export const StatusTitle =styled.p`
 
+export const StatusTitle =styled.p`
     margin: 0px 15px 0px 5px;
     font-size: 15px;
     font-weight: 600;
     color: var(--gray-700);
-
-
 `
 
 export const PeopleContainer = styled.div`

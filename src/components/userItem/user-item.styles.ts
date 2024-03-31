@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import { CSSTextLengthLimit } from '../../index.styles';
+import EnhancedImage from '../image/image.component';
 
 export const UserItemContainer = styled.li`
     display: grid;
@@ -23,7 +24,7 @@ export const UserUserName = styled.p<{ width?: string }>`
     ${CSSTextLengthLimit}
 `;
 
-export const UserItemImage = styled.img`
+export const UserItemImage = styled(EnhancedImage)`
     width: 36px;
     height: 36px;
     border-radius: 50%;

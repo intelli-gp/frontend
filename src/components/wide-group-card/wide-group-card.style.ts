@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 
 import { CSSTextLinesCountLimit } from '../../index.styles';
 import Button from '../button/button.component';
+import EnhancedImage from '../image/image.component';
 
 export const CardContainer = styled(motion.div)`
     position: relative;
@@ -22,15 +23,11 @@ export const CardContainer = styled(motion.div)`
     }
 `;
 
-export const CardImage = styled.img`
+export const CardImage = styled(EnhancedImage)`
     max-width: 100px;
     border-radius: 50%;
     object-fit: cover;
-    border: none;
     aspect-ratio: 1/1;
-    @media (max-width: 768px) {
-        max-width: 100px;
-    }
 `;
 
 export const TypographyContainer = styled.div<{ role?: string }>`

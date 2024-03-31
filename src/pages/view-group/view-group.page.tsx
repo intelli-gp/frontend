@@ -236,14 +236,14 @@ const ViewGroupPage = () => {
             select="danger"
             outline
             onClick={openDeleteModal}
-            className="mt-auto"
+            
         >
             Delete Group
         </Button>
     );
 
     const exitButton = (
-        <Button select="danger" outline onClick={openExitModal}>
+        <Button select="danger" outline  onClick={openExitModal}>
             Exit Group
         </Button>
     );
@@ -295,6 +295,51 @@ const ViewGroupPage = () => {
                 <LeftPart>
                     <EditableSection>
                         <EditableSectionHeader>
+                            <h2>Description</h2>
+                            <EditButton
+                                title="Edit"
+                                onClick={() => {
+                                    setIsEditingDescription(
+                                        !isEditingDescription,
+                                    );
+                                }}
+                            >
+                                {userType === Role.admin ? (
+                                    isGroupUpdating ? (
+                                        <GoSync className="animate-spin" />
+                                    ) : isEditingDescription ? (
+                                        <FiSave
+                                            onClick={handleUpdateGroup}
+                                            size={24}
+                                        />
+                                    ) : (
+                                        <FiEdit size={24} />
+                                    )
+                                ) : (
+                                    <></>
+                                )}
+                            </EditButton>
+                        </EditableSectionHeader>
+
+                        <EditableSectionBody>
+                            {isEditingDescription ? (
+                                <CustomInput
+                                    value={description}
+                                    onChange={(
+                                        e: ChangeEvent<HTMLInputElement>,
+                                    ) => setDescription(e.target.value)}
+                                    multiline
+                                    limit={512}
+                                    maxLength={512}
+                                    rows={5}
+                                />
+                            ) : (
+                                <> {description} </>
+                            )}
+                        </EditableSectionBody>
+                    </EditableSection>
+                    <EditableSection>
+                        <EditableSectionHeader>
                             <h2>Interest</h2>
                             <EditButton
                                 title="Edit"
@@ -338,52 +383,7 @@ const ViewGroupPage = () => {
                         </EditableSectionBody>
                     </EditableSection>
 
-                    <EditableSection>
-                        <EditableSectionHeader>
-                            <h2>Description</h2>
-                            <EditButton
-                                title="Edit"
-                                onClick={() => {
-                                    setIsEditingDescription(
-                                        !isEditingDescription,
-                                    );
-                                }}
-                            >
-                                {userType === Role.admin ? (
-                                    isGroupUpdating ? (
-                                        <GoSync className="animate-spin" />
-                                    ) : isEditingDescription ? (
-                                        <FiSave
-                                            onClick={handleUpdateGroup}
-                                            size={24}
-                                        />
-                                    ) : (
-                                        <FiEdit size={24} />
-                                    )
-                                ) : (
-                                    <></>
-                                )}
-                            </EditButton>
-                        </EditableSectionHeader>
-
-                        <EditableSectionBody>
-                            {isEditingDescription ? (
-                                <CustomInput
-                                    value={description}
-                                    onChange={(
-                                        e: ChangeEvent<HTMLInputElement>,
-                                    ) => setDescription(e.target.value)}
-                                    multiline
-                                    maxLength={1000}
-                                    rows={5}
-                                />
-                            ) : (
-                                <> {description} </>
-                            )}
-                        </EditableSectionBody>
-                    </EditableSection>
-
-                    <div className="flex gap-2 items-end">
+                    <div className="flex gap-2 items-end mt-auto">
                         {user.ID === groupData.GroupOwner.ID ? (
                             deleteButton
                         ) : userType === Role.member ||

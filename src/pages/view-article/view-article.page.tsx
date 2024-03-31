@@ -18,11 +18,13 @@ import { RootState } from '../../store';
 import { ArticleSectionType, ReceivedArticle } from '../../types/article.d';
 import { Response } from '../../types/response';
 import { ReceivedUser } from '../../types/user';
+import { profileURL } from '../../utils/profileUrlBuilder';
 import {
     ArticleBodyContainer,
     ArticleCoverImage,
     ArticleCoverImageContainer,
     ArticleImageSection,
+    ArticleTitle,
     ArticleToolbar,
     AuthorDataContainer,
     AuthorMoreInfoContainer,
@@ -32,7 +34,6 @@ import {
     PublishDate,
     SuggestedArticlesContainer,
 } from './view-article.styles';
-import { profileURL } from '../../utils/profileUrlBuilder';
 
 const ViewArticlePage = () => {
     const navigate = useNavigate();
@@ -49,27 +50,28 @@ const ViewArticlePage = () => {
     const isArticleOwner =
         article?.Author?.Username === (user as ReceivedUser)?.Username;
 
-    return isLoading ? (
-        <Spinner />
-    ) : (
+    if (isLoading) {
+        return <Spinner />;
+    }
+
+    return (
         <PageContainer {...BetweenPageAnimation}>
-
             <ArticleCoverImageContainer>
-
                 <ArticleCoverImage
                     src={article?.CoverImage ?? defaultCoverImage}
+                    alt="article cover image"
                 />
 
-                <AuthorDataContainer>
+                <AuthorDataContainer
+                    to={profileURL(article?.Author?.Username)}
+                    title={`View ${article?.Author?.FullName}'s profile`}
+                >
                     <AuthorProfileImage
                         src={article?.Author?.ProfileImage ?? defaultUserImage}
                         alt="author profile image"
                     />
                     <div className="flex flex-col gap-0">
-                        <AuthorName
-                            title={`View ${article?.Author?.FullName}'s profile`}
-                            to={profileURL(article?.Author?.Username)}
-                        >
+                        <AuthorName>
                             {article?.Author?.FullName}
                         </AuthorName>
                         <PublishDate>
@@ -80,7 +82,7 @@ const ViewArticlePage = () => {
 
                     <Button
                         type="button"
-                        className="text-xs !p-2 ml-auto !rounded-full"
+                        className="text-xs !p-2 ml-auto"
                         select="primary700"
                     >
                         <FiPlus size={18} className="mr-1" />
@@ -101,13 +103,12 @@ const ViewArticlePage = () => {
                         <FiEdit size={18} />
                     </Button>
                 )}
-
             </ArticleCoverImageContainer>
 
             <ArticleBodyContainer data-color-mode="light">
-                <h1 className="text-5xl font-bold text-[var(--gray-800)] text-center tracking-tight font-serif">
+                <ArticleTitle>
                     {article?.Title}
-                </h1>
+                </ArticleTitle>
 
                 {/* Article Tags */}
                 <div className="flex gap-2 items-center justify-center">
@@ -162,6 +163,7 @@ const ViewArticlePage = () => {
                                 article?.Author?.ProfileImage ??
                                 defaultUserImage
                             }
+                            alt=""
                         />
                         <Button
                             select="primary700"

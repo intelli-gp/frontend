@@ -2,36 +2,35 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import EnhancedImage from "../../components/image/image.component"
 import { CSSTextLengthLimit } from '../../index.styles';
 
 export const PageContainer = styled(motion.div)`
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
 `;
 
 export const ArticleCoverImageContainer = styled.div`
     position: relative;
+    height: 30vh;
 `;
 
-export const ArticleCoverImage = styled.img`
-    object-fit: cover;
-    object-position: center;
-    max-height: 250px;
+export const ArticleCoverImage = styled(EnhancedImage)`
     width: 100%;
     height: 100%;
     filter: brightness(0.75);
 `;
 
-export const AuthorDataContainer = styled.div`
+export const AuthorDataContainer = styled(Link)`
+    color: inherit;
     border-radius: 1.5rem;
-    padding: 2rem;
+    padding: 1rem 2rem;
     position: absolute;
     bottom: -1rem;
     left: 0;
     right: 0;
-    width: min(400px, 90%);
-    max-width: 100%;
+    width: min(400px, 100%);
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -40,17 +39,17 @@ export const AuthorDataContainer = styled.div`
     box-shadow: 0px 0px 24px 5px rgba(0, 0, 0, 0.25);
 `;
 
-export const AuthorProfileImage = styled.img`
+export const AuthorProfileImage = styled(EnhancedImage)`
     aspect-ratio: 1/1;
-    width: 75px;
-    height: 75px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     object-fit: cover;
     object-position: center;
     box-shadow: var(--gray-shadow);
 `;
 
-export const AuthorName = styled(Link)<{ width?: string }>`
+export const AuthorName = styled.p<{ width?: string }>`
     color: var(--gray-800);
     font-weight: 700;
     font-size: 1.2rem;
@@ -63,19 +62,36 @@ export const AuthorName = styled(Link)<{ width?: string }>`
     ${CSSTextLengthLimit}
 `;
 
+export const AuthorUsername = styled.span`
+    opacity: 0.8;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: -0.5rem;
+`;
+
 export const PublishDate = styled.time`
     font-size: 0.8rem;
     opacity: 0.8;
 `;
 
 export const ArticleBodyContainer = styled.div`
-    max-width: 700px;
+    width: min(750px, 100%);
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    gap: 2rem;
     margin-bottom: 6rem;
+    padding: 2rem 1rem;
 `;
+
+export const ArticleTitle = styled.h1`
+    font-size: 2.75rem;
+    letter-spacing: -1px;
+    font-weight: 700;
+    line-height: 1.1;
+    text-align: center;
+    font-family: "Merriweather", serif;
+`
 
 export const ArticleImageSection = styled.img`
     object-fit: cover;

@@ -1,6 +1,7 @@
-import styled from "styled-components";
-import { CSSTextLinesCountLimit } from "../../index.styles";
+import styled from 'styled-components';
 
+import { CSSTextLinesCountLimit } from '../../index.styles';
+import EnhancedImage from "../image/image.component";
 
 export const CardImageContainer = styled.div`
     height: 80px;
@@ -9,12 +10,12 @@ export const CardImageContainer = styled.div`
 
 export const CardContainer = styled.div`
     width: 75%;
-    height:140px;
+    height: 140px;
     gap: 0.5rem;
     margin: 0 auto;
     display: flex;
     align-items: center;
-    flex-direction:row;
+    flex-direction: row;
     padding: 1.25rem;
     border-radius: 10px;
     background-color: white;
@@ -26,7 +27,7 @@ export const CardContainer = styled.div`
     }
 `;
 
-export const CardImage = styled.img`
+export const CardImage = styled(EnhancedImage)`
     max-width: 80px;
     border-radius: 50%;
     object-fit: cover;
@@ -37,14 +38,15 @@ export const CardImage = styled.img`
     }
 `;
 export const TypographyContainer = styled.div`
-   display:flex;
-   flex-direction:column;
-   align-items: flex-start;
-   padding-left:10px;
-   justify-content: space-between;
-   margin-left: 0.25rem;
-gap:6px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 10px;
+    justify-content: space-between;
+    margin-left: 0.25rem;
+    gap: 6px;
 `;
+
 export const ChatDate = styled.time`
     font-size: 0.75rem;
     opacity: 0.9;
@@ -52,6 +54,7 @@ export const ChatDate = styled.time`
         font-size: 0.7rem;
     }
 `;
+
 export const ChatContent = styled.p`
     font-size: 0.8rem;
     overflow: hidden;
@@ -59,9 +62,9 @@ export const ChatContent = styled.p`
     -webkit-line-clamp: 2;
     display: -webkit-box;
 `;
-export const GroupTitle = styled.h3<{ width?: string; lines?: number }>`
-${CSSTextLinesCountLimit}
-font-weight: bold;
-font-size: 1.25rem;
 
+export const GroupTitle = styled.h3<{ width?: string; lines?: number }>`
+    ${CSSTextLinesCountLimit}
+    font-weight: bold;
+    font-size: 1.25rem;
 `;

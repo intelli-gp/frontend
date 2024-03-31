@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
 import { CSSTextLengthLimit } from '../../index.styles';
+import EnhancedImage from '../../components/image/image.component';
 
 export const PageContainer = styled(motion.div)`
     display: flex;
@@ -53,11 +54,10 @@ export const GroupTypingStatus = styled.p`
     font-size: 0.8rem;
 `;
 
-export const GroupImage = styled.img`
+export const GroupImage = styled(EnhancedImage)`
     border-radius: 50%;
     height: 3rem;
     width: 3rem;
-    object-fit: cover;
 `;
 
 export const ChatBody = styled.div`

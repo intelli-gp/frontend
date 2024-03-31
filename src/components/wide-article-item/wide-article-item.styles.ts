@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import { CSSTextLinesCountLimit } from '../../index.styles';
+import EnhancedImage from '../image/image.component';
 
 export const ArticleContainer = styled.article`
     margin: 0 auto;
@@ -62,11 +63,10 @@ export const ArticleTitle = styled.h1<{ lines?: number }>`
     }
 `;
 
-export const AuthorPicture = styled.img`
+export const AuthorPicture = styled(EnhancedImage)`
     width: 2rem;
     height: 2rem;
     border-radius: 50%;
-    object-fit: cover;
 `;
 
 export const ArticleContentContainer = styled.main`
@@ -98,11 +98,9 @@ export const ArticleDate = styled.time`
     }
 `;
 
-export const ArticleThumbnail = styled.img`
+export const ArticleThumbnail = styled(EnhancedImage)`
     max-width: 150px;
     border-radius: 0.25rem;
-    object-fit: cover;
-    border: none;
     aspect-ratio: 1/1;
     @media (max-width: 768px) {
         max-width: 100px;
