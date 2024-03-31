@@ -71,9 +71,7 @@ const ViewArticlePage = () => {
                         alt="author profile image"
                     />
                     <div className="flex flex-col gap-0">
-                        <AuthorName>
-                            {article?.Author?.FullName}
-                        </AuthorName>
+                        <AuthorName>{article?.Author?.FullName}</AuthorName>
                         <PublishDate>
                             {article?.UpdatedAt &&
                                 moment(new Date(article.UpdatedAt)).fromNow()}
@@ -106,9 +104,7 @@ const ViewArticlePage = () => {
             </ArticleCoverImageContainer>
 
             <ArticleBodyContainer data-color-mode="light">
-                <ArticleTitle>
-                    {article?.Title}
-                </ArticleTitle>
+                <ArticleTitle>{article?.Title}</ArticleTitle>
 
                 {/* Article Tags */}
                 <div className="flex gap-2 items-center justify-center">

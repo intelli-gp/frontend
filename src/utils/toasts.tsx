@@ -1,6 +1,5 @@
 import { ToastPosition, toast } from 'react-hot-toast';
 
-
 export const successToast = (message: string, position = 'top-right') =>
     toast.success(message, {
         iconTheme: {

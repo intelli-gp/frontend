@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import ProtectedRoutes from './components/ProtectedRoutes';
 import AIHelperPage from './pages/AI-helper/AI-helper.page';
+import { AIServicePage } from './pages/ai-service/ai-service.page';
 import ForgetPasswordPage from './pages/auth/froget-password/forget-password.page';
 import RecoverPassword from './pages/auth/froget-password/recover-password.page';
 import InterestsPage from './pages/auth/interests/interests.page';
@@ -10,6 +11,7 @@ import LoginPage from './pages/auth/login.page';
 import SignupPage from './pages/auth/signup.page';
 import { ChatroomPage } from './pages/chat-room/chat-room.page';
 import { ChatsPage } from './pages/chats/chats.page';
+import { CoursesPage } from './pages/courses/courses.page';
 import CreateArticlePage from './pages/create-article/create-article.page';
 import ExploreArticlesPage from './pages/explore-articles/explore-articles.page';
 import ExploreGroupsPage from './pages/explore-groups/explore-groups.page';
@@ -26,8 +28,6 @@ import LoggedInTemplatePage from './pages/templates/LoggedIn';
 import UpgradePage from './pages/upgrade/upgrade.page';
 import ViewArticlePage from './pages/view-article/view-article.page';
 import ViewGroupPage from './pages/view-group/view-group.page';
-import { CoursesPage } from './pages/courses/courses.page';
-import { AIServicePage } from './pages/ai-service/ai-service.page';
 
 function App() {
     return (
@@ -62,7 +62,7 @@ function App() {
                         />
                         <Route path="groups" element={<ExploreGroupsPage />} />
                         <Route path="courses" element={<CoursesPage />} />
-                        <Route path='ai-service' element={<AIServicePage />} />
+                        <Route path="ai-service" element={<AIServicePage />} />
                         <Route path="settings" element={<SettingsPage />} />
                         <Route
                             path="articles"

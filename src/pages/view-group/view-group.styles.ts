@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import styled from 'styled-components';
 
 export const PageContainer = styled(motion.div)`
     display: flex;
@@ -14,7 +14,7 @@ export const GroupCoverImageContainer = styled.div`
     width: 100%;
 `;
 
-export const GroupTitleHolder=styled.div`
+export const GroupTitleHolder = styled.div`
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -23,10 +23,10 @@ export const GroupTitleHolder=styled.div`
     top: 50%;
     transform: translateY(-50%);
     @media (max-width: 1024px) {
-            gap: 15px;
-            left: 3rem;
+        gap: 15px;
+        left: 3rem;
     }
-`
+`;
 export const GroupCoverImage = styled.img`
     width: 100%;
     height: 100%;
@@ -119,12 +119,12 @@ export const RightPart = styled.div`
     }
 `;
 
-export const StatusTitle =styled.p`
+export const StatusTitle = styled.p`
     margin: 0px 15px 0px 5px;
     font-size: 15px;
     font-weight: 600;
     color: var(--gray-700);
-`
+`;
 
 export const PeopleContainer = styled.div`
     display: grid;
@@ -134,11 +134,9 @@ export const PeopleContainer = styled.div`
     width: 100%;
     @media (max-width: 1284px) {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-
     }
     @media (max-width: 768px) {
         grid-template-columns: repeat(3, minmax(0, 1fr));
-
     }
 `;
 

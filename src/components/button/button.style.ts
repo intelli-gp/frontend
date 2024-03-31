@@ -1,5 +1,6 @@
 import { GoSync } from 'react-icons/go';
 import styled, { css } from 'styled-components';
+
 import { Choice } from './button.component';
 
 interface ButtonProps {
@@ -110,7 +111,7 @@ export const ButtonContainer = styled.button<ButtonProps>`
                         border: 2px solid var(--indigo-200);
                         color: var(--indigo-950);
                     `;
-                 case 'primary100':
+                case 'primary100':
                     return css`
                         background-color: var(--indigo-100);
                         border: 2px solid var(--indigo-100);

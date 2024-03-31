@@ -1,8 +1,8 @@
 import { Image, ImageContainer, Placeholder } from './image.styles';
 
 type EnhancedImageProps = {
-    src: string;
-    alt: string;
+    src?: string;
+    alt?: string;
     /**
      * class for image container
      */
@@ -12,21 +12,16 @@ type EnhancedImageProps = {
      * class for image itself
      */
     imageClassName?: string;
-    
 };
 
 /**
  * This component is a regular image but it has a placeholder that will be shown
  * until the image is loaded.
  */
-const EnhancedImage = ({
-    src,
-    alt,
-    className,
-}: EnhancedImageProps) => {
+const EnhancedImage = ({ src, alt, className }: EnhancedImageProps) => {
     return (
         <ImageContainer className={className}>
-            <Image src={src} alt={alt} />
+            <Image src={src} alt={alt ?? ''} />
             <Placeholder />
         </ImageContainer>
     );

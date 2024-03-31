@@ -7,7 +7,7 @@ export const ImageContainer = styled.div<{ width?: string; height?: string }>`
 `;
 
 export const Image = styled.img`
-position: absolute;
+    position: absolute;
     width: 100%;
     height: 100%;
     border-radius: inherit;

@@ -24,7 +24,7 @@ const UserItem = ({
 }: UserItemProps) => {
     return (
         <UserItemContainer>
-            <UserItemImage src={image} alt="user profile" />
+            <UserItemImage src={image!} alt="user profile" />
             <div>
                 <UserFullName title={full_name}>
                     <Link to={'#'} className="text-inherit">

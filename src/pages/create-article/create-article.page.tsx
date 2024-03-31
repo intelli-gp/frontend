@@ -15,10 +15,7 @@ import { Modal } from '../../components/modal/modal.component';
 import OpenImage from '../../components/openImage/openImage.component';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import { useUploadImage } from '../../hooks/uploadImage.hook';
-import {
-    BetweenPageAnimation,
-    PageTitle,
-} from '../../index.styles';
+import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
     RootState,
     addArticleSection,

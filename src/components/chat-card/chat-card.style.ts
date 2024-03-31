@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { CSSTextLinesCountLimit } from '../../index.styles';
-import EnhancedImage from "../image/image.component";
+import EnhancedImage from '../image/image.component';
 
 export const CardImageContainer = styled.div`
     height: 80px;

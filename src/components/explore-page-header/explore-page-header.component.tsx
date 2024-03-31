@@ -12,7 +12,7 @@ type ExplorePageHeaderProps = {
     onSearchValueChange: (value: string) => void;
     onCreateButtonClick?: () => void;
     placeholder?: string;
-    WithoutButton?:boolean;
+    WithoutButton?: boolean;
 };
 
 const ExplorePageHeader = ({
@@ -33,9 +33,13 @@ const ExplorePageHeader = ({
                     onChange={(e) => onSearchValueChange(e.target.value)}
                 />
             </SearchBarContainer>
-          {WithoutButton?<></> : <CreateButton select="primary200" onClick={onCreateButtonClick}>
-                <FaPlus size={12} className="mr-1" /> Create
-            </CreateButton>}
+            {WithoutButton ? (
+                <></>
+            ) : (
+                <CreateButton select="primary200" onClick={onCreateButtonClick}>
+                    <FaPlus size={12} className="mr-1" /> Create
+                </CreateButton>
+            )}
         </Container>
     );
 };

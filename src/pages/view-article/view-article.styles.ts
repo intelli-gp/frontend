@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import EnhancedImage from "../../components/image/image.component"
+import EnhancedImage from '../../components/image/image.component';
 import { CSSTextLengthLimit } from '../../index.styles';
 
 export const PageContainer = styled(motion.div)`
@@ -90,8 +90,8 @@ export const ArticleTitle = styled.h1`
     font-weight: 700;
     line-height: 1.1;
     text-align: center;
-    font-family: "Merriweather", serif;
-`
+    font-family: 'Merriweather', serif;
+`;
 
 export const ArticleImageSection = styled.img`
     object-fit: cover;

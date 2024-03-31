@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import { ReceivedArticle } from '../../types/article';
+import { profileURL } from '../../utils/profileUrlBuilder';
 import Tag from '../tag/tag.component';
 import {
     ArticleContainer,
@@ -15,7 +16,6 @@ import {
     AuthorPicture,
     TagsContainer,
 } from './wide-article-item.styles';
-import { profileURL } from '../../utils/profileUrlBuilder';
 
 type WideArticleItemProps = Partial<ReceivedArticle> & {
     onClick?: React.MouseEventHandler<HTMLDivElement>;

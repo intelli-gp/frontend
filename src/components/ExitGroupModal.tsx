@@ -47,7 +47,7 @@ const ExitSectionModal: React.FC<ModalProps> = ({
             isOpen={showModal}
             setIsOpen={setShowModal}
             title={'Are you sure you want to exit this group?'}
-            width='lg'
+            width="lg"
         >
             <div className="flex gap-4 flex-row-reverse">
                 <Button

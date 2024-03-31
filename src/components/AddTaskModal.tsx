@@ -166,111 +166,116 @@ export const AddTaskModal: React.FC<ModalProps> = ({
     };
 
     return (
-            <Modal isOpen={showModal} setIsOpen={setShowModal} title={'Add task'} width="lg">
-                <ModalContent>
-                    <form onSubmit={handleSubmitForm}>
-                        <div className="w-full">
+        <Modal
+            isOpen={showModal}
+            setIsOpen={setShowModal}
+            title={'Add task'}
+            width="lg"
+        >
+            <ModalContent>
+                <form onSubmit={handleSubmitForm}>
+                    <div className="w-full">
+                        <CustomInput
+                            required
+                            label="Task name"
+                            type="text"
+                            value={title}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                setTitle(e.target?.value)
+                            }
+                        />
+                    </div>
+                    <div className="flex w-full justify-between pt-[6px] gap-6">
+                        <div className="w-1/2">
                             <CustomInput
                                 required
-                                label="Task name"
+                                label="Status"
                                 type="text"
-                                value={title}
+                                value={status}
                                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                    setTitle(e.target?.value)
+                                    setStatus(e.target.value)
                                 }
                             />
                         </div>
-                        <div className="flex w-full justify-between pt-[6px] gap-6">
-                            <div className="w-1/2">
-                                <CustomInput
-                                    required
-                                    label="Status"
-                                    type="text"
-                                    value={status}
-                                    onChange={(
-                                        e: ChangeEvent<HTMLInputElement>,
-                                    ) => setStatus(e.target.value)}
-                                />
-                            </div>
-                            <div className="w-1/2">
-                                <CustomInput
-                                    required
-                                    label="Select color"
-                                    id="color"
-                                    className="rounded border  border-slate-400 p-2 w-full h-[49px] bg-white focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2"
-                                    type="color"
-                                    value={color}
-                                    onChange={(
-                                        e: ChangeEvent<HTMLInputElement>,
-                                    ) => setColor(e.target.value)}
-                                />
-                            </div>
-                        </div>
-                        <div className="flex w-full justify-between pt-[6px] gap-6">
-                            <div className="w-1/2 flex flex-col justify-between">
-                                <CustomInput
-                                    required
-                                    value={due_date}
-                                    type="date"
-                                    label="Due date"
-                                    onChange={(
-                                        e: ChangeEvent<HTMLInputElement>,
-                                    ) => setDueDate(e.target.value)}
-                                />
-                            </div>
-                            <div className="flex flex-row justify-between w-1/2 mt-auto">
-                                <input
-                                    type="time"
-                                    className="rounded border border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 mr-1"
-                                    value={due_start}
-                                    onChange={handleDueStartChange}
-                                />
-                                <span className="text-xl pt-3">
-                                    <GoDash />
-                                </span>
-                                <input
-                                    type="time"
-                                    className="rounded border ml-1 border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2"
-                                    value={due_end}
-                                    onChange={handleDueEndChange}
-                                />
-                            </div>
-                        </div>
-                        <div className="flex flex-col gap-2 pt-[6px]">
+                        <div className="w-1/2">
                             <CustomInput
-                                label="Description"
-                                value={description}
-                                onChange={(e: { target: { value: any } }) =>
-                                    setDescription(e.target.value)
+                                required
+                                label="Select color"
+                                id="color"
+                                className="rounded border  border-slate-400 p-2 w-full h-[49px] bg-white focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2"
+                                type="color"
+                                value={color}
+                                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                    setColor(e.target.value)
                                 }
-                                multiline="true"
-                                placeholder="Enter description..."
-                                maxLength={1000}
-                                cols={33}
-                                rows={4}
                             />
                         </div>
-                        <div className="w-full flex flex-row gap-4 justify-end items-end pt-5">
-                            <Button
-                                type="submit"
-                                select="primary"
-                                className="w-1/4"
-                                loading={isTaskCreating}
-                            >
-                                Create
-                            </Button>
-                            <Button
-                                type="button"
-                                select="danger"
-                                outline={true}
-                                onClick={() => setShowModal(false)}
-                                className="w-1/4 border-white"
-                            >
-                                Cancel
-                            </Button>
+                    </div>
+                    <div className="flex w-full justify-between pt-[6px] gap-6">
+                        <div className="w-1/2 flex flex-col justify-between">
+                            <CustomInput
+                                required
+                                value={due_date}
+                                type="date"
+                                label="Due date"
+                                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                    setDueDate(e.target.value)
+                                }
+                            />
                         </div>
-                    </form>
-                </ModalContent>
-            </Modal>
+                        <div className="flex flex-row justify-between w-1/2 mt-auto">
+                            <input
+                                type="time"
+                                className="rounded border border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 mr-1"
+                                value={due_start}
+                                onChange={handleDueStartChange}
+                            />
+                            <span className="text-xl pt-3">
+                                <GoDash />
+                            </span>
+                            <input
+                                type="time"
+                                className="rounded border ml-1 border-slate-400 p-2 min-w-0 focus-visible:outline-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2"
+                                value={due_end}
+                                onChange={handleDueEndChange}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-2 pt-[6px]">
+                        <CustomInput
+                            label="Description"
+                            value={description}
+                            onChange={(e: { target: { value: any } }) =>
+                                setDescription(e.target.value)
+                            }
+                            multiline="true"
+                            placeholder="Enter description..."
+                            maxLength={1000}
+                            cols={33}
+                            rows={4}
+                        />
+                    </div>
+                    <div className="w-full flex flex-row gap-4 justify-end items-end pt-5">
+                        <Button
+                            type="submit"
+                            select="primary"
+                            className="w-1/4"
+                            loading={isTaskCreating}
+                        >
+                            Create
+                        </Button>
+                        <Button
+                            type="button"
+                            select="danger"
+                            outline={true}
+                            onClick={() => setShowModal(false)}
+                            className="w-1/4 border-white"
+                        >
+                            Cancel
+                        </Button>
+                    </div>
+                </form>
+            </ModalContent>
+        </Modal>
     );
 };

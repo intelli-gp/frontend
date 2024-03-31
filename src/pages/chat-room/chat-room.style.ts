@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-import { CSSTextLengthLimit } from '../../index.styles';
 import EnhancedImage from '../../components/image/image.component';
+import { CSSTextLengthLimit } from '../../index.styles';
 
 export const PageContainer = styled(motion.div)`
     display: flex;

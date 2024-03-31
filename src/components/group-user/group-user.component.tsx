@@ -1,3 +1,4 @@
+import { FaCrown } from 'react-icons/fa';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,15 +8,18 @@ import { GroupUser } from '../../types/group';
 import { profileURL } from '../../utils/profileUrlBuilder';
 import { errorToast, successToast } from '../../utils/toasts';
 import DropdownMenu from '../menu/menu.component';
-import { PersonContainer, PersonImage, PersonName, CrownHolder } from './group-user.style';
-import { FaCrown } from "react-icons/fa";
+import {
+    CrownHolder,
+    PersonContainer,
+    PersonImage,
+    PersonName,
+} from './group-user.style';
 
 type GroupUserType = GroupUser & {
     GroupID: string | undefined;
     Admin?: boolean;
     IsMe?: boolean;
     Owner?: boolean;
-
 };
 
 const UserContainer = ({
@@ -27,7 +31,7 @@ const UserContainer = ({
     Admin,
     GroupID,
     IsMe,
-    Owner
+    Owner,
 }: GroupUserType) => {
     const navigate = useNavigate();
     const [updateStatus] = usePermissionGroupMutation();
@@ -74,19 +78,17 @@ const UserContainer = ({
         <PersonContainer>
             {Owner ? (
                 <CrownHolder>
-                    <FaCrown size={18} color='#FFBB48' />
+                    <FaCrown size={18} color="#FFBB48" />
                 </CrownHolder>
             ) : (
-                <>
-                </>
+                <></>
             )}
             <PersonImage alt="" src={ProfileImage ?? defaultUserImage} />
             <span className="flex flex-row items-center gap-2 relative">
                 <PersonName title={FullName}>{FullName}</PersonName>
-                { IsMe? (
-                    <>   
-                    </>
-                ):Admin && !Owner ? (
+                {IsMe ? (
+                    <></>
+                ) : Admin && !Owner ? (
                     <>
                         <DropdownMenu
                             options={statusOptionAdmin}
@@ -99,9 +101,9 @@ const UserContainer = ({
                             <IoIosArrowDown />
                         </DropdownMenu>
                     </>
-                )  : (
+                ) : (
                     <>
-                    <DropdownMenu
+                        <DropdownMenu
                             options={statusOptionMember}
                             right="10%"
                             top="100%"

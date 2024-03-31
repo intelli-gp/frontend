@@ -232,18 +232,13 @@ const ViewGroupPage = () => {
     );
 
     const deleteButton = (
-        <Button
-            select="danger"
-            outline
-            onClick={openDeleteModal}
-            
-        >
+        <Button select="danger" outline onClick={openDeleteModal}>
             Delete Group
         </Button>
     );
 
     const exitButton = (
-        <Button select="danger" outline  onClick={openExitModal}>
+        <Button select="danger" outline onClick={openExitModal}>
             Exit Group
         </Button>
     );

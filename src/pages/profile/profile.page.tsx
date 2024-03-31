@@ -332,7 +332,7 @@ const ProfilePage = () => {
             isOpen={isOpen}
             setIsOpen={setIsOpen}
             title={`Edit ${title} Image`}
-            width='lg'
+            width="lg"
         >
             <OpenImage
                 height="250px"

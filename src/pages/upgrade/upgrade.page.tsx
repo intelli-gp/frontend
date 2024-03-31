@@ -1,6 +1,7 @@
 import { SetStateAction, useEffect, useState } from 'react';
 
 import Button from '../../components/button/button.component';
+import { BetweenPageAnimation } from '../../index.styles';
 import {
     ButtonsHolder,
     CardHolder,
@@ -9,7 +10,6 @@ import {
     UpgradeButton,
     UpgradeTitle,
 } from './upgrade.styles';
-import { BetweenPageAnimation } from '../../index.styles';
 
 type Type = {
     type: string;
