@@ -474,7 +474,7 @@ const ProfilePage = () => {
                             className={`${isAnotherUserProfile && 'hidden'}`}
                         />
                     </ProfilePictureContainer>
-                    <div className="flex flex-col justify-between">
+                    <div className="flex flex-col justify-between overflow-hidden">
                         <UserFullName title={userData.FullName}>
                             {userData.FullName}
                         </UserFullName>
