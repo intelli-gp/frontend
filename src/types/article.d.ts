@@ -14,7 +14,7 @@ export type ArticleSection = {
 // Receive from server
 export type ReceivedArticle = {
     ID: number;
-    Author: Pick<ReceivedUser, 'FullName' | 'Username' | 'ProfileImage'> & {
+    Author: Pick<ReceivedUser, 'FullName' | 'Username' | 'ProfileImage'| 'Headline'> & {
         FollowersCont: number;
     };
     CoverImage: string;

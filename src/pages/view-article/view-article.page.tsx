@@ -1,54 +1,104 @@
 import MDEditor from '@uiw/react-md-editor';
 import moment from 'moment';
-import { CiBookmark, CiStar } from 'react-icons/ci';
-import { FiEdit, FiPlus } from 'react-icons/fi';
-import { IoShareSocial } from 'react-icons/io5';
-import { SlOptions } from 'react-icons/sl';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import defaultCoverImage from '../../assets/imgs/defaultCover.jpg';
-import defaultUserImage from '../../assets/imgs/user.jpg';
 import Spinner from '../../components/Spinner';
+import { AuthorCard } from '../../components/article-author-card/author-card.component';
 import Button from '../../components/button/button.component';
+import DropdownMenu from '../../components/menu/menu.component';
+import { Modal } from '../../components/modal/modal.component';
 import Tag from '../../components/tag/tag.component';
 import { BetweenPageAnimation } from '../../index.styles';
-import { useGetArticleQuery } from '../../store';
+import { useDeleteArticleMutation, useGetArticleQuery } from '../../store';
 import { RootState } from '../../store';
 import { ArticleSectionType, ReceivedArticle } from '../../types/article.d';
 import { Response } from '../../types/response';
 import { ReceivedUser } from '../../types/user';
-import { profileURL } from '../../utils/profileUrlBuilder';
+import { errorToast, successToast } from '../../utils/toasts';
 import {
     ArticleBodyContainer,
     ArticleCoverImage,
     ArticleCoverImageContainer,
+    ArticleHeader,
     ArticleImageSection,
     ArticleTitle,
     ArticleToolbar,
-    AuthorDataContainer,
-    AuthorMoreInfoContainer,
-    AuthorName,
-    AuthorProfileImage,
+    Bookmark,
+    Options,
     PageContainer,
     PublishDate,
+    Star,
     SuggestedArticlesContainer,
 } from './view-article.styles';
 
 const ViewArticlePage = () => {
     const navigate = useNavigate();
-
     const { articleId } = useParams();
+
+    const [deleteArticleModalIsOpen, setDeleteArticleModalIsOpen] =
+        useState(false);
+
     const user = useSelector((state: RootState) => state.auth.user);
 
-    if (!articleId) {
-        return <div>Article not found</div>;
-    }
-
-    const { data, isLoading } = useGetArticleQuery(parseInt(articleId));
+    const [removeArticle] = useDeleteArticleMutation();
+    const { data, isLoading } = useGetArticleQuery(+articleId!);
     const article: ReceivedArticle = (data as unknown as Response)?.data;
     const isArticleOwner =
         article?.Author?.Username === (user as ReceivedUser)?.Username;
+
+    const articleOptions = [{ option: 'Copy Link', handler: () => {
+        navigator.clipboard.writeText(window.location.href);
+        successToast('Link copied to clipboard!');
+    } }];
+    if (isArticleOwner) {
+        articleOptions.push({
+            option: 'Edit',
+            handler: () => navigate(`/app/article/edit/${articleId}`),
+        });
+        articleOptions.push({
+            option: 'Delete',
+            handler: () => setDeleteArticleModalIsOpen(true),
+        });
+    }
+
+    const deleteArticle = async () => {
+        try {
+            await removeArticle(+articleId!).unwrap();
+            successToast('Article deleted successfully!');
+            navigate('/app/articles');
+        } catch (error) {
+            errorToast('Error occurred while deleting the article.');
+        }
+    };
+
+    const DeleteArticleModal = (
+        <Modal
+            isOpen={deleteArticleModalIsOpen}
+            setIsOpen={setDeleteArticleModalIsOpen}
+            title="Are you sure you want to delete this Article?"
+            width="lg"
+        >
+            <div className="flex gap-4 flex-row-reverse">
+                <Button
+                    className="!px-8"
+                    select="danger"
+                    outline
+                    onClick={deleteArticle}
+                >
+                    Yes
+                </Button>
+                <Button
+                    className="!px-6"
+                    onClick={() => setDeleteArticleModalIsOpen(false)}
+                >
+                    Cancel
+                </Button>
+            </div>
+        </Modal>
+    );
 
     if (isLoading) {
         return <Spinner />;
@@ -56,80 +106,44 @@ const ViewArticlePage = () => {
 
     return (
         <PageContainer {...BetweenPageAnimation}>
+            {DeleteArticleModal}
             <ArticleCoverImageContainer>
                 <ArticleCoverImage
                     src={article?.CoverImage ?? defaultCoverImage}
                     alt="article cover image"
                 />
-
-                <AuthorDataContainer
-                    to={profileURL(article?.Author?.Username)}
-                    title={`View ${article?.Author?.FullName}'s profile`}
-                >
-                    <AuthorProfileImage
-                        src={article?.Author?.ProfileImage ?? defaultUserImage}
-                        alt="author profile image"
-                    />
-                    <div className="flex flex-col gap-0">
-                        <AuthorName>{article?.Author?.FullName}</AuthorName>
-                        <PublishDate>
-                            {article?.UpdatedAt &&
-                                moment(new Date(article.UpdatedAt)).fromNow()}
-                        </PublishDate>
-                    </div>
-
-                    <Button
-                        type="button"
-                        className="text-xs !p-2 ml-auto"
-                        select="primary700"
-                    >
-                        <FiPlus size={18} className="mr-1" />
-                        Follow
-                    </Button>
-                </AuthorDataContainer>
-
-                {isArticleOwner && (
-                    <Button
-                        select="warning"
-                        type="button"
-                        title="Edit Article"
-                        className="absolute top-4 left-4 !rounded-full !text-[var(--gray-800)] !p-4"
-                        onClick={() =>
-                            navigate(`/app/article/edit/${articleId}`)
-                        }
-                    >
-                        <FiEdit size={18} />
-                    </Button>
-                )}
+                <AuthorCard article={article} />
             </ArticleCoverImageContainer>
 
             <ArticleBodyContainer data-color-mode="light">
-                <ArticleTitle>{article?.Title}</ArticleTitle>
+                <ArticleHeader>
+                    <ArticleTitle>{article?.Title}</ArticleTitle>
 
-                {/* Article Tags */}
-                <div className="flex gap-2 items-center justify-center">
-                    {article?.ArticleTags.map((tag) => {
-                        return <Tag text={tag} />;
-                    })}
-                </div>
+                    <PublishDate>
+                        {moment(article?.UpdatedAt).format('D MMM, YYYY')}
+                    </PublishDate>
+
+                    {/* Article Tags */}
+                    <div className="flex gap-2 justify-center">
+                        {article?.ArticleTags.map((tag) => {
+                            return <Tag text={tag} />;
+                        })}
+                    </div>
+                </ArticleHeader>
 
                 <ArticleToolbar className="flex justify-between">
                     <div className="flex gap-4">
-                        <CiStar size={24} className="text-[var(--gray-600)]" />
-                        <IoShareSocial
-                            size={24}
-                            className="text-[var(--gray-600)]"
-                        />
+                        <Star size={24} title='Start'/>
+                        <Bookmark size={24} title='Bookmark '/>
                     </div>
                     <div className="flex gap-4">
-                        <CiBookmark
-                            size={24}
-                            className="text-[var(--gray-600)]"
-                        />
-                        <SlOptions
-                            size={24}
-                            className="text-[var(--gray-600)]"
-                        />
+                        <DropdownMenu
+                            right="0"
+                            menuWidth="8rem"
+                            options={articleOptions}
+                        >
+                            <Options size={24} title="Options"/>
+                        </DropdownMenu>
                     </div>
                 </ArticleToolbar>
 
@@ -149,31 +163,6 @@ const ViewArticlePage = () => {
                         return <MDEditor.Markdown source={section.Value} />;
                     }
                 })}
-
-                <hr />
-
-                <AuthorMoreInfoContainer>
-                    <div className="flex justify-between items-center w-full">
-                        <AuthorProfileImage
-                            src={
-                                article?.Author?.ProfileImage ??
-                                defaultUserImage
-                            }
-                            alt=""
-                        />
-                        <Button
-                            select="primary700"
-                            type="button"
-                            className="text-sm !px-4 !py-2 !rounded-full"
-                        >
-                            <FiPlus size={20} className="mr-1" />
-                            Follow
-                        </Button>
-                    </div>
-                    <p className="text-3xl font-bold text-[var(--gray-700)]">
-                        Written by {article?.Author?.FullName}
-                    </p>
-                </AuthorMoreInfoContainer>
 
                 <hr />
 
