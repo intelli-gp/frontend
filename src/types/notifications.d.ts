@@ -23,4 +23,13 @@ type WarningNotification = {
     message: any;
 };
 
+export type Notification = {
+    Username: string;
+    UserImage: string;
+    Action: "starred" | "commented" | "followed" | "created";
+    Read: boolean;
+    CreatedAt: string;
+    TargetID: string;
+}
+
 export type SseEvents = ChatNotification | WarningNotification;
