@@ -1,13 +1,11 @@
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { FaStar } from 'react-icons/fa';
+import { HiBookmark } from 'react-icons/hi2';
+import { SlOptions } from 'react-icons/sl';
 import styled from 'styled-components';
 
 import EnhancedImage from '../../components/image/image.component';
-import { CSSTextLengthLimit } from '../../index.styles';
-import { CiStar } from 'react-icons/ci';
-import { FaBookmark, FaStar } from "react-icons/fa";
-import { HiBookmark } from 'react-icons/hi2';
-import { SlOptions } from 'react-icons/sl';
+
 export const PageContainer = styled(motion.div)`
     display: flex;
     flex-direction: column;
@@ -31,8 +29,7 @@ export const ArticleHeader = styled.header`
     display: flex;
     flex-direction: column;
     gap: 1rem;
-
-`
+`;
 
 export const ArticleBodyContainer = styled.div`
     width: min(750px, 100%);
@@ -62,7 +59,7 @@ export const ArticleImageSection = styled.img`
 export const PublishDate = styled.p`
     margin-top: -0.5rem;
     font-size: 0.875rem;
-`
+`;
 
 export const ArticleToolbar = styled.div`
     display: flex;
@@ -79,7 +76,7 @@ export const Star = styled(FaStar)`
     &:hover {
         color: #fab005;
     }
-`
+`;
 
 export const Bookmark = styled(HiBookmark)`
     cursor: pointer;
@@ -88,7 +85,7 @@ export const Bookmark = styled(HiBookmark)`
     &:hover {
         color: #5c940d;
     }
-`
+`;
 
 export const Options = styled(SlOptions)`
     cursor: pointer;
@@ -97,7 +94,7 @@ export const Options = styled(SlOptions)`
     &:hover {
         color: inherit;
     }
-`
+`;
 
 export const SuggestedArticlesContainer = styled.div`
     display: flex;

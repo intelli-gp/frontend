@@ -49,10 +49,15 @@ const ViewArticlePage = () => {
     const isArticleOwner =
         article?.Author?.Username === (user as ReceivedUser)?.Username;
 
-    const articleOptions = [{ option: 'Copy Link', handler: () => {
-        navigator.clipboard.writeText(window.location.href);
-        successToast('Link copied to clipboard!');
-    } }];
+    const articleOptions = [
+        {
+            option: 'Copy Link',
+            handler: () => {
+                navigator.clipboard.writeText(window.location.href);
+                successToast('Link copied to clipboard!');
+            },
+        },
+    ];
     if (isArticleOwner) {
         articleOptions.push({
             option: 'Edit',
@@ -133,8 +138,8 @@ const ViewArticlePage = () => {
 
                 <ArticleToolbar className="flex justify-between">
                     <div className="flex gap-4">
-                        <Star size={24} title='Start'/>
-                        <Bookmark size={24} title='Bookmark '/>
+                        <Star size={24} title="Start" />
+                        <Bookmark size={24} title="Bookmark " />
                     </div>
                     <div className="flex gap-4">
                         <DropdownMenu
@@ -142,7 +147,7 @@ const ViewArticlePage = () => {
                             menuWidth="8rem"
                             options={articleOptions}
                         >
-                            <Options size={24} title="Options"/>
+                            <Options size={24} title="Options" />
                         </DropdownMenu>
                     </div>
                 </ArticleToolbar>
