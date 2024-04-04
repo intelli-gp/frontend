@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { CSSTextLinesCountLimit } from '../../index.styles';
+import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
 import EnhancedImage from '../image/image.component';
 
 export const ArticleContainer = styled.article`
@@ -9,25 +9,21 @@ export const ArticleContainer = styled.article`
     flex: 1;
     background-color: white;
     cursor: pointer;
-    border-radius: 0.5rem;
-    padding: 1.5rem 2rem;
+    border-radius: 1rem;
+    padding: 0.5rem;
+    padding-right: 1rem;
     display: flex;
-    gap: 0.5rem;
+    gap: 1.5rem;
     justify-content: space-between;
-    align-items: center;
     background-color: white;
     transition: background-color 0.2s ease-in-out;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px 0px;
     &:hover {
         background-color: var(--indigo-25);
-        border-radius: 0.5rem;
-    }
-    @media (max-width: 768px) {
-        padding: 1rem 1.5rem;
     }
 
-    @media (max-width: 425px) {
-        padding: 1rem;
+    @media (max-width: 768px) {
+        gap: 0.75rem;
     }
 `;
 
@@ -38,6 +34,7 @@ export const AuthorData = styled.header`
     font-size: 0.875rem; // 14px
     font-weight: 500;
     gap: 0.75rem;
+    width: 100%;
 
     &:hover {
         span {
@@ -46,10 +43,19 @@ export const AuthorData = styled.header`
     }
 `;
 
-export const AuthorFullName = styled.span`
+export const AuthorFullName = styled.p<{ width?: string }>`
     line-height: 1.15;
     transition: border-color 0.2s ease-in-out;
     border-bottom: 1px solid transparent;
+    ${CSSTextLengthLimit}
+`;
+
+export const UserUsername = styled.p<{ width?: string }>`
+    line-height: 1.15;
+    font-size: 0.75rem;
+    opacity: 0.8;
+    ${CSSTextLengthLimit}
+    margin-top: -0.15rem;
 `;
 
 export const ArticleTitle = styled.h1<{ lines?: number }>`
@@ -64,9 +70,10 @@ export const ArticleTitle = styled.h1<{ lines?: number }>`
 `;
 
 export const AuthorPicture = styled(EnhancedImage)`
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
     border-radius: 50%;
+    aspect-ratio: 1/1;
 `;
 
 export const ArticleContentContainer = styled.main`
@@ -99,10 +106,10 @@ export const ArticleDate = styled.time`
 `;
 
 export const ArticleThumbnail = styled(EnhancedImage)`
-    max-width: 150px;
-    border-radius: 0.25rem;
+    width: 200px;
+    border-radius: 0.5rem;
     aspect-ratio: 1/1;
     @media (max-width: 768px) {
-        max-width: 100px;
+        width: 150px;
     }
 `;

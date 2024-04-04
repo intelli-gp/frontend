@@ -9,4 +9,8 @@ export const PageContainer = styled(motion.div)`
     flex-direction: column;
     gap: 2rem;
     align-items: center;
+
+    @media (max-width: 768px) {
+        padding: 2rem 1rem;
+    }
 `;

@@ -5,6 +5,7 @@ import defaultUserImage from '../../assets/imgs/user.jpg';
 import { ReceivedArticle } from '../../types/article';
 import { profileURL } from '../../utils/profileUrlBuilder';
 import Tag from '../tag/tag.component';
+import { UserUsername } from '../wide-article-item/wide-article-item.styles';
 import {
     ArticleContainer,
     ArticleDate,
@@ -33,36 +34,39 @@ const WideArticleItem = ({
     const navigate = useNavigate();
     return (
         <ArticleContainer onClick={onClick} title={title}>
-            <div className="flex justify-between items-center w-full gap-4">
-                <div className="flex flex-col gap-4 max-w-[70%]">
-                    <AuthorData
-                        onClick={(e: React.MouseEvent) => {
-                            e.stopPropagation();
-                            navigate(profileURL(Author?.Username!));
-                        }}
-                        title={`View ${Author?.FullName}'s profile`}
-                    >
-                        <AuthorPicture
-                            src={Author?.ProfileImage ?? defaultUserImage}
-                            alt="user profile picture"
-                        />
+            <ArticleThumbnail src={CoverImage} alt={'thumbnail'} />
+            <div className="flex flex-col justify-between flex-1 overflow-hidden py-3">
+                <AuthorData
+                    onClick={(e: React.MouseEvent) => {
+                        e.stopPropagation();
+                        navigate(profileURL(Author?.Username!));
+                    }}
+                    title={`View ${Author?.FullName}'s profile`}
+                >
+                    <AuthorPicture
+                        src={Author?.ProfileImage ?? defaultUserImage}
+                        alt="user profile picture"
+                    />
+                    <div className="overflow-hidden">
                         <AuthorFullName>{Author?.FullName}</AuthorFullName>
-                    </AuthorData>
-                    <ArticleTitle lines={2}>{title}</ArticleTitle>
-                    <ArticleFooter>
-                        <TagsContainer>
-                            {ArticleTags?.slice(0, 3).map((tag) => (
-                                <Tag text={tag} size="xs" />
-                            ))}
-                        </TagsContainer>
-                        <ArticleDate>
-                            {moment(
-                                new Date(UpdatedAt! || CreatedAt!),
-                            ).fromNow()}
-                        </ArticleDate>
-                    </ArticleFooter>
-                </div>
-                <ArticleThumbnail src={CoverImage} alt={'thumbnail'} />
+                        <UserUsername className="!text-inherit">
+                            @{Author?.Username}
+                        </UserUsername>
+                    </div>
+                </AuthorData>
+                <ArticleTitle lines={2}>{title}</ArticleTitle>
+                <ArticleFooter>
+                    <TagsContainer>
+                        {ArticleTags?.slice(0, 3).map((tag) => (
+                            <Tag text={tag} size="xs" />
+                        ))}
+                    </TagsContainer>
+                    <ArticleDate>
+                        {moment(new Date(UpdatedAt! || CreatedAt!)).format(
+                            'DD MMM, YYYY',
+                        )}
+                    </ArticleDate>
+                </ArticleFooter>
             </div>
         </ArticleContainer>
     );
