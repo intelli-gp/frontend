@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
-import { FaStar } from 'react-icons/fa';
-import { HiBookmark } from 'react-icons/hi2';
-import { SlOptions } from 'react-icons/sl';
-import styled from 'styled-components';
+import { BiSolidComment } from 'react-icons/bi';
+import { BsThreeDots } from 'react-icons/bs';
+import { IoHeart } from 'react-icons/io5';
+import { IoBookmark } from 'react-icons/io5';
+import styled, { css } from 'styled-components';
 
 import EnhancedImage from '../../components/image/image.component';
 
@@ -66,38 +67,94 @@ export const ArticleToolbar = styled.div`
     justify-content: space-between;
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
-    padding: 1rem;
+    padding: 1rem 0.5rem;
 `;
 
-export const Star = styled(FaStar)`
+export const ToolbarIconsContainer = styled.div`
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+`;
+
+export const VerticalLine = styled.div`
+    width: 1px;
+    height: 100%;
+    background-color: var(--gray-400);
+`;
+
+const commonIconStyles = css`
     cursor: pointer;
-    color: var(--gray-600);
-    transition: all 0.25s ease-in-out;
+    stroke: var(--gray-600);
+    transition: color 0.1s ease-in-out;
+`;
+
+export const LoveIcon = styled(IoHeart)<{ active: boolean }>`
+    ${commonIconStyles}
+    color: ${({ active }) => (active ? '#f03e3e' : 'transparent')};
+    stroke-width: ${({ active }) => (active ? 0 : 25)}px;
     &:hover {
-        color: #fab005;
+        stroke-width: 0;
+        color: #f03e3e;
     }
 `;
 
-export const Bookmark = styled(HiBookmark)`
-    cursor: pointer;
-    color: var(--gray-600);
-    transition: all 0.25s ease-in-out;
+export const BookmarkIcon = styled(IoBookmark)<{ active: boolean }>`
+    ${commonIconStyles}
+    color: ${({ active }) => (active ? '#5c940d' : 'transparent')};
+    stroke-width: ${({ active }) => (active ? 0 : 25)}px;
     &:hover {
+        stroke-width: 0;
         color: #5c940d;
     }
 `;
 
-export const Options = styled(SlOptions)`
-    cursor: pointer;
-    transition: all 0.25s ease-in-out;
+export const OptionsIcon = styled(BsThreeDots)`
+    ${commonIconStyles}
     color: var(--gray-600);
+    stroke-width: 0;
     &:hover {
         color: inherit;
     }
+`;
+
+export const CommentsIcon = styled(BiSolidComment)<{ active: boolean }>`
+    ${commonIconStyles}
+    color: ${({ active }) => (active ? 'inherit' : 'transparent')};
+    stroke-width: ${({ active }) => (active ? 0 : 1)}px;
+    &:hover {
+        stroke-width: 0;
+        color: inherit;
+    }
+`;
+
+export const IconWithCounter = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--gray-600);
 `;
 
 export const SuggestedArticlesContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 2rem;
+`;
+
+export const CommentsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: min(500px, 100%);
+    height: 100%;
+    background-color: white;
+    z-index: 100;
+    transition: right 0.25s ease-in-out;
+    &.open {
+        right: 0;
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+        z-index: 100;
+    }
 `;

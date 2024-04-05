@@ -54,6 +54,13 @@ const articleApi = appApi.injectEndpoints({
                 method: 'DELETE',
             }),
         }),
+        toggleLoveArticle: builder.mutation<Response, number>({
+            invalidatesTags: (_result, _error, id) => [{ type: 'Article', id }],
+            query: (id) => ({
+                url: `/articles/${id}/toggle-like`,
+                method: 'POST',
+            }),
+        }),
     }),
 });
 
@@ -65,4 +72,5 @@ export const {
     useUpdateArticleMutation,
     useDeleteArticleMutation,
     useGetUserArticlesQuery,
+    useToggleLoveArticleMutation,
 } = articleApi;

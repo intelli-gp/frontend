@@ -1,23 +1,35 @@
 import MDEditor from '@uiw/react-md-editor';
+import { motion } from 'framer-motion';
 import moment from 'moment';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { IoCloseOutline } from 'react-icons/io5';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import defaultCoverImage from '../../assets/imgs/defaultCover.jpg';
+import loveSound from '../../assets/sounds/article-love-sound.mp3';
 import Spinner from '../../components/Spinner';
 import { AuthorCard } from '../../components/article-author-card/author-card.component';
 import Button from '../../components/button/button.component';
 import DropdownMenu from '../../components/menu/menu.component';
 import { Modal } from '../../components/modal/modal.component';
+import {
+    ModalExitButton,
+    ModalHeader,
+} from '../../components/modal/model.styles';
 import Tag from '../../components/tag/tag.component';
-import { BetweenPageAnimation } from '../../index.styles';
-import { useDeleteArticleMutation, useGetArticleQuery } from '../../store';
+import { BetweenPageAnimation, ModalTitle } from '../../index.styles';
+import {
+    useDeleteArticleMutation,
+    useGetArticleQuery,
+    useToggleLoveArticleMutation,
+} from '../../store';
 import { RootState } from '../../store';
 import { ArticleSectionType, ReceivedArticle } from '../../types/article.d';
 import { Response } from '../../types/response';
 import { ReceivedUser } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
+import { CommentsContainer, IconWithCounter } from './view-article.styles';
 import {
     ArticleBodyContainer,
     ArticleCoverImage,
@@ -26,28 +38,38 @@ import {
     ArticleImageSection,
     ArticleTitle,
     ArticleToolbar,
-    Bookmark,
-    Options,
+    BookmarkIcon,
+    CommentsIcon,
+    LoveIcon,
+    OptionsIcon,
     PageContainer,
     PublishDate,
-    Star,
     SuggestedArticlesContainer,
+    ToolbarIconsContainer,
+    VerticalLine,
 } from './view-article.styles';
 
 const ViewArticlePage = () => {
     const navigate = useNavigate();
     const { articleId } = useParams();
 
+    const commentsPanelRef = useRef<HTMLDivElement>(null);
+    const commentIconRef = useRef<HTMLDivElement>(null);
+
+    const [commentsPanelIsOpen, setCommentsPanelIsOpen] = useState(false);
     const [deleteArticleModalIsOpen, setDeleteArticleModalIsOpen] =
         useState(false);
+    const [isArticleLoved, setIsArticleLoved] = useState(false);
+    const [isArticleBookmarked, _setIsArticleBookmarked] = useState(false);
 
-    const user = useSelector((state: RootState) => state.auth.user);
+    const storedUser = useSelector((state: RootState) => state.auth.user);
 
     const [removeArticle] = useDeleteArticleMutation();
-    const { data, isLoading } = useGetArticleQuery(+articleId!);
+    const [toggleLoveArticle] = useToggleLoveArticleMutation();
+    const { data, isLoading, isFetching } = useGetArticleQuery(+articleId!);
     const article: ReceivedArticle = (data as unknown as Response)?.data;
     const isArticleOwner =
-        article?.Author?.Username === (user as ReceivedUser)?.Username;
+        article?.Author?.Username === (storedUser as ReceivedUser)?.Username;
 
     const articleOptions = [
         {
@@ -69,7 +91,17 @@ const ViewArticlePage = () => {
         });
     }
 
-    const deleteArticle = async () => {
+    const openCommentsPanel = () => {
+        commentsPanelRef.current?.classList.add('open');
+        setCommentsPanelIsOpen(true);
+    };
+
+    const closeCommentsPanel = () => {
+        commentsPanelRef.current?.classList.remove('open');
+        setCommentsPanelIsOpen(false);
+    };
+
+    const handleDeleteArticle = async () => {
         try {
             await removeArticle(+articleId!).unwrap();
             successToast('Article deleted successfully!');
@@ -78,6 +110,19 @@ const ViewArticlePage = () => {
             errorToast('Error occurred while deleting the article.');
         }
     };
+
+    const handleToggleLoveArticle = async () => {
+        try {
+            await toggleLoveArticle(+articleId!).unwrap();
+            if (!isArticleLoved) {
+                new Audio(loveSound).play();
+            }
+        } catch (error) {
+            errorToast('Error occurred while toggling love');
+        }
+    };
+
+    // const handleBookmarkArticle = () => {};
 
     const DeleteArticleModal = (
         <Modal
@@ -91,7 +136,7 @@ const ViewArticlePage = () => {
                     className="!px-8"
                     select="danger"
                     outline
-                    onClick={deleteArticle}
+                    onClick={handleDeleteArticle}
                 >
                     Yes
                 </Button>
@@ -104,6 +149,29 @@ const ViewArticlePage = () => {
             </div>
         </Modal>
     );
+
+    useEffect(() => {
+        if (isLoading || isFetching) return;
+        setIsArticleLoved(
+            article?.LikedBy?.some((user) => user.ID === storedUser?.ID),
+        );
+    }, [isLoading, isFetching]);
+
+    useEffect(() => {
+        const clickScreenHandler = (e: MouseEvent) => {
+            if (
+                !commentIconRef.current?.contains(e.target as Node) &&
+                !commentsPanelRef.current?.contains(e.target as Node)
+            ) {
+                console.log('clickScreenHandler');
+                closeCommentsPanel();
+            }
+        };
+        document.addEventListener('click', clickScreenHandler);
+        return () => {
+            document.removeEventListener('click', clickScreenHandler);
+        };
+    }, []);
 
     if (isLoading) {
         return <Spinner />;
@@ -128,7 +196,6 @@ const ViewArticlePage = () => {
                         {moment(article?.UpdatedAt).format('D MMM, YYYY')}
                     </PublishDate>
 
-                    {/* Article Tags */}
                     <div className="flex gap-2 justify-center">
                         {article?.ArticleTags.map((tag) => {
                             return <Tag text={tag} />;
@@ -137,22 +204,48 @@ const ViewArticlePage = () => {
                 </ArticleHeader>
 
                 <ArticleToolbar className="flex justify-between">
-                    <div className="flex gap-4">
-                        <Star size={24} title="Start" />
-                        <Bookmark size={24} title="Bookmark " />
-                    </div>
-                    <div className="flex gap-4">
+                    <ToolbarIconsContainer>
+                        <IconWithCounter>
+                            <motion.span whileTap={{ scale: 1.25 }}>
+                                <LoveIcon
+                                    size={28}
+                                    title="Love"
+                                    active={isArticleLoved}
+                                    onClick={handleToggleLoveArticle}
+                                />
+                            </motion.span>
+                            ({article?.LikedBy?.length})
+                        </IconWithCounter>
+                        <VerticalLine />
+                        <motion.span whileTap={{ scale: 1.25 }}>
+                            <BookmarkIcon
+                                size={24}
+                                title="Bookmark"
+                                active={isArticleBookmarked}
+                            />
+                        </motion.span>
+                    </ToolbarIconsContainer>
+                    <ToolbarIconsContainer>
+                        <IconWithCounter ref={commentIconRef}>
+                            <CommentsIcon
+                                size={24}
+                                title="Comments"
+                                active={commentsPanelIsOpen}
+                                onClick={openCommentsPanel}
+                            />
+                            ({15})
+                        </IconWithCounter>
+                        <VerticalLine />
                         <DropdownMenu
                             right="0"
                             menuWidth="8rem"
                             options={articleOptions}
                         >
-                            <Options size={24} title="Options" />
+                            <OptionsIcon size={24} title="Options" />
                         </DropdownMenu>
-                    </div>
+                    </ToolbarIconsContainer>
                 </ArticleToolbar>
 
-                {/* Article sections */}
                 {article?.Sections.map((section, index) => {
                     if (section.ContentType === ArticleSectionType.Image) {
                         return (
@@ -172,11 +265,20 @@ const ViewArticlePage = () => {
                 <hr />
 
                 <SuggestedArticlesContainer>
-                    <p className="font-bold text-xl text-[var(--gray-800)]">
-                        More from the same preference and author{' '}
+                    <p className="font-bold text-xl">
+                        More from the same preference and author
                     </p>
                 </SuggestedArticlesContainer>
             </ArticleBodyContainer>
+
+            <CommentsContainer ref={commentsPanelRef}>
+                <ModalHeader>
+                    <ModalTitle>Comments</ModalTitle>
+                    <ModalExitButton onClick={closeCommentsPanel}>
+                        <IoCloseOutline size={28} />
+                    </ModalExitButton>
+                </ModalHeader>
+            </CommentsContainer>
         </PageContainer>
     );
 };

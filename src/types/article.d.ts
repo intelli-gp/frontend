@@ -23,6 +23,7 @@ export type ReceivedArticle = {
     Sections: ArticleSection[];
     UpdatedAt: string;
     CreatedAt: string;
+    LikedBy: any[];
 };
 
 // Send to server
