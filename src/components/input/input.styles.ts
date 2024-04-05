@@ -41,6 +41,7 @@ export const TextAreaContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0rem;
+    position: relative;
 `;
 
 export const Input = styled.input<{ error?: string }>`
@@ -56,4 +57,8 @@ export const TextareaCounter = styled.span`
     font-size: 0.65rem;
     color: var(--gray-700);
     align-self: flex-end;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    transform: translateY(100%);
 `;
