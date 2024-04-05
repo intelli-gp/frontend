@@ -284,7 +284,7 @@ const ViewArticlePage = () => {
                     </ModalExitButton>
                 </ModalHeader>
                 <div className="flex-1 overflow-auto">
-                    {article?.Comments.map((comment) => (
+                    {article?.Comments?.map((comment) => (
                         <>
                             <ArticleComment comment={comment} />
                             <Separator />
