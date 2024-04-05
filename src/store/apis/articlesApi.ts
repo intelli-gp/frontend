@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import { appApi } from '.';
 import { ArticleToSend } from '../../types/article.d';
+import { Response } from '../../types/response';
 
 const articleApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -14,7 +15,11 @@ const articleApi = appApi.injectEndpoints({
             }),
         }),
         getArticles: builder.query<Response, void>({
-            providesTags: ['Article'],
+            providesTags: (result) =>
+                result?.data?.map(({ ID }: { ID: number }) => ({
+                    type: 'Article',
+                    id: ID,
+                })),
             query: () => ({
                 url: '/articles',
                 method: 'GET',
@@ -29,6 +34,11 @@ const articleApi = appApi.injectEndpoints({
         }),
         //Ask Them to add Id
         getUserArticles: builder.query<Response, void>({
+            providesTags: (result) =>
+                result?.data?.map(({ ID }: { ID: number }) => ({
+                    type: 'Article',
+                    id: ID,
+                })),
             query: () => ({
                 url: '/articles/created',
                 method: 'GET',
@@ -61,6 +71,19 @@ const articleApi = appApi.injectEndpoints({
                 method: 'POST',
             }),
         }),
+        commentOnArticle: builder.mutation<
+            Response,
+            { id: number; content: string }
+        >({
+            invalidatesTags: (_result, _error, { id }) => [
+                { type: 'Article', id },
+            ],
+            query: ({ id, content }) => ({
+                url: `/articles/${id}/comment`,
+                method: 'POST',
+                body: { Content: content },
+            }),
+        }),
     }),
 });
 
@@ -73,4 +96,5 @@ export const {
     useDeleteArticleMutation,
     useGetUserArticlesQuery,
     useToggleLoveArticleMutation,
+    useCommentOnArticleMutation,
 } = articleApi;

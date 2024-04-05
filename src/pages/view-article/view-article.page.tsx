@@ -10,6 +10,10 @@ import defaultCoverImage from '../../assets/imgs/defaultCover.jpg';
 import loveSound from '../../assets/sounds/article-love-sound.mp3';
 import Spinner from '../../components/Spinner';
 import { AuthorCard } from '../../components/article-author-card/author-card.component';
+import ArticleComment, {
+    ArticleWriteComment,
+} from '../../components/article-comment/article-comment.component';
+import { Separator } from '../../components/article-comment/article-comment.styles';
 import Button from '../../components/button/button.component';
 import DropdownMenu from '../../components/menu/menu.component';
 import { Modal } from '../../components/modal/modal.component';
@@ -163,7 +167,6 @@ const ViewArticlePage = () => {
                 !commentIconRef.current?.contains(e.target as Node) &&
                 !commentsPanelRef.current?.contains(e.target as Node)
             ) {
-                console.log('clickScreenHandler');
                 closeCommentsPanel();
             }
         };
@@ -193,7 +196,7 @@ const ViewArticlePage = () => {
                     <ArticleTitle>{article?.Title}</ArticleTitle>
 
                     <PublishDate>
-                        {moment(article?.UpdatedAt).format('D MMM, YYYY')}
+                        {moment(article?.UpdatedAt).format('DD MMMM, YYYY')}
                     </PublishDate>
 
                     <div className="flex gap-2 justify-center">
@@ -214,7 +217,7 @@ const ViewArticlePage = () => {
                                     onClick={handleToggleLoveArticle}
                                 />
                             </motion.span>
-                            ({article?.LikedBy?.length})
+                            {article?.LikedBy?.length ?? 0}
                         </IconWithCounter>
                         <VerticalLine />
                         <motion.span whileTap={{ scale: 1.25 }}>
@@ -227,13 +230,15 @@ const ViewArticlePage = () => {
                     </ToolbarIconsContainer>
                     <ToolbarIconsContainer>
                         <IconWithCounter ref={commentIconRef}>
-                            <CommentsIcon
-                                size={24}
-                                title="Comments"
-                                active={commentsPanelIsOpen}
-                                onClick={openCommentsPanel}
-                            />
-                            ({15})
+                            <motion.span whileTap={{ scale: 1.25 }}>
+                                <CommentsIcon
+                                    size={24}
+                                    title="Comments"
+                                    active={commentsPanelIsOpen}
+                                    onClick={openCommentsPanel}
+                                />
+                            </motion.span>
+                            {article?.Comments?.length ?? 0}
                         </IconWithCounter>
                         <VerticalLine />
                         <DropdownMenu
@@ -278,6 +283,15 @@ const ViewArticlePage = () => {
                         <IoCloseOutline size={28} />
                     </ModalExitButton>
                 </ModalHeader>
+                <div className="flex-1 overflow-auto">
+                    {article?.Comments.map((comment) => (
+                        <>
+                            <ArticleComment comment={comment} />
+                            <Separator />
+                        </>
+                    ))}
+                </div>
+                <ArticleWriteComment articleId={+articleId!} />
             </CommentsContainer>
         </PageContainer>
     );

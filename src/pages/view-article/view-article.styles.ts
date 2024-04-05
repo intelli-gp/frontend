@@ -48,6 +48,7 @@ export const ArticleTitle = styled.h1`
     font-weight: 700;
     line-height: 1.1;
     font-family: 'Merriweather', serif;
+    text-align: center;
 `;
 
 export const ArticleImageSection = styled.img`
@@ -60,6 +61,7 @@ export const ArticleImageSection = styled.img`
 export const PublishDate = styled.p`
     margin-top: -0.5rem;
     font-size: 0.875rem;
+    text-align: center;
 `;
 
 export const ArticleToolbar = styled.div`

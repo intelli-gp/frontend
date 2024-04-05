@@ -11,10 +11,31 @@ export type ArticleSection = {
     Value: string;
 };
 
+export type ArticleComment = {
+    ID: number;
+    Content: string;
+    CreatedAt: string;
+    ArticleID: number;
+    Commenter: Pick<
+        ReceivedUser,
+        | 'ID'
+        | 'Username'
+        | 'FullName'
+        | 'ProfileImage'
+        | 'Connected'
+        | 'DOB'
+        | 'Email'
+        | 'PhoneNumber'
+    >;
+};
+
 // Receive from server
 export type ReceivedArticle = {
     ID: number;
-    Author: Pick<ReceivedUser, 'FullName' | 'Username' | 'ProfileImage'| 'Headline'> & {
+    Author: Pick<
+        ReceivedUser,
+        'FullName' | 'Username' | 'ProfileImage' | 'Headline'
+    > & {
         FollowersCont: number;
     };
     CoverImage: string;
@@ -23,7 +44,17 @@ export type ReceivedArticle = {
     Sections: ArticleSection[];
     UpdatedAt: string;
     CreatedAt: string;
-    LikedBy: any[];
+    LikedBy: Pick<
+        ReceivedUser,
+        | 'ProfileImage'
+        | 'FullName'
+        | 'Username'
+        | 'DOB'
+        | 'ID'
+        | 'Headline'
+        | 'Email'
+    >[];
+    Comments: ArticleComment[];
 };
 
 // Send to server
