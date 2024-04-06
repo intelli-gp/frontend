@@ -3,9 +3,11 @@ import { BiSolidComment } from 'react-icons/bi';
 import { BsThreeDots } from 'react-icons/bs';
 import { IoHeart } from 'react-icons/io5';
 import { IoBookmark } from 'react-icons/io5';
+import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 import EnhancedImage from '../../components/image/image.component';
+import { CSSTextLengthLimit } from '../../index.styles';
 
 export const PageContainer = styled(motion.div)`
     display: flex;
@@ -49,6 +51,10 @@ export const ArticleTitle = styled.h1`
     line-height: 1.1;
     font-family: 'Merriweather', serif;
     text-align: center;
+
+    @media (max-width: 768px) {
+        font-size: 2.25rem;
+    }
 `;
 
 export const ArticleImageSection = styled.img`
@@ -83,6 +89,20 @@ export const VerticalLine = styled.div`
     width: 1px;
     height: 100%;
     background-color: var(--gray-400);
+`;
+
+export const InteractionCounter = styled.button`
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--gray-600);
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    user-select: none;
+    &:hover {
+        text-decoration: underline;
+    }
 `;
 
 const commonIconStyles = css`
@@ -159,4 +179,49 @@ export const CommentsContainer = styled.div`
         box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
         z-index: 100;
     }
+`;
+
+export const EmptyPlaceholder = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    font-size: 1.25rem;
+    color: var(--gray-500);
+    width: 100%;
+`;
+
+export const UserItemsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+export const UserContainer = styled.div`
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 1rem 0;
+    &:not(:last-child) {
+        border-bottom: 1px solid var(--gray-300);
+    }
+`;
+
+export const UserImage = styled(EnhancedImage)`
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+`;
+
+export const UserFullName = styled(Link)<{ width?: string }>`
+    color: inherit;
+    display: block;
+    ${CSSTextLengthLimit}
+`;
+
+export const UserUsername = styled.p<{ width?: string }>`
+    color: var(--gray-600);
+    margin-top: -0.35rem;
+    font-size: 0.875rem;
+    ${CSSTextLengthLimit}
 `;

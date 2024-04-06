@@ -1,7 +1,13 @@
+import { useEffect, useState } from 'react';
+
 import defaultUserImage from '../../assets/imgs/user.jpg';
+import { useLazyFetchUserQuery } from '../../store';
 import { ReceivedArticle } from '../../types/article';
+import { Response } from '../../types/response';
+import { ReceivedUser } from '../../types/user';
 import { formatCompactNumber } from '../../utils/compactNumbers';
 import { profileURL } from '../../utils/profileUrlBuilder';
+import { errorToast } from '../../utils/toasts';
 import Button from '../button/button.component';
 import {
     AuthorData,
@@ -16,6 +22,23 @@ type AuthorCardProps = {
 };
 
 export const AuthorCard = ({ article }: AuthorCardProps) => {
+    const [fetchUser] = useLazyFetchUserQuery();
+    const [authorFullData, setAuthorFullData] = useState<ReceivedUser>();
+
+    useEffect(() => {
+        if (article?.Author?.Username) {
+            fetchUser(article?.Author?.Username)
+                .unwrap()
+                .then((data) => {
+                    setAuthorFullData(
+                        (data as Response)?.data?.user as ReceivedUser,
+                    );
+                    console.log(authorFullData);
+                })
+                .catch((_error) => errorToast("Couldn't fetch author data"));
+        }
+    }, []);
+
     return (
         <AuthorDataContainer to={profileURL(article?.Author?.Username)}>
             <AuthorProfileImage
@@ -29,7 +52,9 @@ export const AuthorCard = ({ article }: AuthorCardProps) => {
                 </div>
                 <div className="flex justify-between">
                     <VerticalBadge
-                        count={formatCompactNumber(12)}
+                        count={formatCompactNumber(
+                            authorFullData?.Articles?.length ?? 0,
+                        )}
                         title="articles"
                     />
                     <VerticalBadge
@@ -38,7 +63,7 @@ export const AuthorCard = ({ article }: AuthorCardProps) => {
                     />
                     <VerticalBadge
                         count={formatCompactNumber(1500)}
-                        title="stars"
+                        title="likes"
                     />
                 </div>
                 <div className="flex gap-2">

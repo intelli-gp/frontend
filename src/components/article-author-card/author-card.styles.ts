@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import EnhancedImage from '../image/image.component';
 import { CSSTextLengthLimit } from '../../index.styles';
+import EnhancedImage from '../image/image.component';
 
 export const AuthorDataContainer = styled(Link)`
     color: inherit;
-    border-radius: 1.5rem;
-    padding: 0.75rem;
+    border-radius: 1.25rem;
+    padding: 0.5rem;
     padding-right: 1.5rem;
     position: absolute;
     left: 0;
@@ -42,7 +42,7 @@ export const AuthorData = styled.div`
     flex-direction: column;
     flex: 1;
     justify-content: space-between;
-    padding: 0.25rem 0;
+    padding: 0.5rem 0;
     overflow: hidden;
     height: 135px;
 `;
@@ -67,4 +67,3 @@ export const AuthorUsername = styled.span`
     font-weight: 500;
     margin-top: -0.5rem;
 `;
-

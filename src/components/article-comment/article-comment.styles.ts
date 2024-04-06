@@ -9,8 +9,11 @@ export const CommentContainer = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    padding: 1.5rem;
+    gap: 0.5rem;
+    padding: 1rem;
+    &:not(:last-child) {
+        border-bottom: 1px solid var(--gray-300);
+    }
 `;
 
 export const WriteCommentContainer = styled(CommentContainer)`
@@ -53,15 +56,8 @@ export const CommentContent = styled(MDEditor.Markdown)`
     word-break: break-word;
     font-family: inherit;
     padding: 1rem;
-    border-radius: 0.5rem;
+    border-radius: 0.25rem;
     background-color: var(--gray-100);
     min-height: 100px;
     width: 100%;
-`;
-
-export const Separator = styled.div`
-    width: 90%;
-    height: 1px;
-    background-color: var(--gray-300);
-    margin: 0 auto;
 `;

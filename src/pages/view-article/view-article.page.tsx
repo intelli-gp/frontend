@@ -13,7 +13,6 @@ import { AuthorCard } from '../../components/article-author-card/author-card.com
 import ArticleComment, {
     ArticleWriteComment,
 } from '../../components/article-comment/article-comment.component';
-import { Separator } from '../../components/article-comment/article-comment.styles';
 import Button from '../../components/button/button.component';
 import DropdownMenu from '../../components/menu/menu.component';
 import { Modal } from '../../components/modal/modal.component';
@@ -32,8 +31,19 @@ import { RootState } from '../../store';
 import { ArticleSectionType, ReceivedArticle } from '../../types/article.d';
 import { Response } from '../../types/response';
 import { ReceivedUser } from '../../types/user';
+import { profileURL } from '../../utils/profileUrlBuilder';
 import { errorToast, successToast } from '../../utils/toasts';
-import { CommentsContainer, IconWithCounter } from './view-article.styles';
+import {
+    CommentsContainer,
+    EmptyPlaceholder,
+    IconWithCounter,
+    InteractionCounter,
+    UserContainer,
+    UserFullName,
+    UserImage,
+    UserItemsContainer,
+    UserUsername,
+} from './view-article.styles';
 import {
     ArticleBodyContainer,
     ArticleCoverImage,
@@ -63,6 +73,7 @@ const ViewArticlePage = () => {
     const [commentsPanelIsOpen, setCommentsPanelIsOpen] = useState(false);
     const [deleteArticleModalIsOpen, setDeleteArticleModalIsOpen] =
         useState(false);
+    const [lovedByModalIsOpen, setLovedByModalIsOpen] = useState(false);
     const [isArticleLoved, setIsArticleLoved] = useState(false);
     const [isArticleBookmarked, _setIsArticleBookmarked] = useState(false);
 
@@ -117,12 +128,13 @@ const ViewArticlePage = () => {
 
     const handleToggleLoveArticle = async () => {
         try {
-            await toggleLoveArticle(+articleId!).unwrap();
             if (!isArticleLoved) {
                 new Audio(loveSound).play();
+                setIsArticleLoved(true);
             }
+            await toggleLoveArticle(+articleId!).unwrap();
         } catch (error) {
-            errorToast('Error occurred while toggling love');
+            errorToast('Error occurred while toggling like');
         }
     };
 
@@ -151,6 +163,44 @@ const ViewArticlePage = () => {
                     Cancel
                 </Button>
             </div>
+        </Modal>
+    );
+
+    const LovedByModal = (
+        <Modal
+            title="This article is liked by"
+            width="sm"
+            isOpen={lovedByModalIsOpen}
+            setIsOpen={setLovedByModalIsOpen}
+        >
+            {article?.LikedBy?.length === 0 && (
+                <EmptyPlaceholder>Nobody, yet.</EmptyPlaceholder>
+            )}
+
+            {article?.LikedBy?.length > 0 && (
+                <UserItemsContainer>
+                    {article?.LikedBy?.map((user) => {
+                        return (
+                            <UserContainer>
+                                <UserImage
+                                    src={user?.ProfileImage}
+                                    alt="profile"
+                                />
+                                <div className="flex-1 overflow-hidden">
+                                    <UserFullName
+                                        to={profileURL(user?.Username)}
+                                    >
+                                        {user?.FullName}
+                                    </UserFullName>
+                                    <UserUsername>
+                                        @{user.Username}
+                                    </UserUsername>
+                                </div>
+                            </UserContainer>
+                        );
+                    })}
+                </UserItemsContainer>
+            )}
         </Modal>
     );
 
@@ -183,6 +233,7 @@ const ViewArticlePage = () => {
     return (
         <PageContainer {...BetweenPageAnimation}>
             {DeleteArticleModal}
+            {LovedByModal}
             <ArticleCoverImageContainer>
                 <ArticleCoverImage
                     src={article?.CoverImage ?? defaultCoverImage}
@@ -212,12 +263,17 @@ const ViewArticlePage = () => {
                             <motion.span whileTap={{ scale: 1.25 }}>
                                 <LoveIcon
                                     size={28}
-                                    title="Love"
+                                    title="Like"
                                     active={isArticleLoved}
                                     onClick={handleToggleLoveArticle}
                                 />
                             </motion.span>
-                            {article?.LikedBy?.length ?? 0}
+                            <InteractionCounter
+                                title="View how liked this article"
+                                onClick={() => setLovedByModalIsOpen(true)}
+                            >
+                                {article?.LikedBy?.length ?? 0}
+                            </InteractionCounter>
                         </IconWithCounter>
                         <VerticalLine />
                         <motion.span whileTap={{ scale: 1.25 }}>
@@ -238,7 +294,9 @@ const ViewArticlePage = () => {
                                     onClick={openCommentsPanel}
                                 />
                             </motion.span>
-                            {article?.Comments?.length ?? 0}
+                            <InteractionCounter onClick={openCommentsPanel}>
+                                {article?.Comments?.length ?? 0}
+                            </InteractionCounter>
                         </IconWithCounter>
                         <VerticalLine />
                         <DropdownMenu
@@ -283,12 +341,9 @@ const ViewArticlePage = () => {
                         <IoCloseOutline size={28} />
                     </ModalExitButton>
                 </ModalHeader>
-                <div className="flex-1 overflow-auto">
+                <div className="flex-1 overflow-auto p-2">
                     {article?.Comments?.map((comment) => (
-                        <>
-                            <ArticleComment comment={comment} />
-                            <Separator />
-                        </>
+                        <ArticleComment comment={comment} />
                     ))}
                 </div>
                 <ArticleWriteComment articleId={+articleId!} />
