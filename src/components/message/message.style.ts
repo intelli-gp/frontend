@@ -108,7 +108,7 @@ export const MessageInfoUserContainer = styled.div`
     align-items: center;
 `;
 
-export const MessageInfoUserProfile = styled.img`
+export const MessageInfoUserProfile = styled(EnhancedImage)`
     width: 50px;
     height: 50px;
     aspect-ratio: 1/1;

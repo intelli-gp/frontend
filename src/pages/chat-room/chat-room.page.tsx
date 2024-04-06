@@ -18,6 +18,7 @@ import { BeatLoader } from 'react-spinners';
 
 import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
+import EnhancedImage from '../../components/image/image.component';
 import { CustomInput } from '../../components/input/Input.component';
 import DropdownMenu from '../../components/menu/menu.component';
 import ChatMessage from '../../components/message/message.component';
@@ -276,15 +277,20 @@ export const ChatroomPage = () => {
                     <UsersContainer>
                         <h1 className="font-bold">ONLINE USERS</h1>
                         {onlineUsers.map((person) => (
-                            <UserContainer key={person.ID}>
-                                <img
-                                    className="object-cover"
+                            <UserContainer
+                                key={person.ID}
+                                onClick={() => {
+                                    navigate(profileURL(person.Username));
+                                }}
+                            >
+                                <EnhancedImage
+                                    className="!w-[48px] !h-[48px] rounded-full object-cover aspect-square"
                                     alt="username"
                                     src={
                                         person?.ProfileImage ?? defaultUserImage
                                     }
                                 />
-                                <div className="max-w-[60%]">
+                                <div className="overflow-hidden">
                                     <GroupUserFullName
                                         title={person.FullName}
                                         onClick={() => {
@@ -295,9 +301,9 @@ export const ChatroomPage = () => {
                                     >
                                         {person.FullName}
                                     </GroupUserFullName>
-                                    <div className="flex flex-row gap-[6px] items-center">
+                                    <div className="flex gap-1 items-center">
                                         <StyledBadge online={true} />
-                                        <p className="text-xs text-[var(--slate-500)]">
+                                        <p className="text-xs text-[var(--gray-600)]">
                                             online
                                         </p>
                                     </div>
@@ -306,32 +312,30 @@ export const ChatroomPage = () => {
                         ))}
                         <h1 className="mt-8 font-bold">OFFLINE USERS</h1>
                         {offlineUsers.map((person) => (
-                            <UserContainer key={person.ID}>
-                                <img
+                            <UserContainer
+                                key={person.ID}
+                                onClick={() => {
+                                    navigate(profileURL(person.Username));
+                                }}
+                            >
+                                <EnhancedImage
+                                    className="!w-[48px] !h-[48px] rounded-full object-cover aspect-square"
                                     alt="username"
                                     src={
                                         person?.ProfileImage ?? defaultUserImage
                                     }
-                                    className="object-cover"
                                 />
-                                <span>
-                                    <GroupUserFullName
-                                        onClick={() => {
-                                            navigate(
-                                                profileURL(person.Username),
-                                            );
-                                        }}
-                                        title={person.FullName}
-                                    >
+                                <div className="overflow-hidden">
+                                    <GroupUserFullName title={person.FullName}>
                                         {person.FullName}
                                     </GroupUserFullName>
-                                    <div className="flex flex-row gap-[6px] items-center">
+                                    <div className="flex flex-row gap-1 items-center">
                                         <StyledBadge online={false} />
-                                        <p className="text-xs text-[var(--slate-500)]">
+                                        <p className="text-xs text-[var(--gray-600)]">
                                             offline
                                         </p>
                                     </div>
-                                </span>
+                                </div>
                             </UserContainer>
                         ))}
                     </UsersContainer>
