@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { ChangeEvent, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { MdDoNotDisturb } from 'react-icons/md';
@@ -16,6 +15,7 @@ import Button from '../button/button.component';
 import { CustomInput } from '../input/Input.component';
 import DropdownMenu from '../menu/menu.component';
 import { Modal } from '../modal/modal.component';
+import UserItem from '../user-Item/user-item.component';
 import {
     Message,
     MessageContent,
@@ -24,10 +24,7 @@ import {
     MessageInfoModalContainer,
     MessageInfoReadContainer,
     MessageInfoSectionLabel,
-    MessageInfoUserContainer,
-    MessageInfoUserFullName,
-    MessageInfoUserProfile,
-    MessageInfoUserReadTime,
+    MessageInfoUsersList,
     OptionsButton,
     SenderName,
     SenderProfile,
@@ -186,29 +183,21 @@ const ChatMessage = ({
             <MessageInfoModalContainer>
                 <MessageInfoReadContainer>
                     <MessageInfoSectionLabel>Read by</MessageInfoSectionLabel>
-                    {(messageInfo as MessageInfo[])?.map((info: any) => {
-                        return (
-                            <MessageInfoUserContainer key={info.ID}>
-                                <MessageInfoUserProfile
-                                    src={info?.ProfileImage ?? ''}
-                                    alt="user profile image"
-                                    className="aspect-square rounded-full object-cover w-8 h-8"
-                                />
-                                <div>
-                                    <MessageInfoUserFullName>
-                                        {info?.FullName ?? ''}
-                                    </MessageInfoUserFullName>
-                                    <MessageInfoUserReadTime>
-                                        {moment(
-                                            new Date(
-                                                info?.ReadAt ?? Date.now(),
-                                            ),
-                                        ).fromNow()}
-                                    </MessageInfoUserReadTime>
-                                </div>
-                            </MessageInfoUserContainer>
-                        );
-                    })}
+                    <MessageInfoUsersList>
+                        {(messageInfo as MessageInfo[])?.map(
+                            (info: MessageInfo) => {
+                                return (
+                                    <UserItem
+                                        key={info.UserID}
+                                        FullName={info.FullName}
+                                        ProfileImage={info.ProfileImage}
+                                        Username={info.Username}
+                                        timeInfo={info.ReadAt}
+                                    />
+                                );
+                            },
+                        )}
+                    </MessageInfoUsersList>
                 </MessageInfoReadContainer>
             </MessageInfoModalContainer>
         </Modal>

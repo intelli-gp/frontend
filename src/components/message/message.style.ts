@@ -92,7 +92,10 @@ export const MessageInfoModalContainer = styled.div`
 export const MessageInfoReadContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+`;
+
+export const MessageInfoUsersList = styled.ul`
+    overflow-y: auto;
 `;
 
 export const MessageInfoSectionLabel = styled.label`
@@ -100,28 +103,5 @@ export const MessageInfoSectionLabel = styled.label`
     opacity: 0.6;
     border-bottom: 1px solid var(--gray-300);
     padding-bottom: 0.25rem;
-`;
-
-export const MessageInfoUserContainer = styled.div`
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-`;
-
-export const MessageInfoUserProfile = styled(EnhancedImage)`
-    width: 50px;
-    height: 50px;
-    aspect-ratio: 1/1;
-    border-radius: 50%;
-    object-fit: cover;
-`;
-
-export const MessageInfoUserFullName = styled.p`
-    font-weight: 700;
-    font-size: 1rem;
-`;
-
-export const MessageInfoUserReadTime = styled.p`
-    font-size: 0.75rem;
-    opacity: 0.6;
+    margin-bottom: 0.75rem;
 `;
