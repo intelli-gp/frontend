@@ -34,6 +34,7 @@ export type MessageInfo = {
     MessageID: number;
     UserID: number;
     Username: string;
+    FullName: string;
     ProfileImage: string;
     ReadAt: string; // Date
 };
