@@ -31,7 +31,7 @@ const Card = ({ el }: { el: Type }) => {
                 <p className="text-sm">lorem ipsum lorem ipsum</p>
             </div>
             <UpgradeButton
-                type="button"
+                
                 className={` ${
                     el.middle
                         ? 'bg-[#F9F8C1] hover:opacity-[0.9] border border-[1px] border-black'
@@ -60,7 +60,7 @@ const UpgradePage = () => {
             <UpgradeTitle>Find the plan that suit you the best</UpgradeTitle>
             <ButtonsHolder>
                 <Button
-                    type="button"
+                    
                     select="primary500"
                     className={`!w-[50%] !rounded-[15px] !py-[10px] ${
                         selectedPlan === 'Monthly'
@@ -73,7 +73,7 @@ const UpgradePage = () => {
                     Monthly
                 </Button>
                 <Button
-                    type="button"
+                    
                     select="primary500"
                     className={`!rounded-[15px] !py-[10px] !w-[50%] ${
                         selectedPlan === 'Yearly'

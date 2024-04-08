@@ -314,7 +314,7 @@ const CreateArticlePage = () => {
             <div className="flex gap-4 flex-row-reverse">
                 <Button
                     className="!px-8"
-                    type="button"
+                    
                     select="danger"
                     outline
                     onClick={() => dispatch(executeSectionDeletion())}
@@ -322,7 +322,7 @@ const CreateArticlePage = () => {
                     Yes
                 </Button>
                 <Button
-                    type="button"
+                    
                     className="!px-6"
                     onClick={() => dispatch(openDeleteSectionModal(false))}
                 >
@@ -342,7 +342,7 @@ const CreateArticlePage = () => {
             <div className="flex gap-4 flex-row-reverse">
                 <Button
                     className="!px-8"
-                    type="button"
+                    
                     select="danger"
                     outline
                     onClick={deleteArticle}
@@ -350,7 +350,7 @@ const CreateArticlePage = () => {
                     Yes
                 </Button>
                 <Button
-                    type="button"
+                    
                     className="!px-6"
                     onClick={() => setDeleteArticleModalIsOpen(false)}
                 >
@@ -444,8 +444,8 @@ const CreateArticlePage = () => {
                     right="90%"
                 >
                     <Button
-                        type="button"
-                        className="!p-4 !rounded-full justify-center"
+                        
+                        className="h-[50px] w-[50px] !rounded-full justify-center"
                         title="Add New section"
                         ref={addSectionButtonRef}
                     >
@@ -455,8 +455,7 @@ const CreateArticlePage = () => {
 
                 <Button
                     select="success"
-                    type="button"
-                    className="!p-4 !rounded-full items-center justify-center"
+                    className="h-[50px] w-[50px] !rounded-full items-center justify-center"
                     onClick={isEdit ? updateArticle : publishArticle}
                     loading={imageUploadIsLoading || isArticleCreating}
                     title={isEdit ? 'Save changes' : 'Publish article'}
@@ -466,8 +465,8 @@ const CreateArticlePage = () => {
                 {isEdit && (
                     <Button
                         select="danger"
-                        type="button"
-                        className="!p-4 !rounded-full items-center justify-center"
+                        
+                        className="h-[50px] w-[50px] !rounded-full items-center justify-center"
                         onClick={() => setDeleteArticleModalIsOpen(true)}
                         loading={false}
                         title={'Delete this article'}

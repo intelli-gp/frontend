@@ -231,7 +231,7 @@ export default function SignupPage() {
                         Create
                     </SubmitButton>
 
-                    <GoogleLoginButton type="button">
+                    <GoogleLoginButton >
                         <GoogleLoginLink
                             href={`${
                                 import.meta.env.VITE_BACKEND

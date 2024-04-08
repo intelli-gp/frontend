@@ -265,7 +265,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                             Create
                         </Button>
                         <Button
-                            type="button"
+                            
                             select="danger"
                             outline={true}
                             onClick={() => setShowModal(false)}

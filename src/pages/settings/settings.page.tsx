@@ -248,7 +248,7 @@ export const SettingsPage = () => {
                 </SectionContainer>
 
                 <EditButton
-                    type="button"
+                    
                     select="warning"
                     title="Edit this section"
                     loading={isLoading}
@@ -268,7 +268,7 @@ export const SettingsPage = () => {
 
             <Accordion title="Notifications">
                 <EditButton
-                    type="button"
+                    
                     select="warning"
                     title="Edit this section"
                 >
@@ -278,7 +278,7 @@ export const SettingsPage = () => {
 
             <Accordion title="Payment">
                 <EditButton
-                    type="button"
+                    
                     select="warning"
                     title="Edit this section"
                 >
@@ -288,7 +288,7 @@ export const SettingsPage = () => {
 
             <Accordion title="Security">
                 <EditButton
-                    type="button"
+                    
                     select="warning"
                     title="Edit this section"
                 >
@@ -297,7 +297,7 @@ export const SettingsPage = () => {
             </Accordion>
 
             <Button
-                type="button"
+                
                 outline
                 select="danger"
                 className="self-start mt-auto"

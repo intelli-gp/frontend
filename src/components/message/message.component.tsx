@@ -121,11 +121,11 @@ const ChatMessage = ({
                 rows={5}
             />
             <div className="flex gap-4 flex-row-reverse">
-                <Button type="button" onClick={handleUpdateMessage}>
+                <Button  onClick={handleUpdateMessage}>
                     Save
                 </Button>
                 <Button
-                    type="button"
+                    
                     outline
                     select="danger"
                     onClick={() => {
@@ -148,7 +148,7 @@ const ChatMessage = ({
         >
             <div className="flex gap-4 justify-center">
                 <Button
-                    type="button"
+                    
                     outline
                     select="danger"
                     onClick={handleDeleteMessage}
@@ -156,7 +156,7 @@ const ChatMessage = ({
                     Delete
                 </Button>
                 <Button
-                    type="button"
+                    
                     onClick={() => {
                         setDeleteMessageIsOpen(false);
                     }}

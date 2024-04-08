@@ -41,7 +41,7 @@ export const ImageUploadSection = ({ section }: ImageUploadSectionProps) => {
         <SectionContainer>
             <div className="absolute top-0 right-0 z-30">
                 <Button
-                    type="button"
+                    
                     select="warning"
                     className="!p-2 !rounded-none !text-[var(--gray-800)]"
                     title="Click to choose an image"
@@ -50,7 +50,7 @@ export const ImageUploadSection = ({ section }: ImageUploadSectionProps) => {
                     <FiEdit size={14} />
                 </Button>
                 <Button
-                    type="button"
+                    
                     select="danger"
                     title="Delete this section"
                     className="z-30 !p-2 !rounded-none"

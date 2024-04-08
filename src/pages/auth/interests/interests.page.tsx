@@ -84,7 +84,7 @@ const InterestsPage = () => {
 
             <FooterButtons>
                 <Button
-                    type="button"
+                    
                     onClick={handleContinue}
                     loading={isLoading}
                 >

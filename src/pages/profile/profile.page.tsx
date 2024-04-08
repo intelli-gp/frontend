@@ -333,7 +333,7 @@ const ProfilePage = () => {
             setIsOpen={setIsOpen}
             title={`Edit ${title} Image`}
             width="lg"
-        >
+        >   
             <OpenImage
                 height="250px"
                 width={title === 'Cover' ? '450px' : '250px'}
@@ -342,9 +342,9 @@ const ProfilePage = () => {
                 radius={title === 'Cover' ? '5px' : '50%'}
                 cover={title === 'Cover' ? 'contain' : 'cover'}
             />
+
             <div className="flex flex-row-reverse gap-4 w-full mt-4">
                 <Button
-                    type="button"
                     select="primary"
                     loading={isImageLoading || updateUserIsLoading}
                     onClick={handleUpdate}
@@ -352,7 +352,6 @@ const ProfilePage = () => {
                     Apply
                 </Button>
                 <Button
-                    type="button"
                     select="danger"
                     onClick={() => {
                         setImage(
@@ -418,7 +417,6 @@ const ProfilePage = () => {
     const EditButton = (
         <Button
             select="warning"
-            type="button"
             title="Edit profile"
             className="ml-auto gap-2 !p-4 !text-inherit self-start"
             rounded
@@ -431,7 +429,6 @@ const ProfilePage = () => {
     const FollowButton = (
         <Button
             select="primary"
-            type="button"
             title="Follow"
             className="ml-auto gap-2 self-start"
         >
@@ -455,11 +452,13 @@ const ProfilePage = () => {
                         }`}
                         onClick={openCoverModal}
                     />
-                    {userData?.CoverImage ? (
-                        <CoverImage src={userData?.CoverImage} />
-                    ) : (
-                        <div className="bg-indigo-900 h-[200px]" />
-                    )}
+                    <CoverImage
+                        src={
+                            userData?.CoverImage ??
+                            'https://cdn11.bigcommerce.com/s-9uf88xhege/images/stencil/1280x1280/products/1162/50750/montana-cans-montana-black-dark-indigo__66994.1657052664.jpg?c=1?imbypass=on'
+                        }
+                        alt=""
+                    />
                 </CoverImageContainer>
 
                 <UserDataContainer>

@@ -145,7 +145,7 @@ export default function LoginPage() {
                 Login
             </Button>
 
-            <GoogleLoginButton type="button">
+            <GoogleLoginButton >
                 <GoogleLoginLink href="http://localhost:3333/api/auth/login/google">
                     <GoogleIcon />
                     Login with google

@@ -130,7 +130,7 @@ const TagsInput = ({
                 {ConditionalDropdown}
                 <Button
                     className="flex gap-2"
-                    type="button"
+                    
                     onClick={() => createNewTag(typing)}
                 >
                     Add new tag

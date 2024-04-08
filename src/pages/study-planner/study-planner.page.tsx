@@ -322,7 +322,7 @@ export default function StudyPlanner() {
                 <ButtonMV>
                     <Button
                         select="primary300"
-                        type="button"
+                        
                         rounded
                         onClick={(e: unknown) => {
                             (e as MouseEvent).stopPropagation();
@@ -334,7 +334,7 @@ export default function StudyPlanner() {
                     </Button>
                     <Button
                         select="primary"
-                        type="button"
+                        
                         rounded
                         className="!w-[55px] !h-[55px]"
                     >
@@ -357,7 +357,7 @@ export default function StudyPlanner() {
                         <>
                             <Button
                                 select="primary300"
-                                type="button"
+                                
                                 onClick={openModal}
                                 className="!text-txt"
                             >
@@ -367,7 +367,7 @@ export default function StudyPlanner() {
                             <Button
                                 select="primary"
                                 className="flex flex-row gap-2 py-[10px]"
-                                type="button"
+                                
                             >
                                 <RiRobot2Line size="16" color="white" />
                                 <span className="text-sm">Make plan</span>

@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
 import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
+import EnhancedImage from '../../components/image/image.component';
 
 const SECTION_SHADOW = '';
 const SECTION_BACKGROUND = 'var(--indigo-50)';
@@ -32,11 +33,14 @@ export const CoverImageContainer = styled.div`
     width: 100%;
 `;
 
-export const CoverImage = styled.img`
+export const CoverImage = styled(EnhancedImage)`
     width: 100%;
-    height: 250px;
+    height: auto;
+    min-height: 200px;
+    aspect-ratio: 5/1;
     object-fit: cover;
     border: none;
+    z-index: 0;
 `;
 
 export const ProfilePictureContainer = styled.div`
@@ -68,6 +72,7 @@ export const PictureOverlay = styled(ProfilePicture)`
     opacity: 0;
     position: absolute;
     transition: opacity 0.3s ease-in-out;
+    z-index: 1;
     &:hover {
         opacity: 0.1;
         cursor: pointer;
