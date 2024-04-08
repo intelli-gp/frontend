@@ -21,6 +21,7 @@ import {
     ModalHeader,
 } from '../../components/modal/model.styles';
 import Tag from '../../components/tag/tag.component';
+import UserItem from '../../components/user-Item/user-item.component';
 import { BetweenPageAnimation, ModalTitle } from '../../index.styles';
 import {
     useDeleteArticleMutation,
@@ -31,18 +32,13 @@ import { RootState } from '../../store';
 import { ArticleSectionType, ReceivedArticle } from '../../types/article.d';
 import { Response } from '../../types/response';
 import { ReceivedUser } from '../../types/user';
-import { profileURL } from '../../utils/profileUrlBuilder';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
     CommentsContainer,
     EmptyPlaceholder,
     IconWithCounter,
     InteractionCounter,
-    UserContainer,
-    UserFullName,
-    UserImage,
     UserItemsContainer,
-    UserUsername,
 } from './view-article.styles';
 import {
     ArticleBodyContainer,
@@ -179,26 +175,13 @@ const ViewArticlePage = () => {
 
             {article?.LikedBy?.length > 0 && (
                 <UserItemsContainer>
-                    {article?.LikedBy?.map((user) => {
-                        return (
-                            <UserContainer>
-                                <UserImage
-                                    src={user?.ProfileImage}
-                                    alt="profile"
-                                />
-                                <div className="flex-1 overflow-hidden">
-                                    <UserFullName
-                                        to={profileURL(user?.Username)}
-                                    >
-                                        {user?.FullName}
-                                    </UserFullName>
-                                    <UserUsername>
-                                        @{user.Username}
-                                    </UserUsername>
-                                </div>
-                            </UserContainer>
-                        );
-                    })}
+                    {article?.LikedBy?.map((user) => (
+                        <UserItem
+                            FullName={user.FullName}
+                            Username={user.Username}
+                            ProfileImage={user.ProfileImage}
+                        />
+                    ))}
                 </UserItemsContainer>
             )}
         </Modal>

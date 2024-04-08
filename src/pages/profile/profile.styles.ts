@@ -154,7 +154,7 @@ export const AboutSection = styled.section`
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
 
     @media (max-width: 768px) {
         grid-row: 1;
@@ -265,7 +265,7 @@ export const YouMayNowSection = styled.section`
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
 
     @media (max-width: 768px) {
         grid-column: 1;

@@ -3,11 +3,9 @@ import { BiSolidComment } from 'react-icons/bi';
 import { BsThreeDots } from 'react-icons/bs';
 import { IoHeart } from 'react-icons/io5';
 import { IoBookmark } from 'react-icons/io5';
-import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 import EnhancedImage from '../../components/image/image.component';
-import { CSSTextLengthLimit } from '../../index.styles';
 
 export const PageContainer = styled(motion.div)`
     display: flex;
@@ -191,37 +189,7 @@ export const EmptyPlaceholder = styled.div`
     width: 100%;
 `;
 
-export const UserItemsContainer = styled.div`
+export const UserItemsContainer = styled.ul`
     display: flex;
     flex-direction: column;
-`;
-
-export const UserContainer = styled.div`
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-    padding: 1rem 0;
-    &:not(:last-child) {
-        border-bottom: 1px solid var(--gray-300);
-    }
-`;
-
-export const UserImage = styled(EnhancedImage)`
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    aspect-ratio: 1/1;
-`;
-
-export const UserFullName = styled(Link)<{ width?: string }>`
-    color: inherit;
-    display: block;
-    ${CSSTextLengthLimit}
-`;
-
-export const UserUsername = styled.p<{ width?: string }>`
-    color: var(--gray-600);
-    margin-top: -0.35rem;
-    font-size: 0.875rem;
-    ${CSSTextLengthLimit}
 `;

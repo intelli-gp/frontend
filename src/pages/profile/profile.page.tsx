@@ -14,7 +14,7 @@ import Spinner from '../../components/Spinner';
 import Button from '../../components/button/button.component';
 import { Modal } from '../../components/modal/modal.component';
 import OpenImage from '../../components/openImage/openImage.component';
-import UserItem from '../../components/userItem/user-item.component';
+import UserItem from '../../components/user-Item/user-item.component';
 import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
 import WideGroupCard from '../../components/wide-group-card/wide-group-card.component';
 import { useUploadImage } from '../../hooks/uploadImage.hook';
@@ -393,7 +393,7 @@ const ProfilePage = () => {
         <YouMayNowSection>
             <h1 className="text-xl font-semibold">You may know</h1>
             <hr />
-            <ul className="flex flex-col gap-6">
+            <ul>
                 {youMayKnow.map((user) => (
                     <UserItem {...user} action="follow" />
                 ))}
@@ -407,7 +407,7 @@ const ProfilePage = () => {
                 Mutual Followers
             </h1>
             <hr />
-            <ul className="flex flex-col gap-4 ">
+            <ul>
                 {CommonFollowers.map((user) => (
                     <UserItem {...user} />
                 ))}
