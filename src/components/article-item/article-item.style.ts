@@ -16,8 +16,10 @@ export const Title = styled.h1`
 `;
 export const ArticleImg = styled(EnhancedImage)`
     width: 100%;
-    border-radius: 0.75rem 0.75rem 0 0;
+    object-fit: cover;
+    aspect-ratio: 1/1;
     height: 45%;
+    border-radius: 0.75rem 0.75rem 0 0;
     box-shadow: 0 4px 6px 0 rgba(31, 41, 55, 0.1);
 `;
 export const Container = styled.div`
