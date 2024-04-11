@@ -10,6 +10,7 @@ import {
     UpgradeButton,
     UpgradeTitle,
 } from './upgrade.styles';
+import { useNavigate } from 'react-router-dom';
 
 type Type = {
     type: string;
@@ -20,6 +21,8 @@ type Type = {
 };
 
 const Card = ({ el }: { el: Type }) => {
+    const navigate = useNavigate();
+
     return (
         <CardHolder>
             <div>
@@ -31,7 +34,7 @@ const Card = ({ el }: { el: Type }) => {
                 <p className="text-sm">lorem ipsum lorem ipsum</p>
             </div>
             <UpgradeButton
-                
+                onClick={() => navigate(`/app/checkout`)}
                 className={` ${
                     el.middle
                         ? 'bg-[#F9F8C1] hover:opacity-[0.9] border border-[1px] border-black'
