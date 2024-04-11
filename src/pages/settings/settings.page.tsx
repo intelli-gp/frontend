@@ -16,12 +16,16 @@ import {
 import { ReceivedUser, UserToSend } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
+    AddCard,
+    AddCardContainer,
     EditButton,
     InlineInputsContainer,
     PageContainer,
     SectionContainer,
     SectionTitle,
 } from './settings.styles';
+import CardInfo from '../../components/card-info/card-info.component';
+import CreditCardModal from '../../components/CreditCardModal';
 
 export const SettingsPage = () => {
     const dispatch = useDispatch();
@@ -52,6 +56,7 @@ export const SettingsPage = () => {
     );
     const [bio, setBio] = useState(storedUser.Bio);
     const [interests, setInterests] = useState(storedUser.UserTags);
+    const [addCreditCardIsOpen, setAddCreditCardIsOpen] = useState(false);
 
     const handleUpdatePersonalInformation = async () => {
         /**
@@ -229,26 +234,25 @@ export const SettingsPage = () => {
                         type="password"
                         label={'Current Password'}
                         value=""
-                        onChange={() => {}}
+                        onChange={() => { }}
                     />
                     <InlineInputsContainer>
                         <CustomInput
                             type="password"
                             label={'New Password'}
                             value=""
-                            onChange={() => {}}
+                            onChange={() => { }}
                         />
                         <CustomInput
                             type="password"
                             label={'Repeat New Password'}
                             value=""
-                            onChange={() => {}}
+                            onChange={() => { }}
                         />
                     </InlineInputsContainer>
                 </SectionContainer>
 
                 <EditButton
-                    
                     select="warning"
                     title="Edit this section"
                     loading={isLoading}
@@ -268,7 +272,7 @@ export const SettingsPage = () => {
 
             <Accordion title="Notifications">
                 <EditButton
-                    
+
                     select="warning"
                     title="Edit this section"
                 >
@@ -277,18 +281,24 @@ export const SettingsPage = () => {
             </Accordion>
 
             <Accordion title="Payment">
-                <EditButton
-                    
-                    select="warning"
-                    title="Edit this section"
-                >
-                    Save
-                </EditButton>
+                <div className='flex flex-row justify-start '>
+                    <CardInfo />
+                    <AddCardContainer
+                        onClick={() => setAddCreditCardIsOpen(true)}
+                    >
+                        <AddCard />
+                        <p className='font-bold text-md w-[110px] text-center text-[var(--indigo-950)]'>
+                            Add Payment Method
+                        </p>
+                    </AddCardContainer>
+                </div>
+
+
             </Accordion>
 
             <Accordion title="Security">
                 <EditButton
-                    
+
                     select="warning"
                     title="Edit this section"
                 >
@@ -297,13 +307,14 @@ export const SettingsPage = () => {
             </Accordion>
 
             <Button
-                
+
                 outline
                 select="danger"
                 className="self-start mt-auto"
             >
                 Delete Account
             </Button>
+            <CreditCardModal showModal={addCreditCardIsOpen} setShowModal={setAddCreditCardIsOpen} />
         </PageContainer>
     );
 };

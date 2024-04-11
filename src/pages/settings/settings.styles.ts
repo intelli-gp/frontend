@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
 import Button from '../../components/button/button.component';
+import { IoAddCircle } from "react-icons/io5";
 
 export const PageContainer = styled(motion.div)`
     min-height: 100vh;
@@ -50,3 +51,23 @@ export const EditButton = styled(Button)`
     margin-top: 1rem;
     color: inherit;
 `;
+export const AddCard =styled(IoAddCircle)`
+width: 60px;
+height: 60px;
+
+color: var(--indigo-200);
+
+`
+export const AddCardContainer =styled.div`
+width:200px;
+height:182.86px;
+background-color:var(--indigo-50);
+border-radius:14px;
+display:flex; 
+flex-direction: column;
+justify-items: center;
+justify-content: center;
+align-items: center;
+box-shadow: var(--gray-shadow);
+margin:0 10px;
+`
