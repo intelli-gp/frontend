@@ -28,6 +28,7 @@ import LoggedInTemplatePage from './pages/templates/LoggedIn';
 import UpgradePage from './pages/upgrade/upgrade.page';
 import ViewArticlePage from './pages/view-article/view-article.page';
 import ViewGroupPage from './pages/view-group/view-group.page';
+import CheckoutPage from './pages/checkout/checkout.page';
 
 function App() {
     return (
@@ -64,6 +65,7 @@ function App() {
                         <Route path="courses" element={<CoursesPage />} />
                         <Route path="ai-service" element={<AIServicePage />} />
                         <Route path="settings" element={<SettingsPage />} />
+                        <Route path="checkout" element={<CheckoutPage />} />
                         <Route
                             path="articles"
                             element={<ExploreArticlesPage />}
