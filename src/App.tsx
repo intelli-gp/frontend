@@ -11,6 +11,7 @@ import LoginPage from './pages/auth/login.page';
 import SignupPage from './pages/auth/signup.page';
 import { ChatroomPage } from './pages/chat-room/chat-room.page';
 import { ChatsPage } from './pages/chats/chats.page';
+import CheckoutPage from './pages/checkout/checkout.page';
 import { CoursesPage } from './pages/courses/courses.page';
 import CreateArticlePage from './pages/create-article/create-article.page';
 import ExploreArticlesPage from './pages/explore-articles/explore-articles.page';
@@ -28,7 +29,6 @@ import LoggedInTemplatePage from './pages/templates/LoggedIn';
 import UpgradePage from './pages/upgrade/upgrade.page';
 import ViewArticlePage from './pages/view-article/view-article.page';
 import ViewGroupPage from './pages/view-group/view-group.page';
-import CheckoutPage from './pages/checkout/checkout.page';
 
 function App() {
     return (

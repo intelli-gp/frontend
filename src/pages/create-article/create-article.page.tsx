@@ -314,7 +314,6 @@ const CreateArticlePage = () => {
             <div className="flex gap-4 flex-row-reverse">
                 <Button
                     className="!px-8"
-                    
                     select="danger"
                     outline
                     onClick={() => dispatch(executeSectionDeletion())}
@@ -322,7 +321,6 @@ const CreateArticlePage = () => {
                     Yes
                 </Button>
                 <Button
-                    
                     className="!px-6"
                     onClick={() => dispatch(openDeleteSectionModal(false))}
                 >
@@ -342,7 +340,6 @@ const CreateArticlePage = () => {
             <div className="flex gap-4 flex-row-reverse">
                 <Button
                     className="!px-8"
-                    
                     select="danger"
                     outline
                     onClick={deleteArticle}
@@ -350,7 +347,6 @@ const CreateArticlePage = () => {
                     Yes
                 </Button>
                 <Button
-                    
                     className="!px-6"
                     onClick={() => setDeleteArticleModalIsOpen(false)}
                 >
@@ -444,7 +440,6 @@ const CreateArticlePage = () => {
                     right="90%"
                 >
                     <Button
-                        
                         className="h-[50px] w-[50px] !rounded-full justify-center"
                         title="Add New section"
                         ref={addSectionButtonRef}
@@ -465,7 +460,6 @@ const CreateArticlePage = () => {
                 {isEdit && (
                     <Button
                         select="danger"
-                        
                         className="h-[50px] w-[50px] !rounded-full items-center justify-center"
                         onClick={() => setDeleteArticleModalIsOpen(true)}
                         loading={false}

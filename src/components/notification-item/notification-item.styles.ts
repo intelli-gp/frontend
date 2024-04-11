@@ -47,7 +47,7 @@ export const Username = styled.p`
 
 export const Time = styled.time`
     font-size: 0.75rem;
-`
+`;
 
 export const ContentContainer = styled.div`
     display: flex;

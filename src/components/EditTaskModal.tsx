@@ -293,7 +293,6 @@ export const EditTaskModal: React.FC<ModalProps> = ({
                             Save
                         </Button>
                         <Button
-                            
                             select="danger"
                             outline={true}
                             onClick={handleDelete}

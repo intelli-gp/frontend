@@ -1,4 +1,5 @@
 import { SetStateAction, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '../../components/button/button.component';
 import { BetweenPageAnimation } from '../../index.styles';
@@ -10,7 +11,6 @@ import {
     UpgradeButton,
     UpgradeTitle,
 } from './upgrade.styles';
-import { useNavigate } from 'react-router-dom';
 
 type Type = {
     type: string;
@@ -63,7 +63,6 @@ const UpgradePage = () => {
             <UpgradeTitle>Find the plan that suit you the best</UpgradeTitle>
             <ButtonsHolder>
                 <Button
-                    
                     select="primary500"
                     className={`!w-[50%] !rounded-[15px] !py-[10px] ${
                         selectedPlan === 'Monthly'
@@ -76,7 +75,6 @@ const UpgradePage = () => {
                     Monthly
                 </Button>
                 <Button
-                    
                     select="primary500"
                     className={`!rounded-[15px] !py-[10px] !w-[50%] ${
                         selectedPlan === 'Yearly'

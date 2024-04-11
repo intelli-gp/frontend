@@ -333,7 +333,7 @@ const ProfilePage = () => {
             setIsOpen={setIsOpen}
             title={`Edit ${title} Image`}
             width="lg"
-        >   
+        >
             <OpenImage
                 height="250px"
                 width={title === 'Cover' ? '450px' : '250px'}

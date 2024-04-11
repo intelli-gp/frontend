@@ -2,8 +2,10 @@ import _ from 'lodash';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import CreditCardModal from '../../components/CreditCardModal';
 import Accordion from '../../components/accordion/accordion.component';
 import Button from '../../components/button/button.component';
+import CardInfo from '../../components/card-info/card-info.component';
 import { CustomInput } from '../../components/input/Input.component';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
@@ -24,8 +26,6 @@ import {
     SectionContainer,
     SectionTitle,
 } from './settings.styles';
-import CardInfo from '../../components/card-info/card-info.component';
-import CreditCardModal from '../../components/CreditCardModal';
 
 export const SettingsPage = () => {
     const dispatch = useDispatch();
@@ -234,20 +234,20 @@ export const SettingsPage = () => {
                         type="password"
                         label={'Current Password'}
                         value=""
-                        onChange={() => { }}
+                        onChange={() => {}}
                     />
                     <InlineInputsContainer>
                         <CustomInput
                             type="password"
                             label={'New Password'}
                             value=""
-                            onChange={() => { }}
+                            onChange={() => {}}
                         />
                         <CustomInput
                             type="password"
                             label={'Repeat New Password'}
                             value=""
-                            onChange={() => { }}
+                            onChange={() => {}}
                         />
                     </InlineInputsContainer>
                 </SectionContainer>
@@ -271,53 +271,38 @@ export const SettingsPage = () => {
             </Accordion>
 
             <Accordion title="Notifications">
-                <EditButton
-
-                    select="warning"
-                    title="Edit this section"
-                >
+                <EditButton select="warning" title="Edit this section">
                     Save
                 </EditButton>
             </Accordion>
 
             <Accordion title="Payment">
-                <div className='flex flex-row justify-start '>
-                    <CardInfo
-                        number='53**********4242'
-                        expiry='12/25'
-                    />
+                <div className="flex flex-row justify-start ">
+                    <CardInfo number="53**********4242" expiry="12/25" />
                     <AddCardContainer
                         onClick={() => setAddCreditCardIsOpen(true)}
                     >
                         <AddCard />
-                        <p className='font-bold text-md w-[110px] text-center text-[var(--indigo-950)]'>
+                        <p className="font-bold text-md w-[110px] text-center text-[var(--indigo-950)]">
                             Add Payment Method
                         </p>
                     </AddCardContainer>
                 </div>
-
-
             </Accordion>
 
             <Accordion title="Security">
-                <EditButton
-
-                    select="warning"
-                    title="Edit this section"
-                >
+                <EditButton select="warning" title="Edit this section">
                     Save
                 </EditButton>
             </Accordion>
 
-            <Button
-
-                outline
-                select="danger"
-                className="self-start mt-auto"
-            >
+            <Button outline select="danger" className="self-start mt-auto">
                 Delete Account
             </Button>
-            <CreditCardModal showModal={addCreditCardIsOpen} setShowModal={setAddCreditCardIsOpen} />
+            <CreditCardModal
+                showModal={addCreditCardIsOpen}
+                setShowModal={setAddCreditCardIsOpen}
+            />
         </PageContainer>
     );
 };

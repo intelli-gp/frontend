@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
 import EnhancedImage from '../../components/image/image.component';
+import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
 
 const SECTION_SHADOW = '';
 const SECTION_BACKGROUND = 'var(--indigo-50)';

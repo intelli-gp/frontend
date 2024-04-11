@@ -13,7 +13,6 @@ const NotFoundPage = () => {
                 <Title>OOPS!! Page not found</Title>
                 <Title>Let’s get you home</Title>
                 <Button
-                    
                     className="w-42 !rounded-sm m-4"
                     select="primary500"
                     onClick={() => navigate('/')}

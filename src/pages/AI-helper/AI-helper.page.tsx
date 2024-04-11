@@ -69,7 +69,6 @@ const AIHelperPage = () => {
                     </h1>
                 </span>
                 <Button
-                    
                     select="secondary"
                     className="!text-[#312E81] !text-xs !h-[38px] !w-[80px]"
                     onClick={() => navigate('/app/upgrade')}

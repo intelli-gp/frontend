@@ -26,10 +26,10 @@ type WarningNotification = {
 export type Notification = {
     Username: string;
     UserImage: string;
-    Action: "starred" | "commented" | "followed" | "created";
+    Action: 'starred' | 'commented' | 'followed' | 'created';
     Read: boolean;
     CreatedAt: string;
     TargetID: string;
-}
+};
 
 export type SseEvents = ChatNotification | WarningNotification;

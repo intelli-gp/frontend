@@ -118,7 +118,6 @@ const CreateGroupModal = ({ isOpen, setIsOpen }: CreateGroupModalProps) => {
                         Create
                     </Button>
                     <Button
-                        
                         select="danger"
                         outline
                         onClick={() => {

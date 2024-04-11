@@ -47,7 +47,6 @@ export const OpenImage = ({
         <>
             {editButton && (
                 <Button
-                    
                     select="warning"
                     className="!p-2 !rounded-none !text-[var(--gray-800)]"
                     title="Click to choose an image"
@@ -58,7 +57,6 @@ export const OpenImage = ({
             )}
             {deleteButton && (
                 <Button
-                    
                     select="danger"
                     title="Delete this section"
                     className="z-30 !p-2 !rounded-none"

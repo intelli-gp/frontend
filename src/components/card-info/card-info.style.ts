@@ -1,7 +1,7 @@
-import styled, { css } from "styled-components";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsThreeDotsVertical } from 'react-icons/bs';
+import styled, { css } from 'styled-components';
 
-const x =css`
+const x = css`
 .rccs__card--front, .ccs__card--back {
     box-shadow: var(--gray-shadow) !important;
     background: none !important;
@@ -42,18 +42,17 @@ const x =css`
     display:none !important;
 }
   
-`
-export const CardContainer = styled.span`
-
-${x}
 `;
- 
-export const EditIcon =styled(BsThreeDotsVertical)`
-position: absolute;
-top:12%;
-right:12%;
-z-index:100;
-color: var(--slate-500);
-width:20px;
-height:20px;
-`
+export const CardContainer = styled.span`
+    ${x}
+`;
+
+export const EditIcon = styled(BsThreeDotsVertical)`
+    position: absolute;
+    top: 12%;
+    right: 12%;
+    z-index: 100;
+    color: var(--slate-500);
+    width: 20px;
+    height: 20px;
+`;

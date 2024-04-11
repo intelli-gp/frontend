@@ -180,7 +180,6 @@ const ViewGroupPage = () => {
             />
             <div className="flex flex-row justify-end pt-6 items-center gap-2">
                 <Button
-                    
                     select="primary"
                     loading={isImageLoading}
                     onClick={handleUpdateGroup}
@@ -188,7 +187,6 @@ const ViewGroupPage = () => {
                     Apply
                 </Button>
                 <Button
-                    
                     select="danger"
                     onClick={() => {
                         setCoverImg(groupData.GroupCoverImage);

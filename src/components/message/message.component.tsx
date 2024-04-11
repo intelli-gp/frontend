@@ -121,11 +121,8 @@ const ChatMessage = ({
                 rows={5}
             />
             <div className="flex gap-4 flex-row-reverse">
-                <Button  onClick={handleUpdateMessage}>
-                    Save
-                </Button>
+                <Button onClick={handleUpdateMessage}>Save</Button>
                 <Button
-                    
                     outline
                     select="danger"
                     onClick={() => {
@@ -147,16 +144,10 @@ const ChatMessage = ({
             title={'Are you sure you want to delete this message?'}
         >
             <div className="flex gap-4 justify-center">
-                <Button
-                    
-                    outline
-                    select="danger"
-                    onClick={handleDeleteMessage}
-                >
+                <Button outline select="danger" onClick={handleDeleteMessage}>
                     Delete
                 </Button>
                 <Button
-                    
                     onClick={() => {
                         setDeleteMessageIsOpen(false);
                     }}

@@ -1,27 +1,21 @@
-import { CardContainer, EditIcon } from "./card-info.style";
 import Cards from 'react-credit-cards-2';
 import 'react-credit-cards-2/dist/es/styles-compiled.css';
 
+import { CardContainer, EditIcon } from './card-info.style';
 
 type CardInfoProps = {
-    number:string; 
-    expiry: string; 
-    cvc?: string; 
-    name?: string; 
-}
+    number: string;
+    expiry: string;
+    cvc?: string;
+    name?: string;
+};
 
-const CardInfo = (
-{ number,
-    expiry,
-    cvc,
-    name
-}:CardInfoProps
-) => {
+const CardInfo = ({ number, expiry, cvc, name }: CardInfoProps) => {
     // const state = {
-    //     number: '53**********4242', 
+    //     number: '53**********4242',
     //     expiry: '12/25',
-    //     cvc: '123', 
-    //     name: 'John Doe', 
+    //     cvc: '123',
+    //     name: 'John Doe',
     // };
 
     return (
@@ -31,13 +25,11 @@ const CardInfo = (
                 <Cards
                     number={number}
                     expiry={expiry}
-                    cvc={cvc||''}
-                    name={name||''}
+                    cvc={cvc || ''}
+                    name={name || ''}
                 />
-                
             </div>
         </CardContainer>
-
     );
-}
+};
 export default CardInfo;

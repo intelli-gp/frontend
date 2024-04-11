@@ -40,7 +40,7 @@ const UserItem = ({
     return (
         <UserItemContainer>
             <UserItemImage src={ProfileImage!} alt="user profile image" />
-            <div className='overflow-hidden'>
+            <div className="overflow-hidden">
                 <UserFullName to={profileURL(Username!)} title={FullName}>
                     {FullName}
                 </UserFullName>

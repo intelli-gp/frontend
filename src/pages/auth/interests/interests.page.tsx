@@ -83,11 +83,7 @@ const InterestsPage = () => {
             </main>
 
             <FooterButtons>
-                <Button
-                    
-                    onClick={handleContinue}
-                    loading={isLoading}
-                >
+                <Button onClick={handleContinue} loading={isLoading}>
                     Continue
                 </Button>
             </FooterButtons>

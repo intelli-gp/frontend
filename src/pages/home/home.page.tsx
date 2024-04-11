@@ -88,7 +88,6 @@ function Nav() {
                         <Link to="/auth/signup" className="lg:flex hidden">
                             <Button
                                 select="primary"
-                                
                                 className="text-sm !px-8  !rounded-lg gap-2"
                             >
                                 <IoPersonSharp size={14} />
@@ -97,7 +96,6 @@ function Nav() {
                         </Link>
                         <Link to="/auth/login" className="lg:flex hidden">
                             <Button
-                                
                                 outline={true}
                                 className=" !px-8 !rounded-lg gap-2 text-sm"
                             >
@@ -218,7 +216,6 @@ function FeatureSection() {
                                 and engagement.
                             </p>
                             <Button
-                                
                                 select="secondary"
                                 className="w-4/6! rounded-lg text-xl! px-8 py-2.5 shadow-sm md:w-max! h-auto"
                             >
@@ -345,7 +342,6 @@ function Feedback() {
                         {person.map((_, index) => (
                             <SlideIndicator
                                 key={index}
-                                
                                 isActive={index === currentIndex}
                                 aria-current={
                                     index === currentIndex ? 'true' : 'false'
@@ -356,7 +352,6 @@ function Feedback() {
                     </div>
 
                     <ButtonRight
-                        
                         className="flex absolute top-0 right-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none"
                         data-carousel-next
                         onClick={() => changeSlide(currentIndex + 1)}
@@ -369,7 +364,6 @@ function Feedback() {
                         </BodySpan>
                     </ButtonRight>
                     <ButtonLeft
-                        
                         className="flex absolute top-0 left-0  justify-center items-center px-4 h-full cursor-pointer group "
                         data-carousel-prev
                         onClick={() => changeSlide(currentIndex - 1)}

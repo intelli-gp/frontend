@@ -1,9 +1,9 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { CSSTextLengthLimit } from '../../index.styles';
-import EnhancedImage from '../image/image.component';
-import { Link } from 'react-router-dom';
 import Button from '../button/button.component';
+import EnhancedImage from '../image/image.component';
 
 export const UserItemContainer = styled.li`
     display: flex;
@@ -46,4 +46,4 @@ export const TimeInfo = styled.time`
     margin-left: auto;
     font-size: 0.75rem;
     opacity: 0.8;
-`
+`;
