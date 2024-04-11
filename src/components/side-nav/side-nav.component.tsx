@@ -42,6 +42,7 @@ import {
 export default function SideNav() {
     const navigate = useNavigate();
     const location = useLocation();
+    const [hidden, setHidden] = useState(false);
 
     const [links, setLinks] = useState<
         Array<SideNavItemProps & { id: number }>
@@ -146,6 +147,9 @@ export default function SideNav() {
      * Activate link based on the current location
      */
     useEffect(() => {
+        if(location.pathname==='/app/checkout')
+          setHidden(true);
+        else  setHidden(false);
         setLinks(
             links.map((link) => {
                 return {
@@ -176,91 +180,93 @@ export default function SideNav() {
 
     return (
         <>
-            <SideNavContainer sideNavOpen={sideNavOpen} ref={sideNavRef}>
-                <div>
-                    <Brand>Mujedd</Brand>
-                    <Separator />
-                </div>
+         {!hidden&&
+         <SideNavContainer sideNavOpen={sideNavOpen} ref={sideNavRef}>
+         <div>
+             <Brand>Mujedd</Brand>
+             <Separator />
+         </div>
 
-                <LinksContainer>
-                    {links.map((link) => (
-                        <SideNavItem
-                            key={link.text}
-                            icon={link.icon}
-                            extendable={link?.extendable}
-                            extended={link?.extended}
-                            subItems={link?.subItems}
-                            path={link.path}
-                            text={link.text}
-                            active={link?.active}
-                        />
-                    ))}
-                </LinksContainer>
+         <LinksContainer>
+             {links.map((link) => (
+                 <SideNavItem
+                     key={link.text}
+                     icon={link.icon}
+                     extendable={link?.extendable}
+                     extended={link?.extended}
+                     subItems={link?.subItems}
+                     path={link.path}
+                     text={link.text}
+                     active={link?.active}
+                 />
+             ))}
+         </LinksContainer>
 
-                <SideNavFooter>
-                    <IconsContainer>
-                        <MdNotifications
-                            size={24}
-                            title="Notifications"
-                            onClick={() => navigate('/app/notifications')}
-                        />
-                        <TbMessage2
-                            size={24}
-                            title="Messages"
-                            onClick={() => navigate('/app/chats')}
-                        />
-                    </IconsContainer>
-                    <Separator />
-                    <DropdownMenu
-                        mainElementClassName="relative flex justify-center"
-                        menuWidth="8rem"
-                        bottom={'110%'}
-                        options={[
-                            {
-                                option: (
-                                    <>
-                                        <IoPersonSharp /> Profile
-                                    </>
-                                ),
-                                handler: () => navigate('/app/profile'),
-                            },
-                            {
-                                option: (
-                                    <>
-                                        <IoIosSettings /> Settings
-                                    </>
-                                ),
-                                handler: () => navigate('/app/settings'),
-                            },
-                            {
-                                option: (
-                                    <>
-                                        <MdLogout /> Logout
-                                    </>
-                                ),
-                                handler: handleLogout,
-                            },
-                        ]}
-                    >
-                        <UserContainer title={user?.FullName}>
-                            <UserImage
-                                src={user.ProfileImage ?? defaultUserImage}
-                                alt="profile pic"
-                                className="w-10 h-10 rounded-full object-cover"
-                            />
-                            <div>
-                                <UserFullName width="17ch">
-                                    {user?.FullName}
-                                </UserFullName>
-                                <UserUsername width="17ch">
-                                    @{user?.Username}
-                                </UserUsername>
-                            </div>
-                        </UserContainer>
-                    </DropdownMenu>
-                </SideNavFooter>
-            </SideNavContainer>
+         <SideNavFooter>
+             <IconsContainer>
+                 <MdNotifications
+                     size={24}
+                     title="Notifications"
+                     onClick={() => navigate('/app/notifications')}
+                 />
+                 <TbMessage2
+                     size={24}
+                     title="Messages"
+                     onClick={() => navigate('/app/chats')}
+                 />
+             </IconsContainer>
+             <Separator />
+             <DropdownMenu
+                 mainElementClassName="relative flex justify-center"
+                 menuWidth="8rem"
+                 bottom={'110%'}
+                 options={[
+                     {
+                         option: (
+                             <>
+                                 <IoPersonSharp /> Profile
+                             </>
+                         ),
+                         handler: () => navigate('/app/profile'),
+                     },
+                     {
+                         option: (
+                             <>
+                                 <IoIosSettings /> Settings
+                             </>
+                         ),
+                         handler: () => navigate('/app/settings'),
+                     },
+                     {
+                         option: (
+                             <>
+                                 <MdLogout /> Logout
+                             </>
+                         ),
+                         handler: handleLogout,
+                     },
+                 ]}
+             >
+                 <UserContainer title={user?.FullName}>
+                     <UserImage
+                         src={user.ProfileImage ?? defaultUserImage}
+                         alt="profile pic"
+                         className="w-10 h-10 rounded-full object-cover"
+                     />
+                     <div>
+                         <UserFullName width="17ch">
+                             {user?.FullName}
+                         </UserFullName>
+                         <UserUsername width="17ch">
+                             @{user?.Username}
+                         </UserUsername>
+                     </div>
+                 </UserContainer>
+             </DropdownMenu>
+         </SideNavFooter>
+     </SideNavContainer>
 
+         }   
             <MobileNav ref={verticalNavRef}>
                 <Button
                     className="text-white z-10 !border-none !bg-transparent"
