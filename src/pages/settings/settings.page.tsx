@@ -282,7 +282,10 @@ export const SettingsPage = () => {
 
             <Accordion title="Payment">
                 <div className='flex flex-row justify-start '>
-                    <CardInfo />
+                    <CardInfo
+                        number='53**********4242'
+                        expiry='12/25'
+                    />
                     <AddCardContainer
                         onClick={() => setAddCreditCardIsOpen(true)}
                     >
