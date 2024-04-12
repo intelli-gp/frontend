@@ -277,8 +277,8 @@ export const SettingsPage = () => {
             </Accordion>
 
             <Accordion title="Payment">
-                <div className="flex flex-row justify-start ">
-                    <CardInfo number="53**********4242" expiry="12/25" />
+                <div className="flex flex-row justify-start gap-6">
+                    <CardInfo Number="4242424242424242" Expire="12/25" />
                     <AddCardContainer
                         onClick={() => setAddCreditCardIsOpen(true)}
                     >

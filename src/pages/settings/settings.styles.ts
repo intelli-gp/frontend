@@ -61,7 +61,7 @@ export const AddCardContainer = styled.div`
     width: 200px;
     height: 182.86px;
     background-color: var(--indigo-50);
-    border-radius: 14px;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     justify-items: center;

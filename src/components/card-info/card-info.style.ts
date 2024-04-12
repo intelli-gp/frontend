@@ -1,58 +1,23 @@
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
-const x = css`
-.rccs__card--front, .ccs__card--back {
-    box-shadow: var(--gray-shadow) !important;
-    background: none !important;
-    border-radius:14px !important;
-}
-.rccs__card {
-   
-    -webkit-transform-style: preserve-3d;
-    transform-style: preserve-3d;
-    -webkit-transition: all 0.4s linear;
-    transition: all 0.4s linear;
-    width: 250px;
-
-  }
-  .rccs__name {
-    display:none;
-  }
-  .rccs__expiry__valid{
-    
-\
-    font-size:16px;
-  }
-  .rccs__expiry__value{
-    font-size:14px;
-
-  }
-  .rccs__expiry{
-
-    left:10% !important;
-    right:0 !important;
-  }
-  .rccs__issuer {
-    background-position: top left  !important;
-    left: 10% !important;
-    top:12% !important;
-  }
-.rccs__chip {
-    display:none !important;
-}
-  
-`;
-export const CardContainer = styled.span`
-    ${x}
+export const CardContainer = styled.div`
+padding:1rem;
+width: 240px;
+height: 182.86px;
+border-radius: 8px;
+display: flex;
+gap:12px;
+flex-direction: column;
+justify-content:space-between;
+align-items: flex-start;
+position: relative;
+    box-shadow: var(--gray-shadow);
+    margin: 0 10px;
 `;
 
-export const EditIcon = styled(BsThreeDotsVertical)`
-    position: absolute;
-    top: 12%;
-    right: 12%;
-    z-index: 100;
-    color: var(--slate-500);
+export const EditIcon = styled(BsThreeDotsVertical)`  
+    color: var(--slate-400);
     width: 20px;
     height: 20px;
 `;
