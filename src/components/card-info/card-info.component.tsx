@@ -17,7 +17,7 @@ type CardType = "Alipay" | "Amex" | "Code" | "Diners" | "Discover"
 const CardInfo = ({ Number, Expire }: CardInfoProps) => {
     const [cardType, setCardType] = useState<CardType>();
 
-    const cardNumberValidator: CardNumberVerification = number(42);
+    const cardNumberValidator: CardNumberVerification = number(Number);
     console.log(cardNumberValidator?.card?.niceType as CardType)
     useEffect(() => {
         setCardType(cardNumberValidator?.card?.niceType as CardType);
