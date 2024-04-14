@@ -17,7 +17,15 @@ type ChatNotification = {
         >;
     };
 };
-
+type EventType = {
+    eventName: 'event-type';
+    message:string;
+};
+export type MessagesNotification={
+    Group:ReceivedGroup;
+    LastMessage:SerializedMessage;
+    UnreadMessagesCount:string;
+}
 type WarningNotification = {
     eventName: 'warning';
     message: any;
