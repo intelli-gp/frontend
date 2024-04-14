@@ -22,9 +22,14 @@ type EventType = {
     message:string;
 };
 export type MessagesNotification={
-    Group:ReceivedGroup;
-    LastMessage:SerializedMessage;
-    UnreadMessagesCount:string;
+    Group:Pick<ReceivedGroup, 'ID' | 'GroupTitle' | 'GroupCoverImage'> & {
+        GroupName: string;
+    };
+    LastMessage?:Pick<
+    SerializedMessage,
+    'Content' | 'CreatedAt' | 'IsDeleted' | 'MessageID'|'User'
+>;
+    UnreadMessagesCount?:number;
 }
 type WarningNotification = {
     eventName: 'warning';

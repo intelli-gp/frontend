@@ -24,7 +24,7 @@ const ChatCard = ({
 
     return (
         <CardContainer
-        unread={(Number(UnreadMessagesCount) || 0) > 0}
+        unread={((UnreadMessagesCount) || 0) > 0}
             onClick={() => {
                 navigate(`/app/chat-room/${Group?.ID}`);
             }}
@@ -45,9 +45,9 @@ const ChatCard = ({
                 </ChatContent>
                 <ChatDate>{moment(LastMessage?.CreatedAt).fromNow()}   </ChatDate>
             </TypographyContainer>
-            {(Number(UnreadMessagesCount) || 0) > 0 && (
+            {((UnreadMessagesCount) || 0) > 0 && (
                 <UnreadMessages>
-                    <p>{UnreadMessagesCount}</p>
+                    <p>{String(UnreadMessagesCount)}</p>
                 </UnreadMessages>
             )}
         </CardContainer>
