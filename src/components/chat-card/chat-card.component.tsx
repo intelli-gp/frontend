@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
 import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
-import { ReceivedGroup } from '../../types/group';
 import {
     CardContainer,
     CardImage,
@@ -10,42 +9,47 @@ import {
     ChatDate,
     GroupTitle,
     TypographyContainer,
+    UnreadMessages,
 } from './chat-card.style';
+import { MessagesNotification } from '../../types/notifications';
+import moment from 'moment';
 
 const ChatCard = ({
-    ID,
-    GroupTitle: title,
-    GroupCoverImage,
-}: Partial<ReceivedGroup>) => {
+
+    Group,
+    LastMessage,
+    UnreadMessagesCount
+}: Partial<MessagesNotification>) => {
     const navigate = useNavigate();
-    const message = {
-        Username: 'Youmna_Mahmoud',
-        Content:
-            'I am hosting a party this Thursday at 4 PM and I would love for all of you to join me. I am confident that you will have a great time. If you plan on attending, please kindly confirm your presence.',
-    };
 
     return (
         <CardContainer
+        unread={(Number(UnreadMessagesCount) || 0) > 0}
             onClick={() => {
-                navigate(`/app/chat-room/${ID}`);
+                navigate(`/app/chat-room/${Group?.ID}`);
             }}
         >
             <CardImageContainer>
                 <CardImage
-                    src={GroupCoverImage || defaultGroupImage}
-                    alt={title}
+                    src={Group?.GroupCoverImage || defaultGroupImage}
+                    alt={Group?.GroupTitle}
                 />
             </CardImageContainer>
             <TypographyContainer>
-                <GroupTitle title={title}>{title}</GroupTitle>
+                <GroupTitle title={Group?.GroupTitle}>{Group?.GroupTitle}</GroupTitle>
                 <ChatContent>
                     <span className="font-extrabold">
-                        {message.Username + ': '}
+                        {LastMessage?.User.FullName + ': '}
                     </span>
-                    {message.Content}
+                    {LastMessage?.Content}
                 </ChatContent>
-                <ChatDate>3 minutes ago</ChatDate>
+                <ChatDate>{moment(LastMessage?.CreatedAt).fromNow()}   </ChatDate>
             </TypographyContainer>
+            {(Number(UnreadMessagesCount) || 0) > 0 && (
+                <UnreadMessages>
+                    <p>{UnreadMessagesCount}</p>
+                </UnreadMessages>
+            )}
         </CardContainer>
     );
 };
