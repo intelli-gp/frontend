@@ -1,24 +1,20 @@
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 
 import ChatCard from '../../components/chat-card/chat-card.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
-import { useGetUserGroupsQuery } from '../../store';
-import { ReceivedGroup } from '../../types/group';
-import { Response } from '../../types/response';
+import { useFetchMessagesQuery, } from '../../store';
 import { PageContainer, Title } from './chats.styles';
+import { MessagesNotification } from '../../types/notifications';
 
 export const ChatsPage = () => {
     const [searchValue, setSearchValue] = useState('');
     const handleChangeSearchValue = (value: string) => {
         setSearchValue(value);
     };
-    const [userGroups, setUserGroups] = useState<Partial<ReceivedGroup>[]>([]);
-    const { data: _groups } = useGetUserGroupsQuery();
-    const Groups: ReceivedGroup[] =
-        (_groups as unknown as Response)?.data ?? [];
-    useEffect(() => {
-        setUserGroups(Groups);
-    }, [Groups]);
+
+    const { data: _groups, isLoading, error } = useFetchMessagesQuery(undefined);
+
+
 
     return (
         <PageContainer>
@@ -29,9 +25,15 @@ export const ChatsPage = () => {
                 onSearchValueChange={handleChangeSearchValue}
                 WithoutButton
             />
-            {userGroups.map((group) => {
-                return <ChatCard {...group} />;
-            })}
+            {isLoading ? (
+                <div>Loading...</div>
+            ) : error ? (
+                <div>Error</div>
+            ) :  _groups?.length||0 > 0 ? (
+                _groups?.map((group:Partial<MessagesNotification>) => <ChatCard {...group} />)
+            ) : (
+                <div>No groups found.</div>
+            )}
         </PageContainer>
     );
 };
