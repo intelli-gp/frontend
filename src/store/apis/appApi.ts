@@ -18,7 +18,6 @@ const baseQuery = fetchBaseQuery({
         return headers;
     },
 });
-
 const baseQueryWithRefresh = async (
     args: any,
     api: BaseQueryApi,
@@ -70,5 +69,5 @@ export const appApi = createApi({
     reducerPath: 'app',
     baseQuery: baseQueryWithRefresh,
     endpoints: (_builder) => ({}),
-    tagTypes: ['User', 'Task', 'Article', 'Group'],
+    tagTypes: ['User', 'Task', 'Article', 'Group','Messages'],
 });
