@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import 'swiper/css';
+import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import { Swiper } from 'swiper/react';
 
