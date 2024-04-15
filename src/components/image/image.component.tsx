@@ -14,6 +14,8 @@ type EnhancedImageProps = {
     imageClassName?: string;
 };
 
+type ImageErrorEvent = React.SyntheticEvent<HTMLImageElement, Event>;
+
 /**
  * This component is a regular image but it has a placeholder that will be shown
  * until the image is loaded.
@@ -21,7 +23,14 @@ type EnhancedImageProps = {
 const EnhancedImage = ({ src, alt, className }: EnhancedImageProps) => {
     return (
         <ImageContainer className={className}>
-            <Image src={src} alt={alt ?? ''} />
+            <Image
+                src={src}
+                alt={alt ?? ''}
+                onError={(e: ImageErrorEvent) => {
+                    // TODO: may want to change placeholder to a default image
+                    e.currentTarget.src = 'https://via.placeholder.com/150';
+                }}
+            />
             <Placeholder />
         </ImageContainer>
     );
