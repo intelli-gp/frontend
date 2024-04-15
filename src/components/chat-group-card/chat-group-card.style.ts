@@ -11,7 +11,7 @@ export const CardContainer = styled.div`
     height: -moz-fit-content;
     border-radius: 0.5rem;
     transition: all 0.25s ease-in-out;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px 0px;
     cursor: pointer;
 
     &:hover {

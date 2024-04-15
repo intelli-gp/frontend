@@ -61,7 +61,7 @@ const GroupCard = ({
 
                 <ButtonsContainer>
                     <Button
-                        select="primary500"
+                        select="primary700"
                         title="Become a member of this group"
                         onClick={handleJoiningGroup}
                     >
