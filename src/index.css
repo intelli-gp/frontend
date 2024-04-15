@@ -39,6 +39,10 @@
     --gray-100: #f1f3f5;
     --gray-50: #f8f9fa;
 
+    --yellow-500: #F1EE63;
+    --yellow-400: #f1ef70;
+    --yellow-300: #F9F8C1;
+
     --gray-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
     --black-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
     --tag-shadow: rgb(30, 64, 175, 0.5) 0px 1px 4px;
@@ -57,11 +61,11 @@
         background: rgba(0, 0, 0, 0.025);
     }
     &::-webkit-scrollbar-thumb {
-        background: var(--gray-300);
+        background: var(--gray-400);
         border-radius: 1rem;
     }
     &::-webkit-scrollbar-thumb:hover {
-        background: var(--gray-400);
+        background: var(--gray-500);
     }
 }
 
