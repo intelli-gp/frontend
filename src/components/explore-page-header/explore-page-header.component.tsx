@@ -1,10 +1,10 @@
 import { FaPlus } from 'react-icons/fa';
-import { LuSearch } from 'react-icons/lu';
 
 import {
     Container,
     CreateButton,
     SearchBarContainer,
+    SearchIcon,
 } from './explore-page-header.style';
 
 type ExplorePageHeaderProps = {
@@ -13,6 +13,12 @@ type ExplorePageHeaderProps = {
     onCreateButtonClick?: () => void;
     placeholder?: string;
     WithoutButton?: boolean;
+    /**
+     * a function to be triggered when search
+     * icon is clicked or user press `Enter`
+     * after typing on the search bar
+     */
+    searchHandler: () => void | Promise<void>;
 };
 
 const ExplorePageHeader = ({
@@ -21,11 +27,19 @@ const ExplorePageHeader = ({
     onCreateButtonClick,
     placeholder,
     WithoutButton,
+    searchHandler,
 }: ExplorePageHeaderProps) => {
+    
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === `Enter`) {
+            searchHandler();
+        }
+    };
+
     return (
-        <Container>
+        <Container onKeyDown={handleKeyDown}>
             <SearchBarContainer>
-                <LuSearch />
+                <SearchIcon title={'Search'} onClick={() => searchHandler()} />
                 <input
                     className="border-none outline-none focus-visible:outline-none flex-1"
                     placeholder={placeholder ?? 'Search...'}
