@@ -19,18 +19,18 @@ type ChatNotification = {
 };
 type EventType = {
     eventName: 'event-type';
-    message:string;
+    message: string;
 };
-export type MessagesNotification={
-    Group:Pick<ReceivedGroup, 'ID' | 'GroupTitle' | 'GroupCoverImage'> & {
+export type MessagesNotification = {
+    Group: Pick<ReceivedGroup, 'ID' | 'GroupTitle' | 'GroupCoverImage'> & {
         GroupName: string;
     };
-    LastMessage?:Pick<
-    SerializedMessage,
-    'Content' | 'CreatedAt' | 'IsDeleted' | 'MessageID'|'User'
->;
-    UnreadMessagesCount?:number;
-}
+    LastMessage?: Pick<
+        SerializedMessage,
+        'Content' | 'CreatedAt' | 'IsDeleted' | 'MessageID' | 'User'
+    >;
+    UnreadMessagesCount?: number;
+};
 type WarningNotification = {
     eventName: 'warning';
     message: any;

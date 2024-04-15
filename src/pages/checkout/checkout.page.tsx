@@ -119,7 +119,9 @@ const CheckoutPage = () => {
                                 setCreditCardNumber(e.target.value)
                             }
                             error={erroredInputs.cardNumber}
-                            onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
+                            onKeyDown={(
+                                event: React.KeyboardEvent<HTMLInputElement>,
+                            ) => {
                                 if (!/[0-9]/.test(event.key)) {
                                     event.preventDefault();
                                 }
@@ -132,7 +134,9 @@ const CheckoutPage = () => {
                                     {...getExpiryDateProps()}
                                     required
                                     value={expriy_format()}
-                                    onChange={(e: ChangeEvent<HTMLInputElement>) => setExpiryDate(e.target.value)}
+                                    onChange={(
+                                        e: ChangeEvent<HTMLInputElement>,
+                                    ) => setExpiryDate(e.target.value)}
                                     onKeyDown={(event) => {
                                         if (!/[0-9]/.test(event.key)) {
                                             event.preventDefault();

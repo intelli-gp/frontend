@@ -21,7 +21,8 @@ export const CardContainer = styled.div<{ unread: boolean }>`
     border-radius: 0.5rem;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px 0px;
     cursor: pointer;
-    background-color: ${({ unread }) => (unread ?   'var(--indigo-50)':'white')};
+    background-color: ${({ unread }) =>
+        unread ? 'var(--indigo-50)' : 'white'};
     transition: all 0.2s ease-in-out;
     &:hover {
         background-color: var(--indigo-25);
@@ -39,7 +40,7 @@ export const CardImage = styled(EnhancedImage)`
     }
 `;
 export const TypographyContainer = styled.div`
-    flex:1;
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -58,17 +59,17 @@ export const ChatDate = styled.time`
 `;
 
 export const UnreadMessages = styled.div`
-font-size: 0.85rem;
-border-radius:100%;
-padding:8px;
-width:30px;
-height:30px;
-background-color:#F1EE63;
-color:var(--indigo-950);
-font-weight:900;
-display:flex;
-justify-content:center;
-align-items: center;
+    font-size: 0.85rem;
+    border-radius: 100%;
+    padding: 8px;
+    width: 30px;
+    height: 30px;
+    background-color: #f1ee63;
+    color: var(--indigo-950);
+    font-weight: 900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 export const ChatContent = styled.p`
     font-size: 0.9rem;

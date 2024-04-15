@@ -1,6 +1,8 @@
+import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 
 import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
+import { MessagesNotification } from '../../types/notifications';
 import {
     CardContainer,
     CardImage,
@@ -11,20 +13,17 @@ import {
     TypographyContainer,
     UnreadMessages,
 } from './chat-card.style';
-import { MessagesNotification } from '../../types/notifications';
-import moment from 'moment';
 
 const ChatCard = ({
-
     Group,
     LastMessage,
-    UnreadMessagesCount
+    UnreadMessagesCount,
 }: Partial<MessagesNotification>) => {
     const navigate = useNavigate();
 
     return (
         <CardContainer
-        unread={((UnreadMessagesCount) || 0) > 0}
+            unread={(UnreadMessagesCount || 0) > 0}
             onClick={() => {
                 navigate(`/app/chat-room/${Group?.ID}`);
             }}
@@ -36,16 +35,18 @@ const ChatCard = ({
                 />
             </CardImageContainer>
             <TypographyContainer>
-                <GroupTitle title={Group?.GroupTitle}>{Group?.GroupTitle}</GroupTitle>
+                <GroupTitle title={Group?.GroupTitle}>
+                    {Group?.GroupTitle}
+                </GroupTitle>
                 <ChatContent>
                     <span className="font-extrabold">
                         {LastMessage?.User.FullName + ': '}
                     </span>
                     {LastMessage?.Content}
                 </ChatContent>
-                <ChatDate>{moment(LastMessage?.CreatedAt).fromNow()}   </ChatDate>
+                <ChatDate>{moment(LastMessage?.CreatedAt).fromNow()} </ChatDate>
             </TypographyContainer>
-            {((UnreadMessagesCount) || 0) > 0 && (
+            {(UnreadMessagesCount || 0) > 0 && (
                 <UnreadMessages>
                     <p>{String(UnreadMessagesCount)}</p>
                 </UnreadMessages>

@@ -29,7 +29,6 @@ const ExplorePageHeader = ({
     WithoutButton,
     searchHandler,
 }: ExplorePageHeaderProps) => {
-    
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === `Enter`) {
             searchHandler();

@@ -43,24 +43,27 @@ export const PageContainer = styled(motion.div)`
     }
 `;
 
-export const SearchPageSection = styled.div<{empty?: boolean}>`
+export const SearchPageSection = styled.div<{ empty?: boolean }>`
     display: flex;
     flex-direction: column;
     gap: 1rem;
     width: 100%;
-    ${({empty}) => {
-        return empty && css`
-            &:after {
-                content: "No Results Found!";
-                width: 100%;
-                height: 200px;
-                font-size: 1.5rem;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                opacity: 0.5;
-            }
-        `
+    ${({ empty }) => {
+        return (
+            empty &&
+            css`
+                &:after {
+                    content: 'No Results Found!';
+                    width: 100%;
+                    height: 200px;
+                    font-size: 1.5rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    opacity: 0.5;
+                }
+            `
+        );
     }}
 `;
 

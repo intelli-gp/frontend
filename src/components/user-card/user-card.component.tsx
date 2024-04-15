@@ -1,4 +1,7 @@
+import React from 'react';
+
 import { ReceivedUser } from '../../types/user';
+import { profileURL } from '../../utils/profileUrlBuilder';
 import {
     CardContainer,
     FollowButton,
@@ -6,8 +9,6 @@ import {
     UserImage,
     UserUsername,
 } from './user-card.styles';
-import { profileURL } from '../../utils/profileUrlBuilder';
-import React from 'react';
 
 const UserCard = ({
     FullName,
@@ -19,9 +20,12 @@ const UserCard = ({
             <UserImage src={ProfileImage} alt="user profile image" />
             <UserFullName>{FullName}</UserFullName>
             <UserUsername>@{Username}</UserUsername>
-            <FollowButton select='secondary' onClickCapture={(e: React.MouseEvent) => {
-                e.nativeEvent.preventDefault();
-            }}>
+            <FollowButton
+                select="secondary"
+                onClickCapture={(e: React.MouseEvent) => {
+                    e.nativeEvent.preventDefault();
+                }}
+            >
                 Follow
             </FollowButton>
         </CardContainer>

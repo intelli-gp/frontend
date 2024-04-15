@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { SwiperSlide } from 'swiper/react';
 
 import { CSSTextLengthLimit } from '../../index.styles';
 import Button from '../button/button.component';
 import EnhancedImage from '../image/image.component';
-import { SwiperSlide } from 'swiper/react';
 
-const CARD_WIDTH = "225px";
+const CARD_WIDTH = '225px';
 
 export const CardContainer = styled(Link)`
     color: inherit;
@@ -61,4 +61,4 @@ export const FollowButton = styled(Button)`
 
 export const SwiperCustomSlide = styled(SwiperSlide)`
     width: ${CARD_WIDTH};
-`
+`;
