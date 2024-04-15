@@ -28,7 +28,7 @@ export const ModalWrapper = styled(motion.div)<{ width?: 'sm' | 'md' | 'lg' }>`
                 return `min(100%, 650px)`;
         }
     }};
-    max-height: 90vh;
+    max-height: 95vh;
     overflow-y: auto;
     background: #fff;
     border-radius: 0.5rem;
@@ -53,7 +53,7 @@ export const ModalTitle = styled.span<{ width?: string }>`
 
 export const ModalContentContainer = styled.div`
     padding: 1rem 1.5rem;
-    max-height: 70vh;
+    max-height: 85vh;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
