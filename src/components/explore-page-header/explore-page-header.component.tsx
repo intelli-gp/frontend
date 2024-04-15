@@ -18,7 +18,7 @@ type ExplorePageHeaderProps = {
      * icon is clicked or user press `Enter`
      * after typing on the search bar
      */
-    searchHandler: () => void | Promise<void>;
+    searchHandler?: () => void | Promise<void>;
 };
 
 const ExplorePageHeader = ({
@@ -31,14 +31,19 @@ const ExplorePageHeader = ({
 }: ExplorePageHeaderProps) => {
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === `Enter`) {
-            searchHandler();
+            searchHandler && searchHandler();
         }
     };
 
     return (
         <Container onKeyDown={handleKeyDown}>
             <SearchBarContainer>
-                <SearchIcon title={'Search'} onClick={() => searchHandler()} />
+                <SearchIcon
+                    title={'Search'}
+                    onClick={() => {
+                        searchHandler && searchHandler();
+                    }}
+                />
                 <input
                     className="border-none outline-none focus-visible:outline-none flex-1"
                     placeholder={placeholder ?? 'Search...'}
