@@ -101,6 +101,7 @@ const CheckoutPage = () => {
                     </PageTitle>
                     <form className="flex flex-col gap-4 w-[100%]">
                         <CustomInput
+                            required
                             label={'Card Holder Name'}
                             placeholder={'Card holder name'}
                             value={holderName}
@@ -111,22 +112,32 @@ const CheckoutPage = () => {
                         <CustomInput
                             {...getCardNumberProps()}
                             label={'Card Number'}
+                            required
                             maxlength="19"
                             value={handleCardDisplay()}
                             onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                 setCreditCardNumber(e.target.value)
                             }
                             error={erroredInputs.cardNumber}
+                            onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
+                                if (!/[0-9]/.test(event.key)) {
+                                    event.preventDefault();
+                                }
+                            }}
                         />
                         <div className="flex flex-row justify-between gap-6">
                             <div className="flex flex-col w-full">
                                 <Label> Expiry Date</Label>
                                 <Input
                                     {...getExpiryDateProps()}
+                                    required
                                     value={expriy_format()}
-                                    onChange={(
-                                        e: ChangeEvent<HTMLInputElement>,
-                                    ) => setExpiryDate(e.target.value)}
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => setExpiryDate(e.target.value)}
+                                    onKeyDown={(event) => {
+                                        if (!/[0-9]/.test(event.key)) {
+                                            event.preventDefault();
+                                        }
+                                    }}
                                 />
                                 <span className="text-red-600 text-sm">
                                     {erroredInputs.expiryDate &&

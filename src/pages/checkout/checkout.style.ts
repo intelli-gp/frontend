@@ -23,25 +23,21 @@ export const FlexContainer = styled.div`
     @media (max-width: 1023px) {
         flex-direction: column;
 
-        max-width: 36rem;
         justify-content: center;
     }
 `;
 
 export const SidePanel = styled.div`
-    display: none;
     background-color: var(--indigo-950);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-top: 1rem;
     padding: 2rem 3.5rem;
     width: 100%;
     @media (min-width: 1024px) {
         width: 40%;
         height: 100vh;
-        height: 100%;
     }
 `;
 

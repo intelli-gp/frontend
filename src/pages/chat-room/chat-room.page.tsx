@@ -235,7 +235,7 @@ export const ChatroomPage = () => {
                     </ChatBody>
                     <ChatFooter>
                         {showPicker && (
-                            <div className="absolute bottom-[110%] left-0">
+                            <div className="absolute bottom-[110%] left-0 z-40">
                                 <Picker onEmojiClick={onEmojiClick} />
                             </div>
                         )}

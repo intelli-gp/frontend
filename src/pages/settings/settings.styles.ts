@@ -69,4 +69,8 @@ export const AddCardContainer = styled.div`
     align-items: center;
     box-shadow: var(--gray-shadow);
     margin: 0 10px;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+        transform: scale(0.98);
+    }
 `;

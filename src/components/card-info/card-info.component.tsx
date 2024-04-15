@@ -57,7 +57,10 @@ const CardInfo = ({ Number, Expire }: CardInfoProps) => {
                     bottom="auto"
                     menuWidth="10rem"
                 >
+                    <div className='hover:bg-[var(--indigo-25)] p-[4px] flex items-center rounded-full'>
                     <EditIcon />
+
+                    </div>
                 </DropdownMenu>
             </span>
 
