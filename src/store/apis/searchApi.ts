@@ -1,4 +1,5 @@
 import { Response } from '../../types/response';
+import { SUGGESTION_TYPE } from '../../types/search';
 import { appApi } from './appApi';
 
 const searchApi = appApi.injectEndpoints({
@@ -63,6 +64,19 @@ const searchApi = appApi.injectEndpoints({
                 },
             }),
         }),
+        getAutocompleteSuggestions: builder.query<
+            Response,
+            { type: SUGGESTION_TYPE; searchTerm: string }
+        >({
+            query: ({ searchTerm, type }) => ({
+                url: `/search/autocomplete`,
+                method: 'GET',
+                params: {
+                    searchTerm,
+                    type,
+                },
+            }),
+        }),
     }),
 });
 
@@ -71,4 +85,5 @@ export const {
     useLazyGroupsSearchQuery,
     useLazyArticlesSearchQuery,
     useLazyUsersSearchQuery,
+    useLazyGetAutocompleteSuggestionsQuery,
 } = searchApi;

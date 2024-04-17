@@ -7,3 +7,5 @@ export type GeneralSearchData = {
     users: ReceivedUser[];
     groups: ReceivedGroup[];
 };
+
+export type SUGGESTION_TYPE = 'article' | 'group' | 'user' | 'all';
