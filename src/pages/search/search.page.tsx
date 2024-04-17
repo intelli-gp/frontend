@@ -39,10 +39,10 @@ const SearchPage = () => {
         setSearchValue(newValue);
     };
 
-    const searchHandler = async () => {
+    const searchHandler = async (searchTerm: string) => {
         if (searchValue.trim().length === 0) return;
         try {
-            await triggerSearch(searchValue).unwrap();
+            await triggerSearch(searchTerm).unwrap();
             setIsFirstRender(false);
         } catch (error) {
             errorToast('Error occurred while searching.');
@@ -67,6 +67,7 @@ const SearchPage = () => {
                 searchValue={searchValue}
                 onSearchValueChange={handleSearchValueChange}
                 searchHandler={searchHandler}
+                suggestionsType={'all'}
             />
 
             <SearchPageSection
