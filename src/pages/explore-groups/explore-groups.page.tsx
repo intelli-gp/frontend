@@ -1,60 +1,94 @@
-import Fuse from 'fuse.js';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import CreateGroupModal from '../../components/CreateGroupModal';
 import Spinner from '../../components/Spinner';
 import GroupCard from '../../components/chat-group-card/chat-group-card.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
-import { RootState, useGetAllGroupsQuery } from '../../store';
+import {
+    RootState,
+    changeGroupsPageSearchInitiated,
+    changeGroupsPageSearchQuery,
+} from '../../store';
+import { useLazyGroupsSearchQuery } from '../../store/apis/searchApi';
 import { ReceivedGroup } from '../../types/group';
-import { Response } from '../../types/response';
-import { GroupsGrid, PageContainer } from './explore-groups.style';
+import { errorToast } from '../../utils/toasts';
+import { GroupsGrid, PageContainer, SmallTitle } from './explore-groups.style';
 
 const ExploreGroupsPage = () => {
-    const [searchValue, setSearchValue] = useState('');
-    const [createGroupModalOpen, setCreateGroupModalOpen] = useState(false);
-    const { data, isLoading } = useGetAllGroupsQuery();
-    let groups: ReceivedGroup[] = (data as unknown as Response)?.data ?? [];
-    const userId = useSelector(
-        (state: RootState) => state?.auth?.user?.ID,
-    ) as string;
-    const [showGroups, setGroups] = useState<ReceivedGroup[]>([]);
-    const filteredGroups = groups.filter((group) => {
-        const isUserAssigned = group.GroupMembers.some(
-            (member) => member?.ID === userId,
-        );
-        return !isUserAssigned;
-    });
+    const dispatch = useDispatch();
 
-    useEffect(() => {
-        setGroups(filteredGroups);
-    }, [groups, userId]);
+    const { searchTerm, searchInitiated } = useSelector(
+        (state: RootState) => state.appState.groupsPage,
+    );
+
+    const { UserTags, ID: storedUserId } = useSelector(
+        (state: RootState) => state?.auth?.user,
+    );
+
+    const [triggerSearch, { data: _receivedGroups, isLoading, isFetching }] =
+        useLazyGroupsSearchQuery();
+    let groups: ReceivedGroup[] = _receivedGroups?.data ?? [];
+
+    const [createGroupModalOpen, setCreateGroupModalOpen] = useState(false);
+
+    const searchHandler = async (searchTerm: string) => {
+        if (searchTerm.trim().length === 0) return;
+        try {
+            await triggerSearch({ searchTerm }).unwrap();
+            dispatch(changeGroupsPageSearchInitiated(true));
+        } catch (error) {
+            errorToast('Error occurred while searching.');
+            console.error(error);
+        }
+    };
 
     const handleSearchValueChange = (value: string) => {
-        setSearchValue(value);
-        const fuseOptions = {
-            keys: ['GroupTitle'],
-            includeScore: true,
-            threshold: 0.5,
-        };
-        const fuse = new Fuse(filteredGroups, fuseOptions);
-        const results = fuse.search(searchValue);
-        const filteredSearch =
-            value === ''
-                ? filteredGroups
-                : results.map((result) => result.item);
-        setGroups(filteredSearch);
+        dispatch(changeGroupsPageSearchQuery(value));
     };
 
     const handleCreateButtonClick = () => {
         setCreateGroupModalOpen(true);
     };
 
-    return isLoading ? (
+    useEffect(() => {
+        if (searchInitiated) {
+            triggerSearch({ searchTerm });
+        } else {
+            let userTags = UserTags?.join(' ') ?? '';
+            triggerSearch({ searchTerm: userTags });
+        }
+    }, []);
+
+    let pageContent = isFetching ? (
         <Spinner />
     ) : (
+        <>
+            <SmallTitle>
+                {searchInitiated ? `Search results` : 'suggested groups'}
+            </SmallTitle>
+            <GroupsGrid>
+                {groups.map((group) => (
+                    <GroupCard
+                        key={group.ID}
+                        alreadyJoined={
+                            group?.GroupMembers?.some(
+                                (member) => member?.ID === storedUserId,
+                            ) || group?.GroupOwner?.ID === storedUserId
+                        }
+                        {...group}
+                    />
+                ))}
+            </GroupsGrid>
+        </>
+    );
+
+    if (isLoading) {
+        return <Spinner />;
+    }
+
+    return (
         <PageContainer {...BetweenPageAnimation}>
             <PageTitle className="text-center">Explore Groups</PageTitle>
             <CreateGroupModal
@@ -63,15 +97,13 @@ const ExploreGroupsPage = () => {
             />
             <ExplorePageHeader
                 placeholder="Search groups..."
-                searchValue={searchValue}
+                searchValue={searchTerm}
                 onSearchValueChange={handleSearchValueChange}
                 onCreateButtonClick={handleCreateButtonClick}
+                suggestionsType={'group'}
+                searchHandler={searchHandler}
             />
-            <GroupsGrid>
-                {showGroups.map((group) => (
-                    <GroupCard {...group} />
-                ))}
-            </GroupsGrid>
+            {pageContent}
         </PageContainer>
     );
 };

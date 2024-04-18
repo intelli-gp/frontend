@@ -53,6 +53,12 @@ const appSlice = createSlice({
     },
 });
 
-export const { changeSearchPageQuery, changeSearchPageInitiated } =
-    appSlice.actions;
+export const {
+    changeSearchPageQuery,
+    changeSearchPageInitiated,
+    changeArticlesPageSearchInitiated,
+    changeArticlesPageSearchQuery,
+    changeGroupsPageSearchInitiated,
+    changeGroupsPageSearchQuery,
+} = appSlice.actions;
 export const appReducer = appSlice.reducer;

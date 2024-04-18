@@ -1,63 +1,105 @@
-import Fuse from 'fuse.js';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import Spinner from '../../components/Spinner';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
-import { useGetArticlesQuery } from '../../store';
+import {
+    RootState,
+    changeArticlesPageSearchInitiated,
+    changeArticlesPageSearchQuery,
+} from '../../store';
+import { useLazyArticlesSearchQuery } from '../../store/apis/searchApi';
 import { ReceivedArticle } from '../../types/article';
-import { Response } from '../../types/response';
-import { PageContainer } from './explore-articles.styles';
+import { errorToast } from '../../utils/toasts';
+import {
+    MainContent,
+    PageContainer,
+    SmallTitle,
+} from './explore-articles.styles';
 
 const ExploreArticlesPage = () => {
-    const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const { data, isLoading } = useGetArticlesQuery();
-    const [articles, setArticles] = useState<ReceivedArticle[]>([]);
-    const receivedData = (data as unknown as Response)?.data ?? [];
+    const { searchTerm, searchInitiated } = useSelector(
+        (state: RootState) => state.appState.articlesPage,
+    );
+    const { UserTags } = useSelector((state: RootState) => state.auth.user);
 
-    useEffect(() => {
-        setArticles(receivedData);
-    }, [data]);
+    const [triggerSearch, { data: _receivedArticles, isLoading, isFetching }] =
+        useLazyArticlesSearchQuery();
+    const articles = (_receivedArticles?.data as ReceivedArticle[]) ?? [];
+
+    const searchHandler = async (searchTerm: string) => {
+        if (searchTerm.trim().length === 0) return;
+        try {
+            await triggerSearch({ searchTerm }).unwrap();
+            dispatch(changeArticlesPageSearchInitiated(true));
+        } catch (error) {
+            errorToast('Error occurred while searching.');
+            console.error(error);
+        }
+    };
+
     const handleChangeSearchValue = (value: string) => {
-        setSearchValue(value);
-        const fuseOptions = {
-            keys: ['Title'],
-            includeScore: true,
-            threshold: 0.5,
-        };
-        const fuse = new Fuse(receivedData, fuseOptions);
-        const results = fuse.search(searchValue);
-        const filteredSearch =
-            value === '' ? receivedData : results.map((result) => result.item);
-        setArticles(filteredSearch);
+        dispatch(changeArticlesPageSearchQuery(value));
     };
 
     const handleCreateButtonClick = () => {
         navigate('/app/articles/create');
     };
 
-    return isLoading ? (
+    useEffect(() => {
+        if (searchInitiated) {
+            triggerSearch({ searchTerm });
+        } else {
+            let userTags = UserTags?.join(' ') ?? '';
+            triggerSearch({ searchTerm: userTags });
+        }
+    }, []);
+
+    const pageContent = isFetching ? (
         <Spinner />
     ) : (
+        <>
+            <SmallTitle>
+                {searchInitiated ? 'search results' : 'suggested articles'}
+            </SmallTitle>
+            <MainContent empty={articles && !articles.length}>
+                {articles.map((article: ReceivedArticle) => {
+                    return (
+                        <WideArticleItem
+                            key={article.ID}
+                            {...article}
+                            onClick={() =>
+                                navigate(`/app/articles/${article.ID}`)
+                            }
+                        />
+                    );
+                })}
+            </MainContent>
+        </>
+    );
+
+    if (isLoading) {
+        return <Spinner />;
+    }
+
+    return (
         <PageContainer {...BetweenPageAnimation}>
             <PageTitle className="text-center">Explore Articles</PageTitle>
             <ExplorePageHeader
-                searchValue={searchValue}
+                searchValue={searchTerm}
                 onSearchValueChange={handleChangeSearchValue}
                 onCreateButtonClick={handleCreateButtonClick}
+                searchHandler={searchHandler}
+                suggestionsType={'article'}
+                placeholder="Search articles..."
             />
-            {articles.map((article: ReceivedArticle) => {
-                return (
-                    <WideArticleItem
-                        {...article}
-                        onClick={() => navigate(`/app/articles/${article.ID}`)}
-                    />
-                );
-            })}
+            {pageContent}
         </PageContainer>
     );
 };

@@ -33,7 +33,7 @@ const SearchPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const storedUser = useSelector((state: RootState) => state.auth.user);
+    const {UserTags, ID: storedUserId} = useSelector((state: RootState) => state.auth.user);
     const { searchInitiated, searchTerm } = useSelector(
         (state: RootState) => state.appState.searchPage,
     );
@@ -61,7 +61,7 @@ const SearchPage = () => {
         if (searchInitiated) {
             triggerSearch({ searchTerm });
         } else {
-            let userTags = storedUser.UserTags?.join(' ') ?? '';
+            let userTags = UserTags?.join(' ') ?? '';
             triggerSearch({ searchTerm: userTags });
         }
     }, []);
@@ -125,8 +125,17 @@ const SearchPage = () => {
                 >
                     {searchResult?.groups?.slice(0, 10)?.map((group) => {
                         return (
-                            <SwiperCustomSlide key={group.ID} width='250px'>
-                                <GroupCard {...group} />
+                            <SwiperCustomSlide key={group.ID} width="250px">
+                                <GroupCard
+                                    {...group}
+                                    alreadyJoined={
+                                        group?.GroupMembers?.some(
+                                            (member) =>
+                                                member?.ID === storedUserId,
+                                        ) ||
+                                        group?.GroupOwner?.ID === storedUserId
+                                    }
+                                />
                             </SwiperCustomSlide>
                         );
                     })}
