@@ -31,6 +31,11 @@ type GroupCardProps = Partial<ReceivedGroup> & {
      * 'admin' | 'member' | 'owner'
      */
     UserRole?: string;
+
+    /**
+     * If the user has already joined the group
+     */
+    alreadyJoined?: boolean;
 };
 
 const GroupCard = ({
@@ -42,6 +47,7 @@ const GroupCard = ({
     GroupDescription: description,
     UserRole = 'member',
     profilePage = false,
+    alreadyJoined = false,
 }: GroupCardProps) => {
     const navigate = useNavigate();
 
@@ -92,11 +98,20 @@ const GroupCard = ({
                         </GroupDescription>
                         <ButtonsContainer>
                             <Button
-                                select="primary700"
-                                title="Become a member of this group"
+                                select={
+                                    alreadyJoined ? 'secondary' : 'primary700'
+                                }
+                                title={
+                                    alreadyJoined
+                                        ? 'You already joined this group'
+                                        : 'Become a member of this group'
+                                }
                                 onClick={handleJoiningGroup}
+                                disabled={alreadyJoined}
                             >
-                                Join group
+                                {alreadyJoined
+                                    ? 'Already joined'
+                                    : 'Join group'}
                             </Button>
                         </ButtonsContainer>
                     </>
