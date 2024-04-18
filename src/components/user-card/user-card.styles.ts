@@ -59,6 +59,6 @@ export const FollowButton = styled(Button)`
     margin-top: 0.75rem;
 `;
 
-export const SwiperCustomSlide = styled(SwiperSlide)`
-    width: ${CARD_WIDTH};
+export const SwiperCustomSlide = styled(SwiperSlide)<{ width?: string }>`
+    width: ${({ width }) => width ?? CARD_WIDTH};
 `;
