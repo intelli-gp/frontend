@@ -8,4 +8,13 @@ export type GeneralSearchData = {
     groups: ReceivedGroup[];
 };
 
-export type SUGGESTION_TYPE = 'article' | 'group' | 'user' | 'all';
+export type SearchDto = {
+    searchTerm: string;
+    limit?: number;
+    offset?: number;
+};
+
+export type AutocompleteDto = {
+    searchTerm: string;
+    type: 'article' | 'group' | 'user' | 'all';
+};

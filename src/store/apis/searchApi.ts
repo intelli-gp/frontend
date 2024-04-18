@@ -1,15 +1,11 @@
 import { Response } from '../../types/response';
-import { SUGGESTION_TYPE } from '../../types/search';
+import { AutocompleteDto, SearchDto } from '../../types/search';
 import { appApi } from './appApi';
 
 const searchApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
-        generalSearch: builder.query<Response, string>({
-            query: (
-                searchTerm: string,
-                limit: number = 50,
-                offset: number = 0,
-            ) => ({
+        generalSearch: builder.query<Response, SearchDto>({
+            query: ({ searchTerm, limit = 10, offset = 0 }) => ({
                 url: `/search`,
                 method: 'GET',
                 params: {
@@ -18,13 +14,10 @@ const searchApi = appApi.injectEndpoints({
                     offset,
                 },
             }),
+            keepUnusedDataFor: 5 * 60, // 5 minutes
         }),
-        articlesSearch: builder.query<Response, string>({
-            query: (
-                searchTerm: string,
-                limit: number = 50,
-                offset: number = 0,
-            ) => ({
+        articlesSearch: builder.query<Response, SearchDto>({
+            query: ({ searchTerm, limit = 10, offset = 0 }) => ({
                 url: `/search/articles`,
                 method: 'GET',
                 params: {
@@ -33,13 +26,10 @@ const searchApi = appApi.injectEndpoints({
                     offset,
                 },
             }),
+            keepUnusedDataFor: 5 * 60, // 5 minutes
         }),
-        groupsSearch: builder.query<Response, string>({
-            query: (
-                searchTerm: string,
-                limit: number = 50,
-                offset: number = 0,
-            ) => ({
+        groupsSearch: builder.query<Response, SearchDto>({
+            query: ({ searchTerm, limit = 10, offset = 0 }) => ({
                 url: `/search/chat-groups`,
                 method: 'GET',
                 params: {
@@ -48,13 +38,10 @@ const searchApi = appApi.injectEndpoints({
                     offset,
                 },
             }),
+            keepUnusedDataFor: 5 * 60, // 5 minutes
         }),
-        usersSearch: builder.query<Response, string>({
-            query: (
-                searchTerm: string,
-                limit: number = 50,
-                offset: number = 0,
-            ) => ({
+        usersSearch: builder.query<Response, SearchDto>({
+            query: ({ searchTerm, limit = 10, offset = 0 }) => ({
                 url: `/search/users`,
                 method: 'GET',
                 params: {
@@ -63,11 +50,9 @@ const searchApi = appApi.injectEndpoints({
                     offset,
                 },
             }),
+            keepUnusedDataFor: 5 * 60, // 5 minutes
         }),
-        getAutocompleteSuggestions: builder.query<
-            Response,
-            { type: SUGGESTION_TYPE; searchTerm: string }
-        >({
+        getAutocompleteSuggestions: builder.query<Response, AutocompleteDto>({
             query: ({ searchTerm, type }) => ({
                 url: `/search/autocomplete`,
                 method: 'GET',
