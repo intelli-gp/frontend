@@ -1,34 +1,30 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
+import EnhancedImage from '../image/image.component';
 
-export const CardContainer = styled.div`
+export const CardContainer = styled.div<{profilePage?: boolean}>`
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    width: 225px;
-    height: fit-content;
+    width: 250px;
+    height: 100%;
     height: -moz-fit-content;
     border-radius: 0.5rem;
     transition: all 0.25s ease-in-out;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px 0px;
+    background-color: white;
+    gap: 1rem;
     cursor: pointer;
-
+    padding-bottom: ${({profilePage}) => (profilePage ? '1.25rem' : '0')};
     &:hover {
         background-color: var(--indigo-25);
     }
 `;
 
-export const CardImageContainer = styled.div`
-    background-color: var(--gray-100);
+export const CardImage = styled(EnhancedImage)`
     width: 100%;
-    height: 120px;
-    position: relative;
-`;
-
-export const CardImage = styled.img`
-    width: 100%;
-    height: 100%;
+    height: 150px;
     object-fit: cover;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
@@ -43,19 +39,6 @@ export const GroupInfo = styled.div`
     margin: 0 auto;
 `;
 
-export const GroupTitleGradient = styled.div`
-    width: 100%;
-    height: 50%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    background: linear-gradient(
-        to top,
-        rgba(255, 255, 255, 0.8),
-        rgba(255, 255, 255, 0)
-    );
-`;
-
 export const GroupTitle = styled.h3<{ width?: string }>`
     font-weight: 700;
     letter-spacing: -0.5px;
@@ -66,7 +49,7 @@ export const GroupTitle = styled.h3<{ width?: string }>`
 export const MembersCount = styled.p`
     font-size: 0.75rem;
     opacity: 0.8;
-    margin-top: -0.25rem;
+    margin-top: -0.5rem;
     display: flex;
     gap: 0.125rem;
     align-items: center;
@@ -77,6 +60,13 @@ export const TagsContainer = styled.div`
     gap: 0.25rem;
     max-width: 100%;
     overflow: auto;
+`;
+
+export const GroupDescription = styled.p<{ width?: string; lines?: number }>`
+    font-size: 0.875rem;
+    line-height: 1.2rem;
+    height: 2.4rem;
+    ${CSSTextLinesCountLimit}
 `;
 
 export const ButtonsContainer = styled.div`
@@ -96,8 +86,28 @@ export const ButtonsContainer = styled.div`
     }
 `;
 
-export const GroupDescription = styled.p<{ width?: string; lines?: number }>`
-    font-size: 0.875rem;
-    opacity: 0.8;
-    ${CSSTextLinesCountLimit}
+export const BadgeContainer = styled.div<{ role: string }>`
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    z-index: 10;
+    ${({ role }) => {
+        switch (role) {
+            case 'owner':
+                return css`
+                    background-color: #fab005;
+                `;
+            case 'admin':
+                return css`
+                    background-color: #74c0fc;
+                `;
+            case 'member':
+            case undefined:
+                return css`
+                    background-color: #68d391;
+                `;
+        }
+    }}
 `;
