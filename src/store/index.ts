@@ -4,6 +4,7 @@ import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 import { appApi } from './apis/appApi';
+import { appReducer } from './slices/app.slice';
 import { articleCreatorReducer } from './slices/article-creator.slice';
 import { authReducer } from './slices/auth.slice';
 import { loginFormReducer } from './slices/login-form.slice';
@@ -27,6 +28,7 @@ const store = configureStore({
         'login-form': loginFormReducer,
         'signup-form': singupFormReducer,
         'article-creator': articleCreatorReducer,
+        appState: appReducer,
         auth: authReducer,
         timer: persistedReducer,
         [appApi.reducerPath]: appApi.reducer,
@@ -44,4 +46,5 @@ export * from './slices/signup-form.slice';
 export * from './slices/auth.slice';
 export * from './slices/article-creator.slice';
 export * from './slices/pomodoro.slice';
+export * from './slices/app.slice';
 export * from './apis';
