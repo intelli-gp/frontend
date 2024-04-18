@@ -12,6 +12,7 @@ interface ButtonProps {
     className?: string;
     outline?: boolean;
     rest?: any;
+    disabled?: boolean;
 }
 
 export const ButtonContainer = styled.button<ButtonProps>`
@@ -141,6 +142,16 @@ export const ButtonContainer = styled.button<ButtonProps>`
             }
         }
     }}
+
+    ${({ disabled }) =>
+        disabled &&
+        css`
+            opacity: 0.5;
+            cursor: not-allowed;
+            &:hover {
+                opacity: 0.5;
+            }
+        `}
 `;
 
 export const ButtonIcon = styled(GoSync)`
