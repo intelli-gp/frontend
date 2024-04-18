@@ -12,11 +12,11 @@ import coverImageCamera from '../../assets/imgs/coverImageCamera.png';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import Spinner from '../../components/Spinner';
 import Button from '../../components/button/button.component';
+import GroupCard from '../../components/chat-group-card/chat-group-card.component';
 import { Modal } from '../../components/modal/modal.component';
 import OpenImage from '../../components/openImage/openImage.component';
 import UserItem from '../../components/user-Item/user-item.component';
 import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
-import WideGroupCard from '../../components/wide-group-card/wide-group-card.component';
 import { useUploadImage } from '../../hooks/uploadImage.hook';
 import { BetweenPageAnimation } from '../../index.styles';
 import {
@@ -246,7 +246,7 @@ const ProfilePage = () => {
                 return (
                     <GroupsContainer>
                         {groupsWithRole?.map((group) => (
-                            <WideGroupCard {...group} />
+                            <GroupCard profilePage={true} {...group} />
                         ))}
                     </GroupsContainer>
                 );

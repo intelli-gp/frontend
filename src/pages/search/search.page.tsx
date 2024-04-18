@@ -90,7 +90,7 @@ const SearchPage = () => {
                 </SectionTitle>
                 <Swiper
                     navigation={true}
-                    spaceBetween={25}
+                    spaceBetween={20}
                     modules={[Navigation]}
                     className="w-full !p-2"
                     slidesPerView={'auto'}
@@ -118,14 +118,14 @@ const SearchPage = () => {
                 </SectionTitle>
                 <Swiper
                     navigation={true}
-                    spaceBetween={25}
+                    spaceBetween={20}
                     modules={[Navigation]}
                     className="w-full !p-2"
                     slidesPerView={'auto'}
                 >
                     {searchResult?.groups?.slice(0, 10)?.map((group) => {
                         return (
-                            <SwiperCustomSlide key={group.ID}>
+                            <SwiperCustomSlide key={group.ID} width='250px'>
                                 <GroupCard {...group} />
                             </SwiperCustomSlide>
                         );

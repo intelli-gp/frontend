@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import EnhancedImage from '../../components/image/image.component';
 import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
+import { GroupsGrid } from '../explore-groups/explore-groups.style';
 
 const SECTION_SHADOW = '';
 const SECTION_BACKGROUND = 'var(--indigo-50)';
@@ -245,10 +246,8 @@ export const MainSectionContent = styled.div`
     flex: 1;
 `;
 
-export const GroupsContainer = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 1rem;
+export const GroupsContainer = styled(GroupsGrid)`
+   
 `;
 
 export const EmptyContent = styled.div`
