@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { LuSearch } from 'react-icons/lu';
+import { LuSearch, LuX } from 'react-icons/lu';
 import styled, { css } from 'styled-components';
 
 import { CSSTextLengthLimit } from '../../index.styles';
@@ -13,6 +13,7 @@ export const Container = styled.div`
     gap: 0.5rem;
     justify-content: center;
     align-items: center;
+    margin: 0 auto;
 `;
 
 export const SearchBarContainer = styled.div`
@@ -108,4 +109,17 @@ export const SearchIcon = styled(LuSearch)<{ interactive?: boolean }>`
             `;
         }
     }}
+`;
+
+export const ClearSearchIcon = styled(LuX)`
+    transition: all 0.2s ease-in-out;
+    box-sizing: content-box;
+    padding: 0.5rem;
+    border-radius: 50%;
+    color: var(--gray-700);
+    cursor: pointer;
+    aspect-ratio: 1/1;
+    &:hover {
+        background-color: var(--gray-100);
+    }
 `;

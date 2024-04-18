@@ -5,6 +5,7 @@ import { PulseLoader } from 'react-spinners';
 import { useLazyGetAutocompleteSuggestionsQuery } from '../../store/apis/searchApi';
 import { AutocompleteDto } from '../../types/search';
 import {
+    ClearSearchIcon,
     Container,
     CreateButton,
     SearchBarContainer,
@@ -82,6 +83,10 @@ const ExplorePageHeader = ({
         searchHandler && searchHandler(suggestion);
     };
 
+    const handleClearSearchValue = () => {
+        onSearchValueChange('');
+    };
+
     useEffect(() => {
         const screenClickHandler = () => {
             setShowSuggestions(false);
@@ -115,6 +120,10 @@ const ExplorePageHeader = ({
                     placeholder={placeholder ?? 'Search...'}
                     value={searchValue}
                     onChange={handleSearchValueChange}
+                />
+                <ClearSearchIcon
+                    title={'Clear'}
+                    onClick={handleClearSearchValue}
                 />
                 {(showSuggestions || debounceIsRunning) && (
                     <SuggestionsContainer
