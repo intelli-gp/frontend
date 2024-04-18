@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -13,7 +13,11 @@ import UserCard from '../../components/user-card/user-card.component';
 import { SwiperCustomSlide } from '../../components/user-card/user-card.styles';
 import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
 import { BetweenPageAnimation } from '../../index.styles';
-import { RootState } from '../../store';
+import {
+    RootState,
+    changeSearchPageInitiated,
+    changeSearchPageQuery,
+} from '../../store';
 import { useLazyGeneralSearchQuery } from '../../store/apis/searchApi';
 import { GeneralSearchData } from '../../types/search';
 import { errorToast } from '../../utils/toasts';
@@ -27,23 +31,26 @@ import {
 
 const SearchPage = () => {
     const navigate = useNavigate();
-    const [searchValue, setSearchValue] = useState('');
-    const [isFirstRender, setIsFirstRender] = useState(true);
+    const dispatch = useDispatch();
+
     const storedUser = useSelector((state: RootState) => state.auth.user);
+    const { searchInitiated, searchTerm } = useSelector(
+        (state: RootState) => state.appState.searchPage,
+    );
 
     const [triggerSearch, { isLoading, data: _searchResult }] =
         useLazyGeneralSearchQuery();
     const searchResult = _searchResult?.data as GeneralSearchData;
 
     const handleSearchValueChange = (newValue: string) => {
-        setSearchValue(newValue);
+        dispatch(changeSearchPageQuery(newValue));
     };
 
     const searchHandler = async (searchTerm: string) => {
-        if (searchValue.trim().length === 0) return;
+        if (searchTerm.trim().length === 0) return;
         try {
-            await triggerSearch(searchTerm).unwrap();
-            setIsFirstRender(false);
+            await triggerSearch({ searchTerm }).unwrap();
+            dispatch(changeSearchPageInitiated(true));
         } catch (error) {
             errorToast('Error occurred while searching.');
             console.error(error);
@@ -51,9 +58,12 @@ const SearchPage = () => {
     };
 
     useEffect(() => {
-        if (!isFirstRender) return;
-        let userInterests = storedUser.UserTags?.join(' ') ?? '';
-        triggerSearch(userInterests);
+        if (searchInitiated) {
+            triggerSearch({ searchTerm });
+        } else {
+            let userTags = storedUser.UserTags?.join(' ') ?? '';
+            triggerSearch({ searchTerm: userTags });
+        }
     }, []);
 
     if (isLoading) {
@@ -64,7 +74,7 @@ const SearchPage = () => {
         <PageContainer {...BetweenPageAnimation}>
             <ExplorePageHeader
                 WithoutButton
-                searchValue={searchValue}
+                searchValue={searchTerm}
                 onSearchValueChange={handleSearchValueChange}
                 searchHandler={searchHandler}
                 suggestionsType={'all'}
@@ -74,9 +84,9 @@ const SearchPage = () => {
                 empty={searchResult && searchResult?.users?.length === 0}
             >
                 <SectionTitle>
-                    {isFirstRender
-                        ? 'Suggested users'
-                        : 'users based on your search'}
+                    {searchInitiated
+                        ? 'users based on your search'
+                        : 'Suggested users'}
                 </SectionTitle>
                 <Swiper
                     navigation={true}
@@ -99,9 +109,9 @@ const SearchPage = () => {
                 empty={searchResult && searchResult?.groups?.length === 0}
             >
                 <SectionTitle>
-                    {isFirstRender
-                        ? 'Suggested chat groups'
-                        : 'chat groups based on your search'}
+                    {searchInitiated
+                        ? 'Chat groups based on your search'
+                        : 'Suggested chat groups'}
                     <ExploreMoreLink to="/app/groups">
                         Explore More
                     </ExploreMoreLink>
@@ -127,9 +137,9 @@ const SearchPage = () => {
                 empty={searchResult && searchResult?.articles?.length === 0}
             >
                 <SectionTitle>
-                    {isFirstRender
-                        ? 'Suggested articles'
-                        : 'articles based on your search'}
+                    {searchInitiated
+                        ? 'Articles based on your search'
+                        : 'Suggested articles'}
                     <ExploreMoreLink to="/app/articles">
                         Explore More
                     </ExploreMoreLink>
