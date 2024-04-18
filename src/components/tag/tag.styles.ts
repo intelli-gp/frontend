@@ -43,7 +43,7 @@ export const TagContainer = styled.div<{
     cursor: pointer;
 
     &:hover {
-        background-color: var(--indigo-600);
+        background-color: var(--indigo-800);
         color: white;
     }
     transition: all 0.25s ease-in-out;
@@ -61,11 +61,12 @@ export const DeleteTagButton = styled.button`
     justify-content: center;
     border-radius: 10000px;
     padding: 0.2rem 0.5rem;
-    color: var(--indigo-900);
     background-color: white;
     font-weight: bolder;
     transition: all 0.25s ease-in-out;
+    aspect-ratio: 1;
+    color: black;
     &:hover {
-        background-color: var(--indigo-200);
+        background-color: var(--gray-400);
     }
 `;
