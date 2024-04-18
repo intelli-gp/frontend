@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { CgMathPlus } from 'react-icons/cg';
+import { PulseLoader } from 'react-spinners';
 
 import { useLazyGetAutocompleteSuggestionsQuery } from '../../store/apis/searchApi';
-import { SUGGESTION_TYPE } from '../../types/search';
+import { AutocompleteDto } from '../../types/search';
 import {
     Container,
     CreateButton,
@@ -28,8 +29,10 @@ type ExplorePageHeaderProps = {
      * If passed, the search suggestions will be shown
      * when the user types on the search bar.
      */
-    suggestionsType?: SUGGESTION_TYPE;
+    suggestionsType?: AutocompleteDto['type'];
 };
+
+let debounceTimeout: NodeJS.Timeout;
 
 const ExplorePageHeader = ({
     searchValue,
@@ -41,14 +44,18 @@ const ExplorePageHeader = ({
     suggestionsType,
 }: ExplorePageHeaderProps) => {
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const [debounceIsRunning, setDebounceIsRunning] = useState(false);
 
-    const [getAutoCompleteSuggestions, { data: _searchSuggestions }] =
-        useLazyGetAutocompleteSuggestionsQuery();
+    const [
+        getAutoCompleteSuggestions,
+        { data: _searchSuggestions, isFetching },
+    ] = useLazyGetAutocompleteSuggestionsQuery();
     const searchSuggestions = _searchSuggestions?.data as string[];
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === `Enter`) {
             searchHandler && searchHandler(searchValue);
+            setShowSuggestions(false);
         }
     };
 
@@ -56,17 +63,23 @@ const ExplorePageHeader = ({
         e: React.ChangeEvent<HTMLInputElement>,
     ) => {
         onSearchValueChange(e.target.value);
+
         if (!suggestionsType) return;
-        await getAutoCompleteSuggestions({
-            searchTerm: e.target.value,
-            type: suggestionsType,
-        });
+
+        setDebounceIsRunning(true);
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(async () => {
+            await getAutoCompleteSuggestions({
+                searchTerm: e.target.value,
+                type: suggestionsType,
+            });
+            setDebounceIsRunning(false);
+        }, 500);
     };
 
     const handleClickSuggestion = (suggestion: string) => {
         onSearchValueChange(suggestion);
         searchHandler && searchHandler(suggestion);
-        setShowSuggestions(false);
     };
 
     useEffect(() => {
@@ -91,6 +104,7 @@ const ExplorePageHeader = ({
         <Container onKeyDown={handleKeyDown}>
             <SearchBarContainer>
                 <SearchIcon
+                    interactive
                     title={'Search'}
                     onClick={() => {
                         searchHandler && searchHandler(searchValue);
@@ -102,7 +116,7 @@ const ExplorePageHeader = ({
                     value={searchValue}
                     onChange={handleSearchValueChange}
                 />
-                {showSuggestions && (
+                {(showSuggestions || debounceIsRunning) && (
                     <SuggestionsContainer
                         initial={{
                             height: 0,
@@ -111,15 +125,25 @@ const ExplorePageHeader = ({
                             height: 'auto',
                         }}
                     >
-                        {searchSuggestions?.map((suggestion) => (
-                            <SuggestionItem
-                                onClick={() =>
-                                    handleClickSuggestion(suggestion)
-                                }
-                            >
-                                {suggestion}
-                            </SuggestionItem>
-                        ))}
+                        {!(debounceIsRunning || isFetching) &&
+                            searchSuggestions?.map((suggestion) => (
+                                <SuggestionItem
+                                    onClick={() =>
+                                        handleClickSuggestion(suggestion)
+                                    }
+                                >
+                                    <SearchIcon size={14} />
+                                    <span>{suggestion}</span>
+                                </SuggestionItem>
+                            ))}
+                        {(debounceIsRunning || isFetching) && (
+                            <div className="flex items-center justify-center py-4">
+                                <PulseLoader
+                                    color={'var(--gray-600)'}
+                                    size={8}
+                                />
+                            </div>
+                        )}
                     </SuggestionsContainer>
                 )}
             </SearchBarContainer>
@@ -137,7 +161,7 @@ const ExplorePageHeader = ({
                         },
                     }}
                 >
-                    <CgMathPlus size={24} />
+                    <CgMathPlus size={22} />
                 </CreateButton>
             )}
         </Container>

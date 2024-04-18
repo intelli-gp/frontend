@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { LuSearch } from 'react-icons/lu';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { CSSTextLengthLimit } from '../../index.styles';
 
@@ -17,7 +17,7 @@ export const Container = styled.div`
 
 export const SearchBarContainer = styled.div`
     width: 100%;
-    border-radius: 0.5rem;
+    border-radius: 5rem;
     border: 1px solid var(--gray-300);
     display: flex;
     align-items: center;
@@ -50,45 +50,62 @@ export const CreateButton = styled(motion.button)`
 
 export const SuggestionsContainer = styled(motion.ul)`
     position: absolute;
-    width: calc(100% - 2rem);
+    width: calc(100% - 2.5rem);
+    left: 0;
+    right: 0;
+    margin: 0 auto;
     top: 100%;
     display: flex;
     flex-direction: column;
     background-color: white;
     z-index: 10;
     box-shadow: 0 0 20px 10px rgb(99, 102, 241, 0.075);
-    border-bottom-left-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
+    border-bottom-left-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
     border: 1px solid var(--gray-300);
     overflow: hidden;
 `;
 
 export const SuggestionItem = styled(motion.li)<{ width?: string }>`
     transition: background-color 0.15s ease-in-out;
-    display: block;
+    display: flex;
+    align-items: center;
     cursor: pointer;
-    padding: 0.25rem 0.75rem;
+    padding: 0.25rem;
     margin: 0.125rem 0.5rem;
-    border-radius: 0.25rem;
-    &:hover {
-        background-color: var(--indigo-50);
-    }
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    gap: 0.25rem;
     &:first-child {
         margin-top: 0.5rem;
     }
     &:last-child {
         margin-bottom: 0.5rem;
     }
-    ${CSSTextLengthLimit};
+    &:hover {
+        background-color: var(--indigo-50);
+        color: black;
+    }
+    span {
+        ${CSSTextLengthLimit};
+    }
 `;
 
-export const SearchIcon = styled(LuSearch)`
+export const SearchIcon = styled(LuSearch)<{ interactive?: boolean }>`
     transition: all 0.2s ease-in-out;
     box-sizing: content-box;
     padding: 0.5rem;
     border-radius: 50%;
+    color: var(--gray-700);
     cursor: pointer;
-    &:hover {
-        background-color: var(--gray-100);
-    }
+    aspect-ratio: 1/1;
+    ${({ interactive }) => {
+        if (interactive) {
+            return css`
+                &:hover {
+                    background-color: var(--gray-100);
+                }
+            `;
+        }
+    }}
 `;
