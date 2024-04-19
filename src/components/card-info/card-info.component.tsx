@@ -38,7 +38,7 @@ const CardInfo = ({ Number, Expire }: CardInfoProps) => {
     }, [cardNumberValidator]);
     const maskedNumber = `${'*'.repeat(Number.length - 4)}${Number.slice(
         -4,
-    )}`.replace(/(.{4})/g, '$1 ');
+    )}`.replace(/(.{4})/g, '$1  ').slice(-14);
 
     const CreditOptions = [
         {
@@ -63,11 +63,14 @@ const CardInfo = ({ Number, Expire }: CardInfoProps) => {
     return (
         <CardContainer>
             <span className="flex justify-between w-[100%]">
-                <PaymentIcon
-                    type={cardType || 'Amex'}
-                    format="flat"
-                    width={80}
-                />
+                <span className='flex gap-4'>
+                    <PaymentIcon
+                        type={cardType || 'Amex'}
+                        format="flatRounded"
+                        width={50}
+                    />
+                    <p className="text-lg font-bold">{maskedNumber}</p>
+                </span>
                 <DropdownMenu
                     options={CreditOptions}
                     top="40%"
@@ -81,13 +84,9 @@ const CardInfo = ({ Number, Expire }: CardInfoProps) => {
                     </div>
                 </DropdownMenu>
             </span>
-
-            <span className="flex flex-col gap-[8px]">
-                <p className="text-lg">{maskedNumber}</p>
-                <p className="text-[var(--slate-500)] text-sm">
-                    Expires - {Expire}
-                </p>
-            </span>
+            <p className="text-[var(--slate-500)] text-sm ">
+                Expires - {Expire}
+            </p>
         </CardContainer>
     );
 };
