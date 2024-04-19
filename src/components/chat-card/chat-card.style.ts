@@ -4,7 +4,7 @@ import { CSSTextLinesCountLimit } from '../../index.styles';
 import EnhancedImage from '../image/image.component';
 
 export const CardImageContainer = styled.div`
-    height: 80px;
+    height: 90px;
     position: relative;
 `;
 
@@ -30,7 +30,7 @@ export const CardContainer = styled.div<{ unread: boolean }>`
 `;
 
 export const CardImage = styled(EnhancedImage)`
-    max-width: 80px;
+    max-width: 90px;
     border-radius: 50%;
     object-fit: cover;
     border: none;
