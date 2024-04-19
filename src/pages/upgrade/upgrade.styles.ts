@@ -1,5 +1,13 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
+import { FaCheck } from "react-icons/fa";
+
+export const Check = styled(FaCheck)`
+position: absolute;
+left: -5%;
+top: 3%;
+color: var(--indigo-950);
+`
 
 export const PageContainer = styled(motion.div)`
     display: flex;
@@ -15,6 +23,7 @@ export const UpgradeTitle = styled.h1`
     font-weight: 600;
     font-size: 48px;
     line-height: 100%;
+    width:80%;
     display: flex;
     width: 28rem;
     align-items: center;
@@ -58,14 +67,13 @@ export const CardHolder = styled.div`
     justify-content: space-between;
     box-sizing: border-box;
     width: 280px;
-    height: 380px;
+    height: 382px;
     background: #ffffff;
     border: 1.5px solid rgba(82, 82, 82, 0.27);
     box-shadow: var(--gray-shadow);
     border-radius: 5px;
     & > div:first-child {
         gap: 6px;
-
         display: flex;
         flex-direction: column;
     }
@@ -86,13 +94,22 @@ export const CardHolder = styled.div`
 `;
 export const UpgradeButton = styled.button`
     width: 100%;
-    color: black;
+    color: var(--indigo-950);
     outline: none;
-    font-weight: 500;
+    font-weight: 600;
     padding: 0.5rem 1.5rem;
     text-align: center;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     border-radius: 4px;
+    border:2px solid var(--indigo-950);
+    background:#F9F8C1;
+    transition: all 0.2s ease-in-out;
+    &:hover{
+        color:#F9F8C1;
+        background:var(--indigo-950);
+
+
+    }
 `;
