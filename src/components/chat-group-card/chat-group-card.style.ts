@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
 import EnhancedImage from '../image/image.component';
 
-export const CardContainer = styled.div<{profilePage?: boolean}>`
+export const CardContainer = styled.div<{ profilePage?: boolean }>`
     position: relative;
     display: flex;
     flex-direction: column;
@@ -16,7 +16,7 @@ export const CardContainer = styled.div<{profilePage?: boolean}>`
     background-color: white;
     gap: 1rem;
     cursor: pointer;
-    padding-bottom: ${({profilePage}) => (profilePage ? '1.25rem' : '0')};
+    padding-bottom: ${({ profilePage }) => (profilePage ? '1.25rem' : '0')};
     &:hover {
         background-color: var(--indigo-25);
     }

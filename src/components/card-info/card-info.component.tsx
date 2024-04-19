@@ -36,9 +36,9 @@ const CardInfo = ({ Number, Expire }: CardInfoProps) => {
     useEffect(() => {
         setCardType(cardNumberValidator?.card?.niceType as CardType);
     }, [cardNumberValidator]);
-    const maskedNumber = `${'*'.repeat(Number.length - 4)}${Number.slice(
-        -4,
-    )}`.replace(/(.{4})/g, '$1  ').slice(-14);
+    const maskedNumber = `${'*'.repeat(Number.length - 4)}${Number.slice(-4)}`
+        .replace(/(.{4})/g, '$1  ')
+        .slice(-14);
 
     const CreditOptions = [
         {
@@ -63,7 +63,7 @@ const CardInfo = ({ Number, Expire }: CardInfoProps) => {
     return (
         <CardContainer>
             <span className="flex justify-between w-[100%]">
-                <span className='flex gap-4'>
+                <span className="flex gap-4">
                     <PaymentIcon
                         type={cardType || 'Amex'}
                         format="flatRounded"

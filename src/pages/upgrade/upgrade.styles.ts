@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion';
+import { FaCheck } from 'react-icons/fa';
 import styled from 'styled-components';
-import { FaCheck } from "react-icons/fa";
 
 export const Check = styled(FaCheck)`
-position: absolute;
-left: -5%;
-top: 3%;
-color: var(--indigo-950);
-`
+    position: absolute;
+    left: -5%;
+    top: 3%;
+    color: var(--indigo-950);
+`;
 
 export const PageContainer = styled(motion.div)`
     display: flex;
@@ -23,7 +23,7 @@ export const UpgradeTitle = styled.h1`
     font-weight: 600;
     font-size: 48px;
     line-height: 100%;
-    width:80%;
+    width: 80%;
     display: flex;
     width: 28rem;
     align-items: center;
@@ -103,13 +103,11 @@ export const UpgradeButton = styled.button`
     align-items: center;
     justify-content: center;
     border-radius: 4px;
-    border:2px solid var(--indigo-950);
-    background:#F9F8C1;
+    border: 2px solid var(--indigo-950);
+    background: #f9f8c1;
     transition: all 0.2s ease-in-out;
-    &:hover{
-        color:#F9F8C1;
-        background:var(--indigo-950);
-
-
+    &:hover {
+        color: #f9f8c1;
+        background: var(--indigo-950);
     }
 `;

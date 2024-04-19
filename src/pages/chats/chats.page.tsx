@@ -1,18 +1,21 @@
+import Fuse from 'fuse.js';
 import { useEffect, useState } from 'react';
 
+import Skeleton from '../../components/Skeleton';
 import ChatCard from '../../components/chat-card/chat-card.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
-import { useFetchMessagesQuery, } from '../../store';
-import { PageContainer, Title } from './chats.styles';
+import { useFetchMessagesQuery } from '../../store';
 import { MessagesNotification } from '../../types/notifications';
-import Skeleton from '../../components/Skeleton';
-import Fuse from 'fuse.js';
+import { PageContainer, Title } from './chats.styles';
 
 export const ChatsPage = () => {
     const [searchValue, setSearchValue] = useState('');
 
-
-    const { data: _groups, isLoading, error } = useFetchMessagesQuery(undefined);
+    const {
+        data: _groups,
+        isLoading,
+        error,
+    } = useFetchMessagesQuery(undefined);
     const data = _groups || [];
 
     const [groups, setGroups] = useState(data);
@@ -42,13 +45,15 @@ export const ChatsPage = () => {
                 WithoutButton
             />
             {isLoading ? (
-              <div className="h-auto w-full flex justify-center flex-col items-center gap-2">
-              <Skeleton times={3} className="h-[120px] w-[80%]" />
-          </div>    
+                <div className="h-auto w-full flex justify-center flex-col items-center gap-2">
+                    <Skeleton times={3} className="h-[120px] w-[80%]" />
+                </div>
             ) : error ? (
                 <div>Error</div>
             ) : groups?.length || 0 > 0 ? (
-                groups?.map((group: Partial<MessagesNotification>) => <ChatCard {...group} />)
+                groups?.map((group: Partial<MessagesNotification>) => (
+                    <ChatCard {...group} />
+                ))
             ) : (
                 <div>No groups found.</div>
             )}

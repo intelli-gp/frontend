@@ -1,6 +1,6 @@
 import { GroupToSend, GroupUser } from '../../types/group';
-import { appApi } from './appApi';
 import { Response } from '../../types/response';
+import { appApi } from './appApi';
 
 export const groupsApi = appApi.injectEndpoints({
     endpoints: (builder) => ({

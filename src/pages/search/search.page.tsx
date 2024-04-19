@@ -33,7 +33,9 @@ const SearchPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const {UserTags, ID: storedUserId} = useSelector((state: RootState) => state.auth.user);
+    const { UserTags, ID: storedUserId } = useSelector(
+        (state: RootState) => state.auth.user,
+    );
     const { searchInitiated, searchTerm } = useSelector(
         (state: RootState) => state.appState.searchPage,
     );

@@ -58,34 +58,31 @@ export const AddCard = styled(IoAddCircle)`
     color: var(--indigo-200);
 `;
 export const AddCardContainer = styled(Button)`
-
     display: flex;
     flex-direction: row;
     justify-items: center;
     justify-content: center;
     align-items: center;
-border:0px;
-width:25%;
-gap:8px;
-padding:0.7rem 0.5rem;
+    border: 0px;
+    width: 25%;
+    gap: 8px;
+    padding: 0.7rem 0.5rem;
 `;
 export const PayTime = styled.div`
-
-height:12px;
-font-size: 0.75em;
-color:var(--slate-100);
-font-weight: 500;
-padding: 0.7rem;
-text-align: center;
-display: inline-flex;
-align-items: center;
-justify-content: center;
-border-radius: 55px;
-background:var(--slate-400);
-transition: all 0.2s ease-in-out;
-&:hover{
-    color:var(--slate-400);
-    background:var(--slate-100);
-
-
-}`
+    height: 12px;
+    font-size: 0.75em;
+    color: var(--slate-100);
+    font-weight: 500;
+    padding: 0.7rem;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 55px;
+    background: var(--slate-400);
+    transition: all 0.2s ease-in-out;
+    &:hover {
+        color: var(--slate-400);
+        background: var(--slate-100);
+    }
+`;

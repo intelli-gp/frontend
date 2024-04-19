@@ -246,9 +246,7 @@ export const MainSectionContent = styled.div`
     flex: 1;
 `;
 
-export const GroupsContainer = styled(GroupsGrid)`
-   
-`;
+export const GroupsContainer = styled(GroupsGrid)``;
 
 export const EmptyContent = styled.div`
     font-size: 1.5rem;

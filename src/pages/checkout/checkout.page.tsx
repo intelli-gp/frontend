@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import moment from 'moment';
 import { ChangeEvent, useState } from 'react';
 import { useCreditCardValidator } from 'react-creditcard-validator';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +17,6 @@ import {
     SidePanel,
     Title,
 } from './checkout.style';
-import moment from 'moment';
 
 const CheckoutPage = () => {
     const [holderName, setHolderName] = useState('');
@@ -123,8 +123,13 @@ const CheckoutPage = () => {
                                 setCreditCardNumber(e.target.value)
                             }
                             error={erroredInputs.cardNumber}
-                            onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
-                                if (!/[0-9]/.test(event.key) && event.key !== 'Backspace' ) {
+                            onKeyDown={(
+                                event: React.KeyboardEvent<HTMLInputElement>,
+                            ) => {
+                                if (
+                                    !/[0-9]/.test(event.key) &&
+                                    event.key !== 'Backspace'
+                                ) {
                                     event.preventDefault();
                                 }
                             }}
@@ -136,9 +141,16 @@ const CheckoutPage = () => {
                                     {...getExpiryDateProps()}
                                     required
                                     value={expriy_format()}
-                                    onChange={(e: ChangeEvent<HTMLInputElement>) => setExpiryDate(e.target.value)}
-                                    onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
-                                        if (!/[0-9]/.test(event.key) && event.key !== 'Backspace' ) {
+                                    onChange={(
+                                        e: ChangeEvent<HTMLInputElement>,
+                                    ) => setExpiryDate(e.target.value)}
+                                    onKeyDown={(
+                                        event: React.KeyboardEvent<HTMLInputElement>,
+                                    ) => {
+                                        if (
+                                            !/[0-9]/.test(event.key) &&
+                                            event.key !== 'Backspace'
+                                        ) {
                                             event.preventDefault();
                                         }
                                     }}
@@ -156,8 +168,13 @@ const CheckoutPage = () => {
                                     onChange={(
                                         e: ChangeEvent<HTMLInputElement>,
                                     ) => setCVV(e.target.value)}
-                                    onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
-                                        if (!/[0-9]/.test(event.key) && event.key !== 'Backspace' ) {
+                                    onKeyDown={(
+                                        event: React.KeyboardEvent<HTMLInputElement>,
+                                    ) => {
+                                        if (
+                                            !/[0-9]/.test(event.key) &&
+                                            event.key !== 'Backspace'
+                                        ) {
                                             event.preventDefault();
                                         }
                                     }}

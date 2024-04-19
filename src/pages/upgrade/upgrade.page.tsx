@@ -13,7 +13,6 @@ import {
     UpgradeTitle,
 } from './upgrade.styles';
 
-
 type Type = {
     type: string;
     price: number;
@@ -28,25 +27,31 @@ const Card = ({ el }: { el: Type }) => {
     return (
         <CardHolder>
             <div>
-                <h2 className="font-bold text-[var(--indigo-950)]">{el.type}</h2>
+                <h2 className="font-bold text-[var(--indigo-950)]">
+                    {el.type}
+                </h2>
                 <span>
-                    <h1 className="font-extrabold text-[32px]  text-[var(--indigo-950)]">{el.price}$</h1>
+                    <h1 className="font-extrabold text-[32px]  text-[var(--indigo-950)]">
+                        {el.price}$
+                    </h1>
                     <p>/{el.payment} </p>
                 </span>
                 <ul className="text-sm text-[var(--slate-800)] p-4 ">
-                    {el.para.map((sentence) =>
-                    <span className='relative pl-4 mb-2'>
-                        <Check/>
-                        <li>{sentence}</li>
-                    </span>     
-                    )}
+                    {el.para.map((sentence) => (
+                        <span className="relative pl-4 mb-2">
+                            <Check />
+                            <li>{sentence}</li>
+                        </span>
+                    ))}
                 </ul>
             </div>
-           {el.type!=='Free'? <UpgradeButton
-                onClick={() => navigate(`/app/checkout`)}
-            >
-                Get Started Now
-            </UpgradeButton>:<></>}
+            {el.type !== 'Free' ? (
+                <UpgradeButton onClick={() => navigate(`/app/checkout`)}>
+                    Get Started Now
+                </UpgradeButton>
+            ) : (
+                <></>
+            )}
         </CardHolder>
     );
 };
@@ -60,39 +65,39 @@ const UpgradePage = () => {
 
     const subscriptionPlans: Type[] = [
         {
-            type: "Free",
+            type: 'Free',
             price: 0,
             middle: false,
             para: [
-                "Tailor and design personalized study plans.",
-                "Find and collaborate with study groups.",
-                "Receive personalized course recommendations based on your progress and interests.",
-                "Get assistance from chatbot helper for up to 3 questions per month."
+                'Tailor and design personalized study plans.',
+                'Find and collaborate with study groups.',
+                'Receive personalized course recommendations based on your progress and interests.',
+                'Get assistance from chatbot helper for up to 3 questions per month.',
             ],
-            payment: selectedPlan
+            payment: selectedPlan,
         },
         {
-            type: "Premium",
-            price: selectedPlan === 'Yearly' ? (10 * 12 ): 10,
+            type: 'Premium',
+            price: selectedPlan === 'Yearly' ? 10 * 12 : 10,
             middle: true,
             para: [
-                "Enjoy all the features included in the Free Plan.",
-                "Utilize chatbot helper for up to 10 questions per month.",
-                "Receive 2 personalized study plans per month, carefully crafted by our AI."
+                'Enjoy all the features included in the Free Plan.',
+                'Utilize chatbot helper for up to 10 questions per month.',
+                'Receive 2 personalized study plans per month, carefully crafted by our AI.',
             ],
-            payment: selectedPlan
+            payment: selectedPlan,
         },
         {
-            type: "VIP",
-            price: selectedPlan === 'Yearly' ? (15 * 12 ): 15,
+            type: 'VIP',
+            price: selectedPlan === 'Yearly' ? 15 * 12 : 15,
             middle: false,
             para: [
-                "Enjoy all the features included in the Premium Plan.",
-                "Unlock unlimited personalized study plans, carefully crafted by our AI.",
-                "Enjoy unlimited access to the chatbot helper feature.",
+                'Enjoy all the features included in the Premium Plan.',
+                'Unlock unlimited personalized study plans, carefully crafted by our AI.',
+                'Enjoy unlimited access to the chatbot helper feature.',
             ],
-            payment: selectedPlan
-        }
+            payment: selectedPlan,
+        },
     ];
     return (
         <PageContainer {...BetweenPageAnimation}>
@@ -100,10 +105,11 @@ const UpgradePage = () => {
             <ButtonsHolder>
                 <Button
                     select="primary500"
-                    className={`!w-[50%] !rounded-[15px] !py-[10px] ${selectedPlan === 'Monthly'
-                        ? ''
-                        : '!text-[var(--indigo-950)]'
-                        }`}
+                    className={`!w-[50%] !rounded-[15px] !py-[10px] ${
+                        selectedPlan === 'Monthly'
+                            ? ''
+                            : '!text-[var(--indigo-950)]'
+                    }`}
                     outline={selectedPlan !== 'Monthly'}
                     onClick={() => handleButtonClick('Monthly')}
                 >
@@ -111,10 +117,11 @@ const UpgradePage = () => {
                 </Button>
                 <Button
                     select="primary500"
-                    className={`!rounded-[15px] !py-[10px] !w-[50%] ${selectedPlan === 'Yearly'
-                        ? ''
-                        : '!text-[var(--indigo-950)]'
-                        }`}
+                    className={`!rounded-[15px] !py-[10px] !w-[50%] ${
+                        selectedPlan === 'Yearly'
+                            ? ''
+                            : '!text-[var(--indigo-950)]'
+                    }`}
                     outline={selectedPlan !== 'Yearly'}
                     onClick={() => handleButtonClick('Yearly')}
                 >
