@@ -16,6 +16,7 @@ import {
     SidePanel,
     Title,
 } from './checkout.style';
+import moment from 'moment';
 
 const CheckoutPage = () => {
     const [holderName, setHolderName] = useState('');
@@ -25,8 +26,11 @@ const CheckoutPage = () => {
 
     function expDateValidate(month: string, year: string) {
         console.log(month);
-        if (Number(year) > 2035) {
-            return 'Year cannot be greater than 2035';
+
+        const tenYearsFromNow = moment().year() + 10;
+
+        if (Number(year) > tenYearsFromNow) {
+            return `Year cannot be greater than ${tenYearsFromNow}`;
         }
         return;
     }
@@ -77,7 +81,7 @@ const CheckoutPage = () => {
                             <p>EG$200.00</p>
                         </span>
                         <span className="flex justify-between text-[var(--indigo-900)]">
-                            <p>Taxes</p>
+                            <p>Discount</p>
                             <p>EG$0.00</p>
                         </span>
                         <hr />
@@ -119,10 +123,8 @@ const CheckoutPage = () => {
                                 setCreditCardNumber(e.target.value)
                             }
                             error={erroredInputs.cardNumber}
-                            onKeyDown={(
-                                event: React.KeyboardEvent<HTMLInputElement>,
-                            ) => {
-                                if (!/[0-9]/.test(event.key)) {
+                            onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
+                                if (!/[0-9]/.test(event.key) && event.key !== 'Backspace' ) {
                                     event.preventDefault();
                                 }
                             }}
@@ -134,11 +136,9 @@ const CheckoutPage = () => {
                                     {...getExpiryDateProps()}
                                     required
                                     value={expriy_format()}
-                                    onChange={(
-                                        e: ChangeEvent<HTMLInputElement>,
-                                    ) => setExpiryDate(e.target.value)}
-                                    onKeyDown={(event) => {
-                                        if (!/[0-9]/.test(event.key)) {
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => setExpiryDate(e.target.value)}
+                                    onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
+                                        if (!/[0-9]/.test(event.key) && event.key !== 'Backspace' ) {
                                             event.preventDefault();
                                         }
                                     }}
@@ -156,6 +156,11 @@ const CheckoutPage = () => {
                                     onChange={(
                                         e: ChangeEvent<HTMLInputElement>,
                                     ) => setCVV(e.target.value)}
+                                    onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
+                                        if (!/[0-9]/.test(event.key) && event.key !== 'Backspace' ) {
+                                            event.preventDefault();
+                                        }
+                                    }}
                                 />
                                 <span className="text-red-600 text-sm">
                                     {erroredInputs.cvc && erroredInputs.cvc}
