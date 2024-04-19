@@ -18,14 +18,15 @@ import {
 import { ReceivedUser, UserToSend } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
-    AddCard,
     AddCardContainer,
     EditButton,
     InlineInputsContainer,
     PageContainer,
+    PayTime,
     SectionContainer,
     SectionTitle,
 } from './settings.styles';
+import { FaCheckCircle } from 'react-icons/fa';
 
 export const SettingsPage = () => {
     const dispatch = useDispatch();
@@ -234,20 +235,20 @@ export const SettingsPage = () => {
                         type="password"
                         label={'Current Password'}
                         value=""
-                        onChange={() => {}}
+                        onChange={() => { }}
                     />
                     <InlineInputsContainer>
                         <CustomInput
                             type="password"
                             label={'New Password'}
                             value=""
-                            onChange={() => {}}
+                            onChange={() => { }}
                         />
                         <CustomInput
                             type="password"
                             label={'Repeat New Password'}
                             value=""
-                            onChange={() => {}}
+                            onChange={() => { }}
                         />
                     </InlineInputsContainer>
                 </SectionContainer>
@@ -276,18 +277,62 @@ export const SettingsPage = () => {
                 </EditButton>
             </Accordion>
 
-            <Accordion title="Payment">
-                <div className="flex flex-row justify-start gap-6">
-                    <CardInfo Number="4242424242424242" Expire="12/25" />
-                    <AddCardContainer
-                        onClick={() => setAddCreditCardIsOpen(true)}
-                    >
-                        <AddCard />
-                        <p className="font-bold text-md w-[110px] text-center text-[var(--indigo-950)]">
-                            Add Payment Method
-                        </p>
-                    </AddCardContainer>
+            <Accordion title="Billing">
+                <div className='flex flex-col p-2'>
+                    <SectionTitle>Current Plan</SectionTitle>
+                    <div className='flex flex-row justify-between mb-6 font-bold'>
+                        <div className="w-[70%] flex flex-col gap-2">
+                            <span className="flex justify-start gap-4 items-center mt-4">
+                                <p className='font-extrabold text-lg'>Premium  </p>
+                                <PayTime>Monthly</PayTime>
+                                <p className='mr-6'>$200
+                                    <span className='text-xs text-[var(--slate-500)] font-medium'>/month</span>
+                                </p>
+                            </span>
+                            <span className="flex gap-2 items-center">
+                                <p >Status: </p>
+                                <span className='flex gap-2 items-center font-extrabold'>
+                                    <FaCheckCircle color='green' />
+                                    <p>Active</p>
+                                </span>
+                            </span>
+                            <span className="flex gap-2 items-center">
+                                <div>Joined:</div>
+                                <div className=" font-extrabold">
+                                    <span>April 20, 2024</span>
+                                </div>
+                            </span>
+                            <span className="flex gap-2">
+                                <p>Renew subscription by </p>
+                                <p className='font-extrabold'> May 20, 2024</p>
+                            </span>
+                        </div>
+                        <div className="flex flex-col justify-end gap-4 mt-6 w-[25%]">
+                            <Button>
+                                Change Subscription
+                            </Button>
+                            <Button
+                                select="danger"
+                                outline={true}
+                            >
+                                Cancel Subscription
+                            </Button>
+                        </div>
+                    </div>
+
+                    <SectionTitle>Payment Method</SectionTitle>
+                    <div className='flex flex-col justify-center items-center gap-4 p-2'>
+                        <CardInfo Number="4242424242424242" Expire="12/25" />
+                        <span className='flex justify-end w-full'>
+                            <AddCardContainer
+                                onClick={() => setAddCreditCardIsOpen(true)}
+                            >
+                                    Add Payment Method
+                            </AddCardContainer>
+                        </span>
+                    </div>
                 </div>
+
             </Accordion>
 
             <Accordion title="Security">

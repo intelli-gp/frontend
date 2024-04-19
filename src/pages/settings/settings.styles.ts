@@ -52,25 +52,40 @@ export const EditButton = styled(Button)`
     color: inherit;
 `;
 export const AddCard = styled(IoAddCircle)`
-    width: 60px;
-    height: 60px;
+    width: 25px;
+    height: 25px;
 
     color: var(--indigo-200);
 `;
-export const AddCardContainer = styled.div`
-    width: 200px;
-    height: 182.86px;
-    background-color: var(--indigo-50);
-    border-radius: 8px;
+export const AddCardContainer = styled(Button)`
+
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-items: center;
     justify-content: center;
     align-items: center;
-    box-shadow: var(--gray-shadow);
-    margin: 0 10px;
-    transition: all 0.2s ease-in-out;
-    &:hover {
-        transform: scale(0.98);
-    }
+border:0px;
+width:25%;
+gap:8px;
+padding:0.7rem 0.5rem;
 `;
+export const PayTime = styled.div`
+
+height:12px;
+font-size: 0.75em;
+color:var(--slate-100);
+font-weight: 500;
+padding: 0.7rem;
+text-align: center;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+border-radius: 55px;
+background:var(--slate-400);
+transition: all 0.2s ease-in-out;
+&:hover{
+    color:var(--slate-400);
+    background:var(--slate-100);
+
+
+}`
