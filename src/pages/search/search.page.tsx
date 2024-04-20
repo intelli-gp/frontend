@@ -87,7 +87,7 @@ const SearchPage = () => {
             >
                 <SectionTitle>
                     {searchInitiated
-                        ? 'users based on your search'
+                        ? 'users search results'
                         : 'Suggested users'}
                 </SectionTitle>
                 <Swiper
@@ -112,8 +112,8 @@ const SearchPage = () => {
             >
                 <SectionTitle>
                     {searchInitiated
-                        ? 'Chat groups based on your search'
-                        : 'Suggested chat groups'}
+                        ? 'groups search results'
+                        : 'Suggested groups'}
                     <ExploreMoreLink to="/app/groups">
                         Explore More
                     </ExploreMoreLink>
@@ -149,7 +149,7 @@ const SearchPage = () => {
             >
                 <SectionTitle>
                     {searchInitiated
-                        ? 'Articles based on your search'
+                        ? 'Articles search results'
                         : 'Suggested articles'}
                     <ExploreMoreLink to="/app/articles">
                         Explore More

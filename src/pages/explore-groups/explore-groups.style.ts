@@ -20,9 +20,9 @@ export const GroupsGrid = styled.div`
 
 export const SmallTitle = styled.p`
     margin-bottom: -1rem;
-    font-size: 0.65rem;
+    font-size: 1.25rem;
     font-weight: bolder;
-    text-transform: uppercase;
+    text-transform: capitalize;
     letter-spacing: 0.5px;
     user-select: none;
     display: flex;
