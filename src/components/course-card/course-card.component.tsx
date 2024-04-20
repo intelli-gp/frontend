@@ -7,7 +7,7 @@ import {
     CourseCardContainer,
     CourseDescription,
     CourseInfoWrapper,
-    CourseInstructor,
+    CourseInstructors,
     CoursePriceTag,
     CourseThumbnail,
     CourseTitle,
@@ -15,39 +15,56 @@ import {
 
 export type CourseCardProps = {
     thumbnailUrl: string;
+    redirectUrl: string;
     title: string;
     description: string;
-    instructor: string;
+    instructors: string[];
     avgRating: number;
-    numStudents: number;
+    numReviews: number;
     price: number;
-    currency?: string;
 };
 
 export const CourseCard = ({
     thumbnailUrl,
+    redirectUrl,
     title,
     description,
-    instructor,
+    instructors,
     avgRating,
-    numStudents,
+    numReviews,
     price,
-    currency = '$',
 }: CourseCardProps) => {
+    const openInNewTab = (url: string) => {
+        window.open(url, '_blank', 'noopener,noreferrer');
+    };
+    const handleLinkRedirect = () => {
+        openInNewTab(`${import.meta.env.VITE_UDEMY_URL}${redirectUrl}`);
+    };
     return (
         <CourseCardContainer>
-            <CourseThumbnail src={thumbnailUrl} alt='Course Thumbnail'/>
+            <CourseThumbnail src={thumbnailUrl} alt="Course Thumbnail" />
             <CourseInfoWrapper>
-                <CourseTitle>{_.startCase(title)}</CourseTitle>
-                <CourseDescription>{description}</CourseDescription>
-                <CourseInstructor>{instructor}</CourseInstructor>
-                <Rating value={avgRating} numParticipants={numStudents} />
+                <CourseTitle title={title} onClick={handleLinkRedirect}>
+                    {_.startCase(title)}
+                </CourseTitle>
+                <CourseDescription title={description}>
+                    {description}
+                </CourseDescription>
+                <CourseInstructors title={instructors?.join(', ')}>
+                    {instructors?.join(', ')}
+                </CourseInstructors>
+                <Rating value={avgRating} numParticipants={numReviews} />
             </CourseInfoWrapper>
             <CardFooter>
-                <Button type="submit" select="secondary">
+                <Button
+                    title="Enroll In this Course"
+                    type="submit"
+                    select="secondary"
+                    onClick={handleLinkRedirect}
+                >
                     Enroll now
                 </Button>
-                <CoursePriceTag>{`${price} ${currency}`}</CoursePriceTag>
+                <CoursePriceTag>{price}</CoursePriceTag>
             </CardFooter>
         </CourseCardContainer>
     );
