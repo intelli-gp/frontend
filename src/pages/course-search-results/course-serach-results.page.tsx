@@ -33,7 +33,7 @@ export const CoursesSearchResultsPage = () => {
     const [searchCategory, setSearchCategory] = useState('');
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-    const [pageLimit] = useState(24);
+    const [pageLimit, setPageLimit] = useState(24);
 
     const prefetchSearchCourses = usePrefetchCourse('searchCourses');
     const prefetechRecommendedCourses = usePrefetchCourse(
@@ -49,6 +49,18 @@ export const CoursesSearchResultsPage = () => {
     useEffect(() => {
         const searchQuery = searchParams.get('query');
         const searchCategoryParam = searchParams.get('category');
+        const pageParam = searchParams.get('offset') || '1';
+        const limitParam = searchParams.get('limit') || '24';
+
+        console.log({
+            searchQuery,
+            searchCategoryParam,
+            pageParam,
+            limitParam,
+        });
+
+        setPage(+pageParam);
+        setPageLimit(+limitParam);
 
         setSearchTerm(searchQuery as string);
 
@@ -56,8 +68,8 @@ export const CoursesSearchResultsPage = () => {
             switch (searchQuery) {
                 case 'Recommended For You': {
                     recommendedCourses({
-                        limit: 24,
-                        offset: page,
+                        limit: +limitParam,
+                        offset: +pageParam,
                     })
                         .unwrap()
                         .then((data) => {
@@ -65,6 +77,7 @@ export const CoursesSearchResultsPage = () => {
                                 data?.data as PaginatedResult<Course>;
                             setTotalPages(paginatedResults.NumPages);
                             setSearchResults(paginatedResults.Results);
+
                             prefetechRecommendedCourses({
                                 limit: paginatedResults.LimitPerPage,
                                 offset: paginatedResults.NextPageNum,
@@ -85,8 +98,8 @@ export const CoursesSearchResultsPage = () => {
                     searchCourses({
                         query: searchQuery as string,
                         category: searchCategoryParam as string,
-                        limit: pageLimit,
-                        offset: page,
+                        limit: +pageLimit,
+                        offset: +pageParam,
                     })
                         .unwrap()
                         .then((data) => {
@@ -95,6 +108,7 @@ export const CoursesSearchResultsPage = () => {
                             setTotalPages(paginatedResults.NumPages);
                             setSearchResults(paginatedResults.Results);
                             setSearchTerm(searchQuery as string);
+
                             prefetchSearchCourses({
                                 query: searchQuery as string,
                                 category: searchCategoryParam as string,
@@ -128,10 +142,15 @@ export const CoursesSearchResultsPage = () => {
             .unwrap()
             .then((data) => {
                 const paginatedResults = data?.data as PaginatedResult<Course>;
+                const page = String(paginatedResults?.CurrentPageNum);
+                const pageSize = String(paginatedResults?.LimitPerPage);
                 setPage(paginatedResults?.CurrentPageNum);
                 setTotalPages(paginatedResults?.NumPages);
                 setSearchResults(paginatedResults?.Results as Course[]);
-                setSearchParams({ query }, { replace: true });
+                setSearchParams(
+                    { query, limit: pageSize, offset: page },
+                    { replace: true },
+                );
                 prefetchSearchCourses({
                     query,
                     limit: paginatedResults?.LimitPerPage,
@@ -160,9 +179,15 @@ export const CoursesSearchResultsPage = () => {
                 .then((data) => {
                     const paginatedResults =
                         data?.data as PaginatedResult<Course>;
+                    const page = String(paginatedResults?.CurrentPageNum);
+                    const pageSize = String(paginatedResults?.LimitPerPage);
                     setPage(paginatedResults?.CurrentPageNum);
                     setTotalPages(paginatedResults?.NumPages);
                     setSearchResults(paginatedResults?.Results);
+                    setSearchParams(
+                        { limit: pageSize, offset: page },
+                        { replace: true },
+                    );
                     prefetechRecommendedCourses(
                         {
                             limit: paginatedResults?.LimitPerPage,
@@ -185,9 +210,20 @@ export const CoursesSearchResultsPage = () => {
                 .then((data) => {
                     const paginatedResults =
                         data?.data as PaginatedResult<Course>;
+                    const pageSize = String(paginatedResults?.LimitPerPage);
+                    const page = String(paginatedResults?.CurrentPageNum);
                     setPage(paginatedResults?.CurrentPageNum);
                     setTotalPages(paginatedResults?.NumPages);
                     setSearchResults(paginatedResults?.Results);
+                    setSearchParams(
+                        {
+                            query: searchTerm,
+                            category: searchCategory,
+                            limit: pageSize,
+                            offset: page,
+                        },
+                        { replace: true },
+                    );
                     prefetchSearchCourses(
                         {
                             query: searchTerm,
