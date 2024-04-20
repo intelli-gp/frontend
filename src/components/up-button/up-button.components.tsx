@@ -1,6 +1,6 @@
 import { AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { PiArrowFatLineUpFill } from "react-icons/pi";
+import { PiArrowFatLineUpFill } from 'react-icons/pi';
 
 import { BetweenPageAnimation } from '../../index.styles';
 import { UpButtonContainer } from './up-buttons.styles';
@@ -28,7 +28,7 @@ export const UpButton = ({ pageHeaderElement }: UpButtonProps) => {
                 observer.unobserve(pageHeaderElement);
             }
         };
-    }, []);
+    }, [pageHeaderElement]);
     const onUpButtonClick = () => {
         pageHeaderElement.scrollIntoView({ behavior: 'smooth' });
     };
