@@ -32,7 +32,7 @@ export const CourseSection = ({
 
     const redirectHandler = () => {
         const encodedSectionTitle = encodeURIComponent(sectionTitle);
-        const cleanUrl = `/app/courses/search?query=${encodedSectionTitle}&category=${encodedSectionTitle}`;
+        const cleanUrl = `/app/courses/search?query=${encodedSectionTitle}&category=${encodedSectionTitle}&limit=24&offset=1`;
         navigate(cleanUrl);
     };
 
@@ -56,7 +56,10 @@ export const CourseSection = ({
         <CourseSectionContainer>
             <CourseSectionHeader>
                 <CourseSectionTitle>{sectionTitle}</CourseSectionTitle>
-                <RedirectText onClick={redirectHandler} onMouseEnter={onMoreFromCategoryHover}>
+                <RedirectText
+                    onClick={redirectHandler}
+                    onMouseEnter={onMoreFromCategoryHover}
+                >
                     More from {sectionTitle}
                 </RedirectText>
             </CourseSectionHeader>
