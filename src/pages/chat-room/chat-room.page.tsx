@@ -344,3 +344,5 @@ export const ChatroomPage = () => {
         </PageContainer>
     );
 };
+
+export default ChatroomPage;

@@ -35,7 +35,7 @@ export const AuthorCard = ({ article }: AuthorCardProps) => {
                     );
                     console.log(authorFullData);
                 })
-                .catch((_error) => errorToast("Couldn't fetch author data"));
+                .catch(() => errorToast("Couldn't fetch author data"));
         }
     }, []);
 
