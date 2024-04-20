@@ -12,6 +12,9 @@ export default defineConfig({
     },
     build: {
         outDir:'../backend/frontend-dist',
+        watch: {
+            include: 'src/**',
+        },
         rollupOptions: {
             output: {
                 manualChunks: {
