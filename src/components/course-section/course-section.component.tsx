@@ -1,38 +1,84 @@
-import CourseCard, { CourseCardProps } from '../course-card/course-card.component';
+import { useNavigate } from 'react-router-dom';
+
+import { usePrefetchCourse } from '../../store/apis/coursesApi';
+import { Course } from '../../types/course';
+import CourseCard from '../course-card/course-card.component';
 import { SwiperSlider } from '../swiper/swiper-slider.component';
-import { CourseSectionContainer, CourseSectionTitle } from './course-section.styles';
+import {
+    CourseSectionContainer,
+    CourseSectionHeader,
+    CourseSectionTitle,
+    RedirectText,
+} from './course-section.styles';
 
 export type CourseSectionProps = {
     sectionTitle: string;
     /**
      * Courses available in this section
      */
-    courses: CourseCardProps[];
+    courses: Course[];
 };
 
 export const CourseSection = ({
     courses,
-    sectionTitle
-    
+    sectionTitle,
 }: CourseSectionProps) => {
+    const navigate = useNavigate();
+
+    const prefetchCategory = usePrefetchCourse('searchCourses');
+    const prefetchRecommendedCourses = usePrefetchCourse(
+        'getRecommendedCourses',
+    );
+
+    const redirectHandler = () => {
+        const encodedSectionTitle = encodeURIComponent(sectionTitle);
+        const cleanUrl = `/app/courses/search?query=${encodedSectionTitle}&category=${encodedSectionTitle}`;
+        navigate(cleanUrl);
+    };
+
+    const onMoreFromCategoryHover = () => {
+        if (sectionTitle === 'Recommended For You') {
+            prefetchRecommendedCourses({
+                limit: 24,
+                offset: 1,
+            });
+        } else {
+            prefetchCategory({
+                query: sectionTitle,
+                category: sectionTitle,
+                limit: 24,
+                offset: 1,
+            });
+        }
+    };
+
     return (
         <CourseSectionContainer>
-            <CourseSectionTitle>{sectionTitle}</CourseSectionTitle>
-            <SwiperSlider>
-                {courses.map((course, index) => (
-                    <CourseCard
-                        key={`course-${index}`}
-                        title={course.title}
-                        description={course.description}
-                        instructor={course.instructor}
-                        avgRating={course.avgRating}
-                        numStudents={course.numStudents}
-                        price={course.price}
-                        currency={course.currency}
-                        thumbnailUrl={course.thumbnailUrl}
-                    />
-                ))}
-            </SwiperSlider>
+            <CourseSectionHeader>
+                <CourseSectionTitle>{sectionTitle}</CourseSectionTitle>
+                <RedirectText onClick={redirectHandler} onMouseEnter={onMoreFromCategoryHover}>
+                    More from {sectionTitle}
+                </RedirectText>
+            </CourseSectionHeader>
+            {courses?.length === 0 ? (
+                <CourseSectionTitle>No courses found</CourseSectionTitle>
+            ) : (
+                <SwiperSlider>
+                    {courses?.map((course, index) => (
+                        <CourseCard
+                            key={`course-${index}`}
+                            title={course.Title}
+                            description={course.Headline}
+                            instructors={course.Instructors}
+                            avgRating={course.AvgRating}
+                            numReviews={course.NumReviews}
+                            price={course.Price}
+                            thumbnailUrl={course.Thumbnail}
+                            redirectUrl={course.RedirectUrl}
+                        />
+                    ))}
+                </SwiperSlider>
+            )}
         </CourseSectionContainer>
     );
 };
