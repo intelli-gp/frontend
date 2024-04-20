@@ -60,3 +60,5 @@ export const ChatsPage = () => {
         </PageContainer>
     );
 };
+
+export default ChatsPage;
