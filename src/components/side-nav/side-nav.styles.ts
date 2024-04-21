@@ -35,7 +35,7 @@ export const Brand = styled.h1`
     min-height: 0;
     padding: 0.5rem 0;
     line-height: 1.2;
-    font-family: Merriweather, serif;
+    font-family: "Merriweather", serif;
     user-select: none;
 `;
 
@@ -43,12 +43,13 @@ export const LinksContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    padding: 0 0.5rem;
     overflow-y: auto;
     &::-webkit-scrollbar-thumb {
-        background: rgb(255, 255, 255, 0.2);
+        background: rgb(255, 255, 255, 0.1);
     }
     &::-webkit-scrollbar-thumb:hover {
-        background: rgb(255, 255, 255, 0.3);
+        background: rgb(255, 255, 255, 0.2);
     }
 `;
 
@@ -68,13 +69,15 @@ export const IconsContainer = styled.div`
 
     svg {
         cursor: pointer;
-        background-color: rgba(255, 255, 255, 0.1);
         padding: 0.5rem;
         box-sizing: content-box;
         border-radius: 50%;
-        transition: all 0.2s ease-out;
+        transition:  0.2s ease-out;
+        background-color: rgba(255, 255, 255, 0.075);
+        border: 2px solid transparent;
         &:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.1);
+           border-color: rgba(255, 255, 255, 0.11);
         }
     }
 `;

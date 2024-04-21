@@ -24,6 +24,7 @@ import Button from '../button/button.component';
 import DropdownMenu from '../menu/menu.component';
 import SideNavItem, {
     SideNavItemProps,
+    SubItemProps,
 } from '../sidenav-item/sidenav-item.component';
 import {
     Brand,
@@ -44,20 +45,24 @@ export default function SideNav() {
     const location = useLocation();
     const [hidden, setHidden] = useState(false);
 
-    const [links, setLinks] = useState<
-        Array<SideNavItemProps & { id: number }>
-    >([
+    /**
+     * Notes:
+     * 1. Don't repeat any path in the navItems.
+     * 2. If the item has sub items, clicking it will activate the first sub item.
+     * 3. The path added to the item that has sub items will be ignored `DON'T MAKE IT SAME AS THE FIRST SUBITEM`.
+     */
+    const [navItems, setNavItems] = useState<SideNavItemProps[]>([
         {
             icon: <LuSearch />,
             path: '/app/search',
             text: 'Search',
-            id: 2,
+            id: 1,
         },
         {
             icon: <LuListTodo />,
             path: '/app/study-planner',
             text: 'Study Planner',
-            id: 1,
+            id: 2,
         },
         {
             icon: <HiMiniUserGroup />,
@@ -73,9 +78,26 @@ export default function SideNav() {
         },
         {
             icon: <GiBookshelf />,
-            path: '/app/courses',
+            path: '#',
             text: 'Courses',
             id: 5,
+            extendable: true,
+            subItems: [
+                {
+                    icon: <LuSearch />,
+                    path: '/app/courses',
+                    text: 'Explore',
+                    active: false,
+                    id: 5.1,
+                },
+                {
+                    icon: <LuSearch />,
+                    path: '/app/courses/search',
+                    text: 'Search',
+                    active: false,
+                    id: 5.2,
+                },
+            ],
         },
         {
             icon: <FaHandsHelping />,
@@ -149,14 +171,61 @@ export default function SideNav() {
     useEffect(() => {
         if (location.pathname === '/app/checkout') setHidden(true);
         else setHidden(false);
-        setLinks(
-            links.map((link) => {
-                return {
-                    ...link,
-                    active: link.path === location.pathname,
+
+        let flattenedItems: Array<SideNavItemProps | SubItemProps> = [];
+        navItems.forEach((item) => {
+            flattenedItems.push(item);
+            if (item.extendable) {
+                flattenedItems.push(...item.subItems!);
+            }
+        });
+
+        let targetItemId = flattenedItems.find(
+            (item) => item.path === location.pathname,
+        )?.id;
+
+        if (!targetItemId) return; // No match
+
+        let newItems = navItems.map((item) => {
+            if (item.id === Math.trunc(targetItemId)) {
+                let newItem = {
+                    ...item,
+                    active: true,
                 };
-            }),
-        );
+                if (!Number.isInteger(targetItemId)) {
+                    // The target is a subItem
+                    newItem.extended = true;
+                    newItem.subItems = item.subItems?.map((subItem) => {
+                        if (subItem.id === targetItemId) {
+                            return {
+                                ...subItem,
+                                active: true,
+                            };
+                        } else {
+                            return {
+                                ...subItem,
+                                active: false,
+                            };
+                        }
+                    });
+                }
+                return newItem;
+            } else {
+                let newItem = {
+                    ...item,
+                    active: false,
+                };
+                newItem.subItems = newItem.subItems?.map((subItem) => {
+                    return {
+                        ...subItem,
+                        active: false,
+                    };
+                });
+                return newItem;
+            }
+        });
+
+        setNavItems(newItems);
     }, [location.pathname]);
 
     const handleLogout = async () => {
@@ -169,6 +238,23 @@ export default function SideNav() {
         deleteSocket(); // Clear socket connection
         disconnectSSE(); // Clear SSE connection
         navigate('/');
+    };
+
+    const handleToggleExtend = (
+        event: React.MouseEvent,
+        id: string | number,
+    ) => {
+        event.preventDefault();
+        let newItems = navItems.map((item) => {
+            if (item.id === id) {
+                return {
+                    ...item,
+                    extended: !item.extended,
+                };
+            }
+            return item;
+        });
+        setNavItems(newItems);
     };
 
     // This is for mobile view only.
@@ -187,16 +273,14 @@ export default function SideNav() {
                     </div>
 
                     <LinksContainer>
-                        {links.map((link) => (
+                        {navItems.map((link) => (
                             <SideNavItem
+                                {...link}
                                 key={link.text}
-                                icon={link.icon}
-                                extendable={link?.extendable}
-                                extended={link?.extended}
-                                subItems={link?.subItems}
-                                path={link.path}
-                                text={link.text}
-                                active={link?.active}
+                                toggleExtend={(event: React.MouseEvent) =>
+                                    handleToggleExtend(event, link.id)
+                                }
+                                subItems={link.subItems}
                             />
                         ))}
                     </LinksContainer>

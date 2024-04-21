@@ -1,59 +1,97 @@
-import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
-import { Link } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
-import { ItemContainer, MainItemContent } from './sidenav-item.styles';
+import {
+    ArrowBack,
+    ArrowDown,
+    ItemContainer,
+    MainItemContent,
+    SubItemLink,
+    SubItemsContainer,
+} from './sidenav-item.styles';
 
 export type SideNavItemProps = {
+    id: number;
+    /**
+     * The text to display
+     */
+    text: string;
+    /**
+     * Icon to display on the left of the text
+     */
     icon?: JSX.Element;
-    extendable?: boolean;
+    /**
+     * The route to go to when clicking the item
+     */
     path: string;
-    text?: string;
+    /**
+     * Is item is active
+     */
     active?: boolean;
-    extended?: boolean;
-    subItems?: string[];
-    onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+} & (Extendable | Partial<Extendable>);
+
+type Extendable = {
+    extendable: boolean;
+    extended: boolean;
+    subItems: SubItemProps[];
+    toggleExtend: (event: React.MouseEvent) => void;
 };
+
+export type SubItemProps = Pick<
+    SideNavItemProps,
+    'text' | 'id' | 'active' | 'path' | 'icon'
+>;
 
 export default function SideNavItem({
     icon,
-    extendable = false,
     path,
     text,
-    active = false,
+    active,
+    extendable,
     extended,
     subItems,
-    onClick,
-}: SideNavItemProps) {
+    toggleExtend,
+}: Omit<SideNavItemProps, 'id'>) {
+    const navigate = useNavigate();
+
+    const handleClickExtendableItem = (event: React.MouseEvent) => {
+        if (subItems && subItems[0]) {
+            event.preventDefault();
+            navigate(subItems[0].path);
+        }
+    };
+
     return (
-        <ItemContainer onClick={onClick} to={path} active={active}>
-            <div className="flex items-center justify-between">
-                <MainItemContent>
-                    {icon}
-                    {text}
-                </MainItemContent>
-
+        <ItemContainer to={path} active={active}>
+            <MainItemContent onClick={handleClickExtendableItem}>
+                {icon}
+                {text}
                 {extendable && extended ? (
-                    <IoIosArrowBack />
+                    <ArrowDown onClickCapture={toggleExtend} size={20} />
                 ) : (
-                    extendable && <IoIosArrowDown />
+                    extendable && (
+                        <ArrowBack onClickCapture={toggleExtend} size={20} />
+                    )
                 )}
-            </div>
+            </MainItemContent>
 
-            {extended && (
-                <div className="flex flex-col gap-2">
-                    {subItems?.map((item) => {
-                        return (
-                            <Link
-                                key={item}
-                                to={item}
-                                className="flex w-full text-white text-sm rounded p-2 pl-10 hover:bg-indigo-100/20"
-                            >
-                                {item}
-                            </Link>
-                        );
-                    })}
-                </div>
-            )}
+            <AnimatePresence>
+                {extended && (
+                    <SubItemsContainer>
+                        {subItems?.map((item) => {
+                            return (
+                                <SubItemLink
+                                    key={item.path}
+                                    to={item.path}
+                                    active={item.active}
+                                >
+                                    {item.icon} {item.text}
+                                </SubItemLink>
+                            );
+                        })}
+                    </SubItemsContainer>
+                )}
+            </AnimatePresence>
         </ItemContainer>
     );
 }
