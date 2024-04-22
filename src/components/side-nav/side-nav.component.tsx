@@ -187,7 +187,7 @@ export default function SideNav() {
         if (!targetItemId) return; // No match
 
         let newItems = navItems.map((item) => {
-            if (item.id === Math.trunc(targetItemId)) {
+            if (item.id === Math.trunc(Number(targetItemId))) {
                 let newItem = {
                     ...item,
                     active: true,
