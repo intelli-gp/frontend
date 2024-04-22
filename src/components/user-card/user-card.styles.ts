@@ -60,5 +60,5 @@ export const FollowButton = styled(Button)`
 `;
 
 export const SwiperCustomSlide = styled(SwiperSlide)<{ width?: string }>`
-    width: ${({ width }) => width ?? CARD_WIDTH};
+    width: ${({ width }) => width ?? CARD_WIDTH} !important;
 `;
