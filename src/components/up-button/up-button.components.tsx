@@ -1,4 +1,3 @@
-import { AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { PiArrowFatLineUpFill } from 'react-icons/pi';
 
@@ -36,14 +35,16 @@ export const UpButton = ({ pageHeaderElement }: UpButtonProps) => {
         return null;
     }
     return (
-        <AnimatePresence>
+        // <AnimatePresence>
             <UpButtonContainer
+                // id="up-button"
+                // key={'up-button'}
                 {...BetweenPageAnimation}
                 onClick={onUpButtonClick}
             >
                 <PiArrowFatLineUpFill />
             </UpButtonContainer>
-        </AnimatePresence>
+        // </AnimatePresence>
     );
 };
 

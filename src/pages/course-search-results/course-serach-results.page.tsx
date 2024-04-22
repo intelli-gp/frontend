@@ -270,11 +270,7 @@ export const CoursesSearchResultsPage = () => {
     };
 
     return (
-        <CourseSearchResultsPageContainer
-            onScroll={() => {
-                console.log('scroll');
-            }}
-        >
+        <CourseSearchResultsPageContainer>
             <CourseSearchPageHeader ref={pageHeaderRef}>
                 <CourseSearchPageTitle>Explore Courses</CourseSearchPageTitle>
                 <ExplorePageHeader
@@ -301,7 +297,6 @@ export const CoursesSearchResultsPage = () => {
                 pageSize={pageLimit}
                 siblingCount={1}
             />
-
             <UpButton
                 pageHeaderElement={pageHeaderRef?.current as HTMLDivElement}
             />
