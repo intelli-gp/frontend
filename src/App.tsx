@@ -65,7 +65,7 @@ const ViewGroupPage = React.lazy(
 function App() {
     return (
         <AnimatePresence>
-            <Suspense fallback={<Spinner />}>
+            <Suspense fallback={<LoggedInTemplatePage />}>
                 <Routes location={useLocation()}>
                     <Route index element={<HomePage />} />
                     <Route path="auth" element={<AuthTemplatePage />}>
