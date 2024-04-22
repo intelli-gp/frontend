@@ -229,7 +229,7 @@ const ProfilePage = () => {
         return mainSectionHeaderTabs.map((tab) => {
             if (!tab.isActive) return null;
             if (tab.title === 'Posts') {
-                return (
+                return userArticles?.length ? (
                     <>
                         {userArticles?.map((article) => (
                             <WideArticleItem
@@ -240,15 +240,19 @@ const ProfilePage = () => {
                             />
                         ))}
                     </>
+                ) : (
+                    <EmptyContent>Nothing here.</EmptyContent>
                 );
             }
             if (tab.title === 'Groups') {
-                return (
+                return groupsWithRole?.length ? (
                     <GroupsContainer>
                         {groupsWithRole?.map((group) => (
                             <GroupCard profilePage={true} {...group} />
                         ))}
                     </GroupsContainer>
+                ) : (
+                    <EmptyContent>Nothing here.</EmptyContent>
                 );
             }
             return <EmptyContent>Nothing here.</EmptyContent>;
