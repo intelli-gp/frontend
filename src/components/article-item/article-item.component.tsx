@@ -26,7 +26,7 @@ const SingleBlog = ({
                     <div className="flex flex-row p-[8px] gap-2">
                         {tags
                             ?.slice(0, 3)
-                            .map((tag) => <Tag text={tag} size="sm" />)}
+                            .map((tag) => <Tag key={tag} text={tag} size="sm" />)}
                     </div>
                     <span className="flex-1 py-2 flex flex-col gap-[6px]">
                         <div className="flex  justify-between ">
