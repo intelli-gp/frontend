@@ -1,3 +1,5 @@
+import { ReceivedArticle } from '../../types/article';
+import { PaginatedResult } from '../../types/pagination';
 import { Response } from '../../types/response';
 import { AutocompleteDto, SearchDto } from '../../types/search';
 import { appApi } from './appApi';
@@ -16,7 +18,10 @@ const searchApi = appApi.injectEndpoints({
             }),
             keepUnusedDataFor: 5 * 60, // 5 minutes
         }),
-        articlesSearch: builder.query<Response, SearchDto>({
+        articlesSearch: builder.query<
+            PaginatedResult<ReceivedArticle>,
+            SearchDto
+        >({
             query: ({ searchTerm, limit = 10, offset = 0 }) => ({
                 url: `/search/articles`,
                 method: 'GET',
@@ -71,4 +76,5 @@ export const {
     useLazyArticlesSearchQuery,
     useLazyUsersSearchQuery,
     useLazyGetAutocompleteSuggestionsQuery,
+    usePrefetch: usePrefetchSearch,
 } = searchApi;
