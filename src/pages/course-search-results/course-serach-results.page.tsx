@@ -293,7 +293,7 @@ export const CoursesSearchResultsPage = () => {
                 currentPage={page}
                 onPageChange={onPageChange}
                 onPageHover={onPageHover}
-                totalCount={totalPages}
+                numOfPages={totalPages}
                 pageSize={pageLimit}
                 siblingCount={1}
             />

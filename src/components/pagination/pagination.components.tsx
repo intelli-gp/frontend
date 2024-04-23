@@ -15,7 +15,7 @@ import {
 } from './pagination.styles';
 
 export type BackendSupportedPaginationProps = {
-    totalCount: number;
+    numOfPages: number;
     pageSize: number;
     siblingCount: number;
     currentPage: number;
@@ -24,17 +24,15 @@ export type BackendSupportedPaginationProps = {
 };
 
 export const BackendSupportedPagination = ({
-    totalCount,
+    numOfPages,
     pageSize,
     siblingCount = 1,
     currentPage,
     onPageChange,
     onPageHover,
 }: BackendSupportedPaginationProps) => {
-    // should be props
-
     const paginationRange = usePagination({
-        totalCount,
+        numOfPages,
         pageSize,
         siblingCount,
         currentPage,
