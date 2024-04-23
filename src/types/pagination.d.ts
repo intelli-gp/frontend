@@ -1,9 +1,9 @@
 export interface PaginatedResult<T> {
-    CurrentPageNum:number;
+    TotalEntityCount: number;
+    CurrentPageNum: number;
     LimitPerPage: number;
-    Count: number;
     NumPages: number;
-    NextPageNum:number;
-    PreviousPageNum:number;
+    NextPageNum: number;
+    PreviousPageNum: number;
     Results: T[];
 }
