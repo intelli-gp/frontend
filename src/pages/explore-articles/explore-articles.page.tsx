@@ -4,14 +4,19 @@ import { useNavigate } from 'react-router-dom';
 
 import Spinner from '../../components/Spinner';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
+import BackendSupportedPagination from '../../components/pagination/pagination.components';
 import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
     RootState,
+    changeArticlesPagePaginationPageNumber,
     changeArticlesPageSearchInitiated,
     changeArticlesPageSearchQuery,
 } from '../../store';
-import { useLazyArticlesSearchQuery } from '../../store/apis/searchApi';
+import {
+    useLazyArticlesSearchQuery,
+    usePrefetchSearch,
+} from '../../store/apis/searchApi';
 import { ReceivedArticle } from '../../types/article';
 import { errorToast } from '../../utils/toasts';
 import {
@@ -24,14 +29,15 @@ const ExploreArticlesPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const { searchTerm, searchInitiated } = useSelector(
+    const { searchTerm, searchInitiated, paginationPageNumber } = useSelector(
         (state: RootState) => state.appState.articlesPage,
     );
     const { UserTags } = useSelector((state: RootState) => state.auth.user);
 
-    const [triggerSearch, { data: _receivedArticles, isLoading, isFetching }] =
+    const prefetchSearch = usePrefetchSearch('articlesSearch');
+    const [triggerSearch, { data, isLoading, isFetching }] =
         useLazyArticlesSearchQuery();
-    const articles = (_receivedArticles?.data as ReceivedArticle[]) ?? [];
+    const articles = data?.Results ?? [];
 
     const searchHandler = async (searchTerm: string) => {
         if (searchTerm.trim().length === 0) return;
@@ -50,6 +56,31 @@ const ExploreArticlesPage = () => {
 
     const handleCreateButtonClick = () => {
         navigate('/app/articles/create');
+    };
+
+    const onPageHover = async (page: number) => {
+        if (data?.NumPages ?? 0 > page) {
+        }
+
+        prefetchSearch({
+            searchTerm,
+            limit: data?.LimitPerPage ?? 10,
+            offset: page * (data?.LimitPerPage ?? 10),
+        });
+    };
+
+    const onPageChange = async (page: number) => {
+        dispatch(changeArticlesPagePaginationPageNumber(page));
+
+        await triggerSearch({
+            searchTerm: searchTerm,
+            limit: data?.LimitPerPage ?? 10,
+            offset: page * (data?.LimitPerPage ?? 10),
+        }).unwrap();
+
+        if (data?.NumPages ?? 0 > page) {
+            onPageHover(page + 1);
+        }
     };
 
     useEffect(() => {
@@ -100,6 +131,16 @@ const ExploreArticlesPage = () => {
                 placeholder="Search articles..."
             />
             {pageContent}
+            {searchInitiated && (
+                <BackendSupportedPagination
+                    numOfPages={data?.NumPages ?? 1}
+                    pageSize={data?.LimitPerPage ?? 10}
+                    currentPage={paginationPageNumber}
+                    onPageChange={onPageChange}
+                    onPageHover={onPageHover}
+                    siblingCount={1}
+                />
+            )}
         </PageContainer>
     );
 };
