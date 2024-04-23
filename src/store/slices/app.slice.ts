@@ -14,14 +14,20 @@ const initialState = {
          * page navigation.
          */
         searchInitiated: false,
+        /**
+         * The current page number that the user is on.
+         */
+        paginationPageNumber: 1,
     },
     articlesPage: {
         searchTerm: '',
         searchInitiated: false,
+        paginationPageNumber: 1,
     },
     groupsPage: {
         searchTerm: '',
         searchInitiated: false,
+        paginationPageNumber: 1,
     },
 };
 
@@ -44,11 +50,23 @@ const appSlice = createSlice({
         ) {
             state.articlesPage.searchInitiated = action.payload;
         },
+        changeArticlesPagePaginationPageNumber(
+            state,
+            action: PayloadAction<number>,
+        ) {
+            state.articlesPage.paginationPageNumber = action.payload;
+        },
         changeGroupsPageSearchQuery(state, action: PayloadAction<string>) {
             state.groupsPage.searchTerm = action.payload;
         },
         changeGroupsPageSearchInitiated(state, action: PayloadAction<boolean>) {
             state.groupsPage.searchInitiated = action.payload;
+        },
+        changeGroupsPagePaginationPageNumber(
+            state,
+            action: PayloadAction<number>,
+        ) {
+            state.groupsPage.paginationPageNumber = action.payload;
         },
     },
 });
@@ -60,5 +78,7 @@ export const {
     changeArticlesPageSearchQuery,
     changeGroupsPageSearchInitiated,
     changeGroupsPageSearchQuery,
+    changeArticlesPagePaginationPageNumber,
+    changeGroupsPagePaginationPageNumber,
 } = appSlice.actions;
 export const appReducer = appSlice.reducer;
