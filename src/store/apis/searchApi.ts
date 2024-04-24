@@ -1,6 +1,6 @@
 import { ReceivedArticle } from '../../types/article';
 import { PaginatedResult } from '../../types/pagination';
-import { Response } from '../../types/response';
+import { GenericResponse, Response } from '../../types/response';
 import { AutocompleteDto, SearchDto } from '../../types/search';
 import { appApi } from './appApi';
 
@@ -19,7 +19,7 @@ const searchApi = appApi.injectEndpoints({
             keepUnusedDataFor: 5 * 60, // 5 minutes
         }),
         articlesSearch: builder.query<
-            PaginatedResult<ReceivedArticle>,
+            GenericResponse<PaginatedResult<ReceivedArticle>>,
             SearchDto
         >({
             query: ({ searchTerm, limit = 10, offset = 0 }) => ({
