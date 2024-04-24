@@ -1,10 +1,15 @@
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import Spinner from '../../components/Spinner';
 import { CourseSection } from '../../components/course-section/course-section.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import { BetweenPageAnimation } from '../../index.styles';
+import {
+    RootState,
+    changeCoursesPageSearchInitiated,
+    changeCoursesPageSearchQuery,
+} from '../../store';
 import {
     useGetCoursesPreviewQuery,
     useGetRecommendedCoursesQuery,
@@ -18,8 +23,12 @@ import {
 } from './courses.styles';
 
 export const CoursesPage = () => {
-    const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
+
+    const { searchTerm } = useSelector(
+        (state: RootState) => state.appState.coursesPage,
+    );
+    const dispatch = useDispatch();
 
     const { data: recommendationData, isLoading: isRecommendationsLoading } =
         useGetRecommendedCoursesQuery({});
@@ -33,8 +42,13 @@ export const CoursesPage = () => {
     if (isRecommendationsLoading || isPreviewLoading) return <Spinner />;
     console.log({ previewCourses });
 
-    const searchSubmitHandler = (query: string) => {
-        navigate(`/app/courses/search?query=${encodeURIComponent(query)}`);
+    const onSearchValueChangeHandler = (value: string) => {
+        dispatch(changeCoursesPageSearchQuery(value));
+    };
+    const onSearchSubmitHandler = (value: string) => {
+        dispatch(changeCoursesPageSearchInitiated(true));
+        dispatch(changeCoursesPageSearchQuery(value));
+        navigate(`/app/courses/search?query=${encodeURIComponent(value)}`);
     };
 
     return (
@@ -45,8 +59,8 @@ export const CoursesPage = () => {
                     placeholder="Search Courses..."
                     WithoutButton={true}
                     searchValue={searchTerm}
-                    onSearchValueChange={(value) => setSearchTerm(value)}
-                    searchHandler={searchSubmitHandler}
+                    onSearchValueChange={onSearchValueChangeHandler}
+                    searchHandler={onSearchSubmitHandler}
                 />
             </CoursePageHeader>
             <CourseSectionsWrapper>

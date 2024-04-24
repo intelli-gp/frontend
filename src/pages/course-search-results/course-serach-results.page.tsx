@@ -1,11 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
+// import { useSearchParams } from 'react-router-dom';
 import Spinner from '../../components/Spinner';
 import { CourseResultsGrid } from '../../components/course-results-grid/course-results-grid.components';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import BackendSupportedPagination from '../../components/pagination/pagination.components';
 import UpButton from '../../components/up-button/up-button.components';
+import {
+    RootState,
+    changeCoursesPagePaginationPageNumber,
+    changeCoursesPageSearchInitiated,
+    changeCoursesPageSearchQuery,
+    changeGroupsPageSearchQuery,
+} from '../../store';
 import {
     useLazyGetRecommendedCoursesQuery,
     useLazySearchCoursesQuery,
@@ -22,234 +30,116 @@ import {
 
 export const CoursesSearchResultsPage = () => {
     const pageHeaderRef = useRef<HTMLDivElement>(null);
+    const dispatch = useDispatch();
 
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [searchCourses, result] = useLazySearchCoursesQuery();
-    const [recommendedCourses, recommendedCoursesResult] =
-        useLazyGetRecommendedCoursesQuery();
+    const {
+        searchInitiated,
+        searchTerm,
+        searchCategory,
+        paginationPageNumber,
+        paginationPageLimit,
+    } = useSelector((state: RootState) => state.appState.coursesPage);
 
-    const [searchResults, setSearchResults] = useState<Course[]>([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [searchCategory, setSearchCategory] = useState('');
-    const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
-    const [pageLimit, setPageLimit] = useState(24);
+    const [
+        triggerSearchCourses,
+        {
+            data: searchResultsData,
+            isFetching: isSearchResultsIsFetching,
+            isLoading: isSearchResultsIsLoading,
+        },
+    ] = useLazySearchCoursesQuery();
+    const [
+        triggerRecommendedCourses,
+        {
+            data: recommendedCoursesData,
+            isFetching: isRecommendedCoursesIsFetching,
+            isLoading: isRecommendedCoursesIsLoading,
+        },
+    ] = useLazyGetRecommendedCoursesQuery();
+
+    let data: PaginatedResult<Course> =
+        searchTerm === 'Recommended For You'
+            ? (recommendedCoursesData?.data as PaginatedResult<Course>)
+            : (searchResultsData?.data as PaginatedResult<Course>);
+
+    const isDataFetching =
+        searchTerm === 'Recommended For You'
+            ? isRecommendedCoursesIsFetching
+            : isSearchResultsIsFetching;
+
+    const isDataLoading =
+        searchTerm === 'Recommended For You'
+            ? isRecommendedCoursesIsLoading
+            : isSearchResultsIsLoading;
+
+    console.log({ data });
 
     const prefetchSearchCourses = usePrefetchCourse('searchCourses');
     const prefetechRecommendedCourses = usePrefetchCourse(
         'getRecommendedCourses',
     );
 
-    const scrollToTop = () => {
-        pageHeaderRef?.current?.scrollIntoView({
-            behavior: 'smooth',
-        });
-    };
+    useEffect(() => {
+        console.log('isDataFetching', isDataFetching);
+        console.log('isDataLoading', isDataLoading);
+    }, [isDataFetching, isDataLoading]);
 
     useEffect(() => {
-        const searchQuery = searchParams.get('query');
-        const searchCategoryParam = searchParams.get('category');
-        const pageParam = searchParams.get('offset') || '1';
-        const limitParam = searchParams.get('limit') || '24';
-
-        console.log({
-            searchQuery,
-            searchCategoryParam,
-            pageParam,
-            limitParam,
-        });
-
-        setPage(+pageParam);
-        setPageLimit(+limitParam);
-
-        setSearchTerm(searchQuery as string);
-
-        if (searchQuery || searchCategory) {
-            switch (searchQuery) {
-                case 'Recommended For You': {
-                    recommendedCourses({
-                        limit: +limitParam,
-                        offset: +pageParam,
-                    })
-                        .unwrap()
-                        .then((data) => {
-                            const paginatedResults =
-                                data?.data as PaginatedResult<Course>;
-                            setTotalPages(paginatedResults.NumPages);
-                            setSearchResults(paginatedResults.Results);
-
-                            prefetechRecommendedCourses({
-                                limit: paginatedResults.LimitPerPage,
-                                offset: paginatedResults.NextPageNum,
-                            });
-                            console.log(data);
-                        })
-                        .catch((error): void => {
-                            errorToast('Error fetching recommended courses');
-                            console.error(
-                                'Error fetching recommended courses:',
-                                error,
-                            );
-                        });
-                    break;
-                }
-                default: {
-                    setSearchCategory(searchCategoryParam as string);
-                    searchCourses({
-                        query: searchQuery as string,
-                        category: searchCategoryParam as string,
-                        limit: +pageLimit,
-                        offset: +pageParam,
-                    })
-                        .unwrap()
-                        .then((data) => {
-                            const paginatedResults =
-                                data?.data as PaginatedResult<Course>;
-                            setTotalPages(paginatedResults.NumPages);
-                            setSearchResults(paginatedResults.Results);
-                            setSearchTerm(searchQuery as string);
-
-                            prefetchSearchCourses({
-                                query: searchQuery as string,
-                                category: searchCategoryParam as string,
-                                limit: paginatedResults.LimitPerPage,
-                                offset: paginatedResults.NextPageNum,
-                            });
-                            console.log(data);
-                        })
-                        .catch((error): void => {
-                            errorToast('Error fetching search results');
-                            console.error(
-                                'Error fetching search results:',
-                                error,
-                            );
-                        });
-                    break;
-                }
+        if (searchInitiated) {
+            if (searchTerm === 'Recommended For You') {
+                triggerRecommendedCourses({
+                    limit: paginationPageLimit,
+                    offset: paginationPageNumber,
+                }).unwrap();
+            } else {
+                triggerSearchCourses({
+                    query: searchTerm,
+                    category: searchCategory,
+                    limit: paginationPageLimit,
+                    offset: paginationPageNumber,
+                }).unwrap();
             }
+        } else {
+            data = {} as PaginatedResult<Course>;
+            // TODO: take from search Params and set the search term
         }
     }, []);
 
-    const searchSubmitHandler = (query: string) => {
-        setSearchResults([]);
-        setSearchCategory('');
-        // TODO: when searching we can adjust the page limit not its default 24
-        searchCourses({
-            query,
-            limit: pageLimit,
-            offset: page,
-        })
-            .unwrap()
-            .then((data) => {
-                const paginatedResults = data?.data as PaginatedResult<Course>;
-                const page = String(paginatedResults?.CurrentPageNum);
-                const pageSize = String(paginatedResults?.LimitPerPage);
-                setPage(paginatedResults?.CurrentPageNum);
-                setTotalPages(paginatedResults?.NumPages);
-                setSearchResults(paginatedResults?.Results as Course[]);
-                setSearchParams(
-                    { query, limit: pageSize, offset: page },
-                    { replace: true },
-                );
-                prefetchSearchCourses({
-                    query,
-                    limit: paginatedResults?.LimitPerPage,
-                    offset: paginatedResults?.NextPageNum,
-                });
-                console.log(data);
-            })
-            .catch((error): void => {
-                errorToast('Error fetching search results');
-                console.error('Error fetching search results:', error);
-            });
+    const onSearchValueChangeHandler = (value: string) => {
+        dispatch(changeCoursesPageSearchQuery(value));
     };
 
-    const onPageChange = (page: number) => {
-        scrollToTop();
-        setSearchResults([]);
-        setPage(page);
-
-        console.log({ searchTerm });
-        if (searchTerm === 'Recommended For You') {
-            recommendedCourses({
-                limit: pageLimit,
-                offset: page,
-            })
-                .unwrap()
-                .then((data) => {
-                    const paginatedResults =
-                        data?.data as PaginatedResult<Course>;
-                    const page = String(paginatedResults?.CurrentPageNum);
-                    const pageSize = String(paginatedResults?.LimitPerPage);
-                    setPage(paginatedResults?.CurrentPageNum);
-                    setTotalPages(paginatedResults?.NumPages);
-                    setSearchResults(paginatedResults?.Results);
-                    setSearchParams(
-                        { limit: pageSize, offset: page },
-                        { replace: true },
-                    );
-                    prefetechRecommendedCourses(
-                        {
-                            limit: paginatedResults?.LimitPerPage,
-                            offset: paginatedResults?.NextPageNum,
-                        },
-                        {
-                            ifOlderThan: 60 * 60,
-                        },
-                    );
-                    console.log(data);
-                });
-        } else {
-            searchCourses({
-                query: searchTerm,
+    const onSearchSubmitHandler = async (value: string) => {
+        dispatch(changeCoursesPageSearchInitiated(true));
+        try {
+            if (value.trim().length === 0) {
+                dispatch(changeGroupsPageSearchQuery(''));
+                return;
+            }
+            await triggerSearchCourses({
+                query: value,
                 category: searchCategory,
-                limit: pageLimit,
-                offset: page,
-            })
-                .unwrap()
-                .then((data) => {
-                    const paginatedResults =
-                        data?.data as PaginatedResult<Course>;
-                    const pageSize = String(paginatedResults?.LimitPerPage);
-                    const page = String(paginatedResults?.CurrentPageNum);
-                    setPage(paginatedResults?.CurrentPageNum);
-                    setTotalPages(paginatedResults?.NumPages);
-                    setSearchResults(paginatedResults?.Results);
-                    setSearchParams(
-                        {
-                            query: searchTerm,
-                            category: searchCategory,
-                            limit: pageSize,
-                            offset: page,
-                        },
-                        { replace: true },
-                    );
-                    prefetchSearchCourses(
-                        {
-                            query: searchTerm,
-                            category: searchCategory,
-                            limit: paginatedResults?.LimitPerPage,
-                            offset: paginatedResults?.NextPageNum,
-                        },
-                        {
-                            ifOlderThan: 60 * 60,
-                        },
-                    );
-                    console.log(data);
-                });
+                limit: paginationPageLimit,
+                offset: 0,
+            }).unwrap();
+            dispatch(changeCoursesPagePaginationPageNumber(1));
+            dispatch(changeCoursesPageSearchQuery(value));
+            // TODO: add in search params
+        } catch (error) {
+            errorToast('Error occurred while searching.');
+            console.error(error);
         }
     };
 
-    const onPageHover = (pageNum: number) => {
-        if (pageNum >= totalPages) {
+    const onPageHoverHandler = (pageNum: number) => {
+        if (pageNum >= data.NumPages) {
             return;
         }
 
         if (searchTerm === 'Recommended For You') {
-            console.log(' Here ');
             prefetechRecommendedCourses(
                 {
-                    limit: pageLimit,
+                    limit: paginationPageLimit,
                     offset: pageNum,
                 },
                 {
@@ -260,7 +150,7 @@ export const CoursesSearchResultsPage = () => {
             prefetchSearchCourses({
                 query: searchTerm,
                 category: searchCategory,
-                limit: pageLimit,
+                limit: paginationPageLimit,
                 offset: pageNum,
             }),
                 {
@@ -269,6 +159,32 @@ export const CoursesSearchResultsPage = () => {
         }
     };
 
+    const onPageChangeHandler = (pageNum: number) => {
+        dispatch(changeCoursesPagePaginationPageNumber(pageNum));
+        if (searchTerm === 'Recommended For You') {
+            triggerRecommendedCourses({
+                limit: paginationPageLimit,
+                offset: pageNum,
+            });
+        } else {
+            triggerSearchCourses({
+                query: searchTerm,
+                category: searchCategory,
+                limit: paginationPageLimit,
+                offset: pageNum,
+            });
+        }
+    };
+
+    const pageContent = isDataFetching || isDataLoading? (
+        <Spinner />
+    ) : (
+        <CourseResultsGrid courseResults={data?.Results || []} />
+    );
+
+    // if (isDataLoading) {
+    //     return <Spinner />;
+    // }
     return (
         <CourseSearchResultsPageContainer>
             <CourseSearchPageHeader ref={pageHeaderRef}>
@@ -277,26 +193,23 @@ export const CoursesSearchResultsPage = () => {
                     placeholder="Search Courses..."
                     WithoutButton={true}
                     searchValue={searchTerm as string}
-                    onSearchValueChange={(value) => setSearchTerm(value)}
-                    searchHandler={searchSubmitHandler}
+                    onSearchValueChange={onSearchValueChangeHandler}
+                    searchHandler={onSearchSubmitHandler}
+                    // suggestionsType="all"
                 />
             </CourseSearchPageHeader>
-            {result.isFetching ||
-            recommendedCoursesResult.isFetching ||
-            result.isLoading ||
-            recommendedCoursesResult.isLoading ? (
-                <Spinner />
-            ) : (
-                <CourseResultsGrid courseResults={searchResults} />
+            {pageContent}
+            {data?.NumPages && (
+                <BackendSupportedPagination
+                    pageHeaderElement={pageHeaderRef?.current as HTMLDivElement}
+                    currentPage={data?.CurrentPageNum}
+                    onPageChange={onPageChangeHandler}
+                    onPageHover={onPageHoverHandler}
+                    numOfPages={data?.NumPages}
+                    pageSize={data?.LimitPerPage}
+                    siblingCount={1}
+                />
             )}
-            <BackendSupportedPagination
-                currentPage={page}
-                onPageChange={onPageChange}
-                onPageHover={onPageHover}
-                numOfPages={totalPages}
-                pageSize={pageLimit}
-                siblingCount={1}
-            />
             <UpButton
                 pageHeaderElement={pageHeaderRef?.current as HTMLDivElement}
             />

@@ -21,6 +21,7 @@ export type BackendSupportedPaginationProps = {
     currentPage: number;
     onPageChange: (page: number) => void;
     onPageHover: (page: number) => void;
+    pageHeaderElement: HTMLDivElement;
 };
 
 export const BackendSupportedPagination = ({
@@ -30,7 +31,16 @@ export const BackendSupportedPagination = ({
     currentPage,
     onPageChange,
     onPageHover,
+    pageHeaderElement,
 }: BackendSupportedPaginationProps) => {
+    console.log({
+        numOfPages,
+        pageSize,
+        siblingCount,
+        currentPage,
+        onPageChange,
+        onPageHover,
+    });
     const paginationRange = usePagination({
         numOfPages,
         pageSize,
@@ -48,6 +58,15 @@ export const BackendSupportedPagination = ({
 
     const onPrevious = () => {
         onPageChange(currentPage - 1);
+    };
+
+    const scrollToTop = () => {
+        pageHeaderElement.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    const onPageClickHandler = (pageNumber: number) => {
+        scrollToTop();
+        onPageChange(pageNumber);
     };
 
     const lastPage = paginationRange?.[paginationRange.length - 1] || 0;
@@ -72,7 +91,7 @@ export const BackendSupportedPagination = ({
                         }
                         return (
                             <PageNumber
-                                onClick={() => onPageChange(+pageNumber)}
+                                onClick={() => onPageClickHandler(+pageNumber)}
                                 onMouseEnter={() => onPageHover(+pageNumber)}
                                 key={index}
                                 active={pageNumber === currentPage}

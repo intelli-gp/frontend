@@ -3,7 +3,6 @@ import React, { Suspense } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import ProtectedRoutes from './components/ProtectedRoutes';
-import Spinner from './components/Spinner';
 import AIHelperPage from './pages/AI-helper/AI-helper.page';
 import { AIServicePage } from './pages/ai-service/ai-service.page';
 import ForgetPasswordPage from './pages/auth/froget-password/forget-password.page';
