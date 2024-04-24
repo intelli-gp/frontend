@@ -5,7 +5,7 @@ import { BetweenPageAnimation } from '../../index.styles';
 import { UpButtonContainer } from './up-buttons.styles';
 
 export type UpButtonProps = {
-    pageHeaderElement: HTMLDivElement;
+    pageHeaderElement: HTMLElement;
 };
 export const UpButton = ({ pageHeaderElement }: UpButtonProps) => {
     const [showUpButton, setShowUpButton] = useState(false);
