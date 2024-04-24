@@ -79,10 +79,6 @@ export const CoursesSearchResultsPage = () => {
         'getRecommendedCourses',
     );
 
-    useEffect(() => {
-        console.log('isDataFetching', isDataFetching);
-        console.log('isDataLoading', isDataLoading);
-    }, [isDataFetching, isDataLoading]);
 
     useEffect(() => {
         if (searchInitiated) {

@@ -40,7 +40,6 @@ export const CoursesPage = () => {
     const previewCourses = previewData?.data as CategoryWithCourses[];
 
     if (isRecommendationsLoading || isPreviewLoading) return <Spinner />;
-    console.log({ previewCourses });
 
     const onSearchValueChangeHandler = (value: string) => {
         dispatch(changeCoursesPageSearchQuery(value));

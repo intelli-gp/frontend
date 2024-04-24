@@ -1,5 +1,10 @@
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import {
+    changeCoursesPageSearchInitiated,
+    changeCoursesPageSearchQuery,
+} from '../../store';
 import { usePrefetchCourse } from '../../store/apis/coursesApi';
 import { Course } from '../../types/course';
 import CourseCard from '../course-card/course-card.component';
@@ -24,6 +29,7 @@ export const CourseSection = ({
     sectionTitle,
 }: CourseSectionProps) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const prefetchCategory = usePrefetchCourse('searchCourses');
     const prefetchRecommendedCourses = usePrefetchCourse(
@@ -31,6 +37,8 @@ export const CourseSection = ({
     );
 
     const redirectHandler = () => {
+        dispatch(changeCoursesPageSearchInitiated(true));
+        dispatch(changeCoursesPageSearchQuery(sectionTitle));
         const encodedSectionTitle = encodeURIComponent(sectionTitle);
         const cleanUrl = `/app/courses/search?query=${encodedSectionTitle}&category=${encodedSectionTitle}&limit=24&offset=1`;
         navigate(cleanUrl);
