@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Spinner from '../../components/Spinner';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import BackendSupportedPagination from '../../components/pagination/pagination.components';
+import UpButton from '../../components/up-button/up-button.components';
 import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
@@ -136,6 +137,7 @@ const ExploreArticlesPage = () => {
                 suggestionsType={'article'}
                 placeholder="Search articles..."
             />
+            <UpButton pageHeaderElement={headerRef.current!} />
             {pageContent}
             {searchInitiated && (
                 <BackendSupportedPagination
