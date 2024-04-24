@@ -84,7 +84,7 @@ export const usePagination = ({
             const middleRange = range(leftSiblingIndex, rightSiblingIndex);
             return [firstPageIndex, DOTS, ...middleRange, DOTS, lastPageIndex];
         }
-    }, [pageSize, siblingCount, currentPage]);
+    }, [numOfPages, pageSize, siblingCount, currentPage]);
 
     return paginationRange;
 };
