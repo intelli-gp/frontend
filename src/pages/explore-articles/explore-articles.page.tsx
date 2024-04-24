@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,9 +25,12 @@ import {
     SmallTitle,
 } from './explore-articles.styles';
 
+const PAGE_LIMIT = 15;
+
 const ExploreArticlesPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const headerRef = useRef<HTMLDivElement>(null);
 
     const { searchTerm, searchInitiated, paginationPageNumber } = useSelector(
         (state: RootState) => state.appState.articlesPage,
@@ -37,12 +40,12 @@ const ExploreArticlesPage = () => {
     const prefetchSearch = usePrefetchSearch('articlesSearch');
     const [triggerSearch, { data, isLoading, isFetching }] =
         useLazyArticlesSearchQuery();
-    const articles = data?.Results ?? [];
+    const { Results: articles, NumPages } = data?.data ?? {};
 
     const searchHandler = async (searchTerm: string) => {
         if (searchTerm.trim().length === 0) return;
         try {
-            await triggerSearch({ searchTerm }).unwrap();
+            await triggerSearch({ searchTerm, limit: PAGE_LIMIT }).unwrap();
             dispatch(changeArticlesPageSearchInitiated(true));
         } catch (error) {
             errorToast('Error occurred while searching.');
@@ -59,13 +62,14 @@ const ExploreArticlesPage = () => {
     };
 
     const onPageHover = async (page: number) => {
-        if (data?.NumPages ?? 0 > page) {
+        if (NumPages ?? 0 < page) {
+            return;
         }
 
         prefetchSearch({
             searchTerm,
-            limit: data?.LimitPerPage ?? 10,
-            offset: page * (data?.LimitPerPage ?? 10),
+            limit: PAGE_LIMIT,
+            offset: (page - 1) * PAGE_LIMIT,
         });
     };
 
@@ -74,21 +78,21 @@ const ExploreArticlesPage = () => {
 
         await triggerSearch({
             searchTerm: searchTerm,
-            limit: data?.LimitPerPage ?? 10,
-            offset: page * (data?.LimitPerPage ?? 10),
+            limit: PAGE_LIMIT,
+            offset: (page - 1) * PAGE_LIMIT,
         }).unwrap();
 
-        if (data?.NumPages ?? 0 > page) {
-            onPageHover(page + 1);
+        if (NumPages ?? 0 > page) {
+            onPageHover(page + 1); // prefetch next page
         }
     };
 
     useEffect(() => {
         if (searchInitiated) {
-            triggerSearch({ searchTerm });
+            triggerSearch({ searchTerm, limit: PAGE_LIMIT });
         } else {
             let userTags = UserTags?.join(' ') ?? '';
-            triggerSearch({ searchTerm: userTags });
+            triggerSearch({ searchTerm: userTags, limit: PAGE_LIMIT });
         }
     }, []);
 
@@ -100,7 +104,7 @@ const ExploreArticlesPage = () => {
                 {searchInitiated ? 'search results' : 'suggested articles'}
             </SmallTitle>
             <MainContent empty={articles && !articles.length}>
-                {articles.map((article: ReceivedArticle) => {
+                {articles?.map((article: ReceivedArticle) => {
                     return (
                         <WideArticleItem
                             key={article.ID}
@@ -121,7 +125,9 @@ const ExploreArticlesPage = () => {
 
     return (
         <PageContainer {...BetweenPageAnimation}>
-            <PageTitle className="text-center">Explore Articles</PageTitle>
+            <PageTitle className="text-center" ref={headerRef}>
+                Explore Articles
+            </PageTitle>
             <ExplorePageHeader
                 searchValue={searchTerm}
                 onSearchValueChange={handleChangeSearchValue}
@@ -133,8 +139,9 @@ const ExploreArticlesPage = () => {
             {pageContent}
             {searchInitiated && (
                 <BackendSupportedPagination
-                    numOfPages={data?.NumPages ?? 1}
-                    pageSize={data?.LimitPerPage ?? 10}
+                    pageHeaderElement={headerRef.current!}
+                    numOfPages={NumPages ?? 1}
+                    pageSize={PAGE_LIMIT}
                     currentPage={paginationPageNumber}
                     onPageChange={onPageChange}
                     onPageHover={onPageHover}
