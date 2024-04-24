@@ -21,7 +21,7 @@ export type BackendSupportedPaginationProps = {
     currentPage: number;
     onPageChange: (page: number) => void;
     onPageHover: (page: number) => void;
-    pageHeaderElement: HTMLDivElement;
+    pageHeaderElement: HTMLElement;
 };
 
 export const BackendSupportedPagination = ({
@@ -33,14 +33,7 @@ export const BackendSupportedPagination = ({
     onPageHover,
     pageHeaderElement,
 }: BackendSupportedPaginationProps) => {
-    console.log({
-        numOfPages,
-        pageSize,
-        siblingCount,
-        currentPage,
-        onPageChange,
-        onPageHover,
-    });
+    
     const paginationRange = usePagination({
         numOfPages,
         pageSize,
