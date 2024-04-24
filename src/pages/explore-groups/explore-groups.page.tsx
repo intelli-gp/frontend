@@ -1,25 +1,35 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CreateGroupModal from '../../components/CreateGroupModal';
 import Spinner from '../../components/Spinner';
 import GroupCard from '../../components/chat-group-card/chat-group-card.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
+import BackendSupportedPagination from '../../components/pagination/pagination.components';
+import UpButton from '../../components/up-button/up-button.components';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
     RootState,
+    changeGroupsPagePaginationPageNumber,
     changeGroupsPageSearchInitiated,
     changeGroupsPageSearchQuery,
 } from '../../store';
-import { useLazyGroupsSearchQuery } from '../../store/apis/searchApi';
-import { ReceivedGroup } from '../../types/group';
+import {
+    useLazyGroupsSearchQuery,
+    usePrefetchSearch,
+} from '../../store/apis/searchApi';
 import { errorToast } from '../../utils/toasts';
 import { GroupsGrid, PageContainer, SmallTitle } from './explore-groups.style';
 
+const PAGE_LIMIT = 30;
+
 const ExploreGroupsPage = () => {
     const dispatch = useDispatch();
+    const headerRef = useRef<HTMLDivElement>(null);
 
-    const { searchTerm, searchInitiated } = useSelector(
+    const prefetchSearch = usePrefetchSearch('generalSearch');
+
+    const { searchTerm, searchInitiated, paginationPageNumber } = useSelector(
         (state: RootState) => state.appState.groupsPage,
     );
 
@@ -27,16 +37,16 @@ const ExploreGroupsPage = () => {
         (state: RootState) => state?.auth?.user,
     );
 
-    const [triggerSearch, { data: _receivedGroups, isLoading, isFetching }] =
+    const [triggerSearch, { data, isLoading, isFetching }] =
         useLazyGroupsSearchQuery();
-    let groups: ReceivedGroup[] = _receivedGroups?.data ?? [];
+    let { Results: groups, NumPages } = data?.data ?? {};
 
     const [createGroupModalOpen, setCreateGroupModalOpen] = useState(false);
 
     const searchHandler = async (searchTerm: string) => {
         if (searchTerm.trim().length === 0) return;
         try {
-            await triggerSearch({ searchTerm }).unwrap();
+            await triggerSearch({ searchTerm, limit: PAGE_LIMIT }).unwrap();
             dispatch(changeGroupsPageSearchInitiated(true));
         } catch (error) {
             errorToast('Error occurred while searching.');
@@ -52,12 +62,38 @@ const ExploreGroupsPage = () => {
         setCreateGroupModalOpen(true);
     };
 
+    const onPageHover = async (page: number) => {
+        if (NumPages ?? 0 < page) {
+            return;
+        }
+
+        prefetchSearch({
+            searchTerm,
+            limit: PAGE_LIMIT,
+            offset: (page - 1) * PAGE_LIMIT,
+        });
+    };
+
+    const onPageChange = async (page: number) => {
+        dispatch(changeGroupsPagePaginationPageNumber(page));
+
+        await triggerSearch({
+            searchTerm: searchTerm,
+            limit: PAGE_LIMIT,
+            offset: (page - 1) * PAGE_LIMIT,
+        }).unwrap();
+
+        if (NumPages ?? 0 > page) {
+            onPageHover(page + 1); // prefetch next page
+        }
+    };
+
     useEffect(() => {
         if (searchInitiated) {
-            triggerSearch({ searchTerm });
+            triggerSearch({ searchTerm, limit: PAGE_LIMIT });
         } else {
             let userTags = UserTags?.join(' ') ?? '';
-            triggerSearch({ searchTerm: userTags });
+            triggerSearch({ searchTerm: userTags, limit: PAGE_LIMIT });
         }
     }, []);
 
@@ -69,7 +105,7 @@ const ExploreGroupsPage = () => {
                 {searchInitiated ? `Search results` : 'suggested groups'}
             </SmallTitle>
             <GroupsGrid>
-                {groups.map((group) => (
+                {groups?.map((group) => (
                     <GroupCard
                         key={group.ID}
                         alreadyJoined={
@@ -90,7 +126,9 @@ const ExploreGroupsPage = () => {
 
     return (
         <PageContainer {...BetweenPageAnimation}>
-            <PageTitle className="text-center">Explore Groups</PageTitle>
+            <PageTitle className={"text-center"} ref={headerRef}>
+                Explore Groups
+            </PageTitle>
             <CreateGroupModal
                 isOpen={createGroupModalOpen}
                 setIsOpen={setCreateGroupModalOpen}
@@ -103,7 +141,19 @@ const ExploreGroupsPage = () => {
                 suggestionsType={'group'}
                 searchHandler={searchHandler}
             />
+            <UpButton pageHeaderElement={headerRef.current!} />
             {pageContent}
+            {searchInitiated && (
+                <BackendSupportedPagination
+                    pageSize={PAGE_LIMIT}
+                    numOfPages={NumPages ?? 1}
+                    currentPage={paginationPageNumber}
+                    onPageChange={onPageChange}
+                    onPageHover={onPageHover}
+                    pageHeaderElement={headerRef.current!}
+                    siblingCount={1}
+                />
+            )}
         </PageContainer>
     );
 };

@@ -1,4 +1,5 @@
 import { ReceivedArticle } from '../../types/article';
+import { ReceivedGroup } from '../../types/group';
 import { PaginatedResult } from '../../types/pagination';
 import { GenericResponse, Response } from '../../types/response';
 import { AutocompleteDto, SearchDto } from '../../types/search';
@@ -33,7 +34,7 @@ const searchApi = appApi.injectEndpoints({
             }),
             keepUnusedDataFor: 5 * 60, // 5 minutes
         }),
-        groupsSearch: builder.query<Response, SearchDto>({
+        groupsSearch: builder.query<GenericResponse<PaginatedResult<ReceivedGroup>>, SearchDto>({
             query: ({ searchTerm, limit = 10, offset = 0 }) => ({
                 url: `/search/chat-groups`,
                 method: 'GET',
