@@ -65,11 +65,10 @@
         background: rgba(0, 0, 0, 0.025);
     }
     &::-webkit-scrollbar-thumb {
-        background: var(--gray-400);
-        border-radius: 1rem;
+        background: var(--gray-300);
     }
     &::-webkit-scrollbar-thumb:hover {
-        background: var(--gray-500);
+        background: var(--gray-400);
     }
 }
 
@@ -80,7 +79,6 @@ body {
         background: rgba(0, 0, 0, 0.05);
     }
     &::-webkit-scrollbar-thumb {
-        border-radius: 0;
         background: var(--indigo-950);
     }
     &::-webkit-scrollbar-thumb:hover {

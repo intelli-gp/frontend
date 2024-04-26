@@ -44,8 +44,8 @@ export const ChatDate = styled.time`
 
 export const UnreadMessagesCounter = styled.div`
     font-size: 0.75rem;
-    border-radius: 1rem;
-    padding: 0.5rem 0.6rem;
+    border-radius: 5rem;
+    padding: 0.5rem;
     background-color: var(--yellow-600);
     font-weight: 700;
     color: black;
@@ -53,7 +53,7 @@ export const UnreadMessagesCounter = styled.div`
     justify-content: center;
     align-items: center;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    line-height: 1;
+    line-height: 0.5;
 `;
 
 export const LastMessageContent = styled.div<{ width?: string }>`
