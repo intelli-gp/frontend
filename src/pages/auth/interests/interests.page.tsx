@@ -31,7 +31,7 @@ const InterestsPage = () => {
         if (isError) {
             errorToast(JSON.stringify(error));
         } else if (isSuccess) {
-            navigate('/app');
+            navigate('/app/search');
         }
     }, [isError, isSuccess]);
 
