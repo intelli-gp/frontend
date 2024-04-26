@@ -39,9 +39,13 @@
     --gray-100: #f1f3f5;
     --gray-50: #f8f9fa;
 
-    --yellow-500: #f1ee63;
-    --yellow-400: #f1ef70;
-    --yellow-300: #f9f8c1;
+    --yellow-700: #fab005;
+    --yellow-600: #fcc419;
+    --yellow-500: #ffd43b;
+
+    --yellow-400: #f1ee63;
+    --yellow-300: #f1ef70;
+    --yellow-200: #f9f8c1;
 
     --gray-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
     --black-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
