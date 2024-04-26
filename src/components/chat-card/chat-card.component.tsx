@@ -6,12 +6,12 @@ import { MessagesNotification } from '../../types/notifications';
 import {
     CardContainer,
     CardImage,
-    CardImageContainer,
-    ChatContent,
     ChatDate,
     GroupTitle,
+    LastMessageAuthorName,
+    LastMessageContent,
     TypographyContainer,
-    UnreadMessages,
+    UnreadMessagesCounter,
 } from './chat-card.style';
 
 const ChatCard = ({
@@ -21,6 +21,10 @@ const ChatCard = ({
 }: Partial<MessagesNotification>) => {
     const navigate = useNavigate();
 
+    if (!LastMessage) {
+        return null;
+    }
+
     return (
         <CardContainer
             unread={(UnreadMessagesCount || 0) > 0}
@@ -28,28 +32,28 @@ const ChatCard = ({
                 navigate(`/app/chat-room/${Group?.ID}`);
             }}
         >
-            <CardImageContainer>
-                <CardImage
-                    src={Group?.GroupCoverImage || defaultGroupImage}
-                    alt={Group?.GroupTitle}
-                />
-            </CardImageContainer>
+            <CardImage
+                src={Group?.GroupCoverImage || defaultGroupImage}
+                alt={Group?.GroupTitle}
+            />
+
             <TypographyContainer>
                 <GroupTitle title={Group?.GroupTitle}>
                     {Group?.GroupTitle}
                 </GroupTitle>
-                <ChatContent>
-                    <span className="font-extrabold">
-                        {LastMessage?.User.FullName + ': '}
-                    </span>
+                <LastMessageContent title={LastMessage?.Content}>
+                    <LastMessageAuthorName>
+                        {LastMessage?.User.FullName.split(' ')[0] + ': '}
+                    </LastMessageAuthorName>
                     {LastMessage?.Content}
-                </ChatContent>
+                </LastMessageContent>
                 <ChatDate>{moment(LastMessage?.CreatedAt).fromNow()} </ChatDate>
             </TypographyContainer>
+
             {(UnreadMessagesCount || 0) > 0 && (
-                <UnreadMessages>
-                    <p>{String(UnreadMessagesCount)}</p>
-                </UnreadMessages>
+                <UnreadMessagesCounter>
+                    {UnreadMessagesCount}
+                </UnreadMessagesCounter>
             )}
         </CardContainer>
     );
