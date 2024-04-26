@@ -1,9 +1,7 @@
 import { Course } from '../../types/course';
 import CourseCard from '../course-card/course-card.component';
-import { SearchNotFound } from '../search-not-found/search-not-found.component';
-import {
-    CourseSearchResultsGridContainer,
-} from './course-results-grid.styles';
+import EmptyPagePlaceholder from '../empty-page-placeholder/empty-placeholder.component';
+import { CourseSearchResultsGridContainer } from './course-results-grid.styles';
 
 export type CourseResultsGridProps = {
     courseResults: Course[];
@@ -12,7 +10,14 @@ export type CourseResultsGridProps = {
 export const CourseResultsGrid = ({
     courseResults,
 }: CourseResultsGridProps) => {
-    if (courseResults.length === 0) return <SearchNotFound />;
+    if (courseResults.length === 0)
+        return (
+            <EmptyPagePlaceholder
+                variant={'empty-search'}
+                text={'no results found!\ntry some other keywords.'}
+                button={{ text: 'Explore Suggestions', path: '/app/courses' }}
+            />
+        );
     return (
         <CourseSearchResultsGridContainer>
             {courseResults.map((course, index) => (
