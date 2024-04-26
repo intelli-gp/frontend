@@ -34,9 +34,9 @@ export const MessageNotification = (
                 onClick={dismiss}
             >
                 <NotificationTitle
-                    title={notification?.message?.Group?.GroupName}
+                    title={notification?.message?.Group?.GroupTitle}
                 >
-                    {notification?.message?.Group?.GroupName}
+                    {notification?.message?.Group?.GroupTitle}
                 </NotificationTitle>
 
                 <NotificationContent
