@@ -7,7 +7,7 @@ export const PageContainer = styled(motion.div)`
     max-width: 800px;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.5rem;
     flex: 1;
     height: 100%;
 
@@ -25,7 +25,5 @@ export const NotificationsContainer = styled.div`
     border-left: 1px solid var(--gray-200);
     border-right: 1px solid var(--gray-200);
     padding: 1rem;
-    height: 100%;
     overflow-y: auto;
-    background-color: var(--gray-50);
 `;
