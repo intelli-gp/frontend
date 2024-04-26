@@ -5,10 +5,77 @@ import { PaymentIcon } from 'react-svg-credit-card-payment-icons/dist/index.mjs'
 
 import DropdownMenu from '../menu/menu.component';
 import { CardContainer, EditIcon } from './card-info.style';
+import { useRemovePaymentMethodMutation } from '../../store/apis/paymentMethodsApi';
+import { errorToast, successToast } from '../../utils/toasts';
+import Button from '../button/button.component';
+import { Modal } from '../modal/modal.component';
 
+interface ModalProps {
+    id: number | undefined;
+    showModal: boolean;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const DeleteSectionModal: React.FC<ModalProps> = ({
+    showModal,
+    setShowModal,
+    id,
+}) => {
+
+    const [
+        deleteGroup,
+        { isLoading: isDeletingGroup, isSuccess: groupDeletedSuccessfully },
+    ] = useRemovePaymentMethodMutation();
+
+    const handleDeleteGroup = async () => {
+        try {
+            await deleteGroup(id!).unwrap();
+            setShowModal(false);
+        } catch (error) {
+            errorToast('Error occurred while deleting the card');
+        }
+    };
+
+    // Toasts handling
+    useEffect(() => {
+        if (groupDeletedSuccessfully) {
+            successToast('Deleted the card successfully!');
+        }
+    }, [groupDeletedSuccessfully]);
+
+    return (
+        <Modal
+            isOpen={showModal}
+            setIsOpen={setShowModal}
+            width="lg"
+            title="Are you sure you want to delete this card?"
+        >
+            <div className="flex flex-col gap-8">
+                <div className="flex gap-4 flex-row-reverse">
+                    <Button
+                        className="!px-8"
+                        select="danger"
+                        outline
+                        loading={isDeletingGroup}
+                        onClick={handleDeleteGroup}
+                    >
+                        Yes
+                    </Button>
+                    <Button
+                        className="!px-6"
+                        onClick={() => setShowModal(false)}
+                    >
+                        Cancel
+                    </Button>
+                </div>
+            </div>
+        </Modal>
+    );
+};
 type CardInfoProps = {
     Number: string;
     Expire: string;
+    ID: number;
 };
 type CardType =
     | 'Alipay'
@@ -28,8 +95,9 @@ type CardType =
     | 'Unionpay'
     | 'Visa';
 
-const CardInfo = ({ Number, Expire }: CardInfoProps) => {
+const CardInfo = ({ Number, Expire, ID }: CardInfoProps) => {
     const [cardType, setCardType] = useState<CardType>();
+    const [showDeleteModal, setDeleteModal] = useState(false);
 
     const cardNumberValidator: CardNumberVerification = number(Number);
     console.log(cardNumberValidator?.card?.niceType as CardType);
@@ -44,13 +112,13 @@ const CardInfo = ({ Number, Expire }: CardInfoProps) => {
         {
             option: 'Set default',
             handler: () => {
-                console.log('Set default');
+                setDeleteModal(true);
             },
         },
         {
             option: 'Remove',
             handler: () => {
-                console.log('Remove');
+                setDeleteModal(true);
             },
         },
         {
@@ -73,7 +141,7 @@ const CardInfo = ({ Number, Expire }: CardInfoProps) => {
                 </span>
                 <DropdownMenu
                     options={CreditOptions}
-                    top="40%"
+                    top="70%"
                     right="10%"
                     left="auto"
                     bottom="auto"
@@ -87,6 +155,11 @@ const CardInfo = ({ Number, Expire }: CardInfoProps) => {
             <p className="text-[var(--slate-500)] text-sm ">
                 Expires - {Expire}
             </p>
+            <DeleteSectionModal
+                id={ID}
+                showModal={showDeleteModal}
+                setShowModal={setDeleteModal}
+            />
         </CardContainer>
     );
 };
