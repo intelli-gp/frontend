@@ -143,12 +143,17 @@ export const PeopleContainer = styled.div`
 export const EditButton = styled.button`
     cursor: pointer;
     opacity: 0.8;
+    aspect-ratio: 1/1;
     color: var(--gray-700);
-    padding: 0.75rem;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 5rem;
     transition: all 0.25s ease-in-out;
     &:hover {
         opacity: 1;
+        color: black;
         background-color: var(--indigo-50);
     }
 `;
