@@ -3,47 +3,53 @@ import { useEffect, useState } from 'react';
 
 import Skeleton from '../../components/Skeleton';
 import ChatCard from '../../components/chat-card/chat-card.component';
+import EmptyPagePlaceholder from '../../components/empty-page-placeholder/empty-placeholder.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
+import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import { useFetchMessagesQuery } from '../../store';
 import { MessagesNotification } from '../../types/notifications';
-import { PageContainer, Title } from './chats.styles';
+import { ChatsContainer, PageContainer } from './chats.styles';
 
 export const ChatsPage = () => {
     const [searchValue, setSearchValue] = useState('');
 
-    const {
-        data: _groups,
-        isLoading,
-        error,
-    } = useFetchMessagesQuery(undefined);
-    const data = _groups || [];
+    const { data, isLoading, error } = useFetchMessagesQuery(undefined);
 
-    const [groups, setGroups] = useState(data);
+    const [groups, setGroups] = useState(data ?? []);
+
     useEffect(() => {
-        setGroups(data);
+        let sortedData = data?.toSorted((a, b) => {
+            return (
+                new Date(b?.LastMessage?.CreatedAt ?? Date.now()).getTime() -
+                new Date(a?.LastMessage?.CreatedAt ?? Date.now()).getTime()
+            );
+        });
+        setGroups(sortedData ?? []);
     }, [data]);
+
     const handleChangeSearchValue = (value: string) => {
         setSearchValue(value);
         const fuseOptions = {
             keys: ['Group.GroupTitle'],
             includeScore: true,
         };
-        const fuse = new Fuse(data, fuseOptions);
+        const fuse = new Fuse(data!, fuseOptions);
         const results = fuse.search(searchValue);
         const filteredSearch =
             value === '' ? data : results.map((result) => result.item);
-        setGroups(filteredSearch);
+        setGroups(filteredSearch ?? []);
     };
 
     return (
-        <PageContainer>
-            <Title> Chats</Title>
+        <PageContainer {...BetweenPageAnimation}>
+            <PageTitle> Messages </PageTitle>
             <ExplorePageHeader
                 placeholder="Search chats..."
                 searchValue={searchValue}
                 onSearchValueChange={handleChangeSearchValue}
                 WithoutButton
             />
+
             {isLoading ? (
                 <div className="h-auto w-full flex justify-center flex-col items-center gap-2">
                     <Skeleton times={3} className="h-[120px] w-[80%]" />
@@ -51,11 +57,20 @@ export const ChatsPage = () => {
             ) : error ? (
                 <div>Error</div>
             ) : groups?.length || 0 > 0 ? (
-                groups?.map((group: Partial<MessagesNotification>) => (
-                    <ChatCard {...group} />
-                ))
+                <ChatsContainer>
+                    {groups?.map((group: Partial<MessagesNotification>) => (
+                        <ChatCard {...group} />
+                    ))}
+                </ChatsContainer>
             ) : (
-                <div>No groups found.</div>
+                <EmptyPagePlaceholder
+                    variant="no-data"
+                    text={`You have no messages yet!`}
+                    button={{
+                        text: 'Explore Groups',
+                        path: '/app/groups',
+                    }}
+                />
             )}
         </PageContainer>
     );

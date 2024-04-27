@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import NotificationItem from '../../components/notification-item/notification-item.component';
-import { PageTitle } from '../../index.styles';
+import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import { Notification } from '../../types/notifications';
 import { EditButton } from '../view-group/view-group.styles';
 import { NotificationsContainer, PageContainer } from './notifications.styles';
@@ -115,7 +115,7 @@ const NotificationsPage = () => {
         setSearchValue(value);
     };
     return (
-        <PageContainer>
+        <PageContainer {...BetweenPageAnimation}>
             <div className="flex justify-between items center">
                 <PageTitle>Notification Center</PageTitle>
                 <EditButton onClick={() => navigate('/app/settings')}>

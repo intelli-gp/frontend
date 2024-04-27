@@ -61,6 +61,7 @@ export const CourseCard = ({
                     type="submit"
                     select="secondary"
                     onClick={handleLinkRedirect}
+                    className='!bg-[var(--yellow-500)] !border-[var(--yellow-500)]'
                 >
                     Enroll now
                 </Button>

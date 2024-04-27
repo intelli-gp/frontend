@@ -38,7 +38,7 @@ export default function LoginPage() {
     // Redirect to app page if user is already logged in
     useLayoutEffect(() => {
         if (isAuthenticated) {
-            navigate('/app');
+            navigate('/app/search');
         }
     }, [isAuthenticated]);
 
