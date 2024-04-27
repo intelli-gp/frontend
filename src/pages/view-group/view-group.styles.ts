@@ -142,17 +142,15 @@ export const PeopleContainer = styled.div`
 
 export const EditButton = styled.button`
     cursor: pointer;
-    opacity: 0.8;
     aspect-ratio: 1/1;
-    color: var(--gray-700);
-    height: 48px;
+    color: var(--gray-600);
+    height: 45px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 5rem;
-    transition: all 0.25s ease-in-out;
+    border-radius: 50%;
+    transition: all 0.2s ease-in-out;
     &:hover {
-        opacity: 1;
         color: black;
         background-color: var(--indigo-50);
     }

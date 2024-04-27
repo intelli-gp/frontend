@@ -1,15 +1,5 @@
 import Picker from 'emoji-picker-react';
-import {
-    ChangeEvent,
-    FormEvent,
-    MouseEventHandler,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
-import { IoSend } from 'react-icons/io5';
-import { LuPaperclip } from 'react-icons/lu';
-import { MdOutlineEmojiEmotions } from 'react-icons/md';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { SlOptions } from 'react-icons/sl';
 import { TbUsers } from 'react-icons/tb';
 import { useSelector } from 'react-redux';
@@ -19,7 +9,7 @@ import { BeatLoader } from 'react-spinners';
 import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import EnhancedImage from '../../components/image/image.component';
-import { CustomInput } from '../../components/input/Input.component';
+import { CustomInput as MessageInput } from '../../components/input/Input.component';
 import DropdownMenu from '../../components/menu/menu.component';
 import ChatMessage from '../../components/message/message.component';
 import { BetweenPageAnimation } from '../../index.styles';
@@ -36,18 +26,21 @@ import { SerializedMessage } from '../../types/message';
 import { Response } from '../../types/response';
 import { profileURL } from '../../utils/profileUrlBuilder';
 import { successToast } from '../../utils/toasts';
+import { EditButton as HeaderButton } from '../view-group/view-group.styles';
 import {
+    AttachIcon,
     ChatBody,
     ChatFooter,
     ChatHeader,
+    EmojisIcon,
     GroupImage,
     GroupName,
     GroupTypingStatus,
     GroupUserFullName,
-    HeaderButton,
     LeftPart,
     PageContainer,
     RightPart,
+    SendIcon,
     StyledBadge,
     UserContainer,
     UsersContainer,
@@ -91,7 +84,7 @@ export const ChatroomPage = () => {
         setShowPicker(false);
     };
 
-    const handleSendMessage = async (event: FormEvent<HTMLFormElement>) => {
+    const handleSendMessage = async (event?: React.MouseEvent) => {
         event?.preventDefault();
         if (!messageInput.trim()) return;
         setMessageInput('');
@@ -99,6 +92,12 @@ export const ChatroomPage = () => {
             Content: messageInput,
             GroupID: +groupId!,
         }).unwrap();
+    };
+
+    const handlePressingEnter = (e: KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleSendMessage();
+        }
     };
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -213,7 +212,7 @@ export const ChatroomPage = () => {
                             </DropdownMenu>
                             <HeaderButton
                                 title="View users"
-                                className="flex lg:hidden"
+                                className="lg:!hidden"
                                 onClick={(e: React.MouseEvent) => {
                                     e.stopPropagation();
                                     setUsersListOpen(true);
@@ -239,36 +238,25 @@ export const ChatroomPage = () => {
                                 <Picker onEmojiClick={onEmojiClick} />
                             </div>
                         )}
-                        <div className="flex gap-0">
-                            <MdOutlineEmojiEmotions
-                                className="fill-[var(--indigo-800)] cursor-pointer box-content p-2 rounded-full hover:bg-indigo-100"
+                        <div className="flex items-center gap-0">
+                            <EmojisIcon
                                 size={20}
                                 onClick={() => setShowPicker(!showPicker)}
                             />
-                            <LuPaperclip
-                                color="var(--indigo-800)"
-                                className="cursor-pointer box-content p-2 rounded-full hover:bg-indigo-100"
-                                size={20}
-                            />
+                            <AttachIcon size={20} />
                         </div>
-                        <form
-                            className="flex gap-2 flex-1"
-                            onSubmit={handleSendMessage}
-                        >
-                            <CustomInput
-                                className="bg-[var(--gray-100)] !border-none focus-visible:!outline-none"
-                                placeholder="Type a message..."
-                                value={messageInput}
-                                onChange={handleInputChange}
-                            />
-                        </form>
-                        <IoSend
+
+                        <MessageInput
+                            className="bg-[var(--gray-100)] !border-none focus-visible:!outline-none"
+                            placeholder="Type a message..."
+                            value={messageInput}
+                            onChange={handleInputChange}
+                            onKeyPress={handlePressingEnter}
+                        />
+                        <SendIcon
                             title="Send message"
-                            className="fill-[var(--indigo-800)] cursor-pointer box-content p-2  rounded-full hover:bg-indigo-100"
                             size={20}
-                            onClick={
-                                handleSendMessage as unknown as MouseEventHandler
-                            }
+                            onClick={handleSendMessage}
                         />
                     </ChatFooter>
                 </LeftPart>

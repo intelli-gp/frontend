@@ -62,13 +62,14 @@ const GroupCard = ({
         }
     };
 
-    let badgeIcon: JSX.Element = <FaUser />; // Default badge as a member.
+    const BADGE_SIZE = 12;
+    let badgeIcon: JSX.Element = <FaUser size={BADGE_SIZE} />; // Default badge as a member.
     switch (UserRole) {
         case 'owner':
-            badgeIcon = <FaCrown />;
+            badgeIcon = <FaCrown size={BADGE_SIZE} />;
             break;
         case 'admin':
-            badgeIcon = <MdAdminPanelSettings />;
+            badgeIcon = <MdAdminPanelSettings size={BADGE_SIZE} />;
             break;
     }
 

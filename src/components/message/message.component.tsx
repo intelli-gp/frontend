@@ -232,8 +232,12 @@ const ChatMessage = ({
                 </DropdownMenu>
             )}
 
-            <MessageContent isMine={isMine} isDeleted={message.IsDeleted}>
-                {message.IsDeleted && <MdDoNotDisturb size={18} />}{' '}
+            <MessageContent
+                isMine={isMine}
+                isDeleted={message.IsDeleted}
+                dir="auto"
+            >
+                {message.IsDeleted && <MdDoNotDisturb size={18} />}
                 {message.Content}
             </MessageContent>
 

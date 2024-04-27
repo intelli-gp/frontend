@@ -9,6 +9,7 @@ export const Message = styled.div<{ isMine: boolean }>`
     background-color: ${({ isMine }) =>
         isMine ? 'var(--indigo-700)' : 'var(--gray-200)'};
     padding: 1rem;
+    padding-bottom: 0.5rem;
     border-radius: ${({ isMine }) =>
         isMine ? '16px 16px 0px 16px' : '16px 16px 16px 0px'};
     display: flex;
@@ -67,6 +68,7 @@ export const MessageContent = styled.main<{
     ${CSSTextLinesCountLimit}
 `;
 
+
 export const MessageDate = styled.p<{ isMine: boolean }>`
     display: flex;
     justify-content: flex-end;
@@ -79,8 +81,6 @@ export const MessageDate = styled.p<{ isMine: boolean }>`
 export const OptionsButton = styled.button`
     color: white;
     padding: 0.5rem;
-    border-top-right-radius: 1rem;
-    background-color: var(--indigo-700);
 `;
 
 export const MessageInfoModalContainer = styled.div`

@@ -88,8 +88,8 @@ export const ButtonsContainer = styled.div`
 
 export const BadgeContainer = styled.div<{ role: string }>`
     position: absolute;
-    top: -0.5rem;
-    right: -0.5rem;
+    top: -0.75rem;
+    left: -0.75rem;
     padding: 0.5rem;
     border-radius: 50%;
     z-index: 10;

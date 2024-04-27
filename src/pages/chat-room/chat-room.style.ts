@@ -1,5 +1,8 @@
 import { motion } from 'framer-motion';
-import styled from 'styled-components';
+import { IoSend } from 'react-icons/io5';
+import { LuPaperclip } from 'react-icons/lu';
+import { RiEmotionLine } from 'react-icons/ri';
+import styled, { css } from 'styled-components';
 
 import EnhancedImage from '../../components/image/image.component';
 import { CSSTextLengthLimit } from '../../index.styles';
@@ -90,6 +93,31 @@ export const ChatFooter = styled.div`
     gap: 0.5rem;
 `;
 
+const commonFooterIconStyles = css`
+    color: var(--indigo-800);
+    box-sizing: content-box;
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+    padding: 0.5rem;
+    border-radius: 50%;
+    &:hover {
+        color: black;
+        background-color: var(--indigo-100);
+    }
+`;
+
+export const EmojisIcon = styled(RiEmotionLine)`
+    ${commonFooterIconStyles}
+`;
+
+export const AttachIcon = styled(LuPaperclip)`
+    ${commonFooterIconStyles}
+`;
+
+export const SendIcon = styled(IoSend)`
+    ${commonFooterIconStyles}
+`;
+
 export const RightPart = styled.div`
     height: 100%;
     width: max(20%, 250px);
@@ -128,11 +156,12 @@ export const UsersContainer = styled.div`
 export const UserContainer = styled.div`
     width: 100%;
     cursor: pointer;
-    border-radius: 10rem;
+    border-radius: 1rem;
     display: flex;
     align-items: center;
     gap: 1rem;
     padding: 0.5rem;
+    padding-right: 1rem;
     img {
         border-radius: 50%;
         height: 48px;
@@ -142,7 +171,6 @@ export const UserContainer = styled.div`
         display: flex;
         flex-direction: column;
     }
-
     &:hover {
         background-color: var(--indigo-50);
     }
@@ -160,18 +188,5 @@ export const StyledBadge = styled.span<{ online: boolean }>`
         height: 0.55rem;
         border-radius: 5rem;
         background-color: ${({ online }) => (online ? '#44b700' : '#D30000')};
-    }
-`;
-
-export const HeaderButton = styled.button`
-    cursor: pointer;
-    opacity: 0.8;
-    color: var(--gray-700);
-    padding: 0.75rem;
-    border-radius: 5rem;
-    transition: all 0.25s ease-in-out;
-    &:hover {
-        opacity: 1;
-        background-color: var(--indigo-50);
     }
 `;
