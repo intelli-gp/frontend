@@ -66,7 +66,6 @@ export const MessageContent = styled.main<{
     width?: string;
     lines?: number;
 }>`
-    ${CSSTextLinesCountLimit}
     margin-top: 0rem;
     color: ${({ isMine }) => (isMine ? 'white' : ' var(--gray-800)')};
     opacity: ${({ isDeleted }) => (isDeleted ? 0.5 : 1)};
@@ -84,14 +83,13 @@ export const MessageReactions = styled.div<{ isMine?: boolean }>`
     background-color: white;
     padding: 0.1rem 0.5rem 0.1rem 0.25rem;
     border-radius: 1rem;
-    transform: translateY(50%);
+    transform: translateY(60%);
     box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 8px 0px;
     cursor: pointer;
     user-select: none;
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    line-height: 1.25;
     transition: scale 0.25s ease-in-out;
     &:hover {
         scale: 1.025;
@@ -152,11 +150,11 @@ export const MessageInfoSectionLabel = styled.label`
 export const ReplyToMessageContainer = styled.div<{ passive?: boolean }>`
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
     padding: 1rem 1.5rem;
     padding-right: 1rem;
     border-radius: 0.75rem;
-    background-color: var(--indigo-100);
+    background-color: var(--indigo-200);
     border-left: 5px solid var(--indigo-700);
     border-right: 5px solid var(--indigo-700);
     color: black;
@@ -165,7 +163,7 @@ export const ReplyToMessageContainer = styled.div<{ passive?: boolean }>`
         if (passive) {
             return css`
                 border: none;
-                padding: 0.75rem;
+                padding: 0.5rem 0.75rem;
             `;
         }
     }}
@@ -195,4 +193,9 @@ export const ReplyToMessageCloseButton = styled(IoCloseOutline)`
     &:hover {
         background-color: rgba(0, 0, 0, 0.1);
     }
+`;
+
+export const ReplyToMessageContent = styled(MessageContent)`
+    ${CSSTextLinesCountLimit}
+    color: black;
 `;

@@ -19,6 +19,7 @@ import { CustomInput } from '../input/Input.component';
 import DropdownMenu from '../menu/menu.component';
 import { Modal } from '../modal/modal.component';
 import UserItem from '../user-Item/user-item.component';
+import { ReplyToMessageContent } from './message.style';
 import {
     EmojisContainer,
     EmojisCounter,
@@ -423,9 +424,9 @@ export const ReplyMessage = ({
                 <ReplyToMessageSenderName to={profileURL(User?.Username ?? '')}>
                     {storedUser.ID === User?.ID ? 'You' : User?.FullName}
                 </ReplyToMessageSenderName>
-                <MessageContent dir={'auto'} lines={2}>
+                <ReplyToMessageContent dir={'auto'} lines={2}>
                     {Content}
-                </MessageContent>
+                </ReplyToMessageContent>
             </ReplyToMessageMain>
             {!passive && (
                 <ReplyToMessageCloseButton
