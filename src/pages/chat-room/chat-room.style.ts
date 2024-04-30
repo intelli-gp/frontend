@@ -11,8 +11,9 @@ export const PageContainer = styled(motion.div)`
     display: flex;
     gap: 0.5rem;
     height: 100%;
-    background: var(--indigo-50);
     padding: 1rem;
+    margin: 0 auto;
+    max-width: 1200px;
 
     @media (max-width: 768px) {
         padding: 0.5rem;
@@ -89,8 +90,27 @@ export const ChatFooter = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     position: relative;
     gap: 0.5rem;
+`;
+
+export const FooterInputArea = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+`
+
+export const MessageInput = styled.div`
+    background-color: var(--gray-100);
+    width: 100%;
+    max-height: 4rem;
+    overflow: auto;
+    outline: none;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
 `;
 
 const commonFooterIconStyles = css`

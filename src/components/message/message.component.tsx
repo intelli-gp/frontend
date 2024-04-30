@@ -32,6 +32,10 @@ import {
     MessageInfoUsersList,
     MessageReactions,
     OptionsButton,
+    ReplyToMessageCloseButton,
+    ReplyToMessageContainer,
+    ReplyToMessageMain,
+    ReplyToMessageSenderName,
     SenderName,
     SenderProfile,
 } from './message.style';
@@ -47,11 +51,14 @@ type ChatMessageProps = {
      * className for the message container.
      */
     className?: string;
-
     /**
      * Show reactions to the message.
      */
     showReactions?: boolean;
+    /**
+     * Function to set the message as replay target.
+     */
+    setAsReplayTarget?: (message: SerializedMessage) => void;
 };
 
 const ChatMessage = ({
@@ -59,10 +66,12 @@ const ChatMessage = ({
     enableOptions = true,
     className,
     showReactions = true,
+    setAsReplayTarget,
 }: ChatMessageProps) => {
     const { user } = useSelector((state: RootState) => state.auth);
 
     const isMine = message.User.ID === user.ID; // Does this message belongs to me.
+    const isReply = !!message?.RepliedToMessage;
     const hasReactions = !!message.Reactions?.length;
 
     const [editMessageIsOpen, setEditMessageIsOpen] = useState(false);
@@ -125,9 +134,13 @@ const ChatMessage = ({
         }
     };
 
-    const getMessageOptions = () => {
+    const options = useMemo(() => {
         let options = [
             { option: 'React', handler: () => setReactMessageIsOpen(true) },
+            {
+                option: 'Reply',
+                handler: () => setAsReplayTarget && setAsReplayTarget(message),
+            },
         ];
         if (isMine) {
             options.push(
@@ -140,7 +153,7 @@ const ChatMessage = ({
             );
         }
         return options;
-    };
+    }, [isMine]);
 
     const messageReactions = useMemo(() => {
         if (!message?.Reactions) return;
@@ -304,8 +317,7 @@ const ChatMessage = ({
         <Message
             isMine={isMine}
             className={className || ''}
-            hasReactions={hasReactions}
-            showReactions={showReactions}
+            hasReactions={hasReactions && showReactions && !message.IsDeleted}
         >
             {UpdateMessageModal}
             {DeleteMessageModal}
@@ -330,7 +342,7 @@ const ChatMessage = ({
 
             {enableOptions && !message.IsDeleted && (
                 <DropdownMenu
-                    options={getMessageOptions()}
+                    options={options}
                     mainElementClassName={`!absolute top-0 right-0`}
                     right={`${isMine ? '50%' : 'auto'}`}
                     top="65%"
@@ -347,6 +359,14 @@ const ChatMessage = ({
                 </DropdownMenu>
             )}
 
+            {isReply && (
+                <ReplyMessage
+                    User={message.RepliedToMessage?.User}
+                    Content={message.RepliedToMessage?.Content}
+                    passive={true}
+                />
+            )}
+
             <MessageContent
                 isMine={isMine}
                 isDeleted={message.IsDeleted}
@@ -360,7 +380,7 @@ const ChatMessage = ({
                 {new Date(message.CreatedAt ?? Date.now()).toLocaleString()}
             </MessageDate>
 
-            {showReactions && hasReactions && (
+            {showReactions && hasReactions && !message.IsDeleted && (
                 <MessageReactions
                     isMine={isMine}
                     title="View who reacted."
@@ -375,6 +395,45 @@ const ChatMessage = ({
                 </MessageReactions>
             )}
         </Message>
+    );
+};
+
+type ReplyMessageProps = Partial<SerializedMessage> & {
+    /**
+     * a function triggered when the close button is clicked.
+     */
+    closeButtonHandler?: () => void;
+    /**
+     * can not interact with the message `shown inside the reply message`
+     * @default false
+     */
+    passive?: boolean;
+};
+
+export const ReplyMessage = ({
+    User,
+    Content,
+    passive = false,
+    closeButtonHandler,
+}: ReplyMessageProps) => {
+    let storedUser = useSelector((state: RootState) => state.auth.user);
+    return (
+        <ReplyToMessageContainer passive={passive}>
+            <ReplyToMessageMain>
+                <ReplyToMessageSenderName to={profileURL(User?.Username ?? '')}>
+                    {storedUser.ID === User?.ID ? 'You' : User?.FullName}
+                </ReplyToMessageSenderName>
+                <MessageContent dir={'auto'} lines={2}>
+                    {Content}
+                </MessageContent>
+            </ReplyToMessageMain>
+            {!passive && (
+                <ReplyToMessageCloseButton
+                    size={24}
+                    onClick={closeButtonHandler}
+                />
+            )}
+        </ReplyToMessageContainer>
     );
 };
 

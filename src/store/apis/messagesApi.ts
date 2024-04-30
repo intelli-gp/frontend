@@ -15,7 +15,7 @@ import { appApi } from './appApi';
 
 const messageApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
-        getGroupMessages: builder.query<unknown, number>({
+        getGroupMessages: builder.query<SerializedMessage[], number>({
             queryFn: () => ({ data: [] }),
             async onCacheEntryAdded(
                 groupId,
@@ -87,7 +87,7 @@ const messageApi = appApi.injectEndpoints({
                 }
             },
         }),
-        receiveTyping: builder.query<unknown, void>({
+        receiveTyping: builder.query<string[], void>({
             queryFn: () => ({ data: [] }),
             async onCacheEntryAdded(
                 _,

@@ -16,9 +16,11 @@ export type SerializedMessage = {
             'Username' | 'FullName' | 'ProfileImage' | 'ID'
         >;
     }[];
+    RepliedToMessage?: SerializedMessage;
 };
 
 export type CreateMessageDTO = {
+    RepliedToMessageID?: number;
     Content: string;
     GroupID: number;
 };

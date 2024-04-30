@@ -1,4 +1,4 @@
-import Picker from 'emoji-picker-react';
+import Picker, { EmojiStyle } from 'emoji-picker-react';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { SlOptions } from 'react-icons/sl';
 import { TbUsers } from 'react-icons/tb';
@@ -11,7 +11,9 @@ import defaultUserImage from '../../assets/imgs/user.jpg';
 import EnhancedImage from '../../components/image/image.component';
 import { CustomInput as MessageInput } from '../../components/input/Input.component';
 import DropdownMenu from '../../components/menu/menu.component';
-import ChatMessage from '../../components/message/message.component';
+import ChatMessage, {
+    ReplyMessage,
+} from '../../components/message/message.component';
 import { BetweenPageAnimation } from '../../index.styles';
 import { useGetGroupQuery } from '../../store';
 import { RootState } from '../../store';
@@ -22,8 +24,7 @@ import {
     useSendTypingMutation,
 } from '../../store/apis/messagesApi';
 import { ReceivedGroup } from '../../types/group';
-import { SerializedMessage } from '../../types/message';
-import { Response } from '../../types/response';
+import { CreateMessageDTO, SerializedMessage } from '../../types/message';
 import { profileURL } from '../../utils/profileUrlBuilder';
 import { successToast } from '../../utils/toasts';
 import { EditButton as HeaderButton } from '../view-group/view-group.styles';
@@ -33,6 +34,7 @@ import {
     ChatFooter,
     ChatHeader,
     EmojisIcon,
+    FooterInputArea,
     GroupImage,
     GroupName,
     GroupTypingStatus,
@@ -55,15 +57,12 @@ export const ChatroomPage = () => {
     const { data: _groupData } = useGetGroupQuery(+groupId!, {
         pollingInterval: 30e3,
     });
-    const groupData = (_groupData as unknown as Response)
-        ?.data[0] as ReceivedGroup;
+    const groupData = _groupData?.data[0] as ReceivedGroup;
 
-    const { data: _messages } = useGetGroupMessagesQuery(Number(groupId));
-    const messages = _messages as SerializedMessage[];
+    const { data: messages } = useGetGroupMessagesQuery(Number(groupId));
     const [sendMessage] = useSendMessageMutation();
     const [sendTypingStatus] = useSendTypingMutation();
-    const { data: _typingUsers } = useReceiveTypingQuery();
-    const typingUsers = _typingUsers as string[];
+    const { data: typingUsers } = useReceiveTypingQuery();
     const onlineUsers =
         groupData?.GroupMembers?.filter(
             (member) => member.Connected || member.ID === user.ID,
@@ -78,24 +77,29 @@ export const ChatroomPage = () => {
     const [showPicker, setShowPicker] = useState(false);
     const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout>();
     const [usersListOpen, setUsersListOpen] = useState(false);
+    const [replyingTo, setReplyingTo] = useState<SerializedMessage>();
 
     const onEmojiClick = (emojiObject: { emoji: string }) => {
         setMessageInput((prevInput) => prevInput + emojiObject.emoji);
-        setShowPicker(false);
     };
 
     const handleSendMessage = async (event?: React.MouseEvent) => {
         event?.preventDefault();
         if (!messageInput.trim()) return;
         setMessageInput('');
-        await sendMessage({
+        let message: CreateMessageDTO = {
             Content: messageInput,
             GroupID: +groupId!,
-        }).unwrap();
+        };
+        if (replyingTo) {
+            message.RepliedToMessageID = replyingTo.MessageID;
+            setReplyingTo(null!);
+        }
+        await sendMessage(message).unwrap();
     };
 
-    const handlePressingEnter = (e: KeyboardEvent) => {
-        if (e.key === 'Enter') {
+    const handlePressingEnter = ({ key, shiftKey }: KeyboardEvent) => {
+        if (key === 'Enter' && !shiftKey) {
             handleSendMessage();
         }
     };
@@ -125,6 +129,10 @@ export const ChatroomPage = () => {
         setTypingTimeout(newTimeout);
     };
 
+    const setAsReplyTarget = (message: SerializedMessage) => {
+        setReplyingTo(message);
+    };
+
     const groupOptions = [
         {
             option: 'View Group',
@@ -146,11 +154,12 @@ export const ChatroomPage = () => {
             top: chatBodyRef?.current?.scrollHeight,
             behavior: 'instant',
         });
-    }, [_messages]);
+    }, [messages]);
 
     useEffect(() => {
         const screenClickHandler = () => {
             setUsersListOpen(false);
+            setShowPicker(false);
         };
         document.addEventListener('click', screenClickHandler);
 
@@ -160,175 +169,190 @@ export const ChatroomPage = () => {
     }, []);
 
     return (
-        <PageContainer {...BetweenPageAnimation}>
-            <div className="my-0 mx-auto max-w-[1200px] w-full flex gap-2">
-                <LeftPart>
-                    <ChatHeader>
-                        <GroupImage
-                            src={
-                                groupData?.GroupCoverImage ?? defaultGroupImage
-                            }
-                        />
-                        <div className="flex flex-col">
-                            <GroupName>
-                                {groupData?.GroupTitle ?? `Wait i'm loading...`}
-                            </GroupName>
-                            <GroupTypingStatus>
-                                {typingUsers?.length ? (
-                                    <div className="flex gap-1 items-center">
-                                        <BeatLoader
-                                            color="var(--gray-800)"
-                                            size={6}
-                                        />
-                                        <span className="font-bold">
-                                            {typingUsers?.join(' ,')}
-                                        </span>
-                                        {` ${
-                                            typingUsers.length === 1
-                                                ? 'is'
-                                                : 'are'
-                                        }  `}
-                                        typing...
-                                    </div>
-                                ) : (
-                                    <span className="text-[var(--gray-900)]">
-                                        Idle
+        <PageContainer className="mujedd-chat-room" {...BetweenPageAnimation}>
+            <LeftPart>
+                <ChatHeader>
+                    <GroupImage
+                        src={groupData?.GroupCoverImage ?? defaultGroupImage}
+                    />
+                    <div className="flex flex-col">
+                        <GroupName>
+                            {groupData?.GroupTitle ?? `Wait i'm loading...`}
+                        </GroupName>
+                        <GroupTypingStatus>
+                            {typingUsers?.length ? (
+                                <div className="flex gap-1 items-center">
+                                    <BeatLoader
+                                        color="var(--gray-800)"
+                                        size={6}
+                                    />
+                                    <span className="font-bold">
+                                        {typingUsers?.join(' ,')}
                                     </span>
-                                )}
-                            </GroupTypingStatus>
-                        </div>
-                        <div className="flex gap-2 ml-auto justify-center">
-                            <DropdownMenu
-                                options={groupOptions}
-                                right="50%"
-                                top="100%"
-                                left="auto"
-                                bottom="auto"
-                                menuWidth="10rem"
-                            >
-                                <HeaderButton title="Group options">
-                                    <SlOptions size={20} />
-                                </HeaderButton>
-                            </DropdownMenu>
-                            <HeaderButton
-                                title="View users"
-                                className="lg:!hidden"
-                                onClick={(e: React.MouseEvent) => {
-                                    e.stopPropagation();
-                                    setUsersListOpen(true);
-                                }}
-                            >
-                                <TbUsers size={20} />
+                                    {` ${
+                                        typingUsers.length === 1 ? 'is' : 'are'
+                                    }  `}
+                                    typing...
+                                </div>
+                            ) : (
+                                <span className="text-[var(--gray-900)]">
+                                    Idle
+                                </span>
+                            )}
+                        </GroupTypingStatus>
+                    </div>
+                    <div className="flex gap-2 ml-auto justify-center">
+                        <DropdownMenu
+                            options={groupOptions}
+                            right="50%"
+                            top="100%"
+                            left="auto"
+                            bottom="auto"
+                            menuWidth="10rem"
+                        >
+                            <HeaderButton title="Group options">
+                                <SlOptions size={20} />
                             </HeaderButton>
-                        </div>
-                    </ChatHeader>
-                    <ChatBody ref={chatBodyRef}>
-                        <div />
-                        {messages?.map((message) => (
-                            <ChatMessage
-                                key={message.MessageID}
-                                enableOptions
-                                message={message}
+                        </DropdownMenu>
+                        <HeaderButton
+                            title="View users"
+                            className="lg:!hidden"
+                            onClick={(e: React.MouseEvent) => {
+                                e.stopPropagation();
+                                setUsersListOpen(true);
+                            }}
+                        >
+                            <TbUsers size={20} />
+                        </HeaderButton>
+                    </div>
+                </ChatHeader>
+
+                <ChatBody ref={chatBodyRef}>
+                    {messages?.map((message) => (
+                        <ChatMessage
+                            setAsReplayTarget={setAsReplyTarget}
+                            key={message.MessageID}
+                            enableOptions
+                            message={message}
+                        />
+                    ))}
+                </ChatBody>
+
+                <ChatFooter>
+                    {showPicker && (
+                        <div
+                            className="absolute bottom-[110%] left-0 z-10"
+                            onClick={(event: React.MouseEvent) =>
+                                event.stopPropagation()
+                            }
+                        >
+                            <Picker
+                                onEmojiClick={onEmojiClick}
+                                emojiStyle={EmojiStyle.FACEBOOK}
                             />
-                        ))}
-                    </ChatBody>
-                    <ChatFooter>
-                        {showPicker && (
-                            <div className="absolute bottom-[110%] left-0 z-40">
-                                <Picker onEmojiClick={onEmojiClick} />
-                            </div>
-                        )}
-                        <div className="flex items-center gap-0">
+                        </div>
+                    )}
+                    {replyingTo && (
+                        <ReplyMessage
+                            {...replyingTo}
+                            closeButtonHandler={() => setReplyingTo(null!)}
+                        />
+                    )}
+                    <FooterInputArea>
+                        <div className="flex items-center">
                             <EmojisIcon
                                 size={20}
-                                onClick={() => setShowPicker(!showPicker)}
+                                onClick={(event: React.MouseEvent) => {
+                                    event.stopPropagation();
+                                    setShowPicker(!showPicker);
+                                }}
                             />
                             <AttachIcon size={20} />
                         </div>
 
                         <MessageInput
-                            className="bg-[var(--gray-100)] !border-none focus-visible:!outline-none"
+                            className="bg-[var(--gray-50)] !border-none focus-visible:!outline-none resize-none"
                             placeholder="Type a message..."
                             value={messageInput}
                             onChange={handleInputChange}
                             onKeyPress={handlePressingEnter}
+                            multiline
+                            rows={2}
                         />
+
                         <SendIcon
                             title="Send message"
                             size={20}
                             onClick={handleSendMessage}
                         />
-                    </ChatFooter>
-                </LeftPart>
-
-                <RightPart className={`${usersListOpen && 'open'}`}>
-                    <UsersContainer>
-                        <h1 className="font-bold">ONLINE USERS</h1>
-                        {onlineUsers.map((person) => (
-                            <UserContainer
-                                key={person.ID}
-                                onClick={() => {
-                                    navigate(profileURL(person.Username));
-                                }}
-                            >
-                                <EnhancedImage
-                                    className="!w-[48px] !h-[48px] rounded-full object-cover aspect-square"
-                                    alt="username"
-                                    src={
-                                        person?.ProfileImage ?? defaultUserImage
-                                    }
-                                />
-                                <div className="overflow-hidden">
-                                    <GroupUserFullName
-                                        title={person.FullName}
-                                        onClick={() => {
-                                            navigate(
-                                                profileURL(person.Username),
-                                            );
-                                        }}
-                                    >
-                                        {person.FullName}
-                                    </GroupUserFullName>
-                                    <div className="flex gap-1 items-center">
-                                        <StyledBadge online={true} />
-                                        <p className="text-xs text-[var(--gray-600)]">
-                                            online
-                                        </p>
-                                    </div>
+                    </FooterInputArea>
+                </ChatFooter>
+            </LeftPart>
+            <RightPart className={`${usersListOpen && 'open'}`}>
+                <UsersContainer>
+                    <h1 className="font-bold">
+                        ONLINE USERS ({onlineUsers.length ?? 0})
+                    </h1>
+                    {onlineUsers.map((person) => (
+                        <UserContainer
+                            key={person.ID}
+                            onClick={() => {
+                                navigate(profileURL(person.Username));
+                            }}
+                        >
+                            <EnhancedImage
+                                className="!w-[48px] !h-[48px] rounded-full object-cover aspect-square"
+                                alt="username"
+                                src={person?.ProfileImage ?? defaultUserImage}
+                            />
+                            <div className="overflow-hidden">
+                                <GroupUserFullName
+                                    title={person.FullName}
+                                    onClick={() => {
+                                        navigate(profileURL(person.Username));
+                                    }}
+                                >
+                                    {person.FullName}
+                                </GroupUserFullName>
+                                <div className="flex gap-1 items-center">
+                                    <StyledBadge online={true} />
+                                    <p className="text-xs text-[var(--gray-600)]">
+                                        online
+                                    </p>
                                 </div>
-                            </UserContainer>
-                        ))}
-                        <h1 className="mt-8 font-bold">OFFLINE USERS</h1>
-                        {offlineUsers.map((person) => (
-                            <UserContainer
-                                key={person.ID}
-                                onClick={() => {
-                                    navigate(profileURL(person.Username));
-                                }}
-                            >
-                                <EnhancedImage
-                                    className="!w-[48px] !h-[48px] rounded-full object-cover aspect-square"
-                                    alt="username"
-                                    src={
-                                        person?.ProfileImage ?? defaultUserImage
-                                    }
-                                />
-                                <div className="overflow-hidden">
-                                    <GroupUserFullName title={person.FullName}>
-                                        {person.FullName}
-                                    </GroupUserFullName>
-                                    <div className="flex flex-row gap-1 items-center">
-                                        <StyledBadge online={false} />
-                                        <p className="text-xs text-[var(--gray-600)]">
-                                            offline
-                                        </p>
-                                    </div>
+                            </div>
+                        </UserContainer>
+                    ))}
+                    <h1 className="mt-8 font-bold">
+                        OFFLINE USERS ({offlineUsers.length ?? 0})
+                    </h1>
+                    {offlineUsers.map((person) => (
+                        <UserContainer
+                            key={person.ID}
+                            onClick={() => {
+                                navigate(profileURL(person.Username));
+                            }}
+                        >
+                            <EnhancedImage
+                                className="!w-[48px] !h-[48px] rounded-full object-cover aspect-square"
+                                alt="username"
+                                src={person?.ProfileImage ?? defaultUserImage}
+                            />
+                            <div className="overflow-hidden">
+                                <GroupUserFullName title={person.FullName}>
+                                    {person.FullName}
+                                </GroupUserFullName>
+                                <div className="flex flex-row gap-1 items-center">
+                                    <StyledBadge online={false} />
+                                    <p className="text-xs text-[var(--gray-600)]">
+                                        offline
+                                    </p>
                                 </div>
-                            </UserContainer>
-                        ))}
-                    </UsersContainer>
-                </RightPart>
-            </div>
+                            </div>
+                        </UserContainer>
+                    ))}
+                </UsersContainer>
+            </RightPart>
         </PageContainer>
     );
 };

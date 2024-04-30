@@ -59,8 +59,7 @@ export const CSSTextLinesCountLimit = css<{ width?: string; lines?: number }>`
     display: -webkit-box;
     -webkit-box-orient: ${({ lines }) => (lines ? 'vertical' : 'horizontal')};
     width: ${({ width }) => width || '100%'};
-    line-clamp: ${({ lines }) => lines || 'none'};
-    -webkit-line-clamp: ${({ lines }) => lines || 'none'};
+    -webkit-line-clamp: ${({ lines }) => lines || 1000};
 `;
 
 export const BetweenPageAnimation = {

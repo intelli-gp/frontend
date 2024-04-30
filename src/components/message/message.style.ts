@@ -1,5 +1,6 @@
+import { IoCloseOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
 import EnhancedImage from '../image/image.component';
@@ -7,15 +8,14 @@ import EnhancedImage from '../image/image.component';
 export const Message = styled.div<{
     isMine: boolean;
     hasReactions: boolean;
-    showReactions: boolean;
 }>`
     display: flex;
     align-self: ${({ isMine }) => (isMine ? 'flex-end' : 'flex-start')};
     background-color: ${({ isMine }) =>
-        isMine ? 'var(--indigo-800)' : 'var(--gray-300)'};
+        isMine ? 'var(--indigo-800)' : 'var(--gray-200)'};
     padding: 1rem;
-    padding-bottom: ${({ hasReactions, showReactions }) =>
-        hasReactions && showReactions ? '0.75rem' : '0.5rem'};
+    padding-bottom: ${({ hasReactions }) =>
+        hasReactions ? '0.75rem' : '0.5rem'};
     border-radius: ${({ isMine }) =>
         isMine ? '16px 16px 0px 16px' : '16px 16px 16px 0px'};
     display: flex;
@@ -24,8 +24,7 @@ export const Message = styled.div<{
     min-width: 20%;
     gap: 0.5rem;
     position: relative;
-    margin-bottom: ${({ hasReactions, showReactions }) =>
-        hasReactions && showReactions ? '1rem' : '0'};
+    margin-bottom: ${({ hasReactions }) => (hasReactions ? '1rem' : '0')};
     .options-button {
         transition: opacity 0.2s ease-in-out;
         opacity: 0;
@@ -67,14 +66,14 @@ export const MessageContent = styled.main<{
     width?: string;
     lines?: number;
 }>`
+    ${CSSTextLinesCountLimit}
     margin-top: 0rem;
     color: ${({ isMine }) => (isMine ? 'white' : ' var(--gray-800)')};
     opacity: ${({ isDeleted }) => (isDeleted ? 0.5 : 1)};
-    word-break: break-all;
+    word-break: break-word;
     display: flex;
     gap: 0.25rem;
     align-items: center;
-    ${CSSTextLinesCountLimit}
 `;
 
 export const MessageReactions = styled.div<{ isMine?: boolean }>`
@@ -123,7 +122,7 @@ export const OptionsButton = styled.button<{ isMine?: boolean }>`
     color: ${({ isMine }) => (isMine ? 'white' : 'inherit')};
     padding: 0.5rem;
     background-color: ${({ isMine }) =>
-        isMine ? 'var(--indigo-800)' : 'var(--gray-300)'};
+        isMine ? 'var(--indigo-800)' : 'var(--gray-200)'};
     border-radius: 50%;
 `;
 
@@ -148,4 +147,52 @@ export const MessageInfoSectionLabel = styled.label`
     border-bottom: 1px solid var(--gray-300);
     padding-bottom: 0.25rem;
     margin-bottom: 0.75rem;
+`;
+
+export const ReplyToMessageContainer = styled.div<{ passive?: boolean }>`
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    padding-right: 1rem;
+    border-radius: 0.75rem;
+    background-color: var(--indigo-100);
+    border-left: 5px solid var(--indigo-700);
+    border-right: 5px solid var(--indigo-700);
+    color: black;
+    width: 100%;
+    ${({ passive }) => {
+        if (passive) {
+            return css`
+                border: none;
+                padding: 0.75rem;
+            `;
+        }
+    }}
+`;
+
+export const ReplyToMessageMain = styled.main`
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    overflow: hidden;
+    width: 95%;
+`;
+
+export const ReplyToMessageSenderName = styled(SenderName)`
+    font-size: 1rem;
+    color: var(--indigo-800);
+`;
+
+export const ReplyToMessageCloseButton = styled(IoCloseOutline)`
+    width: 24px;
+    height: 24px;
+    padding: 0.25rem;
+    box-sizing: content-box;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: auto;
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
 `;
