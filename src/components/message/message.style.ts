@@ -1,15 +1,21 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
 import EnhancedImage from '../image/image.component';
 
-export const Message = styled.div<{ isMine: boolean }>`
+export const Message = styled.div<{
+    isMine: boolean;
+    hasReactions: boolean;
+    showReactions: boolean;
+}>`
     display: flex;
     align-self: ${({ isMine }) => (isMine ? 'flex-end' : 'flex-start')};
     background-color: ${({ isMine }) =>
-        isMine ? 'var(--indigo-700)' : 'var(--gray-200)'};
+        isMine ? 'var(--indigo-800)' : 'var(--gray-300)'};
     padding: 1rem;
-    padding-bottom: 0.5rem;
+    padding-bottom: ${({ hasReactions, showReactions }) =>
+        hasReactions && showReactions ? '0.75rem' : '0.5rem'};
     border-radius: ${({ isMine }) =>
         isMine ? '16px 16px 0px 16px' : '16px 16px 16px 0px'};
     display: flex;
@@ -18,7 +24,8 @@ export const Message = styled.div<{ isMine: boolean }>`
     min-width: 20%;
     gap: 0.5rem;
     position: relative;
-
+    margin-bottom: ${({ hasReactions, showReactions }) =>
+        hasReactions && showReactions ? '1rem' : '0'};
     .options-button {
         transition: opacity 0.2s ease-in-out;
         opacity: 0;
@@ -43,12 +50,15 @@ export const SenderProfile = styled(EnhancedImage)`
     aspect-ratio: 1/1;
 `;
 
-export const SenderName = styled.h2<{ isMine?: boolean; width?: string }>`
+export const SenderName = styled(Link)<{ isMine?: boolean; width?: string }>`
     color: var(--gray-700);
     display: ${({ isMine }) => (isMine ? 'none' : '')};
     font-weight: 700;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     ${CSSTextLengthLimit}
+    &:hover {
+        text-decoration: underline;
+    }
 `;
 
 export const MessageContent = styled.main<{
@@ -58,7 +68,6 @@ export const MessageContent = styled.main<{
     lines?: number;
 }>`
     margin-top: 0rem;
-    font-size: 0.85rem;
     color: ${({ isMine }) => (isMine ? 'white' : ' var(--gray-800)')};
     opacity: ${({ isDeleted }) => (isDeleted ? 0.5 : 1)};
     word-break: break-all;
@@ -68,6 +77,38 @@ export const MessageContent = styled.main<{
     ${CSSTextLinesCountLimit}
 `;
 
+export const MessageReactions = styled.div<{ isMine?: boolean }>`
+    position: absolute;
+    bottom: 0;
+    left: ${({ isMine }) => (isMine ? 'auto' : '0.25rem')};
+    right: ${({ isMine }) => (isMine ? '0.25rem' : 'auto')};
+    background-color: white;
+    padding: 0.1rem 0.5rem 0.1rem 0.25rem;
+    border-radius: 1rem;
+    transform: translateY(50%);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 8px 0px;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    line-height: 1.25;
+    transition: scale 0.25s ease-in-out;
+    &:hover {
+        scale: 1.025;
+    }
+`;
+
+export const EmojisContainer = styled.span`
+    display: flex;
+    letter-spacing: -2px;
+`;
+
+export const EmojisCounter = styled.span`
+    font-size: 0.875rem;
+    margin-left: 0.25rem;
+    font-family: 'jetbrains mono', monospace;
+`;
 
 export const MessageDate = styled.p<{ isMine: boolean }>`
     display: flex;
@@ -78,9 +119,12 @@ export const MessageDate = styled.p<{ isMine: boolean }>`
     user-select: none;
 `;
 
-export const OptionsButton = styled.button`
-    color: white;
+export const OptionsButton = styled.button<{ isMine?: boolean }>`
+    color: ${({ isMine }) => (isMine ? 'white' : 'inherit')};
     padding: 0.5rem;
+    background-color: ${({ isMine }) =>
+        isMine ? 'var(--indigo-800)' : 'var(--gray-300)'};
+    border-radius: 50%;
 `;
 
 export const MessageInfoModalContainer = styled.div`

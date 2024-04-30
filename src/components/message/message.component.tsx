@@ -1,4 +1,5 @@
-import { ChangeEvent, useState } from 'react';
+import EmojiPicker, { EmojiClickData, EmojiStyle } from 'emoji-picker-react';
+import { ChangeEvent, useMemo, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { MdDoNotDisturb } from 'react-icons/md';
 import { useSelector } from 'react-redux';
@@ -8,15 +9,19 @@ import { RootState } from '../../store';
 import {
     useDeleteMessageMutation,
     useLazyGetMessageInfoQuery,
+    useReactToMessageMutation,
     useUpdateMessageMutation,
 } from '../../store/apis/messagesApi';
 import { MessageInfo, SerializedMessage } from '../../types/message';
+import { profileURL } from '../../utils/profileUrlBuilder';
 import Button from '../button/button.component';
 import { CustomInput } from '../input/Input.component';
 import DropdownMenu from '../menu/menu.component';
 import { Modal } from '../modal/modal.component';
 import UserItem from '../user-Item/user-item.component';
 import {
+    EmojisContainer,
+    EmojisCounter,
     Message,
     MessageContent,
     MessageDate,
@@ -25,6 +30,7 @@ import {
     MessageInfoReadContainer,
     MessageInfoSectionLabel,
     MessageInfoUsersList,
+    MessageReactions,
     OptionsButton,
     SenderName,
     SenderProfile,
@@ -41,24 +47,35 @@ type ChatMessageProps = {
      * className for the message container.
      */
     className?: string;
+
+    /**
+     * Show reactions to the message.
+     */
+    showReactions?: boolean;
 };
 
 const ChatMessage = ({
     message,
     enableOptions = true,
     className,
+    showReactions = true,
 }: ChatMessageProps) => {
     const { user } = useSelector((state: RootState) => state.auth);
 
     const isMine = message.User.ID === user.ID; // Does this message belongs to me.
+    const hasReactions = !!message.Reactions?.length;
+
     const [editMessageIsOpen, setEditMessageIsOpen] = useState(false);
     const [deleteMessageIsOpen, setDeleteMessageIsOpen] = useState(false);
     const [messageInfoIsOpen, setMessageInfoIsOpen] = useState(false);
+    const [reactMessageIsOpen, setReactMessageIsOpen] = useState(false);
+    const [viewReactionsIsOpen, setViewReactionsIsOpen] = useState(false);
     const [editMessageText, setEditMessageText] = useState(message.Content);
     const [updateMessage] = useUpdateMessageMutation();
     const [deleteMessage] = useDeleteMessageMutation();
     const [getMessageInfo, { data: messageInfo }] =
         useLazyGetMessageInfoQuery();
+    const [reactToMessage] = useReactToMessageMutation();
 
     const handleUpdateMessage = async () => {
         try {
@@ -95,22 +112,59 @@ const ChatMessage = ({
         getMessageInfo(message.MessageID).unsubscribe();
     };
 
-    let messageOptions = [
-        { option: 'Edit', handler: () => setEditMessageIsOpen(true) },
-        { option: 'Delete', handler: () => setDeleteMessageIsOpen(true) },
-        { option: 'Info', handler: handleGetMessageInfo },
-    ];
+    const handleReactToMessage = async (emoji: EmojiClickData) => {
+        try {
+            await reactToMessage({
+                MessageID: message.MessageID,
+                Reaction: emoji.emoji,
+            }).unwrap();
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setReactMessageIsOpen(false);
+        }
+    };
+
+    const getMessageOptions = () => {
+        let options = [
+            { option: 'React', handler: () => setReactMessageIsOpen(true) },
+        ];
+        if (isMine) {
+            options.push(
+                { option: 'Edit', handler: () => setEditMessageIsOpen(true) },
+                {
+                    option: 'Delete',
+                    handler: () => setDeleteMessageIsOpen(true),
+                },
+                { option: 'Info', handler: handleGetMessageInfo },
+            );
+        }
+        return options;
+    };
+
+    const messageReactions = useMemo(() => {
+        if (!message?.Reactions) return;
+        let reactions = new Set<string>();
+        message.Reactions.forEach((reaction) => {
+            reactions.add(reaction.Reaction);
+        });
+        return {
+            reactions: Array.from(reactions).join(''),
+            count: message.Reactions.length,
+        };
+    }, [message]);
 
     const UpdateMessageModal = (
         <Modal
             isOpen={editMessageIsOpen}
             setIsOpen={setEditMessageIsOpen}
-            title={`Edit message (${message.MessageID})`}
+            title={`Edit message`}
         >
             <ChatMessage
                 message={message}
                 enableOptions={false}
                 className="!max-w-full w-full"
+                showReactions={false}
             />
             <CustomInput
                 value={editMessageText}
@@ -160,15 +214,17 @@ const ChatMessage = ({
 
     const MessageInfoModal = (
         <Modal
+            width="sm"
             isOpen={messageInfoIsOpen}
             setIsOpen={setMessageInfoIsOpen}
             cleanupFn={messageInfoModalCleanup}
-            title={`Message Info ${message.MessageID}`}
+            title={`Message Info`}
         >
             <ChatMessage
                 message={message}
                 enableOptions={false}
                 className="!max-w-full w-full mb-4"
+                showReactions={false}
             />
 
             <MessageInfoModalContainer>
@@ -194,11 +250,68 @@ const ChatMessage = ({
         </Modal>
     );
 
+    const ReactToMessageModal = (
+        <Modal
+            isOpen={reactMessageIsOpen}
+            setIsOpen={setReactMessageIsOpen}
+            title={`React to message`}
+        >
+            <EmojiPicker
+                onEmojiClick={handleReactToMessage}
+                width="100%"
+                lazyLoadEmojis={true}
+                emojiStyle={EmojiStyle.FACEBOOK}
+                reactionsDefaultOpen={true}
+                skinTonesDisabled={true}
+            />
+        </Modal>
+    );
+
+    const ViewReactionsModal = (
+        <Modal
+            width="sm"
+            isOpen={viewReactionsIsOpen}
+            setIsOpen={setViewReactionsIsOpen}
+            title={`Reactions on message`}
+        >
+            <ChatMessage
+                message={message}
+                enableOptions={false}
+                className="!max-w-full w-full"
+                showReactions={false}
+            />
+            <MessageInfoReadContainer>
+                <MessageInfoSectionLabel>
+                    ({messageReactions?.count ?? 0}) Reactions by
+                </MessageInfoSectionLabel>
+                <MessageInfoUsersList>
+                    {message.Reactions?.map((reaction) => (
+                        <li key={reaction.User.ID}>
+                            <UserItem
+                                FullName={reaction.User.FullName}
+                                Username={reaction.User.Username}
+                                ProfileImage={reaction.User.ProfileImage}
+                                emoji={reaction.Reaction}
+                            />
+                        </li>
+                    ))}
+                </MessageInfoUsersList>
+            </MessageInfoReadContainer>
+        </Modal>
+    );
+
     return (
-        <Message isMine={isMine} className={className || ''}>
+        <Message
+            isMine={isMine}
+            className={className || ''}
+            hasReactions={hasReactions}
+            showReactions={showReactions}
+        >
             {UpdateMessageModal}
             {DeleteMessageModal}
             {MessageInfoModal}
+            {ReactToMessageModal}
+            {ViewReactionsModal}
 
             <MessageHeader isMine={isMine}>
                 <SenderProfile
@@ -206,7 +319,8 @@ const ChatMessage = ({
                     src={message.User.ProfileImage ?? defaultUserImage}
                 />
                 <SenderName
-                    title={message.User.FullName}
+                    to={profileURL(message.User.Username)}
+                    title={`view ${message.User.FullName}'s profile`}
                     isMine={isMine}
                     width={'90%'}
                 >
@@ -214,16 +328,17 @@ const ChatMessage = ({
                 </SenderName>
             </MessageHeader>
 
-            {isMine && enableOptions && !message.IsDeleted && (
+            {enableOptions && !message.IsDeleted && (
                 <DropdownMenu
-                    options={messageOptions}
+                    options={getMessageOptions()}
                     mainElementClassName={`!absolute top-0 right-0`}
-                    right="100%"
-                    top="10%"
-                    left="auto"
+                    right={`${isMine ? '50%' : 'auto'}`}
+                    top="65%"
+                    left={`${isMine ? 'auto%' : '50%'}`}
                     menuWidth="8rem"
                 >
                     <OptionsButton
+                        isMine={isMine}
                         title={'Options'}
                         className={'options-button'}
                     >
@@ -244,6 +359,21 @@ const ChatMessage = ({
             <MessageDate isMine={isMine}>
                 {new Date(message.CreatedAt ?? Date.now()).toLocaleString()}
             </MessageDate>
+
+            {showReactions && hasReactions && (
+                <MessageReactions
+                    isMine={isMine}
+                    title="View who reacted."
+                    onClick={() => setViewReactionsIsOpen(true)}
+                >
+                    <EmojisContainer>
+                        {messageReactions?.reactions}
+                    </EmojisContainer>
+                    {(messageReactions?.count ?? 0 > 1) && (
+                        <EmojisCounter>{messageReactions?.count}</EmojisCounter>
+                    )}
+                </MessageReactions>
+            )}
         </Message>
     );
 };
