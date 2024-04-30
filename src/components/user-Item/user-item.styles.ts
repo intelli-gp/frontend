@@ -20,6 +20,9 @@ export const UserFullName = styled(Link)<{ width?: string }>`
     color: inherit;
     display: block;
     ${CSSTextLengthLimit}
+    &:hover {
+        text-decoration: underline;
+    }
 `;
 
 export const UserUserName = styled.p<{ width?: string }>`
@@ -39,6 +42,11 @@ export const UserItemImage = styled(EnhancedImage)`
 export const ActionButton = styled(Button)`
     font-size: 0.8rem;
     padding: 0.25rem 0.5rem;
+    margin-left: auto;
+`;
+
+export const Emoji = styled.span`
+    font-size: 1.5rem;
     margin-left: auto;
 `;
 
