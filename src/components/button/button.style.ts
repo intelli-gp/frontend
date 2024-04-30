@@ -73,11 +73,10 @@ export const ButtonContainer = styled.button<ButtonProps>`
                     `;
                 case 'danger':
                     return css`
-                        border: 2px solid #f56565;
-                        color: #f56565;
+                        border: 2px solid red;
+                        color: red;
                         &:hover {
-                            background-color: #f56565;
-                            color: white;
+                            background-color: rgba(255, 0, 0, 0.1);
                         }
                     `;
                 default:
