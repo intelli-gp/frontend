@@ -8,6 +8,7 @@ import EnhancedImage from '../image/image.component';
 export const Message = styled.div<{
     isMine: boolean;
     hasReactions: boolean;
+    isReply?: boolean;
 }>`
     display: flex;
     align-self: ${({ isMine }) => (isMine ? 'flex-end' : 'flex-start')};
@@ -22,7 +23,7 @@ export const Message = styled.div<{
     flex-direction: column;
     max-width: 70%;
     min-width: 20%;
-    gap: 0.5rem;
+    gap: ${({ isReply }) => (isReply ? '0.75rem' : '0.5rem')};
     position: relative;
     margin-bottom: ${({ hasReactions }) => (hasReactions ? '1rem' : '0')};
     .options-button {
@@ -147,39 +148,81 @@ export const MessageInfoSectionLabel = styled.label`
     margin-bottom: 0.75rem;
 `;
 
-export const ReplyToMessageContainer = styled.div<{ passive?: boolean }>`
+export const ReplyToMessageContainer = styled.div<{
+    replyByMe?: boolean;
+    passive?: boolean;
+}>`
     display: flex;
     align-items: center;
     gap: 1rem;
     padding: 1rem 1.5rem;
     padding-right: 1rem;
-    border-radius: 0.75rem;
-    background-color: var(--indigo-200);
+    border-radius: 0.35rem;
+    background-color: var(--indigo-100);
     border-left: 5px solid var(--indigo-700);
     border-right: 5px solid var(--indigo-700);
-    color: black;
     width: 100%;
-    ${({ passive }) => {
+
+    ${({ passive, replyByMe }) => {
+        let style = css``;
         if (passive) {
-            return css`
-                border: none;
-                padding: 0.5rem 0.75rem;
+            style = css`
+                border-right: none;
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
             `;
         }
+        if (passive && replyByMe) {
+            style = css`
+                ${style}
+                color: rgba(255, 255, 255, 0.85);
+                background-color: rgba(255, 255, 255, 0.1);
+                border-color: white;
+            `;
+        } else if (passive && !replyByMe) {
+            style = css`
+                ${style}
+                background-color: rgba(0, 0, 0, 0.1);
+                border-color: black;
+                color:  rgba(0, 0, 0, 0.85);
+            `;
+        } else {
+            style = css`
+                ${style}
+            `;
+        }
+        return style;
     }}
 `;
 
 export const ReplyToMessageMain = styled.main`
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.125rem;
     overflow: hidden;
     width: 95%;
 `;
 
-export const ReplyToMessageSenderName = styled(SenderName)`
-    font-size: 1rem;
-    color: var(--indigo-800);
+export const ReplyToMessageSenderName = styled(SenderName)<{
+    passive?: boolean;
+    replyByMe?: boolean;
+}>`
+    ${({ passive, replyByMe }) => {
+        if (passive && replyByMe) {
+            return css`
+                color: white;
+            `;
+        } else if (passive && !replyByMe) {
+            return css`
+                color: black;
+            `;
+        } else {
+            return css`
+                font-size: 1rem;
+                color: var(--indigo-900);
+            `;
+        }
+    }}
 `;
 
 export const ReplyToMessageCloseButton = styled(IoCloseOutline)`
@@ -197,5 +240,5 @@ export const ReplyToMessageCloseButton = styled(IoCloseOutline)`
 
 export const ReplyToMessageContent = styled(MessageContent)`
     ${CSSTextLinesCountLimit}
-    color: black;
+    color: inherit;
 `;

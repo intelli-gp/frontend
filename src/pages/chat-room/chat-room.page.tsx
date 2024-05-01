@@ -271,13 +271,11 @@ export const ChatroomPage = () => {
                         </div>
 
                         <MessageInput
-                            className="bg-[var(--gray-50)] !border-none focus-visible:!outline-none resize-none"
+                            className="bg-[var(--gray-100)] !border-none focus-visible:!outline-none resize-none"
                             placeholder="Type a message..."
                             value={messageInput}
                             onChange={handleInputChange}
                             onKeyPress={handlePressingEnter}
-                            multiline
-                            rows={2}
                         />
 
                         <SendIcon
@@ -305,12 +303,10 @@ export const ChatroomPage = () => {
                                 alt="username"
                                 src={person?.ProfileImage ?? defaultUserImage}
                             />
-                            <div className="overflow-hidden">
+                            <div className="overflow-hidden flex flex-col">
                                 <GroupUserFullName
+                                    to={profileURL(person.Username)}
                                     title={person.FullName}
-                                    onClick={() => {
-                                        navigate(profileURL(person.Username));
-                                    }}
                                 >
                                     {person.FullName}
                                 </GroupUserFullName>
@@ -339,7 +335,10 @@ export const ChatroomPage = () => {
                                 src={person?.ProfileImage ?? defaultUserImage}
                             />
                             <div className="overflow-hidden">
-                                <GroupUserFullName title={person.FullName}>
+                                <GroupUserFullName
+                                    title={person.FullName}
+                                    to={profileURL(person.Username)}
+                                >
                                     {person.FullName}
                                 </GroupUserFullName>
                                 <div className="flex flex-row gap-1 items-center">

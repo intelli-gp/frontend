@@ -319,6 +319,7 @@ const ChatMessage = ({
             isMine={isMine}
             className={className || ''}
             hasReactions={hasReactions && showReactions && !message.IsDeleted}
+            isReply={isReply}
         >
             {UpdateMessageModal}
             {DeleteMessageModal}
@@ -365,6 +366,7 @@ const ChatMessage = ({
                     User={message.RepliedToMessage?.User}
                     Content={message.RepliedToMessage?.Content}
                     passive={true}
+                    replyByMe={isMine}
                 />
             )}
 
@@ -401,14 +403,21 @@ const ChatMessage = ({
 
 type ReplyMessageProps = Partial<SerializedMessage> & {
     /**
-     * a function triggered when the close button is clicked.
+     * A function triggered when the close button is clicked.
      */
     closeButtonHandler?: () => void;
     /**
-     * can not interact with the message `shown inside the reply message`
+     * Can not interact with the message `shown inside the reply message`
      * @default false
      */
     passive?: boolean;
+    /**
+     * If the reply message is by the current user.
+     * The message which is a reply to this message by the current user.
+     * I am the one who replied to this message.
+     * @default false
+     */
+    replyByMe?: boolean;
 };
 
 export const ReplyMessage = ({
@@ -416,13 +425,20 @@ export const ReplyMessage = ({
     Content,
     passive = false,
     closeButtonHandler,
+    replyByMe = false,
 }: ReplyMessageProps) => {
     let storedUser = useSelector((state: RootState) => state.auth.user);
+    let isMine = User?.ID === storedUser.ID;
+
     return (
-        <ReplyToMessageContainer passive={passive}>
+        <ReplyToMessageContainer passive={passive} replyByMe={replyByMe}>
             <ReplyToMessageMain>
-                <ReplyToMessageSenderName to={profileURL(User?.Username ?? '')}>
-                    {storedUser.ID === User?.ID ? 'You' : User?.FullName}
+                <ReplyToMessageSenderName
+                    to={profileURL(User?.Username ?? '')}
+                    passive={passive}
+                    replyByMe={replyByMe}
+                >
+                    {isMine ? 'You' : User?.FullName}
                 </ReplyToMessageSenderName>
                 <ReplyToMessageContent dir={'auto'} lines={2}>
                     {Content}

@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { IoSend } from 'react-icons/io5';
 import { LuPaperclip } from 'react-icons/lu';
 import { RiEmotionLine } from 'react-icons/ri';
+import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 import EnhancedImage from '../../components/image/image.component';
@@ -101,7 +102,7 @@ export const FooterInputArea = styled.div`
     justify-content: center;
     gap: 0.5rem;
     width: 100%;
-`
+`;
 
 export const MessageInput = styled.div`
     background-color: var(--gray-100);
@@ -179,7 +180,7 @@ export const UserContainer = styled.div`
     border-radius: 1rem;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
     padding: 0.5rem;
     padding-right: 1rem;
     img {
@@ -196,9 +197,15 @@ export const UserContainer = styled.div`
     }
 `;
 
-export const GroupUserFullName = styled.h2<{ width?: string }>`
-    font-size: 0.8rem;
+export const GroupUserFullName = styled(Link)<{ width?: string }>`
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: inherit;
     ${CSSTextLengthLimit}
+
+    &:hover {
+        text-decoration: underline;
+}
 `;
 
 export const StyledBadge = styled.span<{ online: boolean }>`
