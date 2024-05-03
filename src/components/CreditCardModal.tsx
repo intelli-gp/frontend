@@ -1,10 +1,13 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useCreditCardValidator } from 'react-creditcard-validator';
 
 import Button from './button/button.component';
 import { CustomInput } from './input/Input.component';
 import { Input, Label } from './input/input.styles';
 import { Modal } from './modal/modal.component';
+import { useAddPaymentMethodsMutation } from '../store/apis/paymentMethodsApi';
+import { PaymentMethod } from '../types/payment-method';
+import { errorToast, successToast } from '../utils/toasts';
 
 interface ModalProps {
     showModal: boolean;
@@ -16,7 +19,7 @@ const CreditCardModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
     const [creditCardNumber, setCreditCardNumber] = useState('');
     const [expiryDate, setExpiryDate] = useState('');
     const [CVV, setCVV] = useState('');
-
+    const [flag, setFlag] = useState(false);
     function expDateValidate(month: string, year: string) {
         console.log(month);
         if (Number(year) > 2035) {
@@ -24,14 +27,55 @@ const CreditCardModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
         }
         return;
     }
-
     const {
         getCardNumberProps,
         getCVCProps,
         getExpiryDateProps,
         meta: { erroredInputs },
     } = useCreditCardValidator({ expiryDateValidator: expDateValidate });
-
+    const [
+        createPaymentMethod,
+        {
+            isSuccess: isPaymentMethodCreatedSuccessfully,
+            isError: isPaymentMethodCreateError,
+            isLoading: isPaymentMethodCreating,
+            error: paymentMethodCreateError,
+        },
+    ] = useAddPaymentMethodsMutation();
+    useEffect(() => {
+        if (isPaymentMethodCreateError) {
+            errorToast('Error creating the card!', paymentMethodCreateError as string);
+        }
+        if (isPaymentMethodCreatedSuccessfully) {
+            successToast('Card created successfully!');
+        }
+    }, [isPaymentMethodCreatedSuccessfully, isPaymentMethodCreateError]);
+    useEffect(() => {
+        const allUndefined = Object.values(erroredInputs).every(value => value === undefined);
+        if (allUndefined) {
+            setFlag(false);
+        } else {
+            setFlag(true);
+        }
+    }, [erroredInputs]);
+    const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+       if(flag){
+        errorToast('Error creating the card!');
+        return;
+       }
+      ;
+       let [month, year] = expiryDate.split("/");
+       let formattedDate = (new Date(parseInt("20" + year), parseInt(month) - 1)).toISOString().slice(0,10) + "T00:00";
+        const paymentMethod: Partial<PaymentMethod> = {
+            holderName: holderName,
+            cardNumber: creditCardNumber,
+            cardId: CVV,
+            expiryDate: formattedDate
+        }
+        await createPaymentMethod(paymentMethod as PaymentMethod).unwrap();
+        setShowModal(false);
+    }
     const handleCardDisplay = () => {
         const rawText = [...creditCardNumber.split(' ').join('')];
         const creditCard: string[] = [];
@@ -57,7 +101,7 @@ const CreditCardModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
             title={'Add Payment Method'}
             width="md"
         >
-            <form className="flex flex-col gap-4 p-2 py-2">
+            <form className="flex flex-col gap-4 p-2 py-2" onSubmit={handleSubmitForm}>
                 <CustomInput
                     label={'Card Holder Name'}
                     placeholder={'Card holder name'}
@@ -107,7 +151,12 @@ const CreditCardModal: React.FC<ModalProps> = ({ showModal, setShowModal }) => {
                     </div>
                 </div>
                 <div className="flex flex-row justify-end gap-4 mt-4">
-                    <Button type="submit" className="w-[28%]">
+                    <Button
+                        type="submit"
+                        className="w-[28%]"
+                        loading={isPaymentMethodCreating}
+
+                    >
                         Add Card
                     </Button>
                     <Button
