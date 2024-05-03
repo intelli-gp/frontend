@@ -40,6 +40,7 @@ import {
     ChatBody,
     ChatFooter,
     ChatHeader,
+    DeleteImg,
     GroupImage,
     GroupName,
     GroupTypingStatus,
@@ -49,9 +50,12 @@ import {
     PageContainer,
     RightPart,
     StyledBadge,
+    UploadImageContainer,
     UserContainer,
     UsersContainer,
 } from './chat-room.style';
+
+
 
 export const ChatroomPage = () => {
     const { id: groupId } = useParams();
@@ -83,6 +87,7 @@ export const ChatroomPage = () => {
 
     const [messageInput, setMessageInput] = useState('');
     const [showPicker, setShowPicker] = useState(false);
+    const [showUpload, setShowUpload] = useState(false);
     const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout>();
     const [usersListOpen, setUsersListOpen] = useState(false);
 
@@ -99,6 +104,29 @@ export const ChatroomPage = () => {
             Content: messageInput,
             GroupID: +groupId!,
         }).unwrap();
+    };
+    const [images, setImages] = useState<string[]>([]);
+
+    const fileInput = useRef<HTMLInputElement>(null);
+
+    const openFileInput = () => {
+        fileInput.current?.click();
+    };
+
+    const handleImageSelection = (e: ChangeEvent<HTMLInputElement>) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            setImages((prevImages) => [...prevImages, reader.result as string]);
+        };
+        reader.readAsDataURL(e.target.files![0]);
+    };
+
+    const deleteImage = (index: number) => {
+        setImages((prevImages) => {
+            const updatedImages = [...prevImages];
+            updatedImages.splice(index, 1);
+            return updatedImages;
+        });
     };
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -147,6 +175,7 @@ export const ChatroomPage = () => {
             top: chatBodyRef?.current?.scrollHeight,
             behavior: 'instant',
         });
+        console.log(messages);
     }, [_messages]);
 
     useEffect(() => {
@@ -184,11 +213,10 @@ export const ChatroomPage = () => {
                                         <span className="font-bold">
                                             {typingUsers?.join(' ,')}
                                         </span>
-                                        {` ${
-                                            typingUsers.length === 1
-                                                ? 'is'
-                                                : 'are'
-                                        }  `}
+                                        {` ${typingUsers.length === 1
+                                            ? 'is'
+                                            : 'are'
+                                            }  `}
                                         typing...
                                     </div>
                                 ) : (
@@ -239,24 +267,43 @@ export const ChatroomPage = () => {
                                 <Picker onEmojiClick={onEmojiClick} />
                             </div>
                         )}
-                        <div className="flex gap-0">
+                        <div className="flex gap-0 ">
                             <MdOutlineEmojiEmotions
                                 className="fill-[var(--indigo-800)] cursor-pointer box-content p-2 rounded-full hover:bg-indigo-100"
                                 size={20}
                                 onClick={() => setShowPicker(!showPicker)}
                             />
-                            <LuPaperclip
-                                color="var(--indigo-800)"
-                                className="cursor-pointer box-content p-2 rounded-full hover:bg-indigo-100"
-                                size={20}
-                            />
+                            <div onClick={openFileInput}>
+                                <input
+                                    type="file"
+                                    ref={fileInput}
+                                    onChange={handleImageSelection}
+                                    hidden
+                                />
+                                <LuPaperclip
+                                    color="var(--indigo-800)"
+                                    className="cursor-pointer box-content p-2 rounded-full hover:bg-indigo-100"
+                                    size={20}
+                                    onClick={() => setShowUpload(!showUpload)}
+
+                                />
+                            </div>
                         </div>
                         <form
-                            className="flex gap-2 flex-1"
+                            className="flex flex-col flex-1 max-h-[135px] p-[2px] bg-[var(--gray-100)] !border-none focus-visible:!outline-none rounded-md"
                             onSubmit={handleSendMessage}
                         >
+                            <div className='flex gap-2 justify-start items-center'>
+                                {images &&
+                                    images.map((image, index) => (
+                                        <div className='relative p-2 ' key={index}>
+                                            <DeleteImg onClick={() => deleteImage(index)}/>
+                                            <UploadImageContainer src={image} />
+                                        </div>))
+                                }
+                            </div>
                             <CustomInput
-                                className="bg-[var(--gray-100)] !border-none focus-visible:!outline-none"
+                                className="bg-[var(--gray-100)] !border-none focus-visible:!outline-none "
                                 placeholder="Type a message..."
                                 value={messageInput}
                                 onChange={handleInputChange}
