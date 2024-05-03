@@ -67,6 +67,24 @@ export const AddCardContainer = styled(Button)`
     width: 25%;
     gap: 8px;
     padding: 0.7rem 0.5rem;
+    @media (max-width: 1200px) {
+        font-size: 0.85rem;
+    }
+
+`;
+export const PlanButton = styled(Button)`
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 8px;
+    padding: 0.7rem 0.5rem;
+    @media (max-width: 1200px) {
+        font-size: 0.85rem;
+    }
+
 `;
 export const PayTime = styled.div`
     height: 12px;
