@@ -104,9 +104,7 @@ const CardInfo = ({ Number, Expire, ID }: CardInfoProps) => {
     useEffect(() => {
         setCardType(cardNumberValidator?.card?.niceType as CardType);
     }, [cardNumberValidator]);
-    const maskedNumber = `${'*'.repeat(Number.length - 4)}${Number.slice(-4)}`
-        .replace(/(.{4})/g, '$1  ')
-        .slice(-14);
+    const maskedNumber = `**** ${Number.slice(-4)}`;
 
     const CreditOptions = [
         {
@@ -119,12 +117,6 @@ const CardInfo = ({ Number, Expire, ID }: CardInfoProps) => {
             option: 'Remove',
             handler: () => {
                 setDeleteModal(true);
-            },
-        },
-        {
-            option: 'Edit',
-            handler: () => {
-                console.log('Edit');
             },
         },
     ];
