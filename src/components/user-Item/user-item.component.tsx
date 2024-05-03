@@ -5,6 +5,7 @@ import { ReceivedUser } from '../../types/user';
 import { profileURL } from '../../utils/profileUrlBuilder';
 import {
     ActionButton,
+    Emoji,
     TimeInfo,
     UserFullName,
     UserItemContainer,
@@ -27,6 +28,11 @@ type UserItemProps = {
      * pass the actual time string to be showed
      */
     timeInfo?: string;
+
+    /**
+     * Emoji to be displayed `instead of action button`
+     */
+    emoji?: string;
 } & Partial<ReceivedUser>;
 
 const UserItem = ({
@@ -35,22 +41,28 @@ const UserItem = ({
     ProfileImage,
     timeInfo,
     action,
+    emoji,
     actionHandler,
 }: UserItemProps) => {
     return (
         <UserItemContainer>
             <UserItemImage src={ProfileImage!} alt="user profile image" />
             <div className="overflow-hidden">
-                <UserFullName to={profileURL(Username!)} title={FullName}>
-                    {FullName}
-                </UserFullName>
-                <UserUserName>@{Username}</UserUserName>
+                {FullName && (
+                    <UserFullName to={profileURL(Username!)} title={FullName}>
+                        {FullName}
+                    </UserFullName>
+                )}
+                {Username && (
+                    <UserUserName title={Username}>@{Username}</UserUserName>
+                )}
             </div>
             {action && (
                 <ActionButton onClick={actionHandler}>
                     {capitalize(action)}
                 </ActionButton>
             )}
+            {emoji && <Emoji>{emoji}</Emoji>}
             {timeInfo && <TimeInfo>{moment(timeInfo).fromNow()}</TimeInfo>}
         </UserItemContainer>
     );

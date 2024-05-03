@@ -43,7 +43,6 @@ export const SettingsPage = () => {
         useUpdateUserMutation();
 
     // Local state
-    const [isEditingPersonalInfo, setIsEditingPersonalInfo] = useState(false);
     const storedUser = useSelector(
         (state: RootState) => state.auth.user,
     ) as ReceivedUser;
@@ -246,8 +245,18 @@ export const SettingsPage = () => {
                     />
                 </SectionContainer>
 
+                <EditButton
+                    select="warning"
+                    title="Edit this section"
+                    loading={isLoading}
+                    onClick={handleUpdatePersonalInformation}
+                >
+                    Save
+                </EditButton>
+            </Accordion>
+
+            <Accordion title="Change Password">
                 <SectionContainer>
-                    <SectionTitle>password</SectionTitle>
                     <CustomInput
                         type="password"
                         label={'Current Password'}
@@ -268,24 +277,15 @@ export const SettingsPage = () => {
                             onChange={() => { }}
                         />
                     </InlineInputsContainer>
+                    <EditButton
+                        select="warning"
+                        title="Edit this section"
+                        loading={false}
+                        onClick={() => {}}
+                    >
+                        Save
+                    </EditButton>
                 </SectionContainer>
-
-                <EditButton
-                    select="warning"
-                    title="Edit this section"
-                    loading={isLoading}
-                    editing={isEditingPersonalInfo}
-                    onClick={() => {
-                        setIsEditingPersonalInfo((isEditingPersonalInfo) => {
-                            if (isEditingPersonalInfo) {
-                                handleUpdatePersonalInformation();
-                            }
-                            return !isEditingPersonalInfo;
-                        });
-                    }}
-                >
-                    Save{' '}
-                </EditButton>
             </Accordion>
 
             <Accordion title="Notifications">

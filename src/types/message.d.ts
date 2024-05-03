@@ -8,9 +8,19 @@ export type SerializedMessage = {
     Attachment: string;
     CreatedAt: string;
     IsDeleted: boolean;
+    Reactions?: {
+        MessageID: number;
+        Reaction: string;
+        User: Pick<
+            ReceivedUser,
+            'Username' | 'FullName' | 'ProfileImage' | 'ID'
+        >;
+    }[];
+    RepliedToMessage?: SerializedMessage;
 };
 
 export type CreateMessageDTO = {
+    RepliedToMessageID?: number;
     Content: string;
     GroupID: number;
 };
@@ -39,6 +49,11 @@ export type MessageInfo = {
     ReadAt: string; // Date
 };
 
+export type ReactToMessageDTO = {
+    MessageID: number;
+    Reaction: string;
+};
+
 export type SendIsTypingDTO = { IsTyping: boolean; GroupID: number };
 
 export type ClientToServerEvents = {
@@ -50,12 +65,14 @@ export type ClientToServerEvents = {
     editMessage: (data: UpdateMessageDTO) => void;
     getMessageInfo: (data: DeleteMessageDTO) => void;
     leaveMessageInfoRoom: (data: DeleteMessageDTO) => void;
+    reactToMessage: (data: ReactToMessageDTO) => void;
 };
 
 export type ServerToClientEvents = {
     isTyping: (data: ReceivedTypingDTO) => void;
     newMessage: (message: SerializedMessage) => void;
     allMessages: (messages: SerializedMessage[]) => void;
+    editedMessage: (message: SerializedMessage) => void;
     error: (data: any) => void; // TODO: fix this
     messageInfo: (data: any) => void; // TODO: fix this
     newMessageReadInfo: (data: any) => void; // TODO: fix this

@@ -9,12 +9,13 @@ import {
     SendIsTypingDTO,
     UpdateMessageDTO,
 } from '../../types/message';
+import { ReactToMessageDTO } from '../../types/message';
 import { getSocket } from '../../utils/socket';
 import { appApi } from './appApi';
 
 const messageApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
-        getGroupMessages: builder.query<unknown, number>({
+        getGroupMessages: builder.query<SerializedMessage[], number>({
             queryFn: () => ({ data: [] }),
             async onCacheEntryAdded(
                 groupId,
@@ -36,6 +37,24 @@ const messageApi = appApi.injectEndpoints({
                             (draft as SerializedMessage[]).push(message);
                         });
                     });
+                    socket.on(
+                        'editedMessage',
+                        (updatedMessage: SerializedMessage) => {
+                            updateCachedData((draft) => {
+                                let index = (
+                                    draft as SerializedMessage[]
+                                ).findIndex(
+                                    (cachedMessage) =>
+                                        cachedMessage.MessageID ===
+                                        updatedMessage.MessageID,
+                                );
+                                if (index > -1) {
+                                    (draft as SerializedMessage[])[index] =
+                                        updatedMessage;
+                                }
+                            });
+                        },
+                    );
                     await cacheEntryRemoved;
                     socket.emit('leaveRoom', { ChatGroupId: groupId });
                     socket.off('allMessages');
@@ -68,7 +87,7 @@ const messageApi = appApi.injectEndpoints({
                 }
             },
         }),
-        receiveTyping: builder.query<unknown, void>({
+        receiveTyping: builder.query<string[], void>({
             queryFn: () => ({ data: [] }),
             async onCacheEntryAdded(
                 _,
@@ -121,6 +140,17 @@ const messageApi = appApi.injectEndpoints({
                 }
             },
         }),
+        reactToMessage: builder.mutation({
+            queryFn: () => ({ data: [] }),
+            async onCacheEntryAdded(data: ReactToMessageDTO) {
+                try {
+                    let socket = await getSocket();
+                    socket.emit('reactToMessage', data);
+                } catch (error) {
+                    console.error(error);
+                }
+            },
+        }),
         getMessageInfo: builder.query<MessageInfo[], number>({
             queryFn: () => ({ data: [] }),
             async onCacheEntryAdded(MessageID, { cacheEntryRemoved }) {
@@ -167,4 +197,5 @@ export const {
     useDeleteMessageMutation,
     useGetMessageInfoQuery,
     useLazyGetMessageInfoQuery,
+    useReactToMessageMutation,
 } = messageApi;

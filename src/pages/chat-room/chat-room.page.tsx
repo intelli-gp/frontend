@@ -1,15 +1,5 @@
-import Picker from 'emoji-picker-react';
-import {
-    ChangeEvent,
-    FormEvent,
-    MouseEventHandler,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
-import { IoSend } from 'react-icons/io5';
-import { LuPaperclip } from 'react-icons/lu';
-import { MdOutlineEmojiEmotions } from 'react-icons/md';
+import Picker, { EmojiStyle } from 'emoji-picker-react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { SlOptions } from 'react-icons/sl';
 import { TbUsers } from 'react-icons/tb';
 import { useSelector } from 'react-redux';
@@ -19,9 +9,11 @@ import { BeatLoader } from 'react-spinners';
 import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import EnhancedImage from '../../components/image/image.component';
-import { CustomInput } from '../../components/input/Input.component';
+import { CustomInput as MessageInput } from '../../components/input/Input.component';
 import DropdownMenu from '../../components/menu/menu.component';
-import ChatMessage from '../../components/message/message.component';
+import ChatMessage, {
+    ReplyMessage,
+} from '../../components/message/message.component';
 import { BetweenPageAnimation } from '../../index.styles';
 import { useGetGroupQuery } from '../../store';
 import { RootState } from '../../store';
@@ -32,30 +24,29 @@ import {
     useSendTypingMutation,
 } from '../../store/apis/messagesApi';
 import { ReceivedGroup } from '../../types/group';
-import { SerializedMessage } from '../../types/message';
-import { Response } from '../../types/response';
+import { CreateMessageDTO, SerializedMessage } from '../../types/message';
 import { profileURL } from '../../utils/profileUrlBuilder';
 import { successToast } from '../../utils/toasts';
+import { EditButton as HeaderButton } from '../view-group/view-group.styles';
 import {
+    AttachIcon,
     ChatBody,
     ChatFooter,
     ChatHeader,
-    DeleteImg,
+    EmojisIcon,
+    FooterInputArea,
     GroupImage,
     GroupName,
     GroupTypingStatus,
     GroupUserFullName,
-    HeaderButton,
     LeftPart,
     PageContainer,
     RightPart,
+    SendIcon,
     StyledBadge,
-    UploadImageContainer,
     UserContainer,
     UsersContainer,
 } from './chat-room.style';
-
-
 
 export const ChatroomPage = () => {
     const { id: groupId } = useParams();
@@ -66,15 +57,12 @@ export const ChatroomPage = () => {
     const { data: _groupData } = useGetGroupQuery(+groupId!, {
         pollingInterval: 30e3,
     });
-    const groupData = (_groupData as unknown as Response)
-        ?.data[0] as ReceivedGroup;
+    const groupData = _groupData?.data[0] as ReceivedGroup;
 
-    const { data: _messages } = useGetGroupMessagesQuery(Number(groupId));
-    const messages = _messages as SerializedMessage[];
+    const { data: messages } = useGetGroupMessagesQuery(Number(groupId));
     const [sendMessage] = useSendMessageMutation();
     const [sendTypingStatus] = useSendTypingMutation();
-    const { data: _typingUsers } = useReceiveTypingQuery();
-    const typingUsers = _typingUsers as string[];
+    const { data: typingUsers } = useReceiveTypingQuery();
     const onlineUsers =
         groupData?.GroupMembers?.filter(
             (member) => member.Connected || member.ID === user.ID,
@@ -87,46 +75,33 @@ export const ChatroomPage = () => {
 
     const [messageInput, setMessageInput] = useState('');
     const [showPicker, setShowPicker] = useState(false);
-    const [showUpload, setShowUpload] = useState(false);
     const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout>();
     const [usersListOpen, setUsersListOpen] = useState(false);
+    const [replyingTo, setReplyingTo] = useState<SerializedMessage>();
 
     const onEmojiClick = (emojiObject: { emoji: string }) => {
         setMessageInput((prevInput) => prevInput + emojiObject.emoji);
-        setShowPicker(false);
     };
 
-    const handleSendMessage = async (event: FormEvent<HTMLFormElement>) => {
+    const handleSendMessage = async (event?: React.MouseEvent) => {
         event?.preventDefault();
         if (!messageInput.trim()) return;
         setMessageInput('');
-        await sendMessage({
+        let message: CreateMessageDTO = {
             Content: messageInput,
             GroupID: +groupId!,
-        }).unwrap();
-    };
-    const [images, setImages] = useState<string[]>([]);
-
-    const fileInput = useRef<HTMLInputElement>(null);
-
-    const openFileInput = () => {
-        fileInput.current?.click();
-    };
-
-    const handleImageSelection = (e: ChangeEvent<HTMLInputElement>) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-            setImages((prevImages) => [...prevImages, reader.result as string]);
         };
-        reader.readAsDataURL(e.target.files![0]);
+        if (replyingTo) {
+            message.RepliedToMessageID = replyingTo.MessageID;
+            setReplyingTo(null!);
+        }
+        await sendMessage(message).unwrap();
     };
 
-    const deleteImage = (index: number) => {
-        setImages((prevImages) => {
-            const updatedImages = [...prevImages];
-            updatedImages.splice(index, 1);
-            return updatedImages;
-        });
+    const handlePressingEnter = ({ key, shiftKey }: KeyboardEvent) => {
+        if (key === 'Enter' && !shiftKey) {
+            handleSendMessage();
+        }
     };
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -154,6 +129,10 @@ export const ChatroomPage = () => {
         setTypingTimeout(newTimeout);
     };
 
+    const setAsReplyTarget = (message: SerializedMessage) => {
+        setReplyingTo(message);
+    };
+
     const groupOptions = [
         {
             option: 'View Group',
@@ -175,12 +154,12 @@ export const ChatroomPage = () => {
             top: chatBodyRef?.current?.scrollHeight,
             behavior: 'instant',
         });
-        console.log(messages);
-    }, [_messages]);
+    }, [messages]);
 
     useEffect(() => {
         const screenClickHandler = () => {
             setUsersListOpen(false);
+            setShowPicker(false);
         };
         document.addEventListener('click', screenClickHandler);
 
@@ -190,204 +169,189 @@ export const ChatroomPage = () => {
     }, []);
 
     return (
-        <PageContainer {...BetweenPageAnimation}>
-            <div className="my-0 mx-auto max-w-[1200px] w-full flex gap-2">
-                <LeftPart>
-                    <ChatHeader>
-                        <GroupImage
-                            src={
-                                groupData?.GroupCoverImage ?? defaultGroupImage
-                            }
-                        />
-                        <div className="flex flex-col">
-                            <GroupName>
-                                {groupData?.GroupTitle ?? `Wait i'm loading...`}
-                            </GroupName>
-                            <GroupTypingStatus>
-                                {typingUsers?.length ? (
-                                    <div className="flex gap-1 items-center">
-                                        <BeatLoader
-                                            color="var(--gray-800)"
-                                            size={6}
-                                        />
-                                        <span className="font-bold">
-                                            {typingUsers?.join(' ,')}
-                                        </span>
-                                        {` ${typingUsers.length === 1
-                                            ? 'is'
-                                            : 'are'
-                                            }  `}
-                                        typing...
-                                    </div>
-                                ) : (
-                                    <span className="text-[var(--gray-900)]">
-                                        Idle
+        <PageContainer className="mujedd-chat-room" {...BetweenPageAnimation}>
+            <LeftPart>
+                <ChatHeader>
+                    <GroupImage
+                        src={groupData?.GroupCoverImage ?? defaultGroupImage}
+                    />
+                    <div className="flex flex-col">
+                        <GroupName>
+                            {groupData?.GroupTitle ?? `Wait i'm loading...`}
+                        </GroupName>
+                        <GroupTypingStatus>
+                            {typingUsers?.length ? (
+                                <div className="flex gap-1 items-center">
+                                    <BeatLoader
+                                        color="var(--gray-800)"
+                                        size={6}
+                                    />
+                                    <span className="font-bold">
+                                        {typingUsers?.join(' ,')}
                                     </span>
-                                )}
-                            </GroupTypingStatus>
-                        </div>
-                        <div className="flex gap-2 ml-auto justify-center">
-                            <DropdownMenu
-                                options={groupOptions}
-                                right="50%"
-                                top="100%"
-                                left="auto"
-                                bottom="auto"
-                                menuWidth="10rem"
-                            >
-                                <HeaderButton title="Group options">
-                                    <SlOptions size={20} />
-                                </HeaderButton>
-                            </DropdownMenu>
-                            <HeaderButton
-                                title="View users"
-                                className="flex lg:hidden"
-                                onClick={(e: React.MouseEvent) => {
-                                    e.stopPropagation();
-                                    setUsersListOpen(true);
-                                }}
-                            >
-                                <TbUsers size={20} />
-                            </HeaderButton>
-                        </div>
-                    </ChatHeader>
-                    <ChatBody ref={chatBodyRef}>
-                        <div />
-                        {messages?.map((message) => (
-                            <ChatMessage
-                                key={message.MessageID}
-                                enableOptions
-                                message={message}
-                            />
-                        ))}
-                    </ChatBody>
-                    <ChatFooter>
-                        {showPicker && (
-                            <div className="absolute bottom-[110%] left-0 z-40">
-                                <Picker onEmojiClick={onEmojiClick} />
-                            </div>
-                        )}
-                        <div className="flex gap-0 ">
-                            <MdOutlineEmojiEmotions
-                                className="fill-[var(--indigo-800)] cursor-pointer box-content p-2 rounded-full hover:bg-indigo-100"
-                                size={20}
-                                onClick={() => setShowPicker(!showPicker)}
-                            />
-                            <div onClick={openFileInput}>
-                                <input
-                                    type="file"
-                                    ref={fileInput}
-                                    onChange={handleImageSelection}
-                                    hidden
-                                />
-                                <LuPaperclip
-                                    color="var(--indigo-800)"
-                                    className="cursor-pointer box-content p-2 rounded-full hover:bg-indigo-100"
-                                    size={20}
-                                    onClick={() => setShowUpload(!showUpload)}
-
-                                />
-                            </div>
-                        </div>
-                        <form
-                            className="flex flex-col flex-1 max-h-[135px] p-[2px] bg-[var(--gray-100)] !border-none focus-visible:!outline-none rounded-md"
-                            onSubmit={handleSendMessage}
+                                    {` ${
+                                        typingUsers.length === 1 ? 'is' : 'are'
+                                    }  `}
+                                    typing...
+                                </div>
+                            ) : (
+                                <span className="text-[var(--gray-900)]">
+                                    Idle
+                                </span>
+                            )}
+                        </GroupTypingStatus>
+                    </div>
+                    <div className="flex gap-2 ml-auto justify-center">
+                        <DropdownMenu
+                            options={groupOptions}
+                            right="50%"
+                            top="100%"
+                            left="auto"
+                            bottom="auto"
+                            menuWidth="10rem"
                         >
-                            <div className='flex gap-2 justify-start items-center'>
-                                {images &&
-                                    images.map((image, index) => (
-                                        <div className='relative p-2 ' key={index}>
-                                            <DeleteImg onClick={() => deleteImage(index)}/>
-                                            <UploadImageContainer src={image} />
-                                        </div>))
-                                }
-                            </div>
-                            <CustomInput
-                                className="bg-[var(--gray-100)] !border-none focus-visible:!outline-none "
-                                placeholder="Type a message..."
-                                value={messageInput}
-                                onChange={handleInputChange}
-                            />
-                        </form>
-                        <IoSend
-                            title="Send message"
-                            className="fill-[var(--indigo-800)] cursor-pointer box-content p-2  rounded-full hover:bg-indigo-100"
-                            size={20}
-                            onClick={
-                                handleSendMessage as unknown as MouseEventHandler
-                            }
-                        />
-                    </ChatFooter>
-                </LeftPart>
+                            <HeaderButton title="Group options">
+                                <SlOptions size={20} />
+                            </HeaderButton>
+                        </DropdownMenu>
+                        <HeaderButton
+                            title="View users"
+                            className="lg:!hidden"
+                            onClick={(e: React.MouseEvent) => {
+                                e.stopPropagation();
+                                setUsersListOpen(true);
+                            }}
+                        >
+                            <TbUsers size={20} />
+                        </HeaderButton>
+                    </div>
+                </ChatHeader>
 
-                <RightPart className={`${usersListOpen && 'open'}`}>
-                    <UsersContainer>
-                        <h1 className="font-bold">ONLINE USERS</h1>
-                        {onlineUsers.map((person) => (
-                            <UserContainer
-                                key={person.ID}
-                                onClick={() => {
-                                    navigate(profileURL(person.Username));
+                <ChatBody ref={chatBodyRef}>
+                    {messages?.map((message) => (
+                        <ChatMessage
+                            setAsReplayTarget={setAsReplyTarget}
+                            key={message.MessageID}
+                            enableOptions
+                            message={message}
+                        />
+                    ))}
+                </ChatBody>
+
+                <ChatFooter>
+                    {showPicker && (
+                        <div
+                            className="absolute bottom-[110%] left-0 z-10"
+                            onClick={(event: React.MouseEvent) =>
+                                event.stopPropagation()
+                            }
+                        >
+                            <Picker
+                                onEmojiClick={onEmojiClick}
+                                emojiStyle={EmojiStyle.FACEBOOK}
+                            />
+                        </div>
+                    )}
+                    {replyingTo && (
+                        <ReplyMessage
+                            {...replyingTo}
+                            closeButtonHandler={() => setReplyingTo(null!)}
+                        />
+                    )}
+                    <FooterInputArea>
+                        <div className="flex items-center">
+                            <EmojisIcon
+                                size={20}
+                                onClick={(event: React.MouseEvent) => {
+                                    event.stopPropagation();
+                                    setShowPicker(!showPicker);
                                 }}
-                            >
-                                <EnhancedImage
-                                    className="!w-[48px] !h-[48px] rounded-full object-cover aspect-square"
-                                    alt="username"
-                                    src={
-                                        person?.ProfileImage ?? defaultUserImage
-                                    }
-                                />
-                                <div className="overflow-hidden">
-                                    <GroupUserFullName
-                                        title={person.FullName}
-                                        onClick={() => {
-                                            navigate(
-                                                profileURL(person.Username),
-                                            );
-                                        }}
-                                    >
-                                        {person.FullName}
-                                    </GroupUserFullName>
-                                    <div className="flex gap-1 items-center">
-                                        <StyledBadge online={true} />
-                                        <p className="text-xs text-[var(--gray-600)]">
-                                            online
-                                        </p>
-                                    </div>
+                            />
+                            <AttachIcon size={20} />
+                        </div>
+
+                        <MessageInput
+                            className="bg-[var(--gray-100)] !border-none focus-visible:!outline-none resize-none"
+                            placeholder="Type a message..."
+                            value={messageInput}
+                            onChange={handleInputChange}
+                            onKeyPress={handlePressingEnter}
+                        />
+
+                        <SendIcon
+                            title="Send message"
+                            size={20}
+                            onClick={handleSendMessage}
+                        />
+                    </FooterInputArea>
+                </ChatFooter>
+            </LeftPart>
+            <RightPart className={`${usersListOpen && 'open'}`}>
+                <UsersContainer>
+                    <h1 className="font-bold">
+                        ONLINE USERS ({onlineUsers.length ?? 0})
+                    </h1>
+                    {onlineUsers.map((person) => (
+                        <UserContainer
+                            key={person.ID}
+                            onClick={() => {
+                                navigate(profileURL(person.Username));
+                            }}
+                        >
+                            <EnhancedImage
+                                className="!w-[48px] !h-[48px] rounded-full object-cover aspect-square"
+                                alt="username"
+                                src={person?.ProfileImage ?? defaultUserImage}
+                            />
+                            <div className="overflow-hidden flex flex-col">
+                                <GroupUserFullName
+                                    to={profileURL(person.Username)}
+                                    title={person.FullName}
+                                >
+                                    {person.FullName}
+                                </GroupUserFullName>
+                                <div className="flex gap-1 items-center">
+                                    <StyledBadge online={true} />
+                                    <p className="text-xs text-[var(--gray-600)]">
+                                        online
+                                    </p>
                                 </div>
-                            </UserContainer>
-                        ))}
-                        <h1 className="mt-8 font-bold">OFFLINE USERS</h1>
-                        {offlineUsers.map((person) => (
-                            <UserContainer
-                                key={person.ID}
-                                onClick={() => {
-                                    navigate(profileURL(person.Username));
-                                }}
-                            >
-                                <EnhancedImage
-                                    className="!w-[48px] !h-[48px] rounded-full object-cover aspect-square"
-                                    alt="username"
-                                    src={
-                                        person?.ProfileImage ?? defaultUserImage
-                                    }
-                                />
-                                <div className="overflow-hidden">
-                                    <GroupUserFullName title={person.FullName}>
-                                        {person.FullName}
-                                    </GroupUserFullName>
-                                    <div className="flex flex-row gap-1 items-center">
-                                        <StyledBadge online={false} />
-                                        <p className="text-xs text-[var(--gray-600)]">
-                                            offline
-                                        </p>
-                                    </div>
+                            </div>
+                        </UserContainer>
+                    ))}
+                    <h1 className="mt-8 font-bold">
+                        OFFLINE USERS ({offlineUsers.length ?? 0})
+                    </h1>
+                    {offlineUsers.map((person) => (
+                        <UserContainer
+                            key={person.ID}
+                            onClick={() => {
+                                navigate(profileURL(person.Username));
+                            }}
+                        >
+                            <EnhancedImage
+                                className="!w-[48px] !h-[48px] rounded-full object-cover aspect-square"
+                                alt="username"
+                                src={person?.ProfileImage ?? defaultUserImage}
+                            />
+                            <div className="overflow-hidden">
+                                <GroupUserFullName
+                                    title={person.FullName}
+                                    to={profileURL(person.Username)}
+                                >
+                                    {person.FullName}
+                                </GroupUserFullName>
+                                <div className="flex flex-row gap-1 items-center">
+                                    <StyledBadge online={false} />
+                                    <p className="text-xs text-[var(--gray-600)]">
+                                        offline
+                                    </p>
                                 </div>
-                            </UserContainer>
-                        ))}
-                    </UsersContainer>
-                </RightPart>
-            </div>
+                            </div>
+                        </UserContainer>
+                    ))}
+                </UsersContainer>
+            </RightPart>
         </PageContainer>
     );
 };

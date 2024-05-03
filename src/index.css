@@ -86,6 +86,10 @@ body {
     }
 }
 
+main:has(.mujedd-chat-room) {
+    background: var(--indigo-50);
+}
+
 #root {
     min-height: 100vh;
 }
