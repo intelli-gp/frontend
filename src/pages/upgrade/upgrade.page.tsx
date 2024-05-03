@@ -8,24 +8,28 @@ import {
     CardHolder,
     CardsHolder,
     Check,
+    CircleHolder,
     PageContainer,
     UpgradeButton,
     UpgradeTitle,
 } from './upgrade.styles';
 
 type Type = {
+    id: number;
     type: string;
     price: number;
     middle: boolean;
     para: string[];
     payment: string;
+    myPlan?: boolean;
 };
 
 const Card = ({ el }: { el: Type }) => {
     const navigate = useNavigate();
+    const changeSubscription = new URL(window.location.href).pathname.includes('subscriptionManagement');
 
     return (
-        <CardHolder>
+        <CardHolder Border={el.myPlan && changeSubscription}>
             <div>
                 <h2 className="font-bold text-[var(--indigo-950)]">
                     {el.type}
@@ -45,11 +49,18 @@ const Card = ({ el }: { el: Type }) => {
                     ))}
                 </ul>
             </div>
-            {el.type !== 'Free' ? (
+            {el.type == 'Free' ?
+            (
+                <></>
+            )
+            : !changeSubscription ? (
                 <UpgradeButton onClick={() => navigate(`/app/checkout`)}>
                     Get Started Now
                 </UpgradeButton>
-            ) : (
+            ) : !el.myPlan && changeSubscription ? (
+                <UpgradeButton onClick={() => navigate(`/app/checkout`)}>
+                    Upgrade Plan
+                </UpgradeButton>) : (
                 <></>
             )}
         </CardHolder>
@@ -62,9 +73,11 @@ const UpgradePage = () => {
     const handleButtonClick = (plan: SetStateAction<string>) => {
         setSelectedPlan(plan);
     };
+    const changeSubscription = new URL(window.location.href).pathname.includes('subscriptionManagement');
 
     const subscriptionPlans: Type[] = [
         {
+            id: 1,
             type: 'Free',
             price: 0,
             middle: false,
@@ -77,6 +90,7 @@ const UpgradePage = () => {
             payment: selectedPlan,
         },
         {
+            id: 2,
             type: 'Premium',
             price: selectedPlan === 'Yearly' ? 10 * 12 : 10,
             middle: true,
@@ -86,8 +100,10 @@ const UpgradePage = () => {
                 'Receive 2 personalized study plans per month, carefully crafted by our AI.',
             ],
             payment: selectedPlan,
+            myPlan: true,
         },
         {
+            id: 3,
             type: 'VIP',
             price: selectedPlan === 'Yearly' ? 15 * 12 : 15,
             middle: false,
@@ -101,27 +117,25 @@ const UpgradePage = () => {
     ];
     return (
         <PageContainer {...BetweenPageAnimation}>
-            <UpgradeTitle>Find the plan that suits you </UpgradeTitle>
+            <UpgradeTitle>{changeSubscription ? "Manage your plan" : "Find the plan that suits you the best"} </UpgradeTitle>
             <ButtonsHolder>
                 <Button
-                    select="primary500"
-                    className={`!w-[50%] !rounded-[15px] !py-[10px] ${
-                        selectedPlan === 'Monthly'
-                            ? ''
-                            : '!text-[var(--indigo-950)]'
-                    }`}
+                    select='primary500'
+                    className={`!w-[50%] !rounded-[20px] !py-[12px] ${selectedPlan === 'Monthly'
+                        ? ''
+                        : '!text-[var(--indigo-950)]'
+                        }`}
                     outline={selectedPlan !== 'Monthly'}
                     onClick={() => handleButtonClick('Monthly')}
                 >
                     Monthly
                 </Button>
                 <Button
-                    select="primary500"
-                    className={`!rounded-[15px] !py-[10px] !w-[50%] ${
-                        selectedPlan === 'Yearly'
-                            ? ''
-                            : '!text-[var(--indigo-950)]'
-                    }`}
+                    select='primary500'
+                    className={`!rounded-[15px] !py-[10px] !w-[50%] ${selectedPlan === 'Yearly'
+                        ? ''
+                        : '!text-[var(--indigo-950)]'
+                        }`}
                     outline={selectedPlan !== 'Yearly'}
                     onClick={() => handleButtonClick('Yearly')}
                 >
@@ -132,10 +146,8 @@ const UpgradePage = () => {
                 {subscriptionPlans.map((plan) => {
                     if (plan.middle) {
                         return (
-                            <div className="lg:pb-16 pt-8 flex flex-col justify-center items-center relative ">
-                                <div className="absolute top-[2%] z-30 rounded-2xl bg-[#F9F8C1] py-2 font-bold px-[12px] text-xs border-[2px] border-[var(--indigo-950)]  text-[var(--indigo-950)]">
-                                    Most Popular
-                                </div>
+                            <div className="lg:pb-8 pt-8 relative ">
+                                <CircleHolder>{changeSubscription ? 'Your Plan' : 'Most Popular'}</CircleHolder>
                                 <Card el={plan} />
                             </div>
                         );

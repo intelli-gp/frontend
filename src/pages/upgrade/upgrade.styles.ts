@@ -1,11 +1,14 @@
 import { motion } from 'framer-motion';
-import { FaCheck } from 'react-icons/fa';
+import { FaCircleCheck } from "react-icons/fa6";
 import styled from 'styled-components';
 
-export const Check = styled(FaCheck)`
+export const Check = styled(FaCircleCheck)`
     position: absolute;
     left: -5%;
-    top: 3%;
+    top: 4.5%;
+    height:18px;
+    width:18px;
+
     color: var(--indigo-950);
 `;
 
@@ -17,6 +20,7 @@ export const PageContainer = styled(motion.div)`
     justify-content: space-between;
     padding: 20px;
     gap: 1.7rem;
+    
 `;
 export const UpgradeTitle = styled.h1`
     font-style: normal;
@@ -27,9 +31,14 @@ export const UpgradeTitle = styled.h1`
     display: flex;
     width: 28rem;
     align-items: center;
+    justify-content: center;
     text-align: center;
     letter-spacing: -0.04em;
     color: #343a40;
+    @media (max-width: 768px) {
+        font-size: 36px;
+        line-height: 1;
+    }
 `;
 export const ButtonsHolder = styled.div`
     display: flex;
@@ -38,13 +47,24 @@ export const ButtonsHolder = styled.div`
     align-items: center;
     padding: 10px;
     gap: 11px;
-
-    width: 238px;
-    height: 64px;
-
+    width: 234px;
+    height: 66px;
     background: #ffffff;
     box-shadow: var(--gray-shadow);
     border-radius: 25px;
+`;
+export const CircleHolder = styled.div`
+    position: absolute;
+    top: 3%;
+    right:33%;
+    z-index: 30;
+    border-radius: 60px;
+    background-color: #F9F8C1;
+    padding: 7px 12px;
+    font-weight: 700;
+    font-size: 0.8rem; 
+    border: 2px solid var(--indigo-950);
+    color: var(--indigo-950);
 `;
 export const CardsHolder = styled.div`
     display: flex;
@@ -58,7 +78,7 @@ export const CardsHolder = styled.div`
     }
 `;
 
-export const CardHolder = styled.div`
+export const CardHolder = styled.div<{ Border?: boolean }>`
     display: flex;
     flex-direction: column;
     padding: 20px 25px;
@@ -69,7 +89,7 @@ export const CardHolder = styled.div`
     width: 280px;
     height: 382px;
     background: #ffffff;
-    border: 1.5px solid rgba(82, 82, 82, 0.27);
+    border:2px solid ${({Border})=>Border?'var(--indigo-950)' : ' rgba(82, 82, 82, 0.27)'} ;
     box-shadow: var(--gray-shadow);
     border-radius: 5px;
     & > div:first-child {
