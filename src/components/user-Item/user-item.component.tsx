@@ -1,6 +1,9 @@
 import { capitalize } from 'lodash';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
 
+import defaultProfileImage from '../../assets/imgs/user.jpg';
+import { RootState } from '../../store';
 import { ReceivedUser } from '../../types/user';
 import { profileURL } from '../../utils/profileUrlBuilder';
 import {
@@ -44,13 +47,19 @@ const UserItem = ({
     emoji,
     actionHandler,
 }: UserItemProps) => {
+    const storedUser = useSelector((state: RootState) => state.auth.user);
+    const isMe = Username === storedUser.Username;
+    
     return (
         <UserItemContainer>
-            <UserItemImage src={ProfileImage!} alt="user profile image" />
+            <UserItemImage
+                src={ProfileImage ?? defaultProfileImage}
+                alt="user profile image"
+            />
             <div className="overflow-hidden">
                 {FullName && (
                     <UserFullName to={profileURL(Username!)} title={FullName}>
-                        {FullName}
+                        {isMe ? 'You' : FullName}
                     </UserFullName>
                 )}
                 {Username && (
