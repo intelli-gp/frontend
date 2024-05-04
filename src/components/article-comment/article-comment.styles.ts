@@ -41,6 +41,9 @@ export const CommenterFullName = styled(Link)<{ width?: string }>`
     line-height: 1;
     color: inherit;
     ${CSSTextLengthLimit}
+    &:hover {
+        text-decoration: underline;
+    }
 `;
 
 export const CommentDate = styled.p<{ width?: string }>`
@@ -50,14 +53,37 @@ export const CommentDate = styled.p<{ width?: string }>`
     ${CSSTextLengthLimit}
 `;
 
+export const CommentLikeContainer = styled.div<{ active: boolean }>`
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px 0px;
+    user-select: none;
+    margin-left: auto;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    color: black;
+    cursor: pointer;
+    padding: 0.25rem 0.75rem;
+    border-radius: 5rem;
+    background-color: ${({ active }) =>
+        active ? 'var(--yellow-500)' : 'transparent'};
+    border: 1px solid;
+    border-color: ${({ active }) =>
+        active ? 'var(--yellow-500)' : 'var(--gray-500)'};
+    transition: all 0.2s ease-in-out;
+    &:hover {
+        background-color: var(--yellow-500);
+        border-color: var(--yellow-500);
+    }
+`;
+
 export const CommentContent = styled(MDEditor.Markdown)`
     font-size: 0.875rem;
     line-height: 1.5;
     word-break: break-word;
     font-family: inherit;
     padding: 1rem;
-    border-radius: 0.25rem;
-    background-color: var(--gray-100);
+    border-radius: 0.5rem;
+    background-color: var(--gray-100) !important;
     min-height: 100px;
     width: 100%;
 `;

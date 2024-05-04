@@ -1,12 +1,20 @@
 import _ from 'lodash';
 
 import { appApi } from '.';
-import { ArticleToSend } from '../../types/article.d';
-import { Response } from '../../types/response';
+import { ArticleToSend, ReceivedArticle } from '../../types/article.d';
+import { GenericResponse, Response } from '../../types/response';
+
+type LikeCommentPayload = {
+    articleID: number;
+    commentID: number;
+};
 
 const articleApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
-        createArticle: builder.mutation<Response, ArticleToSend>({
+        createArticle: builder.mutation<
+            GenericResponse<ReceivedArticle>,
+            ArticleToSend
+        >({
             invalidatesTags: ['Article'],
             query: (article) => ({
                 url: '/articles',
@@ -14,18 +22,18 @@ const articleApi = appApi.injectEndpoints({
                 body: article,
             }),
         }),
-        getArticles: builder.query<Response, void>({
+        getArticles: builder.query<GenericResponse<ReceivedArticle[]>, void>({
             providesTags: (result) =>
-                result?.data?.map(({ ID }: { ID: number }) => ({
+                result?.data?.map(({ ID }) => ({
                     type: 'Article',
                     id: ID,
-                })),
+                })) ?? [],
             query: () => ({
                 url: '/articles',
                 method: 'GET',
             }),
         }),
-        getArticle: builder.query<Response, number>({
+        getArticle: builder.query<GenericResponse<ReceivedArticle>, number>({
             providesTags: (_result, _error, id) => [{ type: 'Article', id }],
             query: (id) => ({
                 url: `/articles/${id}`,
@@ -33,19 +41,22 @@ const articleApi = appApi.injectEndpoints({
             }),
         }),
         //Ask Them to add Id
-        getUserArticles: builder.query<Response, void>({
+        getUserArticles: builder.query<
+            GenericResponse<ReceivedArticle[]>,
+            void
+        >({
             providesTags: (result) =>
-                result?.data?.map(({ ID }: { ID: number }) => ({
+                result?.data?.map(({ ID }) => ({
                     type: 'Article',
                     id: ID,
-                })),
+                })) ?? [],
             query: () => ({
                 url: '/articles/created',
                 method: 'GET',
             }),
         }),
         updateArticle: builder.mutation<
-            Response,
+            GenericResponse<ReceivedArticle>,
             Partial<ArticleToSend> & { id: number }
         >({
             invalidatesTags: (_result, _error, { id }) => [
@@ -64,7 +75,10 @@ const articleApi = appApi.injectEndpoints({
                 method: 'DELETE',
             }),
         }),
-        toggleLoveArticle: builder.mutation<Response, number>({
+        toggleLoveArticle: builder.mutation<
+            GenericResponse<ReceivedArticle>,
+            number
+        >({
             invalidatesTags: (_result, _error, id) => [{ type: 'Article', id }],
             query: (id) => ({
                 url: `/articles/${id}/toggle-like`,
@@ -72,7 +86,7 @@ const articleApi = appApi.injectEndpoints({
             }),
         }),
         commentOnArticle: builder.mutation<
-            Response,
+            GenericResponse<ReceivedArticle>,
             { id: number; content: string }
         >({
             invalidatesTags: (_result, _error, { id }) => [
@@ -82,6 +96,18 @@ const articleApi = appApi.injectEndpoints({
                 url: `/articles/${id}/comment`,
                 method: 'POST',
                 body: { Content: content },
+            }),
+        }),
+        toggleLikeComment: builder.mutation<
+            GenericResponse<ReceivedArticle>,
+            LikeCommentPayload
+        >({
+            invalidatesTags: (_result, _error, { articleID }) => [
+                { type: 'Article', id: articleID },
+            ],
+            query: ({ articleID, commentID }) => ({
+                url: `/articles/${articleID}/comment/${commentID}/like`,
+                method: 'POST',
             }),
         }),
     }),
@@ -97,4 +123,5 @@ export const {
     useGetUserArticlesQuery,
     useToggleLoveArticleMutation,
     useCommentOnArticleMutation,
+    useToggleLikeCommentMutation,
 } = articleApi;

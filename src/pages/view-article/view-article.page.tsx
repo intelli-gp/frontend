@@ -1,4 +1,3 @@
-import MDEditor from '@uiw/react-md-editor';
 import { motion } from 'framer-motion';
 import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
@@ -7,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import defaultCoverImage from '../../assets/imgs/defaultCover.jpg';
-import loveSound from '../../assets/sounds/article-love-sound.mp3';
 import Spinner from '../../components/Spinner';
 import { AuthorCard } from '../../components/article-author-card/author-card.component';
 import ArticleComment, {
@@ -29,11 +27,11 @@ import {
     useToggleLoveArticleMutation,
 } from '../../store';
 import { RootState } from '../../store';
-import { ArticleSectionType, ReceivedArticle } from '../../types/article.d';
-import { Response } from '../../types/response';
+import { ArticleSectionType } from '../../types/article.d';
 import { ReceivedUser } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
+    ArticleMDSection,
     CommentsContainer,
     EmptyPlaceholder,
     IconWithCounter,
@@ -78,7 +76,7 @@ const ViewArticlePage = () => {
     const [removeArticle] = useDeleteArticleMutation();
     const [toggleLoveArticle] = useToggleLoveArticleMutation();
     const { data, isLoading, isFetching } = useGetArticleQuery(+articleId!);
-    const article: ReceivedArticle = (data as unknown as Response)?.data;
+    const article = data?.data!;
     const isArticleOwner =
         article?.Author?.Username === (storedUser as ReceivedUser)?.Username;
 
@@ -125,7 +123,6 @@ const ViewArticlePage = () => {
     const handleToggleLoveArticle = async () => {
         try {
             if (!isArticleLoved) {
-                new Audio(loveSound).play();
                 setIsArticleLoved(true);
             }
             await toggleLoveArticle(+articleId!).unwrap();
@@ -165,7 +162,6 @@ const ViewArticlePage = () => {
     const LovedByModal = (
         <Modal
             title="This article is liked by"
-            width="sm"
             isOpen={lovedByModalIsOpen}
             setIsOpen={setLovedByModalIsOpen}
         >
@@ -180,6 +176,7 @@ const ViewArticlePage = () => {
                             FullName={user.FullName}
                             Username={user.Username}
                             ProfileImage={user.ProfileImage}
+                            emoji="❤️"
                         />
                     ))}
                 </UserItemsContainer>
@@ -217,6 +214,7 @@ const ViewArticlePage = () => {
         <PageContainer {...BetweenPageAnimation}>
             {DeleteArticleModal}
             {LovedByModal}
+
             <ArticleCoverImageContainer>
                 <ArticleCoverImage
                     src={article?.CoverImage ?? defaultCoverImage}
@@ -233,7 +231,7 @@ const ViewArticlePage = () => {
                         {moment(article?.UpdatedAt).format('DD MMMM, YYYY')}
                     </PublishDate>
 
-                    <div className="flex gap-2 justify-center">
+                    <div className="flex gap-2 justify-center flex-wrap">
                         {article?.ArticleTags.map((tag) => {
                             return <Tag text={tag} />;
                         })}
@@ -304,7 +302,7 @@ const ViewArticlePage = () => {
                     } else if (
                         section.ContentType === ArticleSectionType.Markdown
                     ) {
-                        return <MDEditor.Markdown source={section.Value} />;
+                        return <ArticleMDSection source={section.Value} />;
                     }
                 })}
 
