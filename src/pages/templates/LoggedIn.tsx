@@ -7,7 +7,7 @@ export default function LoggedInTemplatePage() {
     return (
         <LoggedInTemplateContainer>
             <SideNav />
-            <MainContentContainer>
+            <MainContentContainer id="mujedd-root">
                 <Outlet />
             </MainContentContainer>
         </LoggedInTemplateContainer>

@@ -1,3 +1,4 @@
+import { notificationApi, store } from '..';
 import {
     CreateMessageDTO,
     MessageInfo,
@@ -27,6 +28,15 @@ const messageApi = appApi.injectEndpoints({
                     socket.on(
                         'allMessages',
                         (messages: SerializedMessage[]) => {
+                            /**
+                             * Refetch the messages notification to update the unread messages count.
+                             * This is done inside this handler to make sure that messages status got
+                             * updated in the backend before updating the notification state.
+                             */
+                            let { refetch } = store.dispatch(
+                                notificationApi.endpoints.fetchMessages.initiate(),
+                            );
+                            refetch();
                             updateCachedData(() => {
                                 return messages;
                             });

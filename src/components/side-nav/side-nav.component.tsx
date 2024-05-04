@@ -7,8 +7,7 @@ import { HiMiniUserGroup } from 'react-icons/hi2';
 import { IoIosSettings } from 'react-icons/io';
 import { IoPersonSharp } from 'react-icons/io5';
 import { LuListTodo, LuSearch } from 'react-icons/lu';
-import { MdLogout, MdNotifications } from 'react-icons/md';
-import { TbMessage2 } from 'react-icons/tb';
+import { MdLogout } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -16,6 +15,7 @@ import defaultUserImage from '../../assets/imgs/user.jpg';
 import {
     RootState,
     clearCredentials,
+    useFetchMessagesQuery,
     useLogoutUserMutation,
 } from '../../store';
 import { deleteSocket } from '../../utils/socket';
@@ -28,9 +28,12 @@ import SideNavItem, {
 } from '../sidenav-item/sidenav-item.component';
 import {
     Brand,
+    IconContainer,
     IconsContainer,
     LinksContainer,
+    MessagesIcon,
     MobileNav,
+    NotificationsIcon,
     Separator,
     SideNavContainer,
     SideNavFooter,
@@ -44,6 +47,19 @@ export default function SideNav() {
     const navigate = useNavigate();
     const location = useLocation();
     const [hidden, setHidden] = useState(false);
+    const [messagesCounter, setMessageCounter] = useState(0);
+    const [notificationsCounter, _setNotificationsCounter] = useState(0);
+
+    const { data: messagesData } = useFetchMessagesQuery();
+
+    useEffect(() => {
+        setMessageCounter(
+            messagesData?.reduce((acc, cur) => {
+                return acc + (cur?.UnreadMessagesCount ?? 0);
+            }, 0) ?? 0,
+        );
+        console.log('Message Counter is : ', messagesCounter);
+    }, [messagesData]);
 
     /**
      * Notes:
@@ -172,6 +188,11 @@ export default function SideNav() {
         if (location.pathname === '/app/checkout') setHidden(true);
         else setHidden(false);
 
+        document.querySelector('#mujedd-root')?.scrollTo({
+            top: 0,
+            behavior: 'instant',
+        });
+
         let flattenedItems: Array<SideNavItemProps | SubItemProps> = [];
         navItems.forEach((item) => {
             flattenedItems.push(item);
@@ -287,16 +308,22 @@ export default function SideNav() {
 
                     <SideNavFooter>
                         <IconsContainer>
-                            <MdNotifications
-                                size={24}
-                                title="Notifications"
-                                onClick={() => navigate('/app/notifications')}
-                            />
-                            <TbMessage2
-                                size={24}
-                                title="Messages"
-                                onClick={() => navigate('/app/chats')}
-                            />
+                            <IconContainer counter={notificationsCounter}>
+                                <NotificationsIcon
+                                    size={24}
+                                    title="Notifications"
+                                    onClick={() =>
+                                        navigate('/app/notifications')
+                                    }
+                                />
+                            </IconContainer>
+                            <IconContainer counter={messagesCounter}>
+                                <MessagesIcon
+                                    size={24}
+                                    title="Messages"
+                                    onClick={() => navigate('/app/chats')}
+                                />
+                            </IconContainer>
                         </IconsContainer>
                         <Separator />
                         <DropdownMenu
