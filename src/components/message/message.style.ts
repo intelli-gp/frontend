@@ -4,6 +4,9 @@ import styled, { css } from 'styled-components';
 
 import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
 import EnhancedImage from '../image/image.component';
+import { MdFileDownload } from 'react-icons/md';
+import { IoClose } from "react-icons/io5";
+
 
 export const Message = styled.div<{
     isMine: boolean;
@@ -43,9 +46,9 @@ export const MessageHeader = styled.header<{ isMine: boolean }>`
     align-items: center;
 `;
 
-export const SenderProfile = styled(EnhancedImage)`
-    width: 24px;
-    height: 24px;
+export const SenderProfile = styled(EnhancedImage)<{width?:string}>`
+    width:  ${({ width }) => (width ? width : '24px')};
+    height:  ${({ width }) => (width ? width : '24px')};
     border-radius: 50%;
     aspect-ratio: 1/1;
 `;
@@ -61,6 +64,26 @@ export const SenderName = styled(Link)<{ isMine?: boolean; width?: string }>`
     }
 `;
 
+const commonIconStyles = css`
+    color: var(--indigo-900);
+    cursor: pointer;
+    box-sizing: content-box;
+    transition: all 0.1s ease-in-out;
+    padding: 0.5rem;
+    border-radius: 50%;
+    &:hover {
+        color: black;
+        background-color: var(--indigo-100);
+    }
+`;
+export const DownloadIcon = styled(MdFileDownload)`
+    ${commonIconStyles}
+`;
+export const CloseIcon = styled(IoClose)`
+    ${commonIconStyles}
+`;
+
+
 export const MessageContent = styled.main<{
     isMine?: boolean;
     isDeleted?: boolean;
@@ -75,7 +98,28 @@ export const MessageContent = styled.main<{
     gap: 0.25rem;
     align-items: center;
 `;
-
+export const ImageContent = styled.img<{
+    isMine?: boolean;
+    isDeleted?: boolean;
+}>`
+    margin-top: 0rem;
+    color: ${({ isMine }) => (isMine ? 'white' : ' var(--gray-800)')};
+    opacity: ${({ isDeleted }) => (isDeleted ? 0.5 : 1)};
+    display: flex;
+    border-radius:6px;
+    max-width:230px;
+    align-items: center;
+`;
+export const ImageContainer = styled.img`
+height:60px;
+width:70px;
+border-radius: 0.25rem;
+`
+export const ImageHeader = styled.div`
+height:60px;
+width:70px;
+border-radius: 0.25rem;
+`
 export const MessageReactions = styled.div<{ isMine?: boolean }>`
     position: absolute;
     bottom: 0;

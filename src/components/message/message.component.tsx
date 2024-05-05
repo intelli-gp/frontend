@@ -19,7 +19,7 @@ import { CustomInput } from '../input/Input.component';
 import DropdownMenu from '../menu/menu.component';
 import { Modal } from '../modal/modal.component';
 import UserItem from '../user-Item/user-item.component';
-import { ReplyToMessageContent } from './message.style';
+import { CloseIcon, ImageContainer, ImageContent, ReplyToMessageContent } from './message.style';
 import {
     EmojisContainer,
     EmojisCounter,
@@ -39,6 +39,7 @@ import {
     ReplyToMessageSenderName,
     SenderName,
     SenderProfile,
+    DownloadIcon,
 } from './message.style';
 
 type ChatMessageProps = {
@@ -143,7 +144,7 @@ const ChatMessage = ({
                 handler: () => setAsReplayTarget && setAsReplayTarget(message),
             },
         ];
-        if (isMine) {
+        if (isMine && message.Type !== 'IMAGE') {
             options.push(
                 { option: 'Edit', handler: () => setEditMessageIsOpen(true) },
                 {
@@ -153,8 +154,25 @@ const ChatMessage = ({
                 { option: 'Info', handler: handleGetMessageInfo },
             );
         }
+        if (isMine && message.Type === 'IMAGE') {
+            options.push(
+                {
+                    option: 'Delete',
+                    handler: () => setDeleteMessageIsOpen(true),
+                },
+                { option: 'Info', handler: handleGetMessageInfo },
+            );
+        }
         return options;
     }, [isMine]);
+    const handleDownload = () => {
+        const link = document.createElement('a');
+        link.href = message.Content;
+        link.download = 'download.jpg';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 
     const messageReactions = useMemo(() => {
         if (!message?.Reactions) return;
@@ -167,7 +185,45 @@ const ChatMessage = ({
             count: message.Reactions.length,
         };
     }, [message]);
-
+    const [imageModalIsOpen, setImageModalIsOpen] = useState(false);
+    const ImageModal = (
+        <Modal
+            isOpen={imageModalIsOpen}
+            setIsOpen={setImageModalIsOpen}
+            width='lg'
+        >
+            <div className='flex gap-2 items-center '>
+                <SenderProfile
+                    width='40px'
+                    alt="profile image"
+                    src={message.User.ProfileImage ?? defaultUserImage}
+                />
+                <span className='flex flex-col items-start'>
+                    <SenderName
+                        to={profileURL(message.User.Username)}
+                        title={`view ${isMine ? 'your' : message.User.FullName+`'s`} profile`}
+                        isMine={false}
+                        width={'100%'}
+                    >
+                        {isMine ? 'You' : message.User.FullName}
+                    </SenderName>
+                    <MessageDate
+                        className='justify-start!'
+                        isMine={false}>
+                        {new Date(message.CreatedAt ?? Date.now()).toLocaleString()}
+                    </MessageDate>
+                </span>
+                <span className='flex flex-1 items-center justify-end gap-2'>
+                    <DownloadIcon title='Download' size={26} onClick={handleDownload} />
+                    <CloseIcon title='Close' size={28} onClick={() => { setImageModalIsOpen(false) }} />
+                </span>
+            </div>
+            <img
+                className='rounded-md'
+                alt='image'
+                src={message.Content}
+            />
+        </Modal>)
     const UpdateMessageModal = (
         <Modal
             isOpen={editMessageIsOpen}
@@ -326,7 +382,7 @@ const ChatMessage = ({
             {MessageInfoModal}
             {ReactToMessageModal}
             {ViewReactionsModal}
-
+            {ImageModal}
             <MessageHeader isMine={isMine}>
                 <SenderProfile
                     alt="sender profile image"
@@ -366,18 +422,25 @@ const ChatMessage = ({
                     User={message.RepliedToMessage?.User}
                     Content={message.RepliedToMessage?.Content}
                     passive={true}
+                    isImage={message.Type === 'IMAGE'}
                     replyByMe={isMine}
                 />
             )}
 
-            <MessageContent
-                isMine={isMine}
-                isDeleted={message.IsDeleted}
-                dir="auto"
-            >
-                {message.IsDeleted && <MdDoNotDisturb size={18} />}
-                {message.Content}
-            </MessageContent>
+            {message.Type === 'IMAGE' && !message.IsDeleted ?
+                <ImageContent
+                    onClick={() => setImageModalIsOpen(true)}
+                    src={message.Content}
+                />
+                : <MessageContent
+                    isMine={isMine}
+                    isDeleted={message.IsDeleted}
+                    dir="auto"
+                >
+                    {message.IsDeleted && <MdDoNotDisturb size={18} />}
+                    {message.Content}
+                </MessageContent>
+            }
 
             <MessageDate isMine={isMine}>
                 {new Date(message.CreatedAt ?? Date.now()).toLocaleString()}
@@ -418,12 +481,14 @@ type ReplyMessageProps = Partial<SerializedMessage> & {
      * @default false
      */
     replyByMe?: boolean;
+    isImage: boolean;
 };
 
 export const ReplyMessage = ({
     User,
     Content,
     passive = false,
+    isImage,
     closeButtonHandler,
     replyByMe = false,
 }: ReplyMessageProps) => {
@@ -440,9 +505,14 @@ export const ReplyMessage = ({
                 >
                     {isMine ? 'You' : User?.FullName}
                 </ReplyToMessageSenderName>
-                <ReplyToMessageContent dir={'auto'} lines={2}>
-                    {Content}
-                </ReplyToMessageContent>
+
+                {isImage ?
+                    <ImageContainer
+                        alt='image'
+                        src={Content} /> :
+                    <ReplyToMessageContent dir={'auto'} lines={2}>
+                        {Content}
+                    </ReplyToMessageContent>}
             </ReplyToMessageMain>
             {!passive && (
                 <ReplyToMessageCloseButton
