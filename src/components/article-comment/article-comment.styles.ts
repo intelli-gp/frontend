@@ -1,4 +1,5 @@
 import MDEditor from '@uiw/react-md-editor';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -53,8 +54,8 @@ export const CommentDate = styled.p<{ width?: string }>`
     ${CSSTextLengthLimit}
 `;
 
-export const CommentLikeContainer = styled.div<{ active: boolean }>`
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px 0px;
+export const CommentLikeContainer = styled(motion.div)<{ active: boolean }>`
+    box-shadow: rgba(0, 0, 0, 0.075) -2px 2px 4px 0px;
     user-select: none;
     margin-left: auto;
     display: flex;
@@ -62,13 +63,13 @@ export const CommentLikeContainer = styled.div<{ active: boolean }>`
     align-items: center;
     color: black;
     cursor: pointer;
-    padding: 0.25rem 0.75rem;
+    padding: 0.125rem 0.75rem;
     border-radius: 5rem;
     background-color: ${({ active }) =>
         active ? 'var(--yellow-500)' : 'transparent'};
     border: 1px solid;
     border-color: ${({ active }) =>
-        active ? 'var(--yellow-500)' : 'var(--gray-500)'};
+        active ? 'var(--yellow-500)' : 'var(--gray-400)'};
     transition: all 0.2s ease-in-out;
     &:hover {
         background-color: var(--yellow-500);

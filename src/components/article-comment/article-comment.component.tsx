@@ -87,7 +87,12 @@ const LikeCommentBadge = ({
     clickHandler,
 }: LikeCommentBadgeProps) => {
     return (
-        <CommentLikeContainer active={likedByMe} onClick={clickHandler}>
+        <CommentLikeContainer
+            active={likedByMe}
+            onClick={clickHandler}
+            whileTap={{ scale: 0.9 }}
+            transition={{ duration: 0.01, delay: 0 }}
+        >
             <GoThumbsup size={18} />
             <span>{count}</span>
         </CommentLikeContainer>
