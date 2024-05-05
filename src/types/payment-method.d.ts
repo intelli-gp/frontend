@@ -7,7 +7,7 @@ export type PaymentMethod ={
 export type RecievePaymentMethod ={
     ID:number;
     holderName:string;
-    cardId: string;
+    cardId?: string;
     cardNumber:string;
     expiryDate:string;
 }
