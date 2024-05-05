@@ -5,7 +5,6 @@ import { IoCloseOutline } from 'react-icons/io5';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import defaultCoverImage from '../../assets/imgs/defaultCover.jpg';
 import Spinner from '../../components/Spinner';
 import { AuthorCard } from '../../components/article-author-card/author-card.component';
 import ArticleComment, {
@@ -24,6 +23,8 @@ import { BetweenPageAnimation, ModalTitle } from '../../index.styles';
 import {
     useDeleteArticleMutation,
     useGetArticleQuery,
+    useGetBookmarkedArticlesQuery,
+    useToggleBookmarkArticleMutation,
     useToggleLoveArticleMutation,
 } from '../../store';
 import { RootState } from '../../store';
@@ -69,14 +70,24 @@ const ViewArticlePage = () => {
         useState(false);
     const [lovedByModalIsOpen, setLovedByModalIsOpen] = useState(false);
     const [isArticleLoved, setIsArticleLoved] = useState(false);
-    const [isArticleBookmarked, _setIsArticleBookmarked] = useState(false);
+    const [isArticleBookmarked, setIsArticleBookmarked] = useState(false);
 
     const storedUser = useSelector((state: RootState) => state.auth.user);
 
     const [removeArticle] = useDeleteArticleMutation();
     const [toggleLoveArticle] = useToggleLoveArticleMutation();
-    const { data, isLoading, isFetching } = useGetArticleQuery(+articleId!);
-    const article = data?.data!;
+    const [toggleBookmarkArticle] = useToggleBookmarkArticleMutation();
+    const {
+        data: bookmarkedArticles,
+        isLoading: bookmarkedArticlesIsLoading,
+        isFetching: bookmarkedArticlesIsFetching,
+    } = useGetBookmarkedArticlesQuery({ limit: 1e3, offset: 0 });
+    const {
+        data,
+        isLoading: articleIsLoading,
+        isFetching: articleIsFetching,
+    } = useGetArticleQuery(parseInt(articleId!));
+    const article = data?.data;
     const isArticleOwner =
         article?.Author?.Username === (storedUser as ReceivedUser)?.Username;
 
@@ -112,7 +123,7 @@ const ViewArticlePage = () => {
 
     const handleDeleteArticle = async () => {
         try {
-            await removeArticle(+articleId!).unwrap();
+            await removeArticle(parseInt(articleId!)).unwrap();
             successToast('Article deleted successfully!');
             navigate('/app/articles');
         } catch (error) {
@@ -125,13 +136,25 @@ const ViewArticlePage = () => {
             if (!isArticleLoved) {
                 setIsArticleLoved(true);
             }
-            await toggleLoveArticle(+articleId!).unwrap();
+            await toggleLoveArticle(parseInt(articleId!)).unwrap();
         } catch (error) {
             errorToast('Error occurred while toggling like');
         }
     };
 
-    // const handleBookmarkArticle = () => {};
+    const handleBookmarkArticle = async () => {
+        try {
+            let alreadyBookmarked = isArticleBookmarked;
+            await toggleBookmarkArticle(parseInt(articleId!)).unwrap();
+            if (alreadyBookmarked) {
+                successToast('Article removed from bookmarks');
+            } else {
+                successToast('Article added to bookmarks');
+            }
+        } catch (error) {
+            errorToast('Error occurred while toggling bookmark');
+        }
+    };
 
     const DeleteArticleModal = (
         <Modal
@@ -169,7 +192,7 @@ const ViewArticlePage = () => {
                 <EmptyPlaceholder>Nobody, yet.</EmptyPlaceholder>
             )}
 
-            {article?.LikedBy?.length > 0 && (
+            {(article?.LikedBy?.length ?? 0) > 0 && (
                 <UserItemsContainer>
                     {article?.LikedBy?.map((user) => (
                         <UserItem
@@ -185,11 +208,21 @@ const ViewArticlePage = () => {
     );
 
     useEffect(() => {
-        if (isLoading || isFetching) return;
+        if (articleIsLoading || articleIsFetching) return;
         setIsArticleLoved(
-            article?.LikedBy?.some((user) => user.ID === storedUser?.ID),
+            article?.LikedBy?.some((user) => user.ID === storedUser?.ID) ??
+                false,
         );
-    }, [isLoading, isFetching]);
+    }, [articleIsLoading, articleIsFetching, bookmarkedArticlesIsLoading]);
+
+    useEffect(() => {
+        if (bookmarkedArticlesIsLoading || bookmarkedArticlesIsFetching) return;
+        setIsArticleBookmarked(
+            bookmarkedArticles?.data?.Results?.some(
+                (bookmarkedArticle) => bookmarkedArticle.ID === article?.ID,
+            ) ?? false,
+        );
+    }, [bookmarkedArticlesIsLoading, bookmarkedArticlesIsFetching]);
 
     useEffect(() => {
         const clickScreenHandler = (e: MouseEvent) => {
@@ -206,7 +239,7 @@ const ViewArticlePage = () => {
         };
     }, []);
 
-    if (isLoading) {
+    if (articleIsLoading) {
         return <Spinner />;
     }
 
@@ -217,10 +250,10 @@ const ViewArticlePage = () => {
 
             <ArticleCoverImageContainer>
                 <ArticleCoverImage
-                    src={article?.CoverImage ?? defaultCoverImage}
+                    src={article?.CoverImage}
                     alt="article cover image"
                 />
-                <AuthorCard article={article} />
+                <AuthorCard article={article!} />
             </ArticleCoverImageContainer>
 
             <ArticleBodyContainer data-color-mode="light">
@@ -241,14 +274,14 @@ const ViewArticlePage = () => {
                 <ArticleToolbar className="flex justify-between">
                     <ToolbarIconsContainer>
                         <IconWithCounter>
-                            <motion.span whileTap={{ scale: 1.25 }}>
+                            <AnimatedIconWrapper>
                                 <LoveIcon
                                     size={28}
                                     title="Like"
                                     active={isArticleLoved}
                                     onClick={handleToggleLoveArticle}
                                 />
-                            </motion.span>
+                            </AnimatedIconWrapper>
                             <InteractionCounter
                                 title="View how liked this article"
                                 onClick={() => setLovedByModalIsOpen(true)}
@@ -257,24 +290,25 @@ const ViewArticlePage = () => {
                             </InteractionCounter>
                         </IconWithCounter>
                         <VerticalLine />
-                        <motion.span whileTap={{ scale: 1.25 }}>
+                        <AnimatedIconWrapper>
                             <BookmarkIcon
                                 size={24}
                                 title="Bookmark"
                                 active={isArticleBookmarked}
+                                onClick={handleBookmarkArticle}
                             />
-                        </motion.span>
+                        </AnimatedIconWrapper>
                     </ToolbarIconsContainer>
                     <ToolbarIconsContainer>
                         <IconWithCounter ref={commentIconRef}>
-                            <motion.span whileTap={{ scale: 1.25 }}>
+                            <AnimatedIconWrapper>
                                 <CommentsIcon
                                     size={24}
                                     title="Comments"
                                     active={commentsPanelIsOpen}
                                     onClick={openCommentsPanel}
                                 />
-                            </motion.span>
+                            </AnimatedIconWrapper>
                             <InteractionCounter onClick={openCommentsPanel}>
                                 {article?.Comments?.length ?? 0}
                             </InteractionCounter>
@@ -327,10 +361,18 @@ const ViewArticlePage = () => {
                         <ArticleComment comment={comment} />
                     ))}
                 </div>
-                <ArticleWriteComment articleId={+articleId!} />
+                <ArticleWriteComment articleId={parseInt(articleId!)} />
             </CommentsContainer>
         </PageContainer>
     );
+};
+
+// Helper component
+type animatedIconWrapperProps = {
+    children: React.ReactNode;
+};
+const AnimatedIconWrapper = ({ children }: animatedIconWrapperProps) => {
+    return <motion.span whileTap={{ scale: 1.25 }}>{children}</motion.span>;
 };
 
 export default ViewArticlePage;
