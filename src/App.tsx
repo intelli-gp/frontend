@@ -49,6 +49,8 @@ const ProfilePage = React.lazy(() => import('./pages/profile/profile.page'));
 
 const SearchPage = React.lazy(() => import('./pages/search/search.page'));
 
+const CheckoutPage = React.lazy(() => import('./pages/checkout/checkout.page'));
+
 const StudyPlanner = React.lazy(
     () => import('./pages/study-planner/study-planner.page'),
 );
@@ -139,6 +141,7 @@ function App() {
                                 element={<AIHelperPage />}
                             />
                             <Route path="upgrade" element={<UpgradePage />} />
+                            <Route path='checkout' element={<CheckoutPage/>}/>
                             <Route path="chats" element={<ChatsPage />} />
                             <Route
                                 path="notifications"
