@@ -12,26 +12,24 @@ export type SwiperSliderProps = {
 
 export const SwiperSlider = ({ children }: SwiperSliderProps) => {
     return (
-            <SwiperSliderContainer
-                navigation={true}
-                modules={[Navigation]}
-                spaceBetween={15}
-                slidesPerView={'auto'}
-            >
-                {isArray(children) ? (
-                    (children as React.ReactNode[])?.map((child, index) => (
-                        <SwiperSlide
-                            style={{ width: 'auto' }}
-                            key={`carousel-child-${index}`}
-                        >
-                            {child}
-                        </SwiperSlide>
-                    ))
-                ) : (
-                    <SwiperSlide style={{ width: 'auto' }}>
-                        {children}
+        <SwiperSliderContainer
+            navigation={true}
+            modules={[Navigation]}
+            spaceBetween={15}
+            slidesPerView={'auto'}
+        >
+            {isArray(children) ? (
+                (children as React.ReactNode[])?.map((child, index) => (
+                    <SwiperSlide
+                        style={{ width: 'auto' }}
+                        key={`carousel-child-${index}`}
+                    >
+                        {child}
                     </SwiperSlide>
-                )}
-            </SwiperSliderContainer>
+                ))
+            ) : (
+                <SwiperSlide style={{ width: 'auto' }}>{children}</SwiperSlide>
+            )}
+        </SwiperSliderContainer>
     );
 };

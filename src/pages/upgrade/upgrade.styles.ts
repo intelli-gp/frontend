@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion';
-import { FaCircleCheck } from "react-icons/fa6";
+import { FaCircleCheck } from 'react-icons/fa6';
 import styled from 'styled-components';
 
 export const Check = styled(FaCircleCheck)`
     position: absolute;
     left: -5%;
     top: 4.5%;
-    height:18px;
-    width:18px;
+    height: 18px;
+    width: 18px;
 
     color: var(--indigo-950);
 `;
@@ -20,7 +20,6 @@ export const PageContainer = styled(motion.div)`
     justify-content: space-between;
     padding: 20px;
     gap: 1.7rem;
-    
 `;
 export const UpgradeTitle = styled.h1`
     font-style: normal;
@@ -56,13 +55,13 @@ export const ButtonsHolder = styled.div`
 export const CircleHolder = styled.div`
     position: absolute;
     top: 3%;
-    right:33%;
+    right: 33%;
     z-index: 30;
     border-radius: 60px;
-    background-color: #F9F8C1;
+    background-color: #f9f8c1;
     padding: 7px 12px;
     font-weight: 700;
-    font-size: 0.8rem; 
+    font-size: 0.8rem;
     border: 2px solid var(--indigo-950);
     color: var(--indigo-950);
 `;
@@ -89,7 +88,9 @@ export const CardHolder = styled.div<{ Border?: boolean }>`
     width: 280px;
     height: 382px;
     background: #ffffff;
-    border:2px solid ${({Border})=>Border?'var(--indigo-950)' : ' rgba(82, 82, 82, 0.27)'} ;
+    border: 2px solid
+        ${({ Border }) =>
+            Border ? 'var(--indigo-950)' : ' rgba(82, 82, 82, 0.27)'};
     box-shadow: var(--gray-shadow);
     border-radius: 5px;
     & > div:first-child {

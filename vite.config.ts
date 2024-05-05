@@ -11,7 +11,7 @@ export default defineConfig({
         host: '0.0.0.0',
     },
     build: {
-        outDir:'../backend/frontend-dist',
+        outDir: '../backend/frontend-dist',
         emptyOutDir: true,
         // watch: {
         //     include: 'src/**',

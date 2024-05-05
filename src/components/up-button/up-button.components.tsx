@@ -36,14 +36,14 @@ export const UpButton = ({ pageHeaderElement }: UpButtonProps) => {
     }
     return (
         // <AnimatePresence>
-            <UpButtonContainer
-                // id="up-button"
-                // key={'up-button'}
-                {...BetweenPageAnimation}
-                onClick={onUpButtonClick}
-            >
-                <PiArrowFatLineUpFill />
-            </UpButtonContainer>
+        <UpButtonContainer
+            // id="up-button"
+            // key={'up-button'}
+            {...BetweenPageAnimation}
+            onClick={onUpButtonClick}
+        >
+            <PiArrowFatLineUpFill />
+        </UpButtonContainer>
         // </AnimatePresence>
     );
 };

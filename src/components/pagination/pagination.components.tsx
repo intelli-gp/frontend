@@ -33,7 +33,6 @@ export const BackendSupportedPagination = ({
     onPageHover,
     pageHeaderElement,
 }: BackendSupportedPaginationProps) => {
-    
     const paginationRange = usePagination({
         numOfPages,
         pageSize,

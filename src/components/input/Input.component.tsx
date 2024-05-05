@@ -45,7 +45,7 @@ export const CustomInput = ({
             {multiline ? (
                 <TextAreaContainer>
                     <Textarea
-                        dir='auto'
+                        dir="auto"
                         className={className}
                         placeholder={other.placeholder ?? label?.toLowerCase()}
                         id={id}
@@ -61,7 +61,7 @@ export const CustomInput = ({
                 </TextAreaContainer>
             ) : (
                 <Input
-                    dir='auto'
+                    dir="auto"
                     className={className}
                     placeholder={other.placeholder ?? label?.toLowerCase()}
                     id={id}

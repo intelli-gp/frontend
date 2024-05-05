@@ -21,7 +21,6 @@ type EmptyVectorProps = {
 };
 
 const EmptyPagePlaceholder = ({ variant, text, button }: EmptyVectorProps) => {
-    
     const getImage = () => {
         switch (variant) {
             case 'empty-search':

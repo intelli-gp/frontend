@@ -6,7 +6,7 @@ import { GenericResponse } from '../../types/response';
 export const courseApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
         getRecommendedCourses: builder.query<
-        GenericResponse<PaginatedResult<Course>>,
+            GenericResponse<PaginatedResult<Course>>,
             { limit?: number; offset?: number }
         >({
             query: ({ limit, offset }) => ({
@@ -18,7 +18,7 @@ export const courseApi = appApi.injectEndpoints({
             }),
         }),
         searchCourses: builder.query<
-        GenericResponse<PaginatedResult<Course>>,
+            GenericResponse<PaginatedResult<Course>>,
             {
                 query: string;
                 category?: string;
@@ -43,7 +43,7 @@ export const courseApi = appApi.injectEndpoints({
             }),
         }),
         getCoursesPreview: builder.query<
-        GenericResponse<CategoryWithCourses[]>,
+            GenericResponse<CategoryWithCourses[]>,
             void
         >({
             query: () => ({

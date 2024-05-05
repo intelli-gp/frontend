@@ -26,7 +26,9 @@ type Type = {
 
 const Card = ({ el }: { el: Type }) => {
     const navigate = useNavigate();
-    const changeSubscription = new URL(window.location.href).pathname.includes('subscriptionManagement');
+    const changeSubscription = new URL(window.location.href).pathname.includes(
+        'subscriptionManagement',
+    );
 
     return (
         <CardHolder Border={el.myPlan && changeSubscription}>
@@ -49,18 +51,17 @@ const Card = ({ el }: { el: Type }) => {
                     ))}
                 </ul>
             </div>
-            {el.type == 'Free' ?
-            (
+            {el.type == 'Free' ? (
                 <></>
-            )
-            : !changeSubscription ? (
+            ) : !changeSubscription ? (
                 <UpgradeButton onClick={() => navigate(`/app/checkout`)}>
                     Get Started Now
                 </UpgradeButton>
             ) : !el.myPlan && changeSubscription ? (
                 <UpgradeButton onClick={() => navigate(`/app/checkout`)}>
                     Upgrade Plan
-                </UpgradeButton>) : (
+                </UpgradeButton>
+            ) : (
                 <></>
             )}
         </CardHolder>
@@ -73,7 +74,9 @@ const UpgradePage = () => {
     const handleButtonClick = (plan: SetStateAction<string>) => {
         setSelectedPlan(plan);
     };
-    const changeSubscription = new URL(window.location.href).pathname.includes('subscriptionManagement');
+    const changeSubscription = new URL(window.location.href).pathname.includes(
+        'subscriptionManagement',
+    );
 
     const subscriptionPlans: Type[] = [
         {
@@ -117,25 +120,31 @@ const UpgradePage = () => {
     ];
     return (
         <PageContainer {...BetweenPageAnimation}>
-            <UpgradeTitle>{changeSubscription ? "Manage your plan" : "Find the plan that suits you the best"} </UpgradeTitle>
+            <UpgradeTitle>
+                {changeSubscription
+                    ? 'Manage your plan'
+                    : 'Find the plan that suits you the best'}{' '}
+            </UpgradeTitle>
             <ButtonsHolder>
                 <Button
-                    select='primary500'
-                    className={`!w-[50%] !rounded-[20px] !py-[12px] ${selectedPlan === 'Monthly'
-                        ? ''
-                        : '!text-[var(--indigo-950)]'
-                        }`}
+                    select="primary500"
+                    className={`!w-[50%] !rounded-[20px] !py-[12px] ${
+                        selectedPlan === 'Monthly'
+                            ? ''
+                            : '!text-[var(--indigo-950)]'
+                    }`}
                     outline={selectedPlan !== 'Monthly'}
                     onClick={() => handleButtonClick('Monthly')}
                 >
                     Monthly
                 </Button>
                 <Button
-                    select='primary500'
-                    className={`!rounded-[15px] !py-[10px] !w-[50%] ${selectedPlan === 'Yearly'
-                        ? ''
-                        : '!text-[var(--indigo-950)]'
-                        }`}
+                    select="primary500"
+                    className={`!rounded-[15px] !py-[10px] !w-[50%] ${
+                        selectedPlan === 'Yearly'
+                            ? ''
+                            : '!text-[var(--indigo-950)]'
+                    }`}
                     outline={selectedPlan !== 'Yearly'}
                     onClick={() => handleButtonClick('Yearly')}
                 >
@@ -147,7 +156,11 @@ const UpgradePage = () => {
                     if (plan.middle) {
                         return (
                             <div className="lg:pb-8 pt-8 relative ">
-                                <CircleHolder>{changeSubscription ? 'Your Plan' : 'Most Popular'}</CircleHolder>
+                                <CircleHolder>
+                                    {changeSubscription
+                                        ? 'Your Plan'
+                                        : 'Most Popular'}
+                                </CircleHolder>
                                 <Card el={plan} />
                             </div>
                         );

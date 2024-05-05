@@ -126,7 +126,7 @@ const ExploreGroupsPage = () => {
 
     return (
         <PageContainer {...BetweenPageAnimation}>
-            <PageTitle className={"text-center"} ref={headerRef}>
+            <PageTitle className={'text-center'} ref={headerRef}>
                 Explore Groups
             </PageTitle>
             <CreateGroupModal

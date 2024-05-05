@@ -70,7 +70,6 @@ export const AddCardContainer = styled(Button)`
     @media (max-width: 1200px) {
         font-size: 0.85rem;
     }
-
 `;
 export const PlanButton = styled(Button)`
     display: flex;
@@ -84,7 +83,6 @@ export const PlanButton = styled(Button)`
     @media (max-width: 1200px) {
         font-size: 0.85rem;
     }
-
 `;
 export const PayTime = styled.div`
     height: 12px;

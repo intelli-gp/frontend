@@ -19,8 +19,14 @@ import { CustomInput } from '../input/Input.component';
 import DropdownMenu from '../menu/menu.component';
 import { Modal } from '../modal/modal.component';
 import UserItem from '../user-Item/user-item.component';
-import { CloseIcon, ImageContainer, ImageContent, ReplyToMessageContent } from './message.style';
 import {
+    CloseIcon,
+    ImageContainer,
+    ImageContent,
+    ReplyToMessageContent,
+} from './message.style';
+import {
+    DownloadIcon,
     EmojisContainer,
     EmojisCounter,
     Message,
@@ -39,7 +45,6 @@ import {
     ReplyToMessageSenderName,
     SenderName,
     SenderProfile,
-    DownloadIcon,
 } from './message.style';
 
 type ChatMessageProps = {
@@ -190,40 +195,49 @@ const ChatMessage = ({
         <Modal
             isOpen={imageModalIsOpen}
             setIsOpen={setImageModalIsOpen}
-            width='lg'
+            width="lg"
         >
-            <div className='flex gap-2 items-center '>
+            <div className="flex gap-2 items-center ">
                 <SenderProfile
-                    width='40px'
+                    width="40px"
                     alt="profile image"
                     src={message.User.ProfileImage ?? defaultUserImage}
                 />
-                <span className='flex flex-col items-start'>
+                <span className="flex flex-col items-start">
                     <SenderName
                         to={profileURL(message.User.Username)}
-                        title={`view ${isMine ? 'your' : message.User.FullName+`'s`} profile`}
+                        title={`view ${
+                            isMine ? 'your' : message.User.FullName + `'s`
+                        } profile`}
                         isMine={false}
                         width={'100%'}
                     >
                         {isMine ? 'You' : message.User.FullName}
                     </SenderName>
-                    <MessageDate
-                        className='justify-start!'
-                        isMine={false}>
-                        {new Date(message.CreatedAt ?? Date.now()).toLocaleString()}
+                    <MessageDate className="justify-start!" isMine={false}>
+                        {new Date(
+                            message.CreatedAt ?? Date.now(),
+                        ).toLocaleString()}
                     </MessageDate>
                 </span>
-                <span className='flex flex-1 items-center justify-end gap-2'>
-                    <DownloadIcon title='Download' size={26} onClick={handleDownload} />
-                    <CloseIcon title='Close' size={28} onClick={() => { setImageModalIsOpen(false) }} />
+                <span className="flex flex-1 items-center justify-end gap-2">
+                    <DownloadIcon
+                        title="Download"
+                        size={26}
+                        onClick={handleDownload}
+                    />
+                    <CloseIcon
+                        title="Close"
+                        size={28}
+                        onClick={() => {
+                            setImageModalIsOpen(false);
+                        }}
+                    />
                 </span>
             </div>
-            <img
-                className='rounded-md'
-                alt='image'
-                src={message.Content}
-            />
-        </Modal>)
+            <img className="rounded-md" alt="image" src={message.Content} />
+        </Modal>
+    );
     const UpdateMessageModal = (
         <Modal
             isOpen={editMessageIsOpen}
@@ -425,12 +439,13 @@ const ChatMessage = ({
                 />
             )}
 
-            {message.Type === 'IMAGE' && !message.IsDeleted ?
+            {message.Type === 'IMAGE' && !message.IsDeleted ? (
                 <ImageContent
                     onClick={() => setImageModalIsOpen(true)}
                     src={message.Content}
                 />
-                : <MessageContent
+            ) : (
+                <MessageContent
                     isMine={isMine}
                     isDeleted={message.IsDeleted}
                     dir="auto"
@@ -438,7 +453,7 @@ const ChatMessage = ({
                     {message.IsDeleted && <MdDoNotDisturb size={18} />}
                     {message.Content}
                 </MessageContent>
-            }
+            )}
 
             <MessageDate isMine={isMine}>
                 {new Date(message.CreatedAt ?? Date.now()).toLocaleString()}
@@ -504,13 +519,13 @@ export const ReplyMessage = ({
                     {isMine ? 'You' : User?.FullName}
                 </ReplyToMessageSenderName>
 
-                {isImage ?
-                    <ImageContainer
-                        alt='image'
-                        src={Content} /> :
+                {isImage ? (
+                    <ImageContainer alt="image" src={Content} />
+                ) : (
                     <ReplyToMessageContent dir={'auto'} lines={2}>
                         {Content}
-                    </ReplyToMessageContent>}
+                    </ReplyToMessageContent>
+                )}
             </ReplyToMessageMain>
             {!passive && (
                 <ReplyToMessageCloseButton

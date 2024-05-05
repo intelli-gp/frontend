@@ -3,12 +3,12 @@ import { CardNumberVerification } from 'card-validator/dist/card-number';
 import { useEffect, useState } from 'react';
 import { PaymentIcon } from 'react-svg-credit-card-payment-icons/dist/index.mjs';
 
-import DropdownMenu from '../menu/menu.component';
-import { CardContainer, EditIcon } from './card-info.style';
 import { useRemovePaymentMethodMutation } from '../../store/apis/paymentMethodsApi';
 import { errorToast, successToast } from '../../utils/toasts';
 import Button from '../button/button.component';
+import DropdownMenu from '../menu/menu.component';
 import { Modal } from '../modal/modal.component';
+import { CardContainer, EditIcon } from './card-info.style';
 
 interface ModalProps {
     id: number | undefined;
@@ -21,7 +21,6 @@ const DeleteSectionModal: React.FC<ModalProps> = ({
     setShowModal,
     id,
 }) => {
-
     const [
         deleteGroup,
         { isLoading: isDeletingGroup, isSuccess: groupDeletedSuccessfully },

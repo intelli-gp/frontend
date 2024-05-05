@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-
 export const CourseSearchPageTitle = styled.h1`
     user-select: none;
     line-height: 1.25;
@@ -35,5 +34,3 @@ export const CourseSearchPageHeader = styled.div`
     gap: 1rem;
     padding-top: 1.5rem;
 `;
-
-

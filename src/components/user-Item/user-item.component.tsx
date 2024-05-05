@@ -49,7 +49,7 @@ const UserItem = ({
 }: UserItemProps) => {
     const storedUser = useSelector((state: RootState) => state.auth.user);
     const isMe = Username === storedUser.Username;
-    
+
     return (
         <UserItemContainer>
             <UserItemImage

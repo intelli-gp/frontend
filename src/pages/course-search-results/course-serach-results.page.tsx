@@ -79,7 +79,6 @@ export const CoursesSearchResultsPage = () => {
         'getRecommendedCourses',
     );
 
-
     useEffect(() => {
         if (searchInitiated) {
             if (searchTerm === 'Recommended For You') {
@@ -172,11 +171,12 @@ export const CoursesSearchResultsPage = () => {
         }
     };
 
-    const pageContent = isDataFetching || isDataLoading? (
-        <Spinner />
-    ) : (
-        <CourseResultsGrid courseResults={data?.Results || []} />
-    );
+    const pageContent =
+        isDataFetching || isDataLoading ? (
+            <Spinner />
+        ) : (
+            <CourseResultsGrid courseResults={data?.Results || []} />
+        );
 
     // if (isDataLoading) {
     //     return <Spinner />;

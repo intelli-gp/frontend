@@ -17,7 +17,9 @@ import AuthTemplatePage from './pages/templates/Auth';
 import LoggedInTemplatePage from './pages/templates/LoggedIn';
 import UpgradePage from './pages/upgrade/upgrade.page';
 
-const ChatroomPage = React.lazy(() => import('./pages/chat-room/chat-room.page'));
+const ChatroomPage = React.lazy(
+    () => import('./pages/chat-room/chat-room.page'),
+);
 
 const ChatsPage = React.lazy(() => import('./pages/chats/chats.page'));
 
@@ -25,7 +27,7 @@ const CoursesPage = React.lazy(() => import('./pages/courses/courses.page'));
 
 const CoursesSearchResultsPage = React.lazy(
     () => import('./pages/course-search-results/course-serach-results.page'),
-)
+);
 
 const ExploreArticlesPage = React.lazy(
     () => import('./pages/explore-articles/explore-articles.page'),
@@ -33,7 +35,7 @@ const ExploreArticlesPage = React.lazy(
 
 const CreateArticlePage = React.lazy(
     () => import('./pages/create-article/create-article.page'),
-)
+);
 
 const ExploreGroupsPage = React.lazy(
     () => import('./pages/explore-groups/explore-groups.page'),
@@ -141,7 +143,7 @@ function App() {
                                 element={<AIHelperPage />}
                             />
                             <Route path="upgrade" element={<UpgradePage />} />
-                            <Route path='checkout' element={<CheckoutPage/>}/>
+                            <Route path="checkout" element={<CheckoutPage />} />
                             <Route path="chats" element={<ChatsPage />} />
                             <Route
                                 path="notifications"

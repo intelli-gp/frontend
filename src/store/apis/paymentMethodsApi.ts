@@ -1,4 +1,3 @@
-
 import { appApi } from '.';
 
 export const paymentMethodsApi = appApi.injectEndpoints({
@@ -31,8 +30,7 @@ export const paymentMethodsApi = appApi.injectEndpoints({
 });
 
 export const {
-   useAddPaymentMethodsMutation,
-   useFetchPaymentMethodsQuery,
-   useRemovePaymentMethodMutation
+    useAddPaymentMethodsMutation,
+    useFetchPaymentMethodsQuery,
+    useRemovePaymentMethodMutation,
 } = paymentMethodsApi;
-

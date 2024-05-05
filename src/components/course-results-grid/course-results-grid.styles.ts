@@ -11,4 +11,3 @@ export const CourseSearchResultsGridContainer = styled.div`
     align-items: center;
     margin-bottom: 2rem;
 `;
-

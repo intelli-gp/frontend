@@ -91,7 +91,7 @@ export const ChatroomPage = () => {
         setMessageInput('');
         let message: CreateMessageDTO = {
             Content: messageInput,
-            Type:'MESSAGE',
+            Type: 'MESSAGE',
             GroupID: +groupId!,
         };
         if (replyingTo) {
@@ -99,17 +99,16 @@ export const ChatroomPage = () => {
             setReplyingTo(null!);
         }
         await sendMessage(message).unwrap();
-        if(images.length>0){
-            console.log('I entered')
-            images.forEach(async(image) => {
+        if (images.length > 0) {
+            console.log('I entered');
+            images.forEach(async (image) => {
                 let message: CreateMessageDTO = {
                     Content: image,
-                    Type:'IMAGE',
+                    Type: 'IMAGE',
                     GroupID: +groupId!,
                 };
                 await sendMessage(message).unwrap();
-
-            })
+            });
             setImages([]);
         }
     };
@@ -192,8 +191,7 @@ export const ChatroomPage = () => {
             top: chatBodyRef?.current?.scrollHeight,
             behavior: 'instant',
         });
-        console.log(messages)
-
+        console.log(messages);
     }, [messages]);
 
     useEffect(() => {
@@ -229,8 +227,9 @@ export const ChatroomPage = () => {
                                     <span className="font-bold">
                                         {typingUsers?.join(' ,')}
                                     </span>
-                                    {` ${typingUsers.length === 1 ? 'is' : 'are'
-                                        }  `}
+                                    {` ${
+                                        typingUsers.length === 1 ? 'is' : 'are'
+                                    }  `}
                                     typing...
                                 </div>
                             ) : (
@@ -293,9 +292,10 @@ export const ChatroomPage = () => {
                     )}
                     {replyingTo && (
                         <ReplyMessage
-                        isImage={replyingTo.Type==='IMAGE'} 
-                        {...replyingTo}
-                        closeButtonHandler={() => setReplyingTo(null!)}                        />
+                            isImage={replyingTo.Type === 'IMAGE'}
+                            {...replyingTo}
+                            closeButtonHandler={() => setReplyingTo(null!)}
+                        />
                     )}
                     <FooterInputArea>
                         <div className="flex items-center">
@@ -317,13 +317,23 @@ export const ChatroomPage = () => {
                             </span>
                         </div>
                         <div className="flex flex-col flex-1 max-h-[135px] p-[4px] bg-[var(--gray-100)] !border-none focus-visible:!outline-none rounded-md">
-                             {images &&  <div className='flex gap-2 justify-start items-center'>
-                                   { images.map((image, index) => (
-                                        <div className='relative p-2 ' key={index}>
-                                            <DeleteImg onClick={() => deleteImage(index)} />
+                            {images && (
+                                <div className="flex gap-2 justify-start items-center">
+                                    {images.map((image, index) => (
+                                        <div
+                                            className="relative p-2 "
+                                            key={index}
+                                        >
+                                            <DeleteImg
+                                                onClick={() =>
+                                                    deleteImage(index)
+                                                }
+                                            />
                                             <UploadImageContainer src={image} />
-                                        </div>))}
-                            </div>}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                             <MessageInput
                                 className="bg-[var(--gray-100)] !border-none focus-visible:!outline-none resize-none"
                                 placeholder="Type a message..."
@@ -331,13 +341,12 @@ export const ChatroomPage = () => {
                                 onChange={handleInputChange}
                                 onKeyPress={handlePressingEnter}
                             />
-                           
                         </div>
                         <SendIcon
-                                title="Send message"
-                                size={20}
-                                onClick={handleSendMessage}
-                            />
+                            title="Send message"
+                            size={20}
+                            onClick={handleSendMessage}
+                        />
                     </FooterInputArea>
                 </ChatFooter>
             </LeftPart>

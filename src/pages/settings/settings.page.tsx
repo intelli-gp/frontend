@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import CreditCardModal from '../../components/CreditCardModal';
 import Accordion from '../../components/accordion/accordion.component';
@@ -16,6 +17,9 @@ import {
     useGetAllTagsQuery,
     useUpdateUserMutation,
 } from '../../store';
+import { useFetchPaymentMethodsQuery } from '../../store/apis/paymentMethodsApi';
+import { RecievePaymentMethod } from '../../types/payment-method';
+import { Response } from '../../types/response';
 import { ReceivedUser, UserToSend } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
@@ -28,11 +32,6 @@ import {
     SectionContainer,
     SectionTitle,
 } from './settings.styles';
-import { useNavigate } from 'react-router-dom';
-import { useFetchPaymentMethodsQuery } from '../../store/apis/paymentMethodsApi';
-import { RecievePaymentMethod } from '../../types/payment-method';
-import { Response } from '../../types/response';
-
 
 export const SettingsPage = () => {
     const dispatch = useDispatch();
@@ -66,8 +65,8 @@ export const SettingsPage = () => {
     const { data: getPaymentMethods } = useFetchPaymentMethodsQuery(undefined);
     const PaymentMethodsData: RecievePaymentMethod[] =
         (getPaymentMethods as unknown as Response)?.data ?? [];
-    console.log(PaymentMethodsData)
-    function formatExpirationDate(dateString:string) {
+    console.log(PaymentMethodsData);
+    function formatExpirationDate(dateString: string) {
         const date = new Date(dateString);
         const month = date.toLocaleString('en-US', { month: '2-digit' });
         const year = date.getFullYear().toString().slice(2);
@@ -149,7 +148,6 @@ export const SettingsPage = () => {
         setInterests(storedUser.UserTags);
     }, [storedUser]);
     const navigate = useNavigate();
-
 
     return (
         <PageContainer {...BetweenPageAnimation}>
@@ -261,20 +259,20 @@ export const SettingsPage = () => {
                         type="password"
                         label={'Current Password'}
                         value=""
-                        onChange={() => { }}
+                        onChange={() => {}}
                     />
                     <InlineInputsContainer>
                         <CustomInput
                             type="password"
                             label={'New Password'}
                             value=""
-                            onChange={() => { }}
+                            onChange={() => {}}
                         />
                         <CustomInput
                             type="password"
                             label={'Repeat New Password'}
                             value=""
-                            onChange={() => { }}
+                            onChange={() => {}}
                         />
                     </InlineInputsContainer>
                     <EditButton
@@ -330,7 +328,13 @@ export const SettingsPage = () => {
                             </span>
                         </div>
                         <div className="flex flex-col justify-end gap-4 mt-6 w-[25%]">
-                            <PlanButton onClick={() => navigate('/app/subscriptionManagement')} >Change Plan</PlanButton>
+                            <PlanButton
+                                onClick={() =>
+                                    navigate('/app/subscriptionManagement')
+                                }
+                            >
+                                Change Plan
+                            </PlanButton>
                             <PlanButton select="danger" outline={true}>
                                 Cancel Plan
                             </PlanButton>
@@ -339,13 +343,20 @@ export const SettingsPage = () => {
 
                     <SectionTitle>Payment Method</SectionTitle>
                     <div className="flex flex-col justify-center items-center gap-4 p-2">
-                        {PaymentMethodsData.map((paymentMethod, index) =>
-
-                            <div className='w-[100%]' key={index}>
-                                <CardInfo Number={paymentMethod.cardNumber} ID={paymentMethod.ID} Expire={formatExpirationDate(paymentMethod.expiryDate)} />
-                                {index !== PaymentMethodsData.length - 1 && <hr />}
+                        {PaymentMethodsData.map((paymentMethod, index) => (
+                            <div className="w-[100%]" key={index}>
+                                <CardInfo
+                                    Number={paymentMethod.cardNumber}
+                                    ID={paymentMethod.ID}
+                                    Expire={formatExpirationDate(
+                                        paymentMethod.expiryDate,
+                                    )}
+                                />
+                                {index !== PaymentMethodsData.length - 1 && (
+                                    <hr />
+                                )}
                             </div>
-                        )}
+                        ))}
                         <span className="flex justify-end w-full">
                             <AddCardContainer
                                 onClick={() => setAddCreditCardIsOpen(true)}
@@ -370,7 +381,6 @@ export const SettingsPage = () => {
                 showModal={addCreditCardIsOpen}
                 setShowModal={setAddCreditCardIsOpen}
             />
-
         </PageContainer>
     );
 };

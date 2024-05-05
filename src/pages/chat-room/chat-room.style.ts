@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { IoMdCloseCircle } from 'react-icons/io';
 import { IoSend } from 'react-icons/io5';
 import { LuPaperclip } from 'react-icons/lu';
 import { RiEmotionLine } from 'react-icons/ri';
@@ -7,7 +8,6 @@ import styled, { css } from 'styled-components';
 
 import EnhancedImage from '../../components/image/image.component';
 import { CSSTextLengthLimit } from '../../index.styles';
-import { IoMdCloseCircle } from 'react-icons/io';
 
 export const PageContainer = styled(motion.div)`
     display: flex;
@@ -97,22 +97,22 @@ export const ChatFooter = styled.div`
     gap: 0.5rem;
 `;
 export const UploadImageContainer = styled.img`
-height:60px;
-width:70px;
-border-radius: 0.25rem;
-`
-export const DeleteImg = styled(IoMdCloseCircle )`
-position: absolute;
-right: 0;
-top: 0;
-height:20px;
-width:20px;
-color: var(--indigo-100);
-background-color:var(--indigo-900);
-border-radius: 3rem;
-border: 0px solid transperent;
-index-z:40;
-`
+    height: 60px;
+    width: 70px;
+    border-radius: 0.25rem;
+`;
+export const DeleteImg = styled(IoMdCloseCircle)`
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 20px;
+    width: 20px;
+    color: var(--indigo-100);
+    background-color: var(--indigo-900);
+    border-radius: 3rem;
+    border: 0px solid transperent;
+    index-z: 40;
+`;
 export const FooterInputArea = styled.div`
     display: flex;
     align-items: center;
@@ -222,7 +222,7 @@ export const GroupUserFullName = styled(Link)<{ width?: string }>`
 
     &:hover {
         text-decoration: underline;
-}
+    }
 `;
 
 export const StyledBadge = styled.span<{ online: boolean }>`

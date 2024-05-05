@@ -1,12 +1,11 @@
 import { IoCloseOutline } from 'react-icons/io5';
+import { IoClose } from 'react-icons/io5';
+import { MdFileDownload } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
 import EnhancedImage from '../image/image.component';
-import { MdFileDownload } from 'react-icons/md';
-import { IoClose } from "react-icons/io5";
-
 
 export const Message = styled.div<{
     isMine: boolean;
@@ -46,9 +45,9 @@ export const MessageHeader = styled.header<{ isMine: boolean }>`
     align-items: center;
 `;
 
-export const SenderProfile = styled(EnhancedImage)<{width?:string}>`
-    width:  ${({ width }) => (width ? width : '24px')};
-    height:  ${({ width }) => (width ? width : '24px')};
+export const SenderProfile = styled(EnhancedImage)<{ width?: string }>`
+    width: ${({ width }) => (width ? width : '24px')};
+    height: ${({ width }) => (width ? width : '24px')};
     border-radius: 50%;
     aspect-ratio: 1/1;
 `;
@@ -83,7 +82,6 @@ export const CloseIcon = styled(IoClose)`
     ${commonIconStyles}
 `;
 
-
 export const MessageContent = styled.main<{
     isMine?: boolean;
     isDeleted?: boolean;
@@ -106,20 +104,20 @@ export const ImageContent = styled.img<{
     color: ${({ isMine }) => (isMine ? 'white' : ' var(--gray-800)')};
     opacity: ${({ isDeleted }) => (isDeleted ? 0.5 : 1)};
     display: flex;
-    border-radius:6px;
-    max-width:230px;
+    border-radius: 6px;
+    max-width: 230px;
     align-items: center;
 `;
 export const ImageContainer = styled.img`
-height:60px;
-width:70px;
-border-radius: 0.25rem;
-`
+    height: 60px;
+    width: 70px;
+    border-radius: 0.25rem;
+`;
 export const ImageHeader = styled.div`
-height:60px;
-width:70px;
-border-radius: 0.25rem;
-`
+    height: 60px;
+    width: 70px;
+    border-radius: 0.25rem;
+`;
 export const MessageReactions = styled.div<{ isMine?: boolean }>`
     position: absolute;
     bottom: 0;
@@ -229,7 +227,7 @@ export const ReplyToMessageContainer = styled.div<{
                 ${style}
                 background-color: rgba(0, 0, 0, 0.1);
                 border-color: black;
-                color:  rgba(0, 0, 0, 0.85);
+                color: rgba(0, 0, 0, 0.85);
             `;
         } else {
             style = css`

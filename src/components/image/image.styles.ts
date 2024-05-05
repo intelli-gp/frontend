@@ -19,7 +19,8 @@ export const Image = styled.img`
 export const Placeholder = styled.div<{ transparent?: boolean }>`
     position: absolute;
     border-radius: inherit;
-    background-color: ${({ transparent }) => (transparent ? 'transparent' : 'var(--gray-200)')};
+    background-color: ${({ transparent }) =>
+        transparent ? 'transparent' : 'var(--gray-200)'};
     height: 100%;
     width: 100%;
     inset: 0;
