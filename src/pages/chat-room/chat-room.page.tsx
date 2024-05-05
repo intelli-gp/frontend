@@ -33,6 +33,7 @@ import {
     ChatBody,
     ChatFooter,
     ChatHeader,
+    DeleteImg,
     EmojisIcon,
     FooterInputArea,
     GroupImage,
@@ -44,6 +45,7 @@ import {
     RightPart,
     SendIcon,
     StyledBadge,
+    UploadImageContainer,
     UserContainer,
     UsersContainer,
 } from './chat-room.style';
@@ -72,7 +74,6 @@ export const ChatroomPage = () => {
         groupData?.GroupMembers?.filter(
             (member) => !member.Connected && member.ID !== user.ID,
         ) ?? [];
-
     const [messageInput, setMessageInput] = useState('');
     const [showPicker, setShowPicker] = useState(false);
     const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout>();
@@ -82,6 +83,7 @@ export const ChatroomPage = () => {
     const onEmojiClick = (emojiObject: { emoji: string }) => {
         setMessageInput((prevInput) => prevInput + emojiObject.emoji);
     };
+    const [images, setImages] = useState<string[]>([]);
 
     const handleSendMessage = async (event?: React.MouseEvent) => {
         event?.preventDefault();
@@ -89,6 +91,7 @@ export const ChatroomPage = () => {
         setMessageInput('');
         let message: CreateMessageDTO = {
             Content: messageInput,
+            Type:'MESSAGE',
             GroupID: +groupId!,
         };
         if (replyingTo) {
@@ -96,6 +99,19 @@ export const ChatroomPage = () => {
             setReplyingTo(null!);
         }
         await sendMessage(message).unwrap();
+        if(images.length>0){
+            console.log('I entered')
+            images.forEach(async(image) => {
+                let message: CreateMessageDTO = {
+                    Content: image,
+                    Type:'IMAGE',
+                    GroupID: +groupId!,
+                };
+                await sendMessage(message).unwrap();
+
+            })
+            setImages([]);
+        }
     };
 
     const handlePressingEnter = ({ key, shiftKey }: KeyboardEvent) => {
@@ -133,6 +149,28 @@ export const ChatroomPage = () => {
         setReplyingTo(message);
     };
 
+    const fileInput = useRef<HTMLInputElement>(null);
+
+    const openFileInput = () => {
+        fileInput.current?.click();
+    };
+
+    const handleImageSelection = (e: ChangeEvent<HTMLInputElement>) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            setImages((prevImages) => [...prevImages, reader.result as string]);
+        };
+        reader.readAsDataURL(e.target.files![0]);
+    };
+
+    const deleteImage = (index: number) => {
+        setImages((prevImages) => {
+            const updatedImages = [...prevImages];
+            updatedImages.splice(index, 1);
+            return updatedImages;
+        });
+    };
+
     const groupOptions = [
         {
             option: 'View Group',
@@ -154,6 +192,8 @@ export const ChatroomPage = () => {
             top: chatBodyRef?.current?.scrollHeight,
             behavior: 'instant',
         });
+        console.log(messages)
+
     }, [messages]);
 
     useEffect(() => {
@@ -189,9 +229,8 @@ export const ChatroomPage = () => {
                                     <span className="font-bold">
                                         {typingUsers?.join(' ,')}
                                     </span>
-                                    {` ${
-                                        typingUsers.length === 1 ? 'is' : 'are'
-                                    }  `}
+                                    {` ${typingUsers.length === 1 ? 'is' : 'are'
+                                        }  `}
                                     typing...
                                 </div>
                             ) : (
@@ -254,9 +293,9 @@ export const ChatroomPage = () => {
                     )}
                     {replyingTo && (
                         <ReplyMessage
-                            {...replyingTo}
-                            closeButtonHandler={() => setReplyingTo(null!)}
-                        />
+                        isImage={replyingTo.Type==='IMAGE'} 
+                        {...replyingTo}
+                        closeButtonHandler={() => setReplyingTo(null!)}                        />
                     )}
                     <FooterInputArea>
                         <div className="flex items-center">
@@ -267,22 +306,38 @@ export const ChatroomPage = () => {
                                     setShowPicker(!showPicker);
                                 }}
                             />
-                            <AttachIcon size={20} />
+                            <span onClick={openFileInput}>
+                                <input
+                                    type="file"
+                                    ref={fileInput}
+                                    onChange={handleImageSelection}
+                                    hidden
+                                />
+                                <AttachIcon size={20} />
+                            </span>
                         </div>
-
-                        <MessageInput
-                            className="bg-[var(--gray-100)] !border-none focus-visible:!outline-none resize-none"
-                            placeholder="Type a message..."
-                            value={messageInput}
-                            onChange={handleInputChange}
-                            onKeyPress={handlePressingEnter}
-                        />
-
+                        <div className="flex flex-col flex-1 max-h-[135px] p-[4px] bg-[var(--gray-100)] !border-none focus-visible:!outline-none rounded-md">
+                             {images &&  <div className='flex gap-2 justify-start items-center'>
+                                   { images.map((image, index) => (
+                                        <div className='relative p-2 ' key={index}>
+                                            <DeleteImg onClick={() => deleteImage(index)} />
+                                            <UploadImageContainer src={image} />
+                                        </div>))}
+                            </div>}
+                            <MessageInput
+                                className="bg-[var(--gray-100)] !border-none focus-visible:!outline-none resize-none"
+                                placeholder="Type a message..."
+                                value={messageInput}
+                                onChange={handleInputChange}
+                                onKeyPress={handlePressingEnter}
+                            />
+                           
+                        </div>
                         <SendIcon
-                            title="Send message"
-                            size={20}
-                            onClick={handleSendMessage}
-                        />
+                                title="Send message"
+                                size={20}
+                                onClick={handleSendMessage}
+                            />
                     </FooterInputArea>
                 </ChatFooter>
             </LeftPart>
