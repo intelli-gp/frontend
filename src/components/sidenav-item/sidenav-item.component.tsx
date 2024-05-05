@@ -1,5 +1,4 @@
 import { AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 
 import {
     ArrowBack,
@@ -52,12 +51,10 @@ export default function SideNavItem({
     subItems,
     toggleExtend,
 }: Omit<SideNavItemProps, 'id'>) {
-    const navigate = useNavigate();
-
     const handleClickExtendableItem = (event: React.MouseEvent) => {
         if (subItems && subItems[0]) {
             event.preventDefault();
-            navigate(subItems[0].path);
+            toggleExtend && toggleExtend(event);
         }
     };
 
@@ -77,7 +74,11 @@ export default function SideNavItem({
 
             <AnimatePresence>
                 {extended && (
-                    <SubItemsContainer>
+                    <SubItemsContainer
+                        initial={{ height: 0, paddingTop: 0 }}
+                        animate={{ height: '', paddingTop: '0.75rem' }}
+                        exit={{ height: 0, paddingTop: 0 }}
+                    >
                         {subItems?.map((item) => {
                             return (
                                 <SubItemLink

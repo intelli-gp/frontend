@@ -7,7 +7,6 @@ export const ItemContainer = styled(Link)<{ active?: boolean }>`
     display: flex;
     flex-direction: column;
     color: white;
-    gap: 0.75rem;
     padding: 0.5rem 1rem;
     transition: all 0.2s ease-out;
     border-radius: 0.5rem;
@@ -47,6 +46,7 @@ export const ArrowBack = styled(IoIosArrowBack)`
 `;
 
 export const SubItemsContainer = styled(motion.div)`
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
