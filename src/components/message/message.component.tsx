@@ -284,7 +284,6 @@ const ChatMessage = ({
 
     const MessageInfoModal = (
         <Modal
-            width="sm"
             isOpen={messageInfoIsOpen}
             setIsOpen={setMessageInfoIsOpen}
             cleanupFn={messageInfoModalCleanup}
@@ -339,7 +338,6 @@ const ChatMessage = ({
 
     const ViewReactionsModal = (
         <Modal
-            width="sm"
             isOpen={viewReactionsIsOpen}
             setIsOpen={setViewReactionsIsOpen}
             title={`Reactions on message`}
@@ -493,7 +491,7 @@ export const ReplyMessage = ({
     replyByMe = false,
 }: ReplyMessageProps) => {
     let storedUser = useSelector((state: RootState) => state.auth.user);
-    let isMine = User?.ID === storedUser.ID;
+    let isMine = User?.Username === storedUser.Username;
 
     return (
         <ReplyToMessageContainer passive={passive} replyByMe={replyByMe}>

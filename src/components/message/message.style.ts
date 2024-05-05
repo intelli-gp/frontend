@@ -182,6 +182,7 @@ export const MessageInfoReadContainer = styled.div`
 
 export const MessageInfoUsersList = styled.ul`
     overflow-y: auto;
+    padding: 0 1rem;
 `;
 
 export const MessageInfoSectionLabel = styled.label`

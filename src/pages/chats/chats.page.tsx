@@ -13,7 +13,7 @@ import { ChatsContainer, PageContainer } from './chats.styles';
 export const ChatsPage = () => {
     const [searchValue, setSearchValue] = useState('');
 
-    const { data, isLoading, error } = useFetchMessagesQuery(undefined);
+    const { data, isLoading, error } = useFetchMessagesQuery();
 
     const [groups, setGroups] = useState(data ?? []);
 

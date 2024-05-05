@@ -50,7 +50,7 @@ export const AuthorCard = ({ article }: AuthorCardProps) => {
                     <AuthorName>{article?.Author?.FullName}</AuthorName>
                     <AuthorHeadline>{article?.Author?.Headline}</AuthorHeadline>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-evenly">
                     <VerticalBadge
                         count={formatCompactNumber(
                             authorFullData?.Articles?.length ?? 0,
@@ -60,10 +60,6 @@ export const AuthorCard = ({ article }: AuthorCardProps) => {
                     <VerticalBadge
                         count={formatCompactNumber(200)}
                         title="followers"
-                    />
-                    <VerticalBadge
-                        count={formatCompactNumber(1500)}
-                        title="likes"
                     />
                 </div>
                 <div className="flex gap-2">

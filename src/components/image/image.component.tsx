@@ -31,7 +31,7 @@ const EnhancedImage = ({
     return (
         <ImageContainer className={className}>
             <Image
-                src={src}
+                src={src ?? "invalid image"}
                 alt={alt ?? ''}
                 onError={(e: ImageErrorEvent) => {
                     // TODO: may want to change placeholder to a default image

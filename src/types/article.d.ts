@@ -27,6 +27,7 @@ export type ArticleComment = {
         | 'Email'
         | 'PhoneNumber'
     >;
+    LikedBy: Omit<ReceivedUser, 'Password'>[];
 };
 
 // Receive from server

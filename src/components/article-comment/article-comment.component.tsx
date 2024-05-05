@@ -1,7 +1,13 @@
 import moment from 'moment';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useMemo, useState } from 'react';
+import { GoThumbsup } from 'react-icons/go';
+import { useSelector } from 'react-redux';
 
-import { useCommentOnArticleMutation } from '../../store';
+import {
+    RootState,
+    useCommentOnArticleMutation,
+    useToggleLikeCommentMutation,
+} from '../../store';
 import type { ArticleComment as ArticleCommentType } from '../../types/article';
 import { profileURL } from '../../utils/profileUrlBuilder';
 import { errorToast } from '../../utils/toasts';
@@ -12,6 +18,7 @@ import {
     CommentContent,
     CommentDate,
     CommentHeader,
+    CommentLikeContainer,
     CommenterFullName,
     CommenterProfileImage,
     WriteCommentContainer,
@@ -22,6 +29,27 @@ type ArticleCommentProps = {
 };
 
 const ArticleComment = ({ comment }: ArticleCommentProps) => {
+    let storedUser = useSelector((state: RootState) => state.auth.user);
+    let [toggleLike] = useToggleLikeCommentMutation();
+
+    let likedByMe = useMemo(() => {
+        if (!comment?.LikedBy?.length) return false;
+        return comment.LikedBy.some(
+            (like) => like.Username === storedUser?.Username,
+        );
+    }, [comment]);
+
+    let toggleLikeComment = () => {
+        try {
+            toggleLike({
+                articleID: comment.ArticleID,
+                commentID: comment.ID,
+            });
+        } catch (error) {
+            errorToast('Failed to like comment');
+        }
+    };
+
     return (
         <CommentContainer data-color-mode="light">
             <CommentHeader>
@@ -36,9 +64,33 @@ const ArticleComment = ({ comment }: ArticleCommentProps) => {
                         {moment(comment.CreatedAt).fromNow()}
                     </CommentDate>
                 </div>
+                <LikeCommentBadge
+                    clickHandler={toggleLikeComment}
+                    count={comment.LikedBy.length}
+                    likedByMe={likedByMe}
+                />
             </CommentHeader>
             <CommentContent source={comment.Content} />
         </CommentContainer>
+    );
+};
+
+type LikeCommentBadgeProps = {
+    count: number;
+    likedByMe: boolean;
+    clickHandler: () => void;
+};
+
+const LikeCommentBadge = ({
+    count,
+    likedByMe,
+    clickHandler,
+}: LikeCommentBadgeProps) => {
+    return (
+        <CommentLikeContainer active={likedByMe} onClick={clickHandler}>
+            <GoThumbsup size={18} />
+            <span>{count}</span>
+        </CommentLikeContainer>
     );
 };
 

@@ -1,3 +1,4 @@
+import MDEditor from '@uiw/react-md-editor';
 import { motion } from 'framer-motion';
 import { BiSolidComment } from 'react-icons/bi';
 import { BsThreeDots } from 'react-icons/bs';
@@ -60,6 +61,12 @@ export const ArticleImageSection = styled.img`
     object-position: center;
     width: 100%;
     height: 100%;
+`;
+
+export const ArticleMDSection = styled(MDEditor.Markdown)`
+    & * {
+        font-family: 'Merriweather', serif;
+    }
 `;
 
 export const PublishDate = styled.p`
@@ -140,11 +147,11 @@ export const OptionsIcon = styled(BsThreeDots)`
 
 export const CommentsIcon = styled(BiSolidComment)<{ active: boolean }>`
     ${commonIconStyles}
-    color: ${({ active }) => (active ? 'inherit' : 'transparent')};
+    color: ${({ active }) => (active ? 'black' : 'transparent')};
     stroke-width: ${({ active }) => (active ? 0 : 1)}px;
     &:hover {
         stroke-width: 0;
-        color: inherit;
+        color: black;
     }
 `;
 

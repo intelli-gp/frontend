@@ -1,4 +1,6 @@
-import styled from 'styled-components';
+import { MdNotifications } from 'react-icons/md';
+import { TbMessage2 } from 'react-icons/tb';
+import styled, { css } from 'styled-components';
 
 import { CSSTextLengthLimit } from '../../index.styles';
 import EnhancedImage from '../image/image.component';
@@ -35,7 +37,7 @@ export const Brand = styled.h1`
     min-height: 0;
     padding: 0.5rem 0;
     line-height: 1.2;
-    font-family: "Merriweather", serif;
+    font-family: 'Merriweather', serif;
     user-select: none;
 `;
 
@@ -60,6 +62,36 @@ export const SideNavFooter = styled.footer`
     margin-top: auto;
 `;
 
+const commonFooterIconStyles = css<{ counter?: number }>`
+    position: relative;
+    ${({ counter }) => {
+        if (counter ?? 0 > 0) {
+            return css`
+                &::after {
+                    content: '${counter}';
+                    position: absolute;
+                    padding: 0.3rem;
+                    line-height: 0.5rem;
+                    top: -0.35rem;
+                    right: -0.35rem;
+                    background-color: var(--yellow-500);
+                    color: black;
+                    font-size: 0.8rem;
+                    border-radius: 5rem;
+                }
+            `;
+        }
+    }}
+`;
+
+export const IconContainer = styled.div<{ counter?: number }>`
+    ${commonFooterIconStyles}
+`;
+
+export const MessagesIcon = styled(TbMessage2)``;
+
+export const NotificationsIcon = styled(MdNotifications)``;
+
 export const IconsContainer = styled.div`
     display: flex;
     gap: 0.5rem;
@@ -72,12 +104,12 @@ export const IconsContainer = styled.div`
         padding: 0.5rem;
         box-sizing: content-box;
         border-radius: 50%;
-        transition:  0.2s ease-out;
+        transition: 0.2s ease-out;
         background-color: rgba(255, 255, 255, 0.075);
         border: 2px solid transparent;
         &:hover {
             background-color: rgba(255, 255, 255, 0.1);
-           border-color: rgba(255, 255, 255, 0.11);
+            border-color: rgba(255, 255, 255, 0.11);
         }
     }
 `;
