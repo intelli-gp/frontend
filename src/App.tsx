@@ -5,6 +5,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import AIHelperPage from './pages/AI-helper/AI-helper.page';
 import { AIServicePage } from './pages/ai-service/ai-service.page';
+import ArticlesBookmarksPage from './pages/articles-bookmarks/articles-bookmarks.page';
 import ForgetPasswordPage from './pages/auth/froget-password/forget-password.page';
 import RecoverPassword from './pages/auth/froget-password/recover-password.page';
 import InterestsPage from './pages/auth/interests/interests.page';
@@ -128,7 +129,10 @@ function App() {
                                 path="articles/:articleId"
                                 element={<ViewArticlePage />}
                             />
-
+                            <Route
+                                path="/app/articles/my-bookmarks"
+                                element={<ArticlesBookmarksPage />}
+                            />
                             <Route
                                 path="articles/create"
                                 element={<CreateArticlePage />}

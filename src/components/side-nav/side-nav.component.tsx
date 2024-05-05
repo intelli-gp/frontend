@@ -5,7 +5,7 @@ import { FiMenu } from 'react-icons/fi';
 import { GiBookshelf, GiRobotGolem, GiTomato, GiUpgrade } from 'react-icons/gi';
 import { HiMiniUserGroup } from 'react-icons/hi2';
 import { IoIosSettings } from 'react-icons/io';
-import { IoPersonSharp } from 'react-icons/io5';
+import { IoBookmark, IoPersonSharp } from 'react-icons/io5';
 import { LuListTodo, LuSearch } from 'react-icons/lu';
 import { MdLogout } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
@@ -88,9 +88,26 @@ export default function SideNav() {
         },
         {
             icon: <BsFillPostcardFill />,
-            path: '/app/articles',
+            path: '#',
             text: 'Articles',
             id: 4,
+            extendable: true,
+            subItems: [
+                {
+                    icon: <LuSearch />,
+                    path: '/app/articles',
+                    text: 'Explore',
+                    active: false,
+                    id: 4.1,
+                },
+                {
+                    icon: <IoBookmark />,
+                    path: '/app/articles/my-bookmarks',
+                    text: 'Bookmarks',
+                    active: false,
+                    id: 4.2,
+                }
+            ]
         },
         {
             icon: <GiBookshelf />,

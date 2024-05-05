@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import { appApi } from '.';
 import { ArticleToSend, ReceivedArticle } from '../../types/article.d';
+import { PaginatedResult } from '../../types/pagination';
 import { GenericResponse, Response } from '../../types/response';
 
 type LikeCommentPayload = {
@@ -40,7 +41,6 @@ const articleApi = appApi.injectEndpoints({
                 method: 'GET',
             }),
         }),
-        //Ask Them to add Id
         getUserArticles: builder.query<
             GenericResponse<ReceivedArticle[]>,
             void
@@ -106,9 +106,36 @@ const articleApi = appApi.injectEndpoints({
                 { type: 'Article', id: articleID },
             ],
             query: ({ articleID, commentID }) => ({
-                url: `/articles/${articleID}/comment/${commentID}/like`,
+                url: `/articles/${articleID}/comment/${commentID}/toggle-like`,
                 method: 'POST',
             }),
+        }),
+        toggleBookmarkArticle: builder.mutation<
+            GenericResponse<string>,
+            number
+        >({
+            invalidatesTags: ['Bookmarks'],
+            query: (id) => ({
+                url: `/articles/${id}/bookmark`,
+                method: 'POST',
+            }),
+        }),
+        getBookmarkedArticles: builder.query<
+            GenericResponse<PaginatedResult<ReceivedArticle>>,
+            { limit?: number; offset?: number }
+        >({
+            providesTags: ['Bookmarks'],
+            query: ({ limit = 15, offset = 0 }) => {
+                return {
+                    url: '/articles/bookmarked',
+                    method: 'GET',
+                    params: {
+                        limit,
+                        offset,
+                    },
+                };
+            },
+            keepUnusedDataFor: 0,
         }),
     }),
 });
@@ -124,4 +151,7 @@ export const {
     useToggleLoveArticleMutation,
     useCommentOnArticleMutation,
     useToggleLikeCommentMutation,
+    useToggleBookmarkArticleMutation,
+    useGetBookmarkedArticlesQuery,
+    usePrefetch,
 } = articleApi;
