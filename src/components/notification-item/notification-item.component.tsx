@@ -1,6 +1,8 @@
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 
-import { Notification } from '../../types/notifications';
+import { useReadNotificationMutation } from '../../store';
+import { ReadNotificationDto } from '../../types/notifications';
 import {
     ContentContainer,
     ItemContainer,
@@ -9,16 +11,42 @@ import {
     Username,
 } from './notification-item.styles';
 
-type NotificationItemProps = Notification & {};
+const NotificationAction = {
+    liked: 'liked',
+    starred: 'starred',
+    commented: 'commented',
+    followed: 'followed',
+    created: 'created',
+} as const;
+
+type NotificationItemProps = {
+    Read: boolean;
+    UserImage: string;
+    Username: string;
+    Action: keyof typeof NotificationAction;
+    CreatedAt: string;
+    Link: string;
+    ReadNotificationData: ReadNotificationDto;
+};
 
 const NotificationItem = ({
-    Read,
+    Read = false,
     UserImage: Image,
     Username: username,
     Action,
     CreatedAt,
+    Link,
+    ReadNotificationData,
 }: NotificationItemProps) => {
-    let notificationTags = [];
+    const navigate = useNavigate();
+
+    const [readNotification] = useReadNotificationMutation();
+    const notificationTags = [];
+
+    const clickHandler = () => {
+        readNotification(ReadNotificationData);
+        navigate(Link);
+    };
 
     let notificationText = '';
     switch (Action) {
@@ -38,6 +66,10 @@ const NotificationItem = ({
             notificationText = 'created a new article';
             notificationTags.push('Created', 'Article');
             break;
+        case 'liked':
+            notificationText = 'liked your article';
+            notificationTags.push('Liked', 'Article');
+            break;
         default:
             notificationText = 'performed an action';
             notificationTags.push('Unknown', 'Unknown');
@@ -45,7 +77,7 @@ const NotificationItem = ({
     }
 
     return (
-        <ItemContainer read={Read}>
+        <ItemContainer read={Read} onClick={clickHandler}>
             <UserImage src={Image} alt="User" />
             <ContentContainer>
                 <Username>@{username}</Username>
