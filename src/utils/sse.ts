@@ -1,8 +1,14 @@
 import { EventSourcePolyfill } from 'event-source-polyfill';
 
-import { MessageNotification } from '../components/message-notification/message-notification.component';
+import { UserNotification } from '../components/user-notification/user-notification.component';
+import {
+    NOTIFICATION_SUB_TYPES,
+    NOTIFICATION_TYPES,
+} from '../enums/notification.enum';
 import { notificationApi, store } from '../store';
-import { ChatNotification, SseEvents } from '../types/notifications';
+import { ArticleComment, ArticleLike } from '../types/article';
+import { NotificationReceiveType, SseEvents } from '../types/notifications';
+import { GenericResponse } from '../types/response';
 import { infoToast } from './toasts';
 
 let subscription: EventSourcePolyfill;
@@ -16,8 +22,9 @@ export function connectSSE(token?: string) {
             Authorization: `Bearer ${token}`,
         },
     });
-    subscription.onmessage = (event) => {
+    subscription.onmessage = async (event) => {
         const eventData = JSON.parse(event.data) as SseEvents;
+
         // console.log(eventData); // Debugging
         switch (eventData.eventName) {
             case 'chat-group-message': {
@@ -68,10 +75,71 @@ export function connectSSE(token?: string) {
                         console.error('Error refetching data:', error);
                     }
                 });
-                //   const state = store.getState();
-                //   const result = notificationApi.endpoints.fetchMessages.select(undefined)(state)
-                //   console.log(result);
-                return MessageNotification(eventData as ChatNotification);
+                return UserNotification({
+                    ImageSrc: eventData?.message?.Group?.GroupCoverImage,
+                    Title: eventData?.message?.Group?.GroupTitle,
+                    ContentPrefix: eventData?.message?.User?.FullName,
+                    Content: eventData?.message?.Content,
+                    Linker: `/app/chat-room/${eventData?.message?.Group?.ID}`,
+                });
+            }
+            case 'article': {
+                store.dispatch(
+                    notificationApi.util.updateQueryData(
+                        'fetchUserNotifications',
+                        { limit: 10, offset: 0 },
+
+                        (existingNotifications) => {
+                            const existingNotificationsData = Object.assign(
+                                existingNotifications?.data,
+                            );
+
+                            const updatedNotifications: GenericResponse<
+                                SseEvents[]
+                            > = {
+                                status: 'success',
+                                data: [eventData, ...existingNotificationsData],
+                            };
+                            return updatedNotifications;
+                        },
+                    ),
+                );
+
+                switch (eventData.type) {
+                    case NOTIFICATION_SUB_TYPES[NOTIFICATION_TYPES.ARTICLE]
+                        .LIKE: {
+                        const data = eventData as NotificationReceiveType<
+                            'article',
+                            ArticleLike
+                        >;
+                        return UserNotification({
+                            ImageSrc: data?.message?.Liker?.ProfileImage,
+                            ImageLinker: `/app/profile/${data?.message?.Liker?.Username}`,
+                            Title: data?.message?.Liker?.FullName,
+                            Content: 'has liked your article',
+                            Linker: `/app/articles/${data?.message?.ArticleID}`,
+                        });
+                    }
+                    case NOTIFICATION_SUB_TYPES[NOTIFICATION_TYPES.ARTICLE]
+                        .COMMENT: {
+                        const data = eventData as NotificationReceiveType<
+                            'article',
+                            ArticleComment
+                        >;
+                        return UserNotification({
+                            ImageSrc: data?.message?.Commenter?.ProfileImage,
+                            ImageLinker: `/app/profile/${data?.message?.Commenter?.Username}`,
+                            Title: data?.message?.Commenter?.FullName,
+                            Content: 'has commented on your article',
+                            Linker: `/app/articles/${data?.message?.ArticleID}`,
+                        });
+                    }
+                    default: {
+                        return infoToast(
+                            `${eventData.type} is not a supported article notification sub-type`,
+                        );
+                    }
+                }
             }
             default:
                 return infoToast(
