@@ -10,7 +10,7 @@ export const ItemContainer = styled.div<{ read: boolean }>`
     padding: 0.75rem;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px 0px;
     cursor: pointer;
-    background-color: ${({ read }) => (read ? 'white' : 'var(--indigo-20)')};
+    background-color: ${({ read }) => (read ? 'white' : 'var(--indigo-100)')};
     transition: all 0.2s ease-in-out;
     &:hover {
         background-color: var(--indigo-50);
