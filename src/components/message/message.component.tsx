@@ -434,7 +434,7 @@ const ChatMessage = ({
                     User={message.RepliedToMessage?.User}
                     Content={message.RepliedToMessage?.Content}
                     passive={true}
-                    isImage={message.Type === 'IMAGE'}
+                    isImage={message.RepliedToMessage?.Type === 'IMAGE'}
                     replyByMe={isMine}
                 />
             )}
