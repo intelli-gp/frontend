@@ -4,109 +4,16 @@ import { useNavigate } from 'react-router-dom';
 
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import NotificationItem from '../../components/notification-item/notification-item.component';
+import {
+    ARTICLE_NOTIFICATION_TYPES,
+    NOTIFICATION_TYPES,
+} from '../../enums/notification.enum';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
-import { Notification } from '../../types/notifications';
+import { useFetchUserNotificationsQuery } from '../../store';
+import { ArticleComment, ArticleLike } from '../../types/article';
+import { NotificationReceiveType, SseEvents } from '../../types/notifications';
 import { EditButton } from '../view-group/view-group.styles';
 import { NotificationsContainer, PageContainer } from './notifications.styles';
-
-const NOTIFICATIONS: Notification[] = [
-    {
-        Username: 'ahmed',
-        UserImage: 'https://randomuser.me/api/portraits/men/10.jpg',
-        Action: 'starred',
-        Read: true,
-        CreatedAt: '2021-07-01T12:00:00Z',
-        TargetID: '1',
-    },
-    {
-        Username: 'ahmed',
-        UserImage: 'https://randomuser.me/api/portraits/men/10.jpg',
-        Action: 'commented',
-        Read: true,
-        CreatedAt: '2021-07-01T12:00:00Z',
-        TargetID: '2',
-    },
-    {
-        Username: 'ahmed',
-        UserImage: 'https://randomuser.me/api/portraits/men/10.jpg',
-        Action: 'followed',
-        Read: true,
-        CreatedAt: '2021-07-01T12:00:00Z',
-        TargetID: '3',
-    },
-    {
-        Username: 'Khaled',
-        UserImage: 'https://randomuser.me/api/portraits/men/10.jpg',
-        Action: 'created',
-        Read: true,
-        CreatedAt: '2021-07-01T12:00:00Z',
-        TargetID: '4',
-    },
-    {
-        Username: 'Khaled',
-        UserImage: 'https://randomuser.me/api/portraits/men/10.jpg',
-        Action: 'starred',
-        Read: true,
-        CreatedAt: '2021-07-01T12:00:00Z',
-        TargetID: '1',
-    },
-    {
-        Username: 'Khaled',
-        UserImage: 'https://randomuser.me/api/portraits/men/10.jpg',
-        Action: 'commented',
-        Read: false,
-        CreatedAt: '2021-07-01T12:00:00Z',
-        TargetID: '2',
-    },
-    {
-        Username: 'Khaled',
-        UserImage: 'https://randomuser.me/api/portraits/men/10.jpg',
-        Action: 'followed',
-        Read: false,
-        CreatedAt: '2021-07-01T12:00:00Z',
-        TargetID: '3',
-    },
-    {
-        Username: 'Khaled',
-        UserImage: 'https://randomuser.me/api/portraits/men/10.jpg',
-        Action: 'created',
-        Read: false,
-        CreatedAt: '2021-07-01T12:00:00Z',
-        TargetID: '4',
-    },
-    {
-        Username: 'Khaled',
-        UserImage: 'https://randomuser.me/api/portraits/men/10.jpg',
-        Action: 'starred',
-        Read: true,
-        CreatedAt: '2021-07-01T12:00:00Z',
-        TargetID: '1',
-    },
-    {
-        Username: 'Khaled',
-        UserImage: 'https://randomuser.me/api/portraits/men/10.jpg',
-        Action: 'commented',
-        Read: true,
-        CreatedAt: '2021-07-01T12:00:00Z',
-        TargetID: '2',
-    },
-    {
-        Username: 'user3',
-        UserImage: 'https://randomuser.me/api/portraits/men/10.jpg',
-        Action: 'followed',
-        Read: true,
-        CreatedAt: '2021-07-01T12:00:00Z',
-        TargetID: '3',
-    },
-    {
-        Username: 'user4',
-        UserImage: 'https://randomuser.me/api/portraits/men/10.jpg',
-        Action: 'created',
-        Read: true,
-        CreatedAt: '2021-07-01T12:00:00Z',
-        TargetID: '4',
-    },
-];
 
 const NotificationsPage = () => {
     const navigate = useNavigate();
@@ -114,6 +21,85 @@ const NotificationsPage = () => {
     const handleSearchValueChange = (value: string) => {
         setSearchValue(value);
     };
+
+    const { data: userNotifications } = useFetchUserNotificationsQuery({
+        limit: 10,
+        offset: 0,
+    });
+
+
+    const notifications = userNotifications?.data?.map(
+        (notification: SseEvents) => {
+            switch (notification.eventName) {
+                case NOTIFICATION_TYPES.ARTICLE: {
+                    switch (notification?.type) {
+                        case ARTICLE_NOTIFICATION_TYPES.LIKE: {
+                            const data =
+                                notification as NotificationReceiveType<
+                                    'article',
+                                    ArticleLike
+                                >;
+                            return (
+                                <NotificationItem
+                                    key={`Article-${data?.message?.ArticleID}-Like-${data?.message?.Liker?.ID}-Notification${data?.createdAt}`}
+                                    Action="liked"
+                                    UserImage={
+                                        data?.message?.Liker?.ProfileImage
+                                    }
+                                    Username={data?.message?.Liker?.Username}
+                                    CreatedAt={data?.createdAt?.toString()}
+                                    Read={data?.message?.IsNotificationViewed}
+                                    Link={`/app/articles/${data?.message?.ArticleID}`}
+                                    ReadNotificationData={{
+                                        ID: +data?.message?.ArticleID,
+                                        PrimaryType: NOTIFICATION_TYPES.ARTICLE,
+                                        SubType:
+                                            ARTICLE_NOTIFICATION_TYPES.LIKE,
+                                        NotificationSenderID:
+                                            +data?.message?.Liker?.ID,
+                                    }}
+                                />
+                            );
+                        }
+                        case ARTICLE_NOTIFICATION_TYPES.COMMENT: {
+                            const data =
+                                notification as NotificationReceiveType<
+                                    'article',
+                                    ArticleComment
+                                >;
+                            return (
+                                <NotificationItem
+                                    key={`Article-${data?.message?.ArticleID}-Comment-${data?.message?.Commenter?.ID}-Notification${data?.createdAt}`}
+                                    Action="commented"
+                                    UserImage={
+                                        data?.message?.Commenter?.ProfileImage
+                                    }
+                                    Username={
+                                        data?.message?.Commenter?.Username
+                                    }
+                                    CreatedAt={data?.createdAt?.toString()}
+                                    Read={data?.message?.IsNotificationViewed}
+                                    Link={`/app/articles/${data?.message?.ArticleID}`}
+                                    ReadNotificationData={{
+                                        ID: +data?.message?.ID,
+                                        PrimaryType: NOTIFICATION_TYPES.ARTICLE,
+                                        SubType:
+                                            ARTICLE_NOTIFICATION_TYPES.COMMENT,
+                                        NotificationSenderID:
+                                            +data?.message?.Commenter?.ID,
+                                    }}
+                                />
+                            );
+                        }
+                        default:
+                            break;
+                    }
+                }
+            }
+        },
+    );
+
+
     return (
         <PageContainer {...BetweenPageAnimation}>
             <div className="flex justify-between items center">
@@ -127,14 +113,7 @@ const NotificationsPage = () => {
                 searchValue={searchValue}
                 onSearchValueChange={handleSearchValueChange}
             />
-            <NotificationsContainer>
-                {NOTIFICATIONS.map((notification) => (
-                    <NotificationItem
-                        key={notification.TargetID}
-                        {...notification}
-                    />
-                ))}
-            </NotificationsContainer>
+            <NotificationsContainer>{notifications}</NotificationsContainer>
         </PageContainer>
     );
 };

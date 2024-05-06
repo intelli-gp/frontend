@@ -1,4 +1,4 @@
-import { ReceivedUser, UserToSend } from './user';
+import { ReceivedUser } from './user';
 
 export enum ArticleSectionType {
     Markdown = 'markdown',
@@ -16,6 +16,11 @@ export type ArticleComment = {
     Content: string;
     CreatedAt: string;
     ArticleID: number;
+    IsNotificationViewed: boolean;
+    LikedBy: Pick<
+        ReceivedUser,
+        'ID' | 'Username' | 'FullName' | 'ProfileImage'
+    >
     Commenter: Pick<
         ReceivedUser,
         | 'ID'
@@ -28,6 +33,13 @@ export type ArticleComment = {
         | 'PhoneNumber'
     >;
     LikedBy: Omit<ReceivedUser, 'Password'>[];
+};
+
+export type ArticleLike = {
+    ArticleID: number;
+    CreatedAt: string;
+    Liker: Pick<ReceivedUser, 'ID' | 'FullName' | 'Username' | 'ProfileImage'>;
+    IsNotificationViewed: boolean;
 };
 
 // Receive from server
