@@ -20,7 +20,7 @@ export type ArticleComment = {
     LikedBy: Pick<
         ReceivedUser,
         'ID' | 'Username' | 'FullName' | 'ProfileImage'
-    >
+    >[];
     Commenter: Pick<
         ReceivedUser,
         | 'ID'

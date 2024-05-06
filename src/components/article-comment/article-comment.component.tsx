@@ -29,17 +29,17 @@ type ArticleCommentProps = {
 };
 
 const ArticleComment = ({ comment }: ArticleCommentProps) => {
-    let storedUser = useSelector((state: RootState) => state.auth.user);
-    let [toggleLike] = useToggleLikeCommentMutation();
+    const storedUser = useSelector((state: RootState) => state.auth.user);
+    const [toggleLike] = useToggleLikeCommentMutation();
 
-    let likedByMe = useMemo(() => {
+    const likedByMe = useMemo(() => {
         if (!comment?.LikedBy?.length) return false;
         return comment.LikedBy.some(
             (like) => like.Username === storedUser?.Username,
         );
     }, [comment]);
 
-    let toggleLikeComment = () => {
+    const toggleLikeComment = () => {
         try {
             toggleLike({
                 articleID: comment.ArticleID,
