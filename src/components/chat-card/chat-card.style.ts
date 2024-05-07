@@ -58,7 +58,10 @@ export const UnreadMessagesCounter = styled.div`
 
 export const LastMessageContent = styled.div<{ width?: string }>`
     ${CSSTextLengthLimit};
+    display: flex;
+    align-items: center;
     font-size: 0.875rem;
+    gap:6px;
 `;
 
 export const LastMessageAuthorName = styled.span`

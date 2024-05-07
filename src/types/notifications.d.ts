@@ -50,7 +50,7 @@ export type MessagesNotification = {
     };
     LastMessage?: Pick<
         SerializedMessage,
-        'Content' | 'CreatedAt' | 'IsDeleted' | 'MessageID' | 'User'
+        'Content' | 'CreatedAt' | 'IsDeleted' | 'MessageID' | 'User' | 'Type'
     >;
     UnreadMessagesCount?: number;
 };
