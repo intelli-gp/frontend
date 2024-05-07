@@ -49,6 +49,7 @@ import {
     UserContainer,
     UsersContainer,
 } from './chat-room.style';
+import { useUploadImage } from '../../hooks/uploadImage.hook';
 
 export const ChatroomPage = () => {
     const { id: groupId } = useParams();
@@ -84,9 +85,21 @@ export const ChatroomPage = () => {
         setMessageInput((prevInput) => prevInput + emojiObject.emoji);
     };
     const [images, setImages] = useState<string[]>([]);
-
+    const { trigger: uploadImage } =    useUploadImage();
     const handleSendMessage = async (event?: React.MouseEvent) => {
         event?.preventDefault();
+        if (images.length > 0) {
+            images.forEach(async (image) => {
+                const imageURL = await uploadImage(image);
+                let message: CreateMessageDTO = {
+                    Content: imageURL,
+                    Type: 'IMAGE',
+                    GroupID: +groupId!,
+                };
+                await sendMessage(message).unwrap();
+            });
+            setImages([]);
+        }
         if (!messageInput.trim()) return;
         setMessageInput('');
         let message: CreateMessageDTO = {
@@ -99,18 +112,7 @@ export const ChatroomPage = () => {
             setReplyingTo(null!);
         }
         await sendMessage(message).unwrap();
-        if (images.length > 0) {
-            console.log('I entered');
-            images.forEach(async (image) => {
-                let message: CreateMessageDTO = {
-                    Content: image,
-                    Type: 'IMAGE',
-                    GroupID: +groupId!,
-                };
-                await sendMessage(message).unwrap();
-            });
-            setImages([]);
-        }
+       
     };
 
     const handlePressingEnter = ({ key, shiftKey }: KeyboardEvent) => {
