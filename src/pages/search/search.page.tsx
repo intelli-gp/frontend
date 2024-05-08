@@ -50,20 +50,13 @@ const SearchPage = () => {
         useLazyGeneralSearchQuery();
     const searchResult = _searchResult?.data as GeneralSearchData;
 
-    const [
-        triggerArticleRecommendation,
-        {
-            data: _articleRecommendation,
-            isLoading: isArticleRecommendationLoading,
-        },
-    ] = useLazyFetchGeneralArticlesRecommendationQuery();
+    const [triggerArticleRecommendation, { data: _articleRecommendation }] =
+        useLazyFetchGeneralArticlesRecommendationQuery();
     const recommendedArticles = _articleRecommendation?.data
         ?.Results as ReceivedArticle[];
 
-    const [
-        triggerUsersRecommendation,
-        { data: _userRecommendation, isLoading: isUserRecommendationLoading },
-    ] = useLazyFetchGeneralUsersRecommendationQuery();
+    const [triggerUsersRecommendation, { data: _userRecommendation }] =
+        useLazyFetchGeneralUsersRecommendationQuery();
     const recommendedUsers = _userRecommendation?.data
         ?.Results as ReceivedUser[];
 

@@ -61,6 +61,8 @@ export function connectSSE(token?: string) {
                                                         MessageID:
                                                             eventData.message
                                                                 .MessageID,
+                                                        Type: eventData.message
+                                                            .Type,
                                                     },
                                                 };
                                             }
@@ -121,9 +123,10 @@ export function connectSSE(token?: string) {
                             ReadNotificationData: {
                                 ID: data?.message?.ArticleID,
                                 PrimaryType: NOTIFICATION_TYPES.ARTICLE,
-                                SubType: NOTIFICATION_SUB_TYPES[
-                                    NOTIFICATION_TYPES.ARTICLE
-                                ].LIKE,
+                                SubType:
+                                    NOTIFICATION_SUB_TYPES[
+                                        NOTIFICATION_TYPES.ARTICLE
+                                    ].LIKE,
                                 NotificationSenderID: +data?.message?.Liker?.ID,
                             },
                         });
@@ -143,11 +146,11 @@ export function connectSSE(token?: string) {
                             ReadNotificationData: {
                                 ID: data?.message?.ID,
                                 PrimaryType: NOTIFICATION_TYPES.ARTICLE,
-                                SubType: NOTIFICATION_SUB_TYPES[
-                                    NOTIFICATION_TYPES.ARTICLE
-                                ].COMMENT,
-                                
-                            }
+                                SubType:
+                                    NOTIFICATION_SUB_TYPES[
+                                        NOTIFICATION_TYPES.ARTICLE
+                                    ].COMMENT,
+                            },
                         });
                     }
                     default: {
