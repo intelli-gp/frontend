@@ -88,10 +88,18 @@ export type SseEvents =
     | ArticleNotifications;
 
 type ReadNotificationDto = {
+    /**
+     * The ID of the notification to mark as read. in case of one to many relationships,
+     *  this is the ID of the relevant parent entity e.g article_id .
+     */
     ID: number;
     PrimaryType: NotificationType<void>;
     SubType: string;
-    NotificationSenderID: number;
+    /**
+     * @Notice This is only required for notifications that 
+     * have one to many relationships such as Likes .
+     */
+    NotificationSenderID?: number;
 };
 
 // received notifications in notifications page

@@ -41,7 +41,7 @@ const NotificationsPage = () => {
                                 >;
                             return (
                                 <NotificationItem
-                                    key={`Article-${data?.message?.ArticleID}-Like-${data?.message?.Liker?.ID}-Notification${data?.createdAt}`}
+                                    key={`Article-${data?.message?.ArticleID}-Like-${data?.message?.Liker?.ID}-Notification${data?.message?.CreatedAt}`}
                                     Action="liked"
                                     UserImage={
                                         data?.message?.Liker?.ProfileImage
@@ -69,7 +69,7 @@ const NotificationsPage = () => {
                                 >;
                             return (
                                 <NotificationItem
-                                    key={`Article-${data?.message?.ArticleID}-Comment-${data?.message?.Commenter?.ID}-Notification${data?.createdAt}`}
+                                    key={`Article-${data?.message?.ArticleID}-Comment-${data?.message?.Commenter?.ID}-Notification${data?.message?.CreatedAt}`}
                                     Action="commented"
                                     UserImage={
                                         data?.message?.Commenter?.ProfileImage
@@ -85,8 +85,6 @@ const NotificationsPage = () => {
                                         PrimaryType: NOTIFICATION_TYPES.ARTICLE,
                                         SubType:
                                             ARTICLE_NOTIFICATION_TYPES.COMMENT,
-                                        NotificationSenderID:
-                                            +data?.message?.Commenter?.ID,
                                     }}
                                 />
                             );

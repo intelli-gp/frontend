@@ -118,6 +118,14 @@ export function connectSSE(token?: string) {
                             Title: data?.message?.Liker?.FullName,
                             Content: 'has liked your article',
                             Linker: `/app/articles/${data?.message?.ArticleID}`,
+                            ReadNotificationData: {
+                                ID: data?.message?.ArticleID,
+                                PrimaryType: NOTIFICATION_TYPES.ARTICLE,
+                                SubType: NOTIFICATION_SUB_TYPES[
+                                    NOTIFICATION_TYPES.ARTICLE
+                                ].LIKE,
+                                NotificationSenderID: +data?.message?.Liker?.ID,
+                            },
                         });
                     }
                     case NOTIFICATION_SUB_TYPES[NOTIFICATION_TYPES.ARTICLE]
@@ -132,6 +140,14 @@ export function connectSSE(token?: string) {
                             Title: data?.message?.Commenter?.FullName,
                             Content: 'has commented on your article',
                             Linker: `/app/articles/${data?.message?.ArticleID}`,
+                            ReadNotificationData: {
+                                ID: data?.message?.ID,
+                                PrimaryType: NOTIFICATION_TYPES.ARTICLE,
+                                SubType: NOTIFICATION_SUB_TYPES[
+                                    NOTIFICATION_TYPES.ARTICLE
+                                ].COMMENT,
+                                
+                            }
                         });
                     }
                     default: {

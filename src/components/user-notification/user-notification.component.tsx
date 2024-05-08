@@ -2,6 +2,7 @@ import { ToastPosition, toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 
 import NotificationAudio from '../../assets/sounds/Notification.mp3';
+import { ReadNotificationDto } from '../../types/notifications';
 import {
     DismissButton,
     NotificationContent,
@@ -10,13 +11,40 @@ import {
 } from './user-notification.style';
 
 type UserNotificationProps = {
+    /**
+     * The image source of the main image in the notification.
+     */
     ImageSrc: string;
+    /**
+     * The title of the notification.
+     */
     Title: string;
+    /**
+     * The main content of the notification.
+     */
     Content: string;
+    /**
+     * The link to navigate to when the notification is clicked.
+     */
     Linker: string;
+    /**
+     * The link to navigate to when the image is clicked.
+     * @NotImplemented
+     */
     ImageLinker?: string;
+    /**
+     * The position of the toast notification.
+     */
     position?: ToastPosition;
+    /**
+     * The prefix to add to the content. eg "New Message: "
+     */
     ContentPrefix?: string;
+    /**
+     * The data to send to the server to mark the notification as read.
+     * @NotImplemented
+     */
+    ReadNotificationData?: ReadNotificationDto;
 };
 
 export const UserNotification = ({
@@ -27,6 +55,7 @@ export const UserNotification = ({
     ImageLinker,
     position = 'top-right',
     ContentPrefix,
+    ReadNotificationData,
 }: UserNotificationProps) => {
     // const navigate = useNavigate();
     console.log({
@@ -37,7 +66,9 @@ export const UserNotification = ({
         position,
         ContentPrefix,
         Linker,
+        ReadNotificationData,
     });
+    //TODO: Implement read notification
     const dismiss = () => toast.dismiss(toastId);
     const toastId = toast(
         <div className={'flex gap-4 items-center !text-inherit'}>

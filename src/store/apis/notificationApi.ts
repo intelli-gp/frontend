@@ -19,6 +19,7 @@ export const notificationApi = appApi.injectEndpoints({
             GenericResponse<SseEvents[]>,
             PaginationDto
         >({
+            providesTags: ['User Notifications'],
             query: ({ limit = 10, offset = 0 }) => ({
                 url: `/notifications?limit=${limit}&offset=${offset}`,
                 method: 'GET',
@@ -26,18 +27,13 @@ export const notificationApi = appApi.injectEndpoints({
             keepUnusedDataFor: 0,
         }),
         readNotification: builder.mutation<void, ReadNotificationDto>({
+            invalidatesTags: ['User Notifications'],
             query: (data) => ({
                 url: `/notifications/read`,
                 method: 'PATCH',
                 body: data,
             }),
         }),
-        // markAllAsRead: builder.mutation<void, void>({
-        //     query: () => ({
-        //         url: '/notifications/read',
-        //         method: 'PUT',
-        //     }),
-        // }),
     }),
 });
 

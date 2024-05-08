@@ -16,6 +16,7 @@ import {
     RootState,
     clearCredentials,
     useFetchMessagesQuery,
+    useFetchUserNotificationsQuery,
     useLogoutUserMutation,
 } from '../../store';
 import { deleteSocket } from '../../utils/socket';
@@ -48,9 +49,22 @@ export default function SideNav() {
     const location = useLocation();
     const [hidden, setHidden] = useState(false);
     const [messagesCounter, setMessageCounter] = useState(0);
-    const [notificationsCounter, _setNotificationsCounter] = useState(0);
+    const [notificationsCounter, setNotificationsCounter] = useState(0);
 
     const { data: messagesData } = useFetchMessagesQuery();
+    const { data: notificationsData } = useFetchUserNotificationsQuery({
+        limit: 10,
+        offset: 0,
+    });
+
+    useEffect(() => {
+        setNotificationsCounter(
+            notificationsData?.data?.reduce((acc, cur) => {
+                return acc + (cur?.message?.IsNotificationViewed ? 0 : 1);
+            }, 0) ?? 0,
+        );
+        console.log('Notifications Counter is : ', notificationsCounter);
+    }, [notificationsData]);
 
     useEffect(() => {
         setMessageCounter(
@@ -106,8 +120,8 @@ export default function SideNav() {
                     text: 'Bookmarks',
                     active: false,
                     id: 4.2,
-                }
-            ]
+                },
+            ],
         },
         {
             icon: <GiBookshelf />,
