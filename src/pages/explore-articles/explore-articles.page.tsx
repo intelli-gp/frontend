@@ -14,6 +14,7 @@ import {
     changeArticlesPageSearchInitiated,
     changeArticlesPageSearchQuery,
 } from '../../store';
+import { useLazyFetchGeneralArticlesRecommendationQuery } from '../../store/apis/recommendationApi';
 import {
     useLazyArticlesSearchQuery,
     usePrefetchSearch,
@@ -36,12 +37,20 @@ const ExploreArticlesPage = () => {
     const { searchTerm, searchInitiated, paginationPageNumber } = useSelector(
         (state: RootState) => state.appState.articlesPage,
     );
-    const { UserTags } = useSelector((state: RootState) => state.auth.user);
 
     const prefetchSearch = usePrefetchSearch('articlesSearch');
     const [triggerSearch, { data, isLoading, isFetching }] =
         useLazyArticlesSearchQuery();
     const { Results: articles, NumPages } = data?.data ?? {};
+
+    const [
+        triggerArticleRecommendation,
+        {
+            data: _articleRecommendation,
+        },
+    ] = useLazyFetchGeneralArticlesRecommendationQuery();
+    const recommendedArticles = _articleRecommendation?.data
+        ?.Results as ReceivedArticle[];
 
     const searchHandler = async (searchTerm: string) => {
         if (searchTerm.trim().length === 0) return;
@@ -92,8 +101,7 @@ const ExploreArticlesPage = () => {
         if (searchInitiated) {
             triggerSearch({ searchTerm, limit: PAGE_LIMIT });
         } else {
-            let userTags = UserTags?.join(' ') ?? '';
-            triggerSearch({ searchTerm: userTags, limit: PAGE_LIMIT });
+            triggerArticleRecommendation({ limit: PAGE_LIMIT });
         }
     }, []);
 
@@ -104,18 +112,26 @@ const ExploreArticlesPage = () => {
             <SmallTitle>
                 {searchInitiated ? 'search results' : 'suggested articles'}
             </SmallTitle>
-            <MainContent empty={articles && !articles.length}>
-                {articles?.map((article: ReceivedArticle) => {
-                    return (
-                        <WideArticleItem
-                            key={article.ID}
-                            {...article}
-                            onClick={() =>
-                                navigate(`/app/articles/${article.ID}`)
-                            }
-                        />
-                    );
-                })}
+            <MainContent
+                empty={
+                    searchInitiated
+                        ? articles && !articles.length
+                        : recommendedArticles && !recommendedArticles.length
+                }
+            >
+                {(searchInitiated ? articles : recommendedArticles)?.map(
+                    (article) => {
+                        return (
+                            <WideArticleItem
+                                key={article.ID}
+                                {...article}
+                                onClick={() =>
+                                    navigate(`/app/articles/${article.ID}`)
+                                }
+                            />
+                        );
+                    },
+                )}
             </MainContent>
         </>
     );

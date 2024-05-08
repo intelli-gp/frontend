@@ -18,8 +18,14 @@ import {
     changeSearchPageInitiated,
     changeSearchPageQuery,
 } from '../../store';
+import {
+    useLazyFetchGeneralArticlesRecommendationQuery,
+    useLazyFetchGeneralUsersRecommendationQuery,
+} from '../../store/apis/recommendationApi';
 import { useLazyGeneralSearchQuery } from '../../store/apis/searchApi';
+import { ReceivedArticle } from '../../types/article';
 import { GeneralSearchData } from '../../types/search';
+import { ReceivedUser } from '../../types/user';
 import { errorToast } from '../../utils/toasts';
 import {
     ArticleSectionBody,
@@ -44,6 +50,23 @@ const SearchPage = () => {
         useLazyGeneralSearchQuery();
     const searchResult = _searchResult?.data as GeneralSearchData;
 
+    const [
+        triggerArticleRecommendation,
+        {
+            data: _articleRecommendation,
+            isLoading: isArticleRecommendationLoading,
+        },
+    ] = useLazyFetchGeneralArticlesRecommendationQuery();
+    const recommendedArticles = _articleRecommendation?.data
+        ?.Results as ReceivedArticle[];
+
+    const [
+        triggerUsersRecommendation,
+        { data: _userRecommendation, isLoading: isUserRecommendationLoading },
+    ] = useLazyFetchGeneralUsersRecommendationQuery();
+    const recommendedUsers = _userRecommendation?.data
+        ?.Results as ReceivedUser[];
+
     const handleSearchValueChange = (newValue: string) => {
         dispatch(changeSearchPageQuery(newValue));
     };
@@ -63,8 +86,11 @@ const SearchPage = () => {
         if (searchInitiated) {
             triggerSearch({ searchTerm });
         } else {
-            let userTags = UserTags?.join(' ') ?? '';
+            // TODO: leave for now till groups recommendation is implemented
+            const userTags = UserTags?.join(' ') ?? '';
             triggerSearch({ searchTerm: userTags });
+            triggerArticleRecommendation({});
+            triggerUsersRecommendation({});
         }
     }, []);
 
@@ -90,6 +116,8 @@ const SearchPage = () => {
                         ? 'users search results'
                         : 'Suggested users'}
                 </SectionTitle>
+                {/* TODO: add skeleton here for loading users */}
+
                 <Swiper
                     navigation={true}
                     spaceBetween={20}
@@ -97,7 +125,10 @@ const SearchPage = () => {
                     className="w-full !p-2"
                     slidesPerView={'auto'}
                 >
-                    {searchResult?.users?.slice(0, 10)?.map((user) => {
+                    {(searchInitiated
+                        ? searchResult?.users?.slice(0, 10)
+                        : recommendedUsers
+                    )?.map((user) => {
                         return (
                             <SwiperCustomSlide key={user.ID}>
                                 <UserCard {...user} />
@@ -118,6 +149,7 @@ const SearchPage = () => {
                         Explore More
                     </ExploreMoreLink>
                 </SectionTitle>
+                {/* TODO: add skeleton here for loading groups */}
                 <Swiper
                     navigation={true}
                     spaceBetween={20}
@@ -155,8 +187,12 @@ const SearchPage = () => {
                         Explore More
                     </ExploreMoreLink>
                 </SectionTitle>
+                {/* TODO: add skeleton here for loading articles */}
                 <ArticleSectionBody>
-                    {searchResult?.articles?.slice(0, 10)?.map((article) => {
+                    {(searchInitiated
+                        ? searchResult?.articles?.slice(0, 10)
+                        : recommendedArticles
+                    )?.map((article) => {
                         return (
                             <WideArticleItem
                                 {...article}

@@ -28,7 +28,10 @@ import {
     useToggleLoveArticleMutation,
 } from '../../store';
 import { RootState } from '../../store';
-import { ArticleSectionType } from '../../types/article.d';
+import {
+    useFetchSpecificArticlesRecommendationQuery,
+} from '../../store/apis/recommendationApi';
+import { ArticleSectionType, ReceivedArticle } from '../../types/article.d';
 import { ReceivedUser } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
@@ -57,6 +60,7 @@ import {
     ToolbarIconsContainer,
     VerticalLine,
 } from './view-article.styles';
+import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
 
 const ViewArticlePage = () => {
     const navigate = useNavigate();
@@ -90,6 +94,15 @@ const ViewArticlePage = () => {
     const article = data?.data;
     const isArticleOwner =
         article?.Author?.Username === (storedUser as ReceivedUser)?.Username;
+
+    const { data: _articleRecommendations } =
+        useFetchSpecificArticlesRecommendationQuery({
+            searchTerm: articleId + '',
+            limit: 5,
+            offset: 0,
+        });
+    const recommendedArticles = _articleRecommendations?.data
+        ?.Results as ReceivedArticle[];
 
     const articleOptions = [
         {
@@ -144,7 +157,7 @@ const ViewArticlePage = () => {
 
     const handleBookmarkArticle = async () => {
         try {
-            let alreadyBookmarked = isArticleBookmarked;
+            const alreadyBookmarked = isArticleBookmarked;
             await toggleBookmarkArticle(parseInt(articleId!)).unwrap();
             if (alreadyBookmarked) {
                 successToast('Article removed from bookmarks');
@@ -346,6 +359,19 @@ const ViewArticlePage = () => {
                     <p className="font-bold text-xl">
                         More from the same preference and author
                     </p>
+                    <>
+                    {recommendedArticles?.map((article) => {
+                            return (
+                                <WideArticleItem
+                                    {...article}
+                                    key={article.ID}
+                                    onClick={() =>
+                                        navigate(`/app/articles/${article.ID}`)
+                                    }
+                                />
+                            );
+                        })}
+                    </>
                 </SuggestedArticlesContainer>
             </ArticleBodyContainer>
 

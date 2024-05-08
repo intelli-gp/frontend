@@ -42,6 +42,7 @@ import {
     useLazyFetchUserQuery,
     useUpdateUserMutation,
 } from '../../store';
+import { useFetchSpecificUsersRecommendationQuery } from '../../store/apis/recommendationApi';
 import { ReceivedArticle } from '../../types/article.d';
 import { GroupWithRole, ReceivedGroup } from '../../types/group';
 import { Response } from '../../types/response';
@@ -125,28 +126,39 @@ const ProfilePage = () => {
         { title: 'Followers', isActive: false, label: 'followers' },
         { title: 'Following', isActive: false, label: 'following' },
     ]);
-    const [youMayKnow] = useState<any[]>([
-        {
-            FullName: 'Ahmed Mohamed Mohamed',
-            Username: 'ahmedali',
-            ProfileImage: defaultUserImage,
-        },
-        {
-            FullName: 'Ahmed',
-            Username: 'ahmedali',
-            ProfileImage: defaultUserImage,
-        },
-        {
-            FullName: 'Ahmed',
-            Username: 'ahmedali',
-            ProfileImage: defaultUserImage,
-        },
-        {
-            FullName: 'Ahmed',
-            Username: 'ahmedali',
-            ProfileImage: defaultUserImage,
-        },
-    ]);
+    // const [youMayKnow] = useState<any[]>([
+    //     {
+    //         FullName: 'Ahmed Mohamed Mohamed',
+    //         Username: 'ahmedali',
+    //         ProfileImage: defaultUserImage,
+    //     },
+    //     {
+    //         FullName: 'Ahmed',
+    //         Username: 'ahmedali',
+    //         ProfileImage: defaultUserImage,
+    //     },
+    //     {
+    //         FullName: 'Ahmed',
+    //         Username: 'ahmedali',
+    //         ProfileImage: defaultUserImage,
+    //     },
+    //     {
+    //         FullName: 'Ahmed',
+    //         Username: 'ahmedali',
+    //         ProfileImage: defaultUserImage,
+    //     },
+    // ]);
+
+    // TODO: change this when social network is implemented
+    const { data: usersRecommendation } =
+        useFetchSpecificUsersRecommendationQuery({
+            searchTerm: loggedInUser.Username + '',
+            limit: 5,
+            offset: 0,
+        });
+
+    const youMayKnow = usersRecommendation?.data?.Results as ReceivedUser[];
+
     const [CommonFollowers] = useState<any[]>([
         {
             FullName: 'Ahmed',
@@ -397,8 +409,13 @@ const ProfilePage = () => {
             <h1 className="text-xl font-semibold">You may know</h1>
             <hr />
             <ul>
-                {youMayKnow.map((user) => (
-                    <UserItem {...user} action="follow" />
+                {youMayKnow?.map((user) => (
+                    <UserItem
+                        Username={user.Username}
+                        FullName={user.FullName}
+                        ProfileImage={user.ProfileImage}
+                        action="follow"
+                    />
                 ))}
             </ul>
         </YouMayNowSection>
