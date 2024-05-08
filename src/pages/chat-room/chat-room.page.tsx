@@ -104,7 +104,7 @@ export const ChatroomPage = () => {
         setMessageInput('');
         let message: CreateMessageDTO = {
             Content: messageInput,
-            Type: 'MESSAGE',
+            Type: 'TEXT',
             GroupID: +groupId!,
         };
         if (replyingTo) {

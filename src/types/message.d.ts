@@ -5,7 +5,7 @@ export type SerializedMessage = {
     RoomID: string;
     User: Pick<ReceivedUser, 'Username' | 'FullName' | 'ProfileImage' | 'ID'>;
     Content: string;
-    Type: 'MESSAGE' | 'IMAGE';
+    Type: 'TEXT' | 'IMAGE';
     CreatedAt: string;
     IsDeleted: boolean;
     Reactions?: {
@@ -22,7 +22,7 @@ export type SerializedMessage = {
 export type CreateMessageDTO = {
     RepliedToMessageID?: number;
     Content: string;
-    Type: 'MESSAGE' | 'IMAGE';
+    Type: 'TEXT' | 'IMAGE';
     GroupID: number;
 };
 
