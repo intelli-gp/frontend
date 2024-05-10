@@ -1,6 +1,5 @@
 import { appApi } from '.';
 import { ReceivedArticle } from '../../types/article';
-import { PaginatedResult } from '../../types/pagination';
 import { GenericResponse } from '../../types/response';
 import { PaginationDto, SearchDto } from '../../types/search';
 import { ReceivedUser } from '../../types/user';
@@ -8,7 +7,7 @@ import { ReceivedUser } from '../../types/user';
 export const recommendationApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
         fetchSpecificArticlesRecommendation: builder.query<
-            GenericResponse<PaginatedResult<ReceivedArticle>>,
+            GenericResponse<ReceivedArticle[]>,
             SearchDto
         >({
             query: ({ searchTerm: articleId, limit = 10, offset = 0 }) => ({
@@ -17,7 +16,7 @@ export const recommendationApi = appApi.injectEndpoints({
             }),
         }),
         fetchGeneralArticlesRecommendation: builder.query<
-            GenericResponse<PaginatedResult<ReceivedArticle>>,
+            GenericResponse<ReceivedArticle[]>,
             PaginationDto
         >({
             query: ({ limit = 10, offset = 0 }) => ({
@@ -26,7 +25,7 @@ export const recommendationApi = appApi.injectEndpoints({
             }),
         }),
         fetchGeneralUsersRecommendation: builder.query<
-            GenericResponse<PaginatedResult<ReceivedUser>>,
+            GenericResponse<ReceivedUser[]>,
             PaginationDto
         >({
             query: ({ limit = 10, offset = 0 }) => ({
@@ -35,7 +34,7 @@ export const recommendationApi = appApi.injectEndpoints({
             }),
         }),
         fetchSpecificUsersRecommendation: builder.query<
-            GenericResponse<PaginatedResult<ReceivedUser>>,
+            GenericResponse<ReceivedUser[]>,
             SearchDto
         >({
             query: ({ searchTerm: username, limit = 10, offset = 0 }) => ({

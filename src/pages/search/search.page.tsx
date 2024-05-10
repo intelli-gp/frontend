@@ -52,13 +52,12 @@ const SearchPage = () => {
 
     const [triggerArticleRecommendation, { data: _articleRecommendation }] =
         useLazyFetchGeneralArticlesRecommendationQuery();
-    const recommendedArticles = _articleRecommendation?.data
-        ?.Results as ReceivedArticle[];
+    const recommendedArticles =
+        _articleRecommendation?.data as ReceivedArticle[];
 
     const [triggerUsersRecommendation, { data: _userRecommendation }] =
         useLazyFetchGeneralUsersRecommendationQuery();
-    const recommendedUsers = _userRecommendation?.data
-        ?.Results as ReceivedUser[];
+    const recommendedUsers = _userRecommendation?.data as ReceivedUser[];
 
     const handleSearchValueChange = (newValue: string) => {
         dispatch(changeSearchPageQuery(newValue));

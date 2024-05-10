@@ -63,7 +63,6 @@ export default function SideNav() {
                 return acc + (cur?.message?.IsNotificationViewed ? 0 : 1);
             }, 0) ?? 0,
         );
-        console.log('Notifications Counter is : ', notificationsCounter);
     }, [notificationsData]);
 
     useEffect(() => {
@@ -72,7 +71,6 @@ export default function SideNav() {
                 return acc + (cur?.UnreadMessagesCount ?? 0);
             }, 0) ?? 0,
         );
-        console.log('Message Counter is : ', messagesCounter);
     }, [messagesData]);
 
     /**
