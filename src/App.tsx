@@ -17,6 +17,8 @@ import { SettingsPage } from './pages/settings/settings.page';
 import AuthTemplatePage from './pages/templates/Auth';
 import LoggedInTemplatePage from './pages/templates/LoggedIn';
 import UpgradePage from './pages/upgrade/upgrade.page';
+import usePomodoroTimer from './hooks/pomodoroTimer.hook';
+import { useDocumentTitle } from './hooks/docTitle.hook';
 
 const ChatroomPage = React.lazy(
     () => import('./pages/chat-room/chat-room.page'),
@@ -67,6 +69,10 @@ const ViewGroupPage = React.lazy(
 );
 
 function App() {
+
+    const { minutes, seconds,time } = usePomodoroTimer();
+
+    useDocumentTitle(minutes, seconds, time.isRunning);
     return (
         <AnimatePresence>
             <Suspense fallback={<LoggedInTemplatePage />}>
