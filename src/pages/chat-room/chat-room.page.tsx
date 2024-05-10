@@ -14,6 +14,7 @@ import DropdownMenu from '../../components/menu/menu.component';
 import ChatMessage, {
     ReplyMessage,
 } from '../../components/message/message.component';
+import { useUploadImage } from '../../hooks/uploadImage.hook';
 import { BetweenPageAnimation } from '../../index.styles';
 import { useGetGroupQuery } from '../../store';
 import { RootState } from '../../store';
@@ -49,20 +50,23 @@ import {
     UserContainer,
     UsersContainer,
 } from './chat-room.style';
-import { useUploadImage } from '../../hooks/uploadImage.hook';
 
 export const ChatroomPage = () => {
     const { id: groupId } = useParams();
     const navigate = useNavigate();
+
     const chatBodyRef = useRef<HTMLDivElement>(null);
+    const fileInput = useRef<HTMLInputElement>(null);
+
     const { user } = useSelector((state: RootState) => state.auth);
 
-    const { data: _groupData } = useGetGroupQuery(+groupId!, {
+    const { data: _groupData } = useGetGroupQuery(parseInt(groupId!), {
         pollingInterval: 30e3,
     });
     const groupData = _groupData?.data[0] as ReceivedGroup;
 
-    const { data: messages } = useGetGroupMessagesQuery(Number(groupId));
+    const { trigger: uploadImage } = useUploadImage();
+    const { data: messages } = useGetGroupMessagesQuery(parseInt(groupId!));
     const [sendMessage] = useSendMessageMutation();
     const [sendTypingStatus] = useSendTypingMutation();
     const { data: typingUsers } = useReceiveTypingQuery();
@@ -80,12 +84,12 @@ export const ChatroomPage = () => {
     const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout>();
     const [usersListOpen, setUsersListOpen] = useState(false);
     const [replyingTo, setReplyingTo] = useState<SerializedMessage>();
+    const [images, setImages] = useState<string[]>([]);
 
     const onEmojiClick = (emojiObject: { emoji: string }) => {
         setMessageInput((prevInput) => prevInput + emojiObject.emoji);
     };
-    const [images, setImages] = useState<string[]>([]);
-    const { trigger: uploadImage } =    useUploadImage();
+
     const handleSendMessage = async (event?: React.MouseEvent) => {
         event?.preventDefault();
         if (images.length > 0) {
@@ -112,7 +116,6 @@ export const ChatroomPage = () => {
             setReplyingTo(null!);
         }
         await sendMessage(message).unwrap();
-       
     };
 
     const handlePressingEnter = ({ key, shiftKey }: KeyboardEvent) => {
@@ -132,14 +135,14 @@ export const ChatroomPage = () => {
         // Send to the server telling that I am currently typing.
         sendTypingStatus({
             IsTyping: true,
-            GroupID: +groupId!,
+            GroupID: parseInt(groupId!),
         });
 
         // Send to the server telling that I stopped typing.
         let newTimeout = setTimeout(() => {
             sendTypingStatus({
                 IsTyping: false,
-                GroupID: +groupId!,
+                GroupID: parseInt(groupId!),
             });
         }, 1e3);
 
@@ -149,8 +152,6 @@ export const ChatroomPage = () => {
     const setAsReplyTarget = (message: SerializedMessage) => {
         setReplyingTo(message);
     };
-
-    const fileInput = useRef<HTMLInputElement>(null);
 
     const openFileInput = () => {
         fileInput.current?.click();
@@ -323,7 +324,7 @@ export const ChatroomPage = () => {
                                 <div className="flex gap-2 justify-start items-center">
                                     {images.map((image, index) => (
                                         <div
-                                            className="relative p-2 "
+                                            className="relative p-2"
                                             key={index}
                                         >
                                             <DeleteImg

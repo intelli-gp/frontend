@@ -157,7 +157,11 @@ const ViewArticlePage = () => {
 
     const handleBookmarkArticle = async () => {
         try {
-            const alreadyBookmarked = isArticleBookmarked;
+            let alreadyBookmarked = isArticleBookmarked;
+            if (!alreadyBookmarked) {
+                // Set it here and in useEffect to avoid waiting for the response.
+                setIsArticleBookmarked(true);
+            }
             await toggleBookmarkArticle(parseInt(articleId!)).unwrap();
             if (alreadyBookmarked) {
                 successToast('Article removed from bookmarks');

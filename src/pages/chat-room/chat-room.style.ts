@@ -96,22 +96,30 @@ export const ChatFooter = styled.div`
     position: relative;
     gap: 0.5rem;
 `;
-export const UploadImageContainer = styled.img`
+export const UploadImageContainer = styled(EnhancedImage)`
     height: 60px;
-    width: 70px;
+    aspect-ratio: 14/9;
+    object-fit: cover;
     border-radius: 0.25rem;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px 0px;
 `;
+
 export const DeleteImg = styled(IoMdCloseCircle)`
     position: absolute;
+    cursor: pointer;
     right: 0;
     top: 0;
-    height: 20px;
-    width: 20px;
+    height: 18px;
+    width: 18px;
     color: var(--indigo-100);
-    background-color: var(--indigo-900);
-    border-radius: 3rem;
-    border: 0px solid transperent;
-    index-z: 40;
+    background-color: var(--gray-900);
+    border-radius: 50%;
+    transition: all 0.1s ease-in-out;
+    z-index: 40;
+    opacity: 0.8;
+    &:hover {
+        opacity: 1;
+    }
 `;
 export const FooterInputArea = styled.div`
     display: flex;
