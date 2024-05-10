@@ -19,6 +19,7 @@ import {
 } from '../../components/modal/model.styles';
 import Tag from '../../components/tag/tag.component';
 import UserItem from '../../components/user-Item/user-item.component';
+import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
 import { BetweenPageAnimation, ModalTitle } from '../../index.styles';
 import {
     useDeleteArticleMutation,
@@ -28,9 +29,7 @@ import {
     useToggleLoveArticleMutation,
 } from '../../store';
 import { RootState } from '../../store';
-import {
-    useFetchSpecificArticlesRecommendationQuery,
-} from '../../store/apis/recommendationApi';
+import { useFetchSpecificArticlesRecommendationQuery } from '../../store/apis/recommendationApi';
 import { ArticleSectionType, ReceivedArticle } from '../../types/article.d';
 import { ReceivedUser } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
@@ -60,7 +59,6 @@ import {
     ToolbarIconsContainer,
     VerticalLine,
 } from './view-article.styles';
-import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
 
 const ViewArticlePage = () => {
     const navigate = useNavigate();
@@ -101,8 +99,8 @@ const ViewArticlePage = () => {
             limit: 5,
             offset: 0,
         });
-    const recommendedArticles = _articleRecommendations?.data
-        ?.Results as ReceivedArticle[];
+    const recommendedArticles =
+        _articleRecommendations?.data as ReceivedArticle[];
 
     const articleOptions = [
         {
@@ -364,7 +362,7 @@ const ViewArticlePage = () => {
                         More from the same preference and author
                     </p>
                     <>
-                    {recommendedArticles?.map((article) => {
+                        {recommendedArticles?.map((article) => {
                             return (
                                 <WideArticleItem
                                     {...article}

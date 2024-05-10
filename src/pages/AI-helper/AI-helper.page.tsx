@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { IoSend } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 
 import AIimg from '../../assets/imgs/AI-profile.svg';

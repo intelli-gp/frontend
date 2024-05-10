@@ -126,28 +126,6 @@ const ProfilePage = () => {
         { title: 'Followers', isActive: false, label: 'followers' },
         { title: 'Following', isActive: false, label: 'following' },
     ]);
-    // const [youMayKnow] = useState<any[]>([
-    //     {
-    //         FullName: 'Ahmed Mohamed Mohamed',
-    //         Username: 'ahmedali',
-    //         ProfileImage: defaultUserImage,
-    //     },
-    //     {
-    //         FullName: 'Ahmed',
-    //         Username: 'ahmedali',
-    //         ProfileImage: defaultUserImage,
-    //     },
-    //     {
-    //         FullName: 'Ahmed',
-    //         Username: 'ahmedali',
-    //         ProfileImage: defaultUserImage,
-    //     },
-    //     {
-    //         FullName: 'Ahmed',
-    //         Username: 'ahmedali',
-    //         ProfileImage: defaultUserImage,
-    //     },
-    // ]);
 
     // TODO: change this when social network is implemented
     const { data: usersRecommendation } =
@@ -157,7 +135,7 @@ const ProfilePage = () => {
             offset: 0,
         });
 
-    const youMayKnow = usersRecommendation?.data?.Results as ReceivedUser[];
+    const youMayKnow = usersRecommendation?.data as ReceivedUser[];
 
     const [CommonFollowers] = useState<any[]>([
         {
