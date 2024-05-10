@@ -1,98 +1,151 @@
+import { useState } from 'react';
 import { IoSend } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 
 import AIimg from '../../assets/imgs/AI-profile.svg';
-import Button from '../../components/button/button.component';
 import { CustomInput } from '../../components/input/Input.component';
+import { AIMessage } from '../../components/message/message.component';
 import { BetweenPageAnimation } from '../../index.styles';
+import { AIMessageType } from '../../types/message';
+import { SendIcon } from '../chat-room/chat-room.style';
 import {
+    AIAvatarContainer,
     AIicon,
     ChatBody,
-    ChatBox,
     ChatFooter,
     ChatHeader,
-    Message,
-    Messagebar,
     PageContainer,
+    UpgradeButton,
 } from './AI-helper.style';
-
-type MessageType = {
-    type: string;
-    message: string;
-    incoming: boolean;
-    date: string;
-};
-
-const TextMsg = ({ el }: { el: MessageType }) => {
-    return (
-        <ChatBox incoming={el.incoming}>
-            <Message incoming={el.incoming}>
-                <p>{el.message}</p>
-                <span>{el.date}</span>
-            </Message>
-        </ChatBox>
-    );
-};
 
 const AIHelperPage = () => {
     const navigate = useNavigate();
 
-    const data1 = [
+    const [message, setMessage] = useState('');
+
+    const messages: AIMessageType[] = [
         {
-            type: 'msg',
-            message: 'HI, how are you?',
-            incoming: true,
-            date: '10/16/2023, 10:51:23 AM ',
+            MessageID: 1,
+            AIGenerated: true,
+            Content: 'Hello there',
+            CreatedAt: '2021-09-10T12:00:00Z',
         },
         {
-            type: 'msg',
-            message: 'Thanks for asking! I am fine and u?',
-            incoming: false,
-            date: '10/16/2023, 10:51:23 AM ',
+            MessageID: 2,
+            AIGenerated: false,
+            Content: 'Hi',
+            CreatedAt: '2021-09-10T12:01:00Z',
         },
         {
-            type: 'msg',
-            message:
-                'I am great, Can you come to work today? I am great, Can you come to work today? I am great, Can you come to work today?',
-            incoming: true,
-            date: '10/16/2023, 10:51:23 AM ',
+            MessageID: 3,
+            AIGenerated: true,
+            Content: 'How can I help you?',
+            CreatedAt: '2021-09-10T12:02:00Z',
+        },
+        {
+            MessageID: 1,
+            AIGenerated: true,
+            Content: 'Hello there',
+            CreatedAt: '2021-09-10T12:00:00Z',
+        },
+        {
+            MessageID: 2,
+            AIGenerated: false,
+            Content: 'Hi',
+            CreatedAt: '2021-09-10T12:01:00Z',
+        },
+        {
+            MessageID: 3,
+            AIGenerated: true,
+            Content: 'How can I help you?',
+            CreatedAt: '2021-09-10T12:02:00Z',
+        },
+        {
+            MessageID: 1,
+            AIGenerated: true,
+            Content: 'Hello there',
+            CreatedAt: '2021-09-10T12:00:00Z',
+        },
+        {
+            MessageID: 2,
+            AIGenerated: false,
+            Content: 'Hi',
+            CreatedAt: '2021-09-10T12:01:00Z',
+        },
+        {
+            MessageID: 3,
+            AIGenerated: true,
+            Content: 'How can I help you?',
+            CreatedAt: '2021-09-10T12:02:00Z',
+        },
+        {
+            MessageID: 1,
+            AIGenerated: true,
+            Content: 'Hello there',
+            CreatedAt: '2021-09-10T12:00:00Z',
+        },
+        {
+            MessageID: 2,
+            AIGenerated: false,
+            Content: 'Hi',
+            CreatedAt: '2021-09-10T12:01:00Z',
+        },
+        {
+            MessageID: 3,
+            AIGenerated: true,
+            Content: 'How can I help you?',
+            CreatedAt: '2021-09-10T12:02:00Z',
         },
     ];
 
+    const handleSendMessages = async () => {
+        if (message.trim().length === 0) return;
+        setMessage('');
+        // Send message to the server
+    };
+
+    const handlePressingEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            handleSendMessages();
+        }
+    };
+
     return (
-        <PageContainer {...BetweenPageAnimation}>
+        <PageContainer {...BetweenPageAnimation} className="mujedd-ai-page">
             <ChatHeader>
-                <span className="flex flex-row gap-4 items-center">
+                <AIAvatarContainer>
                     <AIicon src={AIimg} />
                     <h1 className="text-lg font-bold text-[var(--slate-700)]">
                         AI Helper
                     </h1>
-                </span>
-                <Button
-                    select="secondary"
-                    className="!text-[#312E81] !text-xs !h-[38px] !w-[80px]"
+                </AIAvatarContainer>
+                <UpgradeButton
+                    select="success"
                     onClick={() => navigate('/app/upgrade')}
                 >
                     Upgrade
-                </Button>
+                </UpgradeButton>
             </ChatHeader>
-            <div className="flex flex-col md:px-[120px] px-[50px] h-[calc(100%-70px)]">
-                <ChatBody>
-                    <div />
-                    {data1.map((text) => (
-                        <TextMsg el={text} />
-                    ))}
-                </ChatBody>
-                <ChatFooter>
-                    <Messagebar>
-                        <CustomInput
-                            className="shadow-none bg-[var(--slate-100)] border-none "
-                            placeholder="Type a message..."
-                        />
-                        <IoSend color="var(--indigo-800)" size={26} />
-                    </Messagebar>
-                </ChatFooter>
-            </div>
+
+            <ChatBody>
+                {messages.map((message) => (
+                    <AIMessage message={message} />
+                ))}
+            </ChatBody>
+
+            <ChatFooter>
+                <CustomInput
+                    className="bg-[var(--gray-100)] !border-none focus-visible:!outline-none resize-none"
+                    placeholder="Type a message..."
+                    value={message}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setMessage(e.target.value)
+                    }
+                    onPressEnter={handlePressingEnter}
+                    multiline
+                />
+                <SendIcon size={26} onClick={handleSendMessages} />
+            </ChatFooter>
         </PageContainer>
     );
 };

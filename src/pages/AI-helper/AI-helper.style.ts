@@ -1,28 +1,36 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-import image from '../../assets/imgs/AI-helper.svg';
+import Button from '../../components/button/button.component';
 
 export const PageContainer = styled(motion.div)`
+    padding: 0.5rem;
     display: flex;
     flex-direction: column;
-    background: var(--indigo-50);
     height: 100%;
-    background-image: url(${image});
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+    background-color: var(--indigo-50);
+    width: min(100%, 1200px);
+    margin: 0 auto;
+    gap: 0.5rem;
 `;
 
 export const ChatHeader = styled.div`
     width: 100%;
-    height: 70px;
-    background: var(--gray-50);
+    background: white;
     display: flex;
-    flex-direction: row;
-    padding: 20px 55px;
+    padding: 0.75rem 2.25rem;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0px 0px 22px 10px rgba(99, 102, 241, 0.1);
+    z-index: 100;
+    height: 75px;
+    border-radius: 0.5rem;
+`;
+
+export const AIAvatarContainer = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 `;
 
 export const AIicon = styled.img`
@@ -32,75 +40,35 @@ export const AIicon = styled.img`
 `;
 
 export const ChatBody = styled.div`
+    box-shadow: 0px 0px 22px 10px rgba(99, 102, 241, 0.15);
     width: 100%;
-    padding: 34px;
-    flex-grow: 1;
-    gap: 20px;
+    padding: 2rem;
+    gap: 0.5rem;
     background: white;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    & > div:first-child {
-        flex: 1 1 auto;
-        min-height: 6px;
-    }
+    border-radius: 0.5rem;
+    flex-grow: 1;
 `;
 
-export const Messagebar = styled.div`
-    display: flex;
-    align-items: center;
-    width: 100%;
-    justify-content: space-between;
-    height: 100%;
-    border: 2px solid var(--gray-500);
-    border-radius: 10px;
-    background: var(--gray-50);
-    transition: background 0.25s;
-    padding: 10px 15px;
-    input {
-        background: transparent;
-        outline: none;
-        border: none;
-        flex: 1;
-    }
-    &:focus-within {
-        border: 2px solid #4f46e5;
-    }
-`;
 export const ChatFooter = styled.div`
-    width: 100%;
-    height: 75px;
+    box-shadow: 0px 0px 22px 10px rgba(99, 102, 241, 0.15);
+    display: flex;
     background: white;
-    padding: 10px 32px 15px 32px;
+    align-items: center;
+    padding: 1rem;
+    gap: 0.5rem;
+    height: 90px;
+    border-radius: 0.5rem;
 `;
 
-export const ChatBox = styled.div<{ incoming: boolean }>`
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    justify-content: ${({ incoming }) =>
-        incoming ? 'flex-end' : 'flex-start'};
-
-    p {
-        color: ${({ incoming }) => (incoming ? 'white' : ' var(--gray-800)')};
+export const UpgradeButton = styled(Button)`
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: bold;
+    box-shadow: 0px 0px 15px 5px rgba(72, 187, 120, 0.2);
+    &:hover {
+        box-shadow: 0px 0px 20px 5px rgba(72, 187, 120, 0.2);
     }
-
-    span {
-        display: flex;
-        justify-content: flex-end;
-        font-size: 10px;
-        color: ${({ incoming }) => (incoming ? 'white' : 'var(--slate-500)')};
-    }
-`;
-export const Message = styled.div<{ incoming: boolean }>`
-    background-color: ${({ incoming }) =>
-        incoming ? 'var(--indigo-600)' : 'var(  --gray-200)'};
-    padding: ${({ incoming }) => (incoming ? '8px  15px ' : '15px')};
-    border-radius: ${({ incoming }) =>
-        incoming ? '16px 16px 0px 16px' : '16px 16px 16px 0px'};
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    max-width: 40%;
-    min-width: 20%;
 `;

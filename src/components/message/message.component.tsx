@@ -4,6 +4,7 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { MdDoNotDisturb } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
+import AIBotImage from '../../assets/imgs/AI-profile.svg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import { RootState } from '../../store';
 import {
@@ -12,7 +13,11 @@ import {
     useReactToMessageMutation,
     useUpdateMessageMutation,
 } from '../../store/apis/messagesApi';
-import { MessageInfo, SerializedMessage } from '../../types/message';
+import {
+    AIMessageType,
+    MessageInfo,
+    SerializedMessage,
+} from '../../types/message';
 import { profileURL } from '../../utils/profileUrlBuilder';
 import Button from '../button/button.component';
 import { CustomInput } from '../input/Input.component';
@@ -534,6 +539,27 @@ export const ReplyMessage = ({
                 />
             )}
         </ReplyToMessageContainer>
+    );
+};
+
+type AIMessageProps = {
+    message: AIMessageType;
+};
+
+export const AIMessage = ({ message }: AIMessageProps) => {
+    return (
+        <Message isMine={!message.AIGenerated}>
+            <MessageHeader isMine={!message.AIGenerated}>
+                <SenderProfile alt="AI bot image" src={AIBotImage} />
+                <SenderName to={'#'}>AI Helper</SenderName>
+            </MessageHeader>
+            <MessageContent dir="auto" isMine={!message.AIGenerated}>
+                {message.Content}
+            </MessageContent>
+            <MessageDate isMine={!message.AIGenerated}>
+                {new Date(message.CreatedAt ?? Date.now()).toLocaleString()}
+            </MessageDate>
+        </Message>
     );
 };
 

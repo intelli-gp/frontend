@@ -96,6 +96,7 @@ export const ChatFooter = styled.div`
     position: relative;
     gap: 0.5rem;
 `;
+
 export const UploadImageContainer = styled(EnhancedImage)`
     height: 60px;
     aspect-ratio: 14/9;
@@ -121,6 +122,7 @@ export const DeleteImg = styled(IoMdCloseCircle)`
         opacity: 1;
     }
 `;
+
 export const FooterInputArea = styled.div`
     display: flex;
     align-items: center;

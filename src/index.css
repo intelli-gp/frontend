@@ -86,7 +86,7 @@ body {
     }
 }
 
-main:has(.mujedd-chat-room) {
+main:has(.mujedd-chat-room, .mujedd-ai-page) {
     background: var(--indigo-50);
 }
 

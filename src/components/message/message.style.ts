@@ -9,7 +9,7 @@ import EnhancedImage from '../image/image.component';
 
 export const Message = styled.div<{
     isMine: boolean;
-    hasReactions: boolean;
+    hasReactions?: boolean;
     isReply?: boolean;
 }>`
     display: flex;
@@ -39,7 +39,7 @@ export const Message = styled.div<{
     }
 `;
 
-export const MessageHeader = styled.header<{ isMine: boolean }>`
+export const MessageHeader = styled.header<{ isMine?: boolean }>`
     display: ${({ isMine }) => (isMine ? 'none' : 'flex')};
     gap: 0.5rem;
     align-items: center;
@@ -150,7 +150,7 @@ export const EmojisCounter = styled.span`
     font-family: 'jetbrains mono', monospace;
 `;
 
-export const MessageDate = styled.p<{ isMine: boolean }>`
+export const MessageDate = styled.p<{ isMine?: boolean }>`
     display: flex;
     justify-content: flex-end;
     font-size: 0.6rem;
