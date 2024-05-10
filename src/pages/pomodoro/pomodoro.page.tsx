@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import button from '../../assets/sounds/button-press.wav';
 import usePomodoroTimer from '../../hooks/pomodoroTimer.hook';
 import { BetweenPageAnimation } from '../../index.styles';
-import { setMode } from '../../store';
+import { setMode, setSeconds, setMinutes } from '../../store';
 import { player } from '../../utils/sounds';
 import {
     ControlButton,
@@ -21,9 +21,9 @@ const buttonSound = player({
 });
 
 const PomodoroPage = () => {
-    const { minutes, seconds, startTimer, stopTimer, time , } =
+    const { startTimer, stopTimer, time } =
         usePomodoroTimer();
-   
+
     const toggleTimer = useCallback(() => {
         buttonSound.play();
         if (time.isRunning) {
@@ -33,18 +33,21 @@ const PomodoroPage = () => {
         }
     }, [startTimer, stopTimer, time.isRunning]);
     const dispatch = useDispatch();
-    useDocumentTitle(minutes, seconds, time.isRunning);
+
+    // This custom hook updates the browser tab's title to reflect the current state of the timer.
+    useDocumentTitle(time.minutes, time.seconds, time.isRunning);
 
     return (
         <PageContainer {...BetweenPageAnimation}>
             <PomodoroContainer mode={time.mode}>
                 <ModesContainer>
                     <ModeButton
-                        onClick={() =>{
+                        onClick={() => {
                             stopTimer();
-                            localStorage.setItem('seconds', String(0));
-                            localStorage.setItem('minutes', String(25));
-                            dispatch(setMode('pomodoro'))}}
+                            dispatch(setMinutes(25));
+                            dispatch(setSeconds(0));
+                            dispatch(setMode('pomodoro'))
+                        }}
                         active={String(time.mode === 'pomodoro')}
                     >
                         Pomodoro
@@ -52,27 +55,29 @@ const PomodoroPage = () => {
                     <ModeButton
                         onClick={() => {
                             stopTimer();
-                            localStorage.setItem('seconds', String(0));
-                            localStorage.setItem('minutes', String(5));
-                            dispatch(setMode('shortBreak'))}}
+                            dispatch(setMinutes(5));
+                            dispatch(setSeconds(0));
+                            dispatch(setMode('shortBreak'))
+                        }}
                         active={String(time.mode === 'shortBreak')}
                     >
                         Short Break
                     </ModeButton>
                     <ModeButton
-                        onClick={() =>{
+                        onClick={() => {
                             stopTimer();
-                            localStorage.setItem('seconds', String(0));
-                            localStorage.setItem('minutes', String(15));
-                            dispatch(setMode('longBreak'))}}
+                            dispatch(setMinutes(15));
+                            dispatch(setSeconds(0));
+                            dispatch(setMode('longBreak'))
+                        }}
                         active={String(time.mode === 'longBreak')}
                     >
                         Long Break
                     </ModeButton>
                 </ModesContainer>
                 <Timer>
-                    {String(minutes).padStart(2, '0')}:
-                    {String(seconds).padStart(2, '0')}
+                    {String(time.minutes).padStart(2, '0')}:
+                    {String(time.seconds).padStart(2, '0')}
                 </Timer>
                 <div className="flex flex-col items-center gap-3">
                     <ControlButton onClick={toggleTimer} mode={time.mode}>

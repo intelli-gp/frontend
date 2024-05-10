@@ -1,27 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import alarm from '../assets/sounds/alarm-digital.mp3';
-import { RootState, incrementRound, setMode, setStartTimer, setStopTimer, setTimer } from '../store';
+import { RootState, incrementRound, setMode, setStartTimer, setMinutes, setSeconds, setStopTimer } from '../store';
 import { player } from '../utils/sounds';
 import worker from '../utils/worker-script';
 
-
+// Create a new Web Worker
 const timerWorker = new Worker(worker);
 
 type State = {
     mode: string;
     round: number;
+    minutes: number;
+    seconds: number;
     autoBreaks: boolean;
     autoPomodoros: boolean;
     longBreakInterval: number;
-    timer: string;
     isRunning: boolean;
 };
-export type TimerModes = 'pomodoro' | 'shortBreak' | 'longBreak';
 const usePomodoroTimer = () => {
     const dispatch = useDispatch();
+
+    // Create a selector to get the timer state from your Redux store
     const timeSelector = createSelector(
         (state: RootState) => state.timer.pomodoro,
         (time: State) => {
@@ -31,24 +33,36 @@ const usePomodoroTimer = () => {
         },
     );
 
+    // Use the useSelector hook with your selector to get the current timer state
     const time = useSelector(timeSelector);
 
-    const [minutes, setMinutes] = useState(Number(localStorage.getItem('minutes')) || 25);
-    const [seconds, setSeconds] = useState(Number(localStorage.getItem('seconds')) || 0);
-
-    useEffect(() => {
-        timerWorker.onmessage = ({ data: { minutes, seconds } }) => {
-            console.log(seconds);
-            setMinutes(minutes);
-            setSeconds(seconds);
-        };
-    }, []);
-    const startWebWorkerTimer = () => {
-        timerWorker.postMessage({ turn: "on", initialMinutes: minutes, initialSeconds: seconds });
+    // Define the onmessage handler to recieve the data from web worker
+    timerWorker.onmessage = ({ data: { minutes, seconds } }) => {
+        // Use setTimeout to ensure that the state updates are not batched by React
+        setTimeout(() => {
+            dispatch(setMinutes(minutes));
+            dispatch(setSeconds(seconds));
+        }, 100);
     };
 
+    // This function sends a message to the web worker to start the timer.
+    // It includes the current state's minutes and seconds as initial values.
+    const startWebWorkerTimer = () => {
+        timerWorker.postMessage({
+            turn: "on",
+            initialMinutes: time.minutes,
+            initialSeconds: time.seconds
+        });
+    };
+
+    // This function sends a message to the web worker to stop the timer.
+    // The worker will clear the interval and reset its internal minutes and seconds to these values.
     const resetWebWorkerTimer = () => {
-        timerWorker.postMessage({ turn: "off", initialMinutes: minutes, initialSeconds: seconds });
+        timerWorker.postMessage({
+            turn: "off",
+            initialMinutes: time.minutes,
+            initialSeconds: time.seconds
+        });
     };
     const alarmAudio = player({
         asset: alarm,
@@ -61,30 +75,12 @@ const usePomodoroTimer = () => {
         dispatch(setStopTimer());
         resetWebWorkerTimer();
     };
-    useEffect(() => {
-        localStorage.setItem('minutes', String(minutes));
-        localStorage.setItem('seconds', String(seconds));
-        dispatch(setTimer(String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0')));
-    }, [minutes, seconds]);
-    useEffect(() => {
-        const min = Number(localStorage.getItem('minutes'));
-        const sec = Number(localStorage.getItem('seconds'));
-        if (time.mode === 'pomodoro') {
-            setMinutes(min || 25);
-            setSeconds(sec || 0);
-        } else if (time.mode === 'shortBreak') {
-            setMinutes(min || 5);
-            setSeconds(sec || 0);
 
-        } else if (time.mode === 'longBreak') {
-            setMinutes(min || 15);
-            setSeconds(sec || 0);
-        }
 
-    }, [time.mode]);
+    // Use the useEffect hook to handle the end of a timer cycle
     useEffect(() => {
         if (time.isRunning) {
-            if (Number(minutes) === 0 && Number(seconds) === 0) {
+            if (time.minutes === 0 && time.seconds === 0) {
                 stopTimer();
                 alarmAudio.play();
 
@@ -93,25 +89,23 @@ const usePomodoroTimer = () => {
                 }
                 if (time.round % 3 === 0 && time.mode === 'pomodoro') {
                     dispatch(setMode('longBreak'));
-                    setMinutes(15);
-                    setSeconds(0);
+                    dispatch(setMinutes(15));
+                    dispatch(setSeconds(0));
                 } else if (time.mode === 'pomodoro') {
                     dispatch(setMode('shortBreak'));
-                    setMinutes(5);
-                    setSeconds(0);
+                    dispatch(setMinutes(5));
+                    dispatch(setSeconds(0));
                 } else {
                     dispatch(setMode('pomodoro'));
-                    setMinutes(25);
-                    setSeconds(0);
+                    dispatch(setMinutes(25));
+                    dispatch(setSeconds(0));
                 }
                 return;
             }
         }
-    }, [time.isRunning, minutes, seconds]);
+    }, [time.isRunning, time.minutes, time.seconds]);
 
     return {
-        minutes,
-        seconds,
         startTimer,
         stopTimer,
         time,

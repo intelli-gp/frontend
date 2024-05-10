@@ -70,9 +70,11 @@ const ViewGroupPage = React.lazy(
 
 function App() {
 
-    const { minutes, seconds,time } = usePomodoroTimer();
-
-    useDocumentTitle(minutes, seconds, time.isRunning);
+    const { time } = usePomodoroTimer();
+    // This custom hook updates the browser tab's title to reflect the current state of the timer.
+    // If the timer is running, it shows the remaining time in minutes and seconds.
+    // If the timer is not running, it sets the title to "Mujedd".
+    useDocumentTitle(time.minutes, time.seconds, time.isRunning);
     return (
         <AnimatePresence>
             <Suspense fallback={<LoggedInTemplatePage />}>
