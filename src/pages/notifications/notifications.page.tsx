@@ -27,7 +27,6 @@ const NotificationsPage = () => {
         offset: 0,
     });
 
-
     const notifications = userNotifications?.data?.map(
         (notification: SseEvents) => {
             switch (notification.eventName) {
@@ -96,7 +95,6 @@ const NotificationsPage = () => {
             }
         },
     );
-
 
     return (
         <PageContainer {...BetweenPageAnimation}>

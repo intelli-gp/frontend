@@ -2,9 +2,10 @@ import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
 import button from '../../assets/sounds/button-press.wav';
+import { useDocumentTitle } from '../../hooks/docTitle.hook';
 import usePomodoroTimer from '../../hooks/pomodoroTimer.hook';
 import { BetweenPageAnimation } from '../../index.styles';
-import { setMode, setSeconds, setMinutes } from '../../store';
+import { setMinutes, setMode, setSeconds } from '../../store';
 import { player } from '../../utils/sounds';
 import {
     ControlButton,
@@ -14,15 +15,13 @@ import {
     PomodoroContainer,
     Timer,
 } from './pomodoro.styles';
-import { useDocumentTitle } from '../../hooks/docTitle.hook';
 
 const buttonSound = player({
     asset: button,
 });
 
 const PomodoroPage = () => {
-    const { startTimer, stopTimer, time } =
-        usePomodoroTimer();
+    const { startTimer, stopTimer, time } = usePomodoroTimer();
 
     const toggleTimer = useCallback(() => {
         buttonSound.play();
@@ -46,7 +45,7 @@ const PomodoroPage = () => {
                             stopTimer();
                             dispatch(setMinutes(25));
                             dispatch(setSeconds(0));
-                            dispatch(setMode('pomodoro'))
+                            dispatch(setMode('pomodoro'));
                         }}
                         active={String(time.mode === 'pomodoro')}
                     >
@@ -57,7 +56,7 @@ const PomodoroPage = () => {
                             stopTimer();
                             dispatch(setMinutes(5));
                             dispatch(setSeconds(0));
-                            dispatch(setMode('shortBreak'))
+                            dispatch(setMode('shortBreak'));
                         }}
                         active={String(time.mode === 'shortBreak')}
                     >
@@ -68,7 +67,7 @@ const PomodoroPage = () => {
                             stopTimer();
                             dispatch(setMinutes(15));
                             dispatch(setSeconds(0));
-                            dispatch(setMode('longBreak'))
+                            dispatch(setMode('longBreak'));
                         }}
                         active={String(time.mode === 'longBreak')}
                     >

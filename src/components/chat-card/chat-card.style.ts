@@ -61,7 +61,7 @@ export const LastMessageContent = styled.div<{ width?: string }>`
     display: flex;
     align-items: center;
     font-size: 0.875rem;
-    gap:6px;
+    gap: 6px;
 `;
 
 export const LastMessageAuthorName = styled.span`

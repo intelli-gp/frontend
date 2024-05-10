@@ -3,7 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import alarm from '../assets/sounds/alarm-digital.mp3';
-import { RootState, incrementRound, setMode, setStartTimer, setMinutes, setSeconds, setStopTimer } from '../store';
+import {
+    RootState,
+    incrementRound,
+    setMinutes,
+    setMode,
+    setSeconds,
+    setStartTimer,
+    setStopTimer,
+} from '../store';
 import { player } from '../utils/sounds';
 import worker from '../utils/worker-script';
 
@@ -49,9 +57,9 @@ const usePomodoroTimer = () => {
     // It includes the current state's minutes and seconds as initial values.
     const startWebWorkerTimer = () => {
         timerWorker.postMessage({
-            turn: "on",
+            turn: 'on',
             initialMinutes: time.minutes,
-            initialSeconds: time.seconds
+            initialSeconds: time.seconds,
         });
     };
 
@@ -59,9 +67,9 @@ const usePomodoroTimer = () => {
     // The worker will clear the interval and reset its internal minutes and seconds to these values.
     const resetWebWorkerTimer = () => {
         timerWorker.postMessage({
-            turn: "off",
+            turn: 'off',
             initialMinutes: time.minutes,
-            initialSeconds: time.seconds
+            initialSeconds: time.seconds,
         });
     };
     const alarmAudio = player({
@@ -75,7 +83,6 @@ const usePomodoroTimer = () => {
         dispatch(setStopTimer());
         resetWebWorkerTimer();
     };
-
 
     // Use the useEffect hook to handle the end of a timer cycle
     useEffect(() => {

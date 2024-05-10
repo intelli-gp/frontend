@@ -3,6 +3,8 @@ import React, { Suspense } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import ProtectedRoutes from './components/ProtectedRoutes';
+import { useDocumentTitle } from './hooks/docTitle.hook';
+import usePomodoroTimer from './hooks/pomodoroTimer.hook';
 import AIHelperPage from './pages/AI-helper/AI-helper.page';
 import { AIServicePage } from './pages/ai-service/ai-service.page';
 import ArticlesBookmarksPage from './pages/articles-bookmarks/articles-bookmarks.page';
@@ -17,8 +19,6 @@ import { SettingsPage } from './pages/settings/settings.page';
 import AuthTemplatePage from './pages/templates/Auth';
 import LoggedInTemplatePage from './pages/templates/LoggedIn';
 import UpgradePage from './pages/upgrade/upgrade.page';
-import usePomodoroTimer from './hooks/pomodoroTimer.hook';
-import { useDocumentTitle } from './hooks/docTitle.hook';
 
 const ChatroomPage = React.lazy(
     () => import('./pages/chat-room/chat-room.page'),
@@ -69,7 +69,6 @@ const ViewGroupPage = React.lazy(
 );
 
 function App() {
-
     const { time } = usePomodoroTimer();
     // This custom hook updates the browser tab's title to reflect the current state of the timer.
     // If the timer is running, it shows the remaining time in minutes and seconds.

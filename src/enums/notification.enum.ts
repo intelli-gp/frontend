@@ -17,4 +17,3 @@ export const NOTIFICATION_SUB_TYPES = {
         WARNING: 'warning',
     },
 } as const;
-

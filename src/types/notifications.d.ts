@@ -96,7 +96,7 @@ type ReadNotificationDto = {
     PrimaryType: NotificationType<void>;
     SubType: string;
     /**
-     * @Notice This is only required for notifications that 
+     * @Notice This is only required for notifications that
      * have one to many relationships such as Likes .
      */
     NotificationSenderID?: number;

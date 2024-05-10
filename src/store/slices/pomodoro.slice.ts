@@ -7,8 +7,8 @@ const initialState = {
     autoPomodoros: false,
     longBreakInterval: 3,
     isRunning: false,
-    minutes:25,
-    seconds:0,
+    minutes: 25,
+    seconds: 0,
 };
 export const pomodoroSlice = createSlice({
     name: 'pomodoro',
@@ -16,10 +16,10 @@ export const pomodoroSlice = createSlice({
     reducers: {
         setStartTimer: (state) => {
             state.isRunning = true;
-          },
-          setStopTimer: (state) => {
+        },
+        setStopTimer: (state) => {
             state.isRunning = false;
-          },
+        },
         incrementRound: (state) => {
             state.round += 1;
         },
@@ -35,6 +35,13 @@ export const pomodoroSlice = createSlice({
     },
 });
 
-export const { incrementRound, setMode,setMinutes, setSeconds, setStartTimer, setStopTimer } = pomodoroSlice.actions;
+export const {
+    incrementRound,
+    setMode,
+    setMinutes,
+    setSeconds,
+    setStartTimer,
+    setStopTimer,
+} = pomodoroSlice.actions;
 
 export const pomodoroReducer = pomodoroSlice.reducer;

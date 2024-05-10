@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { IoCamera } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 
 import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
@@ -13,7 +14,6 @@ import {
     TypographyContainer,
     UnreadMessagesCounter,
 } from './chat-card.style';
-import { IoCamera } from 'react-icons/io5';
 
 const ChatCard = ({
     Group,
@@ -47,12 +47,14 @@ const ChatCard = ({
                         {LastMessage?.User.FullName.split(' ')[0] + ': '}
                     </LastMessageAuthorName>
 
-                    {LastMessage?.Type ==="IMAGE"?
-                    <span className='flex gap-[5px] items-center '>
-                    <IoCamera size={18}/>
-                    Photo
-                    </span>:
-                    LastMessage?.Content}
+                    {LastMessage?.Type === 'IMAGE' ? (
+                        <span className="flex gap-[5px] items-center ">
+                            <IoCamera size={18} />
+                            Photo
+                        </span>
+                    ) : (
+                        LastMessage?.Content
+                    )}
                 </LastMessageContent>
                 <ChatDate>{moment(LastMessage?.CreatedAt).fromNow()} </ChatDate>
             </TypographyContainer>
