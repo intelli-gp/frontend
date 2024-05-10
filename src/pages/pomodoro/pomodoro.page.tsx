@@ -14,43 +14,57 @@ import {
     PomodoroContainer,
     Timer,
 } from './pomodoro.styles';
+import { useDocumentTitle } from '../../hooks/docTitle.hook';
 
 const buttonSound = player({
     asset: button,
 });
 
 const PomodoroPage = () => {
-    const { minutes, seconds, isRunning, startTimer, stopTimer, time } =
+    const { minutes, seconds, startTimer, stopTimer, time , } =
         usePomodoroTimer();
-
+   
     const toggleTimer = useCallback(() => {
         buttonSound.play();
-        if (isRunning) {
+        if (time.isRunning) {
             stopTimer();
         } else {
             startTimer();
         }
-    }, [startTimer, stopTimer, isRunning]);
+    }, [startTimer, stopTimer, time.isRunning]);
     const dispatch = useDispatch();
+    useDocumentTitle(minutes, seconds, time.isRunning);
 
     return (
         <PageContainer {...BetweenPageAnimation}>
             <PomodoroContainer mode={time.mode}>
                 <ModesContainer>
                     <ModeButton
-                        onClick={() => dispatch(setMode('pomodoro'))}
+                        onClick={() =>{
+                            stopTimer();
+                            localStorage.setItem('seconds', String(0));
+                            localStorage.setItem('minutes', String(25));
+                            dispatch(setMode('pomodoro'))}}
                         active={String(time.mode === 'pomodoro')}
                     >
                         Pomodoro
                     </ModeButton>
                     <ModeButton
-                        onClick={() => dispatch(setMode('shortBreak'))}
+                        onClick={() => {
+                            stopTimer();
+                            localStorage.setItem('seconds', String(0));
+                            localStorage.setItem('minutes', String(5));
+                            dispatch(setMode('shortBreak'))}}
                         active={String(time.mode === 'shortBreak')}
                     >
                         Short Break
                     </ModeButton>
                     <ModeButton
-                        onClick={() => dispatch(setMode('longBreak'))}
+                        onClick={() =>{
+                            stopTimer();
+                            localStorage.setItem('seconds', String(0));
+                            localStorage.setItem('minutes', String(15));
+                            dispatch(setMode('longBreak'))}}
                         active={String(time.mode === 'longBreak')}
                     >
                         Long Break
@@ -62,7 +76,7 @@ const PomodoroPage = () => {
                 </Timer>
                 <div className="flex flex-col items-center gap-3">
                     <ControlButton onClick={toggleTimer} mode={time.mode}>
-                        {isRunning ? 'PAUSE' : 'START'}
+                        {time.isRunning ? 'PAUSE' : 'START'}
                     </ControlButton>
                     <p>Round #{time.round}</p>
                 </div>

@@ -3,8 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import alarm from '../assets/sounds/alarm-digital.mp3';
-import { RootState, incrementRound, setMode } from '../store';
+import { RootState, incrementRound, setMode, setStartTimer, setStopTimer, setTimer } from '../store';
 import { player } from '../utils/sounds';
+import worker from '../utils/worker-script';
+
+
+const timerWorker = new Worker(worker);
 
 type State = {
     mode: string;
@@ -12,53 +16,74 @@ type State = {
     autoBreaks: boolean;
     autoPomodoros: boolean;
     longBreakInterval: number;
+    timer: string;
+    isRunning: boolean;
 };
 export type TimerModes = 'pomodoro' | 'shortBreak' | 'longBreak';
 const usePomodoroTimer = () => {
-    const [minutes, setMinutes] = useState(25);
-    const [seconds, setSeconds] = useState(0);
-    const [isRunning, setIsRunning] = useState(false);
     const dispatch = useDispatch();
     const timeSelector = createSelector(
         (state: RootState) => state.timer.pomodoro,
-        (timer: State) => {
+        (time: State) => {
             return {
-                ...timer,
+                ...time,
             };
         },
     );
 
     const time = useSelector(timeSelector);
+
+    const [minutes, setMinutes] = useState(Number(localStorage.getItem('minutes')) || 25);
+    const [seconds, setSeconds] = useState(Number(localStorage.getItem('seconds')) || 0);
+
     useEffect(() => {
-        console.log(time.mode);
-        //    setTimerMode(time.pomodoro.mode)
-    }, [time]);
+        timerWorker.onmessage = ({ data: { minutes, seconds } }) => {
+            console.log(seconds);
+            setMinutes(minutes);
+            setSeconds(seconds);
+        };
+    }, []);
+    const startWebWorkerTimer = () => {
+        timerWorker.postMessage({ turn: "on", initialMinutes: minutes, initialSeconds: seconds });
+    };
+
+    const resetWebWorkerTimer = () => {
+        timerWorker.postMessage({ turn: "off", initialMinutes: minutes, initialSeconds: seconds });
+    };
     const alarmAudio = player({
         asset: alarm,
     });
     const startTimer = () => {
-        setIsRunning(true);
+        dispatch(setStartTimer());
+        startWebWorkerTimer();
     };
     const stopTimer = () => {
-        setIsRunning(false);
+        dispatch(setStopTimer());
+        resetWebWorkerTimer();
     };
     useEffect(() => {
-        setIsRunning(false);
+        localStorage.setItem('minutes', String(minutes));
+        localStorage.setItem('seconds', String(seconds));
+        dispatch(setTimer(String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0')));
+    }, [minutes, seconds]);
+    useEffect(() => {
+        const min = Number(localStorage.getItem('minutes'));
+        const sec = Number(localStorage.getItem('seconds'));
         if (time.mode === 'pomodoro') {
-            setMinutes(25);
-            setSeconds(0);
+            setMinutes(min || 25);
+            setSeconds(sec || 0);
         } else if (time.mode === 'shortBreak') {
-            setMinutes(5);
-            setSeconds(0);
+            setMinutes(min || 5);
+            setSeconds(sec || 0);
+
         } else if (time.mode === 'longBreak') {
-            setMinutes(15);
-            setSeconds(0);
+            setMinutes(min || 15);
+            setSeconds(sec || 0);
         }
+
     }, [time.mode]);
     useEffect(() => {
-        let interval: any = null;
-
-        if (isRunning) {
+        if (time.isRunning) {
             if (Number(minutes) === 0 && Number(seconds) === 0) {
                 stopTimer();
                 alarmAudio.play();
@@ -66,34 +91,27 @@ const usePomodoroTimer = () => {
                 if (time.mode === 'shortBreak' || time.mode === 'longBreak') {
                     dispatch(incrementRound());
                 }
-
                 if (time.round % 3 === 0 && time.mode === 'pomodoro') {
                     dispatch(setMode('longBreak'));
+                    setMinutes(15);
+                    setSeconds(0);
                 } else if (time.mode === 'pomodoro') {
                     dispatch(setMode('shortBreak'));
+                    setMinutes(5);
+                    setSeconds(0);
                 } else {
                     dispatch(setMode('pomodoro'));
+                    setMinutes(25);
+                    setSeconds(0);
                 }
                 return;
             }
-            if (Number(seconds) === 0) {
-                setSeconds(59);
-                setMinutes((prevTime) => prevTime - 1);
-            }
-            if (Number(seconds) > 0) {
-                interval = setInterval(() => {
-                    setSeconds((prevTime) => prevTime - 1);
-                }, 1000);
-            }
         }
-
-        return () => clearInterval(interval);
-    }, [isRunning, minutes, seconds]);
+    }, [time.isRunning, minutes, seconds]);
 
     return {
         minutes,
         seconds,
-        isRunning,
         startTimer,
         stopTimer,
         time,
