@@ -16,7 +16,7 @@ type TimerModesProps = {
 export const Skip =styled(IoMdSkipForward)`
 position: absolute;
 right: 18%;
-top: 4%;
+top: 7%;
 width:36px;
 height:36px;
 color:white;
