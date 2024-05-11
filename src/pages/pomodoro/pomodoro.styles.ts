@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { IoMdSkipForward } from 'react-icons/io';
 import styled from 'styled-components';
 
 export const PageContainer = styled(motion.div)`
@@ -12,7 +13,14 @@ export const PageContainer = styled(motion.div)`
 type TimerModesProps = {
     mode: string;
 };
-
+export const Skip =styled(IoMdSkipForward)`
+position: absolute;
+right: 18%;
+top: 1;
+width:42px;
+height:42px;
+color:white;
+`
 export const PomodoroContainer = styled.div<TimerModesProps>`
     display: flex;
     flex-direction: column;

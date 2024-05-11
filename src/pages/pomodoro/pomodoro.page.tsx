@@ -5,7 +5,7 @@ import button from '../../assets/sounds/button-press.wav';
 import { useDocumentTitle } from '../../hooks/docTitle.hook';
 import usePomodoroTimer from '../../hooks/pomodoroTimer.hook';
 import { BetweenPageAnimation } from '../../index.styles';
-import { setMinutes, setMode, setSeconds } from '../../store';
+import { setMinutes, setMode, setSeconds, setToggleTimer } from '../../store';
 import { player } from '../../utils/sounds';
 import {
     ControlButton,
@@ -14,6 +14,7 @@ import {
     PageContainer,
     PomodoroContainer,
     Timer,
+    Skip
 } from './pomodoro.styles';
 
 const buttonSound = player({
@@ -78,10 +79,14 @@ const PomodoroPage = () => {
                     {String(time.minutes).padStart(2, '0')}:
                     {String(time.seconds).padStart(2, '0')}
                 </Timer>
-                <div className="flex flex-col items-center gap-3">
-                    <ControlButton onClick={toggleTimer} mode={time.mode}>
-                        {time.isRunning ? 'PAUSE' : 'START'}
-                    </ControlButton>
+                <div className="flex flex-col items-center gap-3 relative w-[50%]">
+                        <ControlButton onClick={toggleTimer} mode={time.mode}>
+                            {time.isRunning ? 'PAUSE' : 'START'}
+                        </ControlButton>
+                        {time.isRunning &&
+                            <Skip
+                                onClick={() => dispatch(setToggleTimer(true))}
+                              />}
                     <p>Round #{time.round}</p>
                 </div>
             </PomodoroContainer>

@@ -11,6 +11,7 @@ import {
     setSeconds,
     setStartTimer,
     setStopTimer,
+    setToggleTimer,
 } from '../store';
 import { player } from '../utils/sounds';
 import worker from '../utils/worker-script';
@@ -87,12 +88,13 @@ const usePomodoroTimer = () => {
     // Use the useEffect hook to handle the end of a timer cycle
     useEffect(() => {
         if (time.isRunning) {
-            if (time.minutes === 0 && time.seconds === 0) {
+            if ((time.minutes === 0 && time.seconds === 0)||time.autoBreaks) {
                 stopTimer();
-                alarmAudio.play();
-
+                if(!time.autoBreaks)
+                  alarmAudio.play();
+                
                 if (time.mode === 'shortBreak' || time.mode === 'longBreak') {
-                    dispatch(incrementRound());
+                    dispatch(incrementRound(time.round+1));
                 }
                 if (time.round % 3 === 0 && time.mode === 'pomodoro') {
                     dispatch(setMode('longBreak'));
@@ -107,8 +109,10 @@ const usePomodoroTimer = () => {
                     dispatch(setMinutes(25));
                     dispatch(setSeconds(0));
                 }
+                dispatch(setToggleTimer(false));
+
                 return;
-            }
+            } 
         }
     }, [time.isRunning, time.minutes, time.seconds]);
 
