@@ -78,5 +78,7 @@ export const appApi = createApi({
         'PaymentMethods',
         'Bookmarks',
         'User Notifications',
+        "Followings",
+        "Followers",
     ],
 });

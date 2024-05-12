@@ -1,5 +1,6 @@
-import { Response } from '../../types/response';
-import { UserToSend } from '../../types/user';
+import { PaginatedResult } from '../../types/pagination';
+import { GenericResponse, Response } from '../../types/response';
+import { ReceivedUser, UserToSend } from '../../types/user';
 import { appApi } from './appApi';
 
 const userApi = appApi.injectEndpoints({
@@ -16,7 +17,6 @@ const userApi = appApi.injectEndpoints({
             },
             keepUnusedDataFor: 0,
         }),
-
         updateUser: builder.mutation<Response, Partial<UserToSend>>({
             invalidatesTags: (_result, _error, user) => [
                 { type: 'User', id: user.id },
@@ -29,6 +29,39 @@ const userApi = appApi.injectEndpoints({
                 };
             },
         }),
+        toggleFollowUser: builder.mutation<GenericResponse<number>, number>({
+            invalidatesTags: ['Followings', 'Followers'],
+            query: (id) => {
+                return {
+                    url: `users/toggle-follow/${id}`,
+                    method: 'GET',
+                };
+            },
+        }),
+        getFollowers: builder.query<
+            GenericResponse<PaginatedResult<ReceivedUser>>,
+            number
+        >({
+            providesTags: ['Followers'],
+            query: (id) => {
+                return {
+                    url: `users/followers/${id}`,
+                    method: 'GET',
+                };
+            },
+        }),
+        getFollowing: builder.query<
+            GenericResponse<PaginatedResult<ReceivedUser>>,
+            number
+        >({
+            providesTags: ['Followings'],
+            query: (id) => {
+                return {
+                    url: `users/following/${id}`,
+                    method: 'GET',
+                };
+            },
+        }),
     }),
 });
 
@@ -36,4 +69,9 @@ export const {
     useFetchUserQuery,
     useLazyFetchUserQuery,
     useUpdateUserMutation,
+    useToggleFollowUserMutation,
+    useGetFollowersQuery,
+    useGetFollowingQuery,
+    useLazyGetFollowersQuery,
+    useLazyGetFollowingQuery,
 } = userApi;

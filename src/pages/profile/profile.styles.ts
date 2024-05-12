@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
+import Button from '../../components/button/button.component';
 import EnhancedImage from '../../components/image/image.component';
 import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
 import { GroupsGrid } from '../explore-groups/explore-groups.style';
@@ -274,3 +275,10 @@ export const YouMayNowSection = styled.section`
         grid-row: 2;
     }
 `;
+
+export const FollowButton = styled(Button)`
+    margin-left: auto;
+    padding: 0.35rem 1.5rem;
+    align-self: flex-start;
+`;
+

@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { FaCalendarAlt, FaEnvelope, FaPlus } from 'react-icons/fa';
+import { FaCalendarAlt, FaEnvelope } from 'react-icons/fa';
 import { FaPhoneAlt } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
 import { LuDot } from 'react-icons/lu';
@@ -22,6 +22,7 @@ import { BetweenPageAnimation } from '../../index.styles';
 import {
     AboutListItemText,
     EmptyContent,
+    FollowButton,
     GroupsContainer,
     MainContainer,
     PageContainer,
@@ -37,15 +38,19 @@ import {
 import {
     RootState,
     setCredentials,
+    useGetFollowersQuery,
+    useGetFollowingQuery,
     useGetUserArticlesQuery,
     useGetUserGroupsQuery,
     useLazyFetchUserQuery,
+    useLazyGetFollowersQuery,
+    useLazyGetFollowingQuery,
+    useToggleFollowUserMutation,
     useUpdateUserMutation,
 } from '../../store';
 import { useFetchSpecificUsersRecommendationQuery } from '../../store/apis/recommendationApi';
 import { ReceivedArticle } from '../../types/article.d';
 import { GroupWithRole, ReceivedGroup } from '../../types/group';
-import { Response } from '../../types/response';
 import { ReceivedUser, UserToSend } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
 import { ContactInfoLink } from './profile.styles';
@@ -78,7 +83,7 @@ const ProfilePage = () => {
     const dispatch = useDispatch();
     const location = useLocation();
 
-    const { token, user: loggedInUser } = useSelector(
+    const { token, user: storedUser } = useSelector(
         (state: RootState) => state.auth,
     );
 
@@ -94,23 +99,36 @@ const ProfilePage = () => {
         getUserData,
         { data: _anotherUserData, isLoading: anotherUserIsLoading },
     ] = useLazyFetchUserQuery();
+    const [getFollowers, { data: __followers }] = useLazyGetFollowersQuery();
+    const [getFollowing, { data: __following }] = useLazyGetFollowingQuery();
     const [updateUser, { isLoading: updateUserIsLoading }] =
         useUpdateUserMutation();
     const { data: _articles } = useGetUserArticlesQuery();
     const { data: _groups } = useGetUserGroupsQuery();
+    const { data: _followers } = useGetFollowersQuery(storedUser?.ID!);
+    const { data: _following } = useGetFollowingQuery(storedUser?.ID!);
+    const [toggleFollowUser, { isLoading: followUserIsLoading }] =
+        useToggleFollowUserMutation();
 
-    const loggedInUserArticles: ReceivedArticle[] =
-        (_articles as unknown as Response)?.data ?? [];
-    const loggedInUserGroups: ReceivedGroup[] =
-        (_groups as unknown as Response)?.data ?? [];
-    const anotherUserData: ReceivedUser =
-        (_anotherUserData as unknown as Response)?.data?.user ?? {};
+    const loggedInUserArticles: ReceivedArticle[] = _articles?.data ?? [];
+    const loggedInUserGroups: ReceivedGroup[] = _groups?.data ?? [];
+    const loggedInUserFollowers = _followers?.data?.Results as ReceivedUser[];
+    const loggedInUserFollowing = _following?.data?.Results as ReceivedUser[];
+    const anotherUserFollowers = __followers?.data?.Results as ReceivedUser[];
+    const anotherUserFollowing = __following?.data?.Results as ReceivedUser[];
+    const followers = isAnotherUserProfile
+        ? anotherUserFollowers
+        : loggedInUserFollowers;
+    const following = isAnotherUserProfile
+        ? anotherUserFollowing
+        : loggedInUserFollowing;
+    const anotherUserData: ReceivedUser = _anotherUserData?.data?.user ?? {};
 
     const [loggedInUserProfileImage, setLoggedInUserProfileImage] = useState(
-        loggedInUser.ProfileImage,
+        storedUser.ProfileImage,
     );
     const [loggedInUserCoverImage, setLoggedInUserCoverImage] = useState(
-        loggedInUser.CoverImage,
+        storedUser.CoverImage,
     );
     const [showCoverModal, setCoverModal] = useState(false);
     const [showImgModal, setImgModal] = useState(false);
@@ -127,15 +145,23 @@ const ProfilePage = () => {
         { title: 'Following', isActive: false, label: 'following' },
     ]);
 
+    /**
+     * Check if the other user is followed by me
+     */
+    const isFollowedByMe = (username: string) =>
+        loggedInUserFollowing?.some((user) => {
+            return user.Username === username;
+        });
+
     // TODO: change this when social network is implemented
     const { data: usersRecommendation } =
         useFetchSpecificUsersRecommendationQuery({
-            searchTerm: loggedInUser.Username + '',
+            searchTerm: storedUser.Username + '',
             limit: 5,
             offset: 0,
         });
 
-    const youMayKnow = usersRecommendation?.data as ReceivedUser[];
+    const youMayKnow = usersRecommendation?.data?.Results as ReceivedUser[];
 
     const [CommonFollowers] = useState<any[]>([
         {
@@ -193,9 +219,9 @@ const ProfilePage = () => {
 
     // For logged in user profile
     useEffect(() => {
-        setLoggedInUserProfileImage(loggedInUser.ProfileImage!);
-        setLoggedInUserCoverImage(loggedInUser.CoverImage!);
-    }, [loggedInUser.ProfileImage, loggedInUser.CoverImage]);
+        setLoggedInUserProfileImage(storedUser.ProfileImage!);
+        setLoggedInUserCoverImage(storedUser.CoverImage!);
+    }, [storedUser.ProfileImage, storedUser.CoverImage]);
 
     useEffect(() => {
         if (isAnotherUserProfile) {
@@ -203,7 +229,7 @@ const ProfilePage = () => {
             setUserGroups(anotherUserData.GroupsJoined);
             setUserArticles(anotherUserData.Articles);
         } else {
-            setUserData(loggedInUser);
+            setUserData(storedUser);
             setUserGroups(loggedInUserGroups);
             setUserArticles(loggedInUserArticles);
         }
@@ -211,9 +237,14 @@ const ProfilePage = () => {
 
     useEffect(() => {
         if (isAnotherUserProfile && anotherUserUsername) {
-            getUserData(anotherUserUsername);
+            getUserData(anotherUserUsername)
+                .unwrap()
+                .then((res) => {
+                    getFollowers(res.data.user.ID);
+                    getFollowing(res.data.user.ID);
+                });
         }
-    }, []);
+    }, [anotherUserUsername]);
 
     const MainContent = () => {
         return mainSectionHeaderTabs.map((tab) => {
@@ -233,14 +264,25 @@ const ProfilePage = () => {
                 ) : (
                     <EmptyContent>Nothing here.</EmptyContent>
                 );
-            }
-            if (tab.title === 'Groups') {
+            } else if (tab.title === 'Groups') {
                 return groupsWithRole?.length ? (
                     <GroupsContainer>
                         {groupsWithRole?.map((group) => (
                             <GroupCard profilePage={true} {...group} />
                         ))}
                     </GroupsContainer>
+                ) : (
+                    <EmptyContent>Nothing here.</EmptyContent>
+                );
+            } else if (tab.title === 'Followers') {
+                return followers?.length ? (
+                    <ul>{followers?.map((user) => <UserItem {...user} />)}</ul>
+                ) : (
+                    <EmptyContent>Nothing here.</EmptyContent>
+                );
+            } else if (tab.title === 'Following') {
+                return following?.length ? (
+                    <ul>{following?.map((user) => <UserItem {...user} />)}</ul>
                 ) : (
                     <EmptyContent>Nothing here.</EmptyContent>
                 );
@@ -264,7 +306,7 @@ const ProfilePage = () => {
         try {
             const update: Partial<UserToSend> = {};
 
-            if (loggedInUser?.ProfileImage !== loggedInUserProfileImage) {
+            if (storedUser?.ProfileImage !== loggedInUserProfileImage) {
                 const imageURL = await uploadImage(loggedInUserProfileImage!);
                 update.image = imageURL;
                 const {
@@ -280,7 +322,7 @@ const ProfilePage = () => {
 
                 successToast('Image uploaded successfully');
             }
-            if (loggedInUser?.CoverImage !== loggedInUserCoverImage) {
+            if (storedUser?.CoverImage !== loggedInUserCoverImage) {
                 const imageURL = await uploadImage(loggedInUserCoverImage!);
                 update.coverImage = imageURL;
                 const {
@@ -303,6 +345,16 @@ const ProfilePage = () => {
             } else {
                 errorToast('Error occurred while updating the image!');
             }
+        }
+    };
+
+    const handleToggleFollowUser = async (userID: number) => {
+        try {
+            await toggleFollowUser(userID).unwrap();
+            successToast('User followed successfully');
+        } catch (error) {
+            errorToast('Error occurred while following the user!');
+            console.log(error);
         }
     };
 
@@ -350,8 +402,8 @@ const ProfilePage = () => {
                     onClick={() => {
                         setImage(
                             title === 'Cover'
-                                ? loggedInUser.CoverImage!
-                                : loggedInUser.ProfileImage!,
+                                ? storedUser.CoverImage!
+                                : storedUser.ProfileImage!,
                         );
                         setIsOpen(false);
                     }}
@@ -387,14 +439,26 @@ const ProfilePage = () => {
             <h1 className="text-xl font-semibold">You may know</h1>
             <hr />
             <ul>
-                {youMayKnow?.map((user) => (
-                    <UserItem
-                        Username={user.Username}
-                        FullName={user.FullName}
-                        ProfileImage={user.ProfileImage}
-                        action="follow"
-                    />
-                ))}
+                {youMayKnow?.map((user) => {
+                    const followedByMe = isFollowedByMe(user.Username);
+                    return (
+                        <UserItem
+                            Username={user.Username}
+                            FullName={user.FullName}
+                            ProfileImage={user.ProfileImage}
+                            actionHandler={() =>
+                                handleToggleFollowUser(user.ID)
+                            }
+                            actionButtonProps={{
+                                select: `${
+                                    followedByMe ? 'danger' : 'primary'
+                                }`,
+                                outline: followedByMe,
+                            }}
+                            action={`${followedByMe ? 'Unfollow' : 'Follow'}`}
+                        />
+                    );
+                })}
             </ul>
         </YouMayNowSection>
     );
@@ -425,15 +489,21 @@ const ProfilePage = () => {
         </Button>
     );
 
-    const FollowButton = (
-        <Button
-            select="primary"
-            title="Follow"
-            className="ml-auto gap-2 self-start"
-        >
-            <FaPlus size={14} /> Follow
-        </Button>
-    );
+    const FollowUserButton = () => {
+        let followedByMe = isFollowedByMe(userData?.Username ?? 'NONE');
+        return (
+            <FollowButton
+                select={`${followedByMe ? 'danger' : 'primary'}`}
+                outline={isFollowedByMe(userData?.Username! ?? 'None')}
+                title={`${followedByMe ? 'Unfollow' : 'Follow'}`}
+                className="ml-auto"
+                onClick={() => handleToggleFollowUser(userData?.ID!)}
+                loading={followUserIsLoading}
+            >
+                {followedByMe ? 'Unfollow' : 'Follow'}
+            </FollowButton>
+        );
+    };
 
     if (isAnotherUserProfile && anotherUserIsLoading) {
         return <Spinner />;
@@ -492,7 +562,7 @@ const ProfilePage = () => {
                         </UserHeadline>
                     </div>
 
-                    {isAnotherUserProfile ? FollowButton : EditButton}
+                    {isAnotherUserProfile ? <FollowUserButton /> : EditButton}
                 </UserDataContainer>
             </PageHeader>
 

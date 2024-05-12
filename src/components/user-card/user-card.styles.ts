@@ -57,8 +57,6 @@ export const FollowButton = styled(Button)`
     margin: 0 auto;
     font-size: 0.875rem;
     margin-top: 0.75rem;
-    background-color: var(--yellow-500);
-    border-color: var(--yellow-500);
 `;
 
 export const SwiperCustomSlide = styled(SwiperSlide)<{ width?: string }>`

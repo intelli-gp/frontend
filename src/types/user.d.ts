@@ -2,7 +2,7 @@ import { ReceivedArticle } from './article';
 import { ReceivedGroup } from './group';
 
 export type ReceivedUser = {
-    ID: string;
+    ID: number;
     FullName: string;
     Username: string;
     Email: string;

@@ -6,7 +6,6 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import { Swiper } from 'swiper/react';
 
-import Spinner from '../../components/Spinner';
 import GroupCard from '../../components/chat-group-card/chat-group-card.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import UserCard from '../../components/user-card/user-card.component';
@@ -21,6 +20,8 @@ import {
 import {
     useLazyFetchGeneralArticlesRecommendationQuery,
     useLazyFetchGeneralUsersRecommendationQuery,
+    useLazyFetchSpecificArticlesRecommendationQuery,
+    useLazyFetchSpecificUsersRecommendationQuery,
 } from '../../store/apis/recommendationApi';
 import { useLazyGeneralSearchQuery } from '../../store/apis/searchApi';
 import { ReceivedArticle } from '../../types/article';
@@ -39,25 +40,41 @@ const SearchPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const { UserTags, ID: storedUserId } = useSelector(
-        (state: RootState) => state.auth.user,
-    );
+    const {
+        UserTags,
+        ID: storedUserId,
+        Username,
+    } = useSelector((state: RootState) => state.auth.user);
     const { searchInitiated, searchTerm } = useSelector(
         (state: RootState) => state.appState.searchPage,
     );
 
-    const [triggerSearch, { isLoading, data: _searchResult }] =
-        useLazyGeneralSearchQuery();
+    const [
+        triggerSearch,
+        { isFetching: generalSearchIsFetching, data: _searchResult },
+    ] = useLazyGeneralSearchQuery();
     const searchResult = _searchResult?.data as GeneralSearchData;
 
-    const [triggerArticleRecommendation, { data: _articleRecommendation }] =
-        useLazyFetchGeneralArticlesRecommendationQuery();
-    const recommendedArticles =
-        _articleRecommendation?.data as ReceivedArticle[];
+    const [
+        triggerArticleRecommendation,
+        {
+            data: _articleRecommendation,
+            isFetching: articleRecommendationIsFetching,
+        },
+    ] = useLazyFetchGeneralArticlesRecommendationQuery();
+    const recommendedArticles = _articleRecommendation?.data
+        ?.Results as ReceivedArticle[];
 
-    const [triggerUsersRecommendation, { data: _userRecommendation }] =
-        useLazyFetchGeneralUsersRecommendationQuery();
-    const recommendedUsers = _userRecommendation?.data as ReceivedUser[];
+    const [
+        triggerUsersRecommendation,
+        {
+            data: _userRecommendation,
+            isFetching: userRecommendationsIsFetching,
+        },
+    ] = useLazyFetchSpecificUsersRecommendationQuery();
+
+    const recommendedUsers = _userRecommendation?.data
+        ?.Results as ReceivedUser[];
 
     const handleSearchValueChange = (newValue: string) => {
         dispatch(changeSearchPageQuery(newValue));
@@ -82,13 +99,9 @@ const SearchPage = () => {
             const userTags = UserTags?.join(' ') ?? '';
             triggerSearch({ searchTerm: userTags });
             triggerArticleRecommendation({});
-            triggerUsersRecommendation({});
+            triggerUsersRecommendation({ searchTerm: Username! });
         }
     }, []);
-
-    if (isLoading) {
-        return <Spinner />;
-    }
 
     return (
         <PageContainer {...BetweenPageAnimation}>
@@ -108,8 +121,6 @@ const SearchPage = () => {
                         ? 'users search results'
                         : 'Suggested users'}
                 </SectionTitle>
-                {/* TODO: add skeleton here for loading users */}
-
                 <Swiper
                     navigation={true}
                     spaceBetween={20}
