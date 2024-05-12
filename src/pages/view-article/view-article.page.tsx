@@ -99,8 +99,8 @@ const ViewArticlePage = () => {
             limit: 5,
             offset: 0,
         });
-    const recommendedArticles =
-        _articleRecommendations?.data?.Results as ReceivedArticle[];
+    const recommendedArticles = _articleRecommendations?.data
+        ?.Results as ReceivedArticle[];
 
     const articleOptions = [
         {
@@ -228,7 +228,12 @@ const ViewArticlePage = () => {
             article?.LikedBy?.some((user) => user.ID === storedUser?.ID) ??
                 false,
         );
-    }, [articleIsLoading, articleIsFetching, bookmarkedArticlesIsLoading]);
+    }, [
+        articleIsLoading,
+        articleIsFetching,
+        bookmarkedArticlesIsLoading,
+        article,
+    ]);
 
     useEffect(() => {
         if (bookmarkedArticlesIsLoading || bookmarkedArticlesIsFetching) return;
@@ -237,7 +242,7 @@ const ViewArticlePage = () => {
                 (bookmarkedArticle) => bookmarkedArticle.ID === article?.ID,
             ) ?? false,
         );
-    }, [bookmarkedArticlesIsLoading, bookmarkedArticlesIsFetching]);
+    }, [bookmarkedArticlesIsLoading, bookmarkedArticlesIsFetching, article]);
 
     useEffect(() => {
         const clickScreenHandler = (e: MouseEvent) => {
