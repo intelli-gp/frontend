@@ -51,11 +51,7 @@ const SearchPage = () => {
 
     const [
         triggerSearch,
-        {
-            isFetching: generalSearchIsFetching,
-            data: _searchResult,
-            isUninitialized: generalSearchIsUnInitialized,
-        },
+        { isFetching: generalSearchIsFetching, data: _searchResult },
     ] = useLazyGeneralSearchQuery();
     const searchResult = _searchResult?.data as GeneralSearchData;
 
@@ -119,7 +115,7 @@ const SearchPage = () => {
 
             <SearchPageSection
                 empty={
-                    !generalSearchIsUnInitialized &&
+                    !generalSearchIsFetching &&
                     searchResult?.users?.length === 0
                 }
             >
@@ -154,7 +150,7 @@ const SearchPage = () => {
 
             <SearchPageSection
                 empty={
-                    !generalSearchIsUnInitialized &&
+                    !generalSearchIsFetching &&
                     searchResult?.groups?.length === 0
                 }
             >
@@ -199,7 +195,7 @@ const SearchPage = () => {
 
             <SearchPageSection
                 empty={
-                    !generalSearchIsUnInitialized &&
+                    !generalSearchIsFetching &&
                     searchResult?.articles?.length === 0
                 }
             >
@@ -267,7 +263,7 @@ export const GroupsSkeleton = () => {
         >
             {[...Array(10)].map((_, index) => {
                 return (
-                    <SwiperCustomSlide key={index} width={"250px"}>
+                    <SwiperCustomSlide key={index} width={'250px'}>
                         <Skeleton className="w-[250px] h-[355px] rounded-[0.5rem]" />
                     </SwiperCustomSlide>
                 );

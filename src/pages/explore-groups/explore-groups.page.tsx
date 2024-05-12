@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import CreateGroupModal from '../../components/CreateGroupModal';
 import Skeleton from '../../components/Skeleton';
-import Spinner from '../../components/Spinner';
 import GroupCard from '../../components/chat-group-card/chat-group-card.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import BackendSupportedPagination from '../../components/pagination/pagination.components';
@@ -38,7 +37,7 @@ const ExploreGroupsPage = () => {
         (state: RootState) => state?.auth?.user,
     );
 
-    const [triggerSearch, { data, isLoading, isFetching: searchIsFetching }] =
+    const [triggerSearch, { data, isFetching: searchIsFetching }] =
         useLazyGroupsSearchQuery();
     let { Results: groups, NumPages } = data?.data ?? {};
 
@@ -115,10 +114,6 @@ const ExploreGroupsPage = () => {
             ))}
         </GroupsGrid>
     );
-
-    if (isLoading) {
-        return <Spinner />;
-    }
 
     return (
         <PageContainer {...BetweenPageAnimation}>
