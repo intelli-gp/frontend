@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { FaUserCheck } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import Button from '../../components/button/button.component';
@@ -280,5 +281,31 @@ export const FollowButton = styled(Button)`
     margin-left: auto;
     padding: 0.35rem 1.5rem;
     align-self: flex-start;
+    height: 2.25rem;
+    width: 110px;
 `;
 
+export const UsersListContainer = styled.ul`
+    width: min(500px, 100%);
+    margin: 0 auto;
+    border-radius: 0.25rem;
+    background-color: white;
+    box-shadow: 0px 0px 25px 5px rgba(99, 102, 241, 0.1);
+`;
+
+export const UsersListContent = styled.div`
+    height: 50vh;
+    overflow-y: auto;
+    padding: 1rem;
+`;
+
+export const UsersListHeader = styled.header`
+    padding: 1rem;
+`;
+
+export const FollowIcon = styled(FaUserCheck)`
+    color: var(--gray-700);
+    &:hover {
+        cursor: help;
+    }
+`;

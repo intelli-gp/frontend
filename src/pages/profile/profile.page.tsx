@@ -1,3 +1,4 @@
+import Fuse from 'fuse.js';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { FaCalendarAlt, FaEnvelope } from 'react-icons/fa';
@@ -13,6 +14,7 @@ import defaultUserImage from '../../assets/imgs/user.jpg';
 import Spinner from '../../components/Spinner';
 import Button from '../../components/button/button.component';
 import GroupCard from '../../components/chat-group-card/chat-group-card.component';
+import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import { Modal } from '../../components/modal/modal.component';
 import OpenImage from '../../components/openImage/openImage.component';
 import UserItem from '../../components/user-Item/user-item.component';
@@ -23,6 +25,7 @@ import {
     AboutListItemText,
     EmptyContent,
     FollowButton,
+    FollowIcon,
     GroupsContainer,
     MainContainer,
     PageContainer,
@@ -34,6 +37,9 @@ import {
     UserFullName,
     UserHeadline,
     UserUserName,
+    UsersListContainer,
+    UsersListContent,
+    UsersListHeader,
 } from '../../pages/profile/profile.styles';
 import {
     RootState,
@@ -157,7 +163,7 @@ const ProfilePage = () => {
             return user.Username === username;
         });
 
-    // TODO: change this when social network is implemented
+    // TODO: change this when social network is implemented ->> `If implemented hehe`
     const { data: usersRecommendation } =
         useFetchSpecificUsersRecommendationQuery({
             searchTerm: storedUser.Username + '',
@@ -253,8 +259,11 @@ const ProfilePage = () => {
     const MainContent = () => {
         return mainSectionHeaderTabs.map((tab) => {
             if (!tab.isActive) return null;
+            let tabContentIsEmpty = true;
+            let content: JSX.Element = <></>;
             if (tab.title === 'Posts') {
-                return userArticles?.length ? (
+                tabContentIsEmpty = !userArticles?.length;
+                content = (
                     <>
                         {userArticles?.map((article) => (
                             <WideArticleItem
@@ -265,33 +274,33 @@ const ProfilePage = () => {
                             />
                         ))}
                     </>
-                ) : (
-                    <EmptyContent>Nothing here.</EmptyContent>
                 );
             } else if (tab.title === 'Groups') {
-                return groupsWithRole?.length ? (
+                tabContentIsEmpty = !groupsWithRole?.length;
+                content = (
                     <GroupsContainer>
                         {groupsWithRole?.map((group) => (
                             <GroupCard profilePage={true} {...group} />
                         ))}
                     </GroupsContainer>
-                ) : (
-                    <EmptyContent>Nothing here.</EmptyContent>
                 );
             } else if (tab.title === 'Followers') {
-                return followers?.length ? (
-                    <ul>{followers?.map((user) => <UserItem {...user} />)}</ul>
-                ) : (
-                    <EmptyContent>Nothing here.</EmptyContent>
+                tabContentIsEmpty = !followers?.length;
+                content = (
+                    <UsersListWithSearch users={followers} type="Followers" />
                 );
             } else if (tab.title === 'Following') {
-                return following?.length ? (
-                    <ul>{following?.map((user) => <UserItem {...user} />)}</ul>
-                ) : (
-                    <EmptyContent>Nothing here.</EmptyContent>
+                tabContentIsEmpty = !following?.length;
+                content = (
+                    <UsersListWithSearch users={following} type="Following" />
                 );
             }
-            return <EmptyContent>Nothing here.</EmptyContent>;
+
+            if (tabContentIsEmpty) {
+                return <EmptyContent>Nothing here.</EmptyContent>;
+            }
+
+            return content;
         });
     };
 
@@ -352,8 +361,8 @@ const ProfilePage = () => {
         }
     };
 
-    const handleToggleFollowUser = async (userID: number) => {
-        const alreadyFollowingThisUser = isFollowedByMe(userData.Username!);
+    const handleToggleFollowUser = async (userID: number, username: string) => {
+        const alreadyFollowingThisUser = isFollowedByMe(username);
         try {
             await toggleFollowUser(userID).unwrap();
             if (alreadyFollowingThisUser) {
@@ -456,7 +465,7 @@ const ProfilePage = () => {
                             FullName={user.FullName}
                             ProfileImage={user.ProfileImage}
                             actionHandler={() =>
-                                handleToggleFollowUser(user.ID)
+                                handleToggleFollowUser(user.ID, user.Username)
                             }
                             actionButtonProps={{
                                 select: `${
@@ -506,7 +515,9 @@ const ProfilePage = () => {
                 outline={isFollowedByMe(userData?.Username! ?? 'None')}
                 title={`${followedByMe ? 'Unfollow' : 'Follow'}`}
                 className="ml-auto"
-                onClick={() => handleToggleFollowUser(userData?.ID!)}
+                onClick={() =>
+                    handleToggleFollowUser(userData?.ID!, userData?.Username!)
+                }
                 loading={followUserIsLoading}
             >
                 {followedByMe ? 'Unfollow' : 'Follow'}
@@ -625,6 +636,55 @@ const ProfilePage = () => {
                 title="Cover"
             />
         </PageContainer>
+    );
+};
+
+type UsersListProps = {
+    users: ReceivedUser[];
+    type: 'Following' | 'Followers';
+};
+export const UsersListWithSearch = ({ users, type }: UsersListProps) => {
+    const [searchValue, setSearchValue] = useState('');
+    const [visibleUsers, setVisibleUsers] = useState(users);
+
+    let fuzzy = new Fuse<ReceivedUser>(users, {
+        keys: ['Username', 'FullName'],
+    });
+
+    const handleSearchValueChange = (newValue: string) => {
+        setSearchValue(newValue);
+        if (newValue.trim().length === 0) return setVisibleUsers(users);
+        let searchResult =
+            fuzzy.search(newValue)?.reduce((acc, cur) => {
+                acc.push(cur.item);
+                return acc;
+            }, [] as ReceivedUser[]) ?? [];
+        setVisibleUsers(searchResult);
+    };
+
+    const iconTitle =
+        type === 'Following'
+            ? "You'r following this user."
+            : 'This user follows you.';
+
+    return (
+        <UsersListContainer>
+            <UsersListHeader>
+                <ExplorePageHeader
+                    WithoutButton
+                    searchValue={searchValue}
+                    onSearchValueChange={handleSearchValueChange}
+                />
+            </UsersListHeader>
+            <UsersListContent>
+                {visibleUsers?.map((user) => (
+                    <UserItem
+                        {...user}
+                        emoji={<FollowIcon title={iconTitle} size={18} />}
+                    />
+                ))}
+            </UsersListContent>
+        </UsersListContainer>
     );
 };
 
