@@ -57,6 +57,7 @@ export const CardMainButton = styled(Button)`
     margin: 0 auto;
     font-size: 0.875rem;
     margin-top: 0.75rem;
+    height: 2rem;
 `;
 
 export const SwiperCustomSlide = styled(SwiperSlide)<{ width?: string }>`
