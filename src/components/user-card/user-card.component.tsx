@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import {
     RootState,
@@ -8,10 +9,10 @@ import {
 } from '../../store';
 import { ReceivedUser } from '../../types/user';
 import { profileURL } from '../../utils/profileUrlBuilder';
-import { errorToast } from '../../utils/toasts';
+import { errorToast, successToast } from '../../utils/toasts';
 import {
     CardContainer,
-    FollowButton,
+    CardMainButton,
     UserFullName,
     UserImage,
     UserUsername,
@@ -23,7 +24,10 @@ const UserCard = ({
     ProfileImage,
     ID,
 }: Partial<ReceivedUser>) => {
+    const navigate = useNavigate();
     const storedUser = useSelector((state: RootState) => state.auth.user);
+
+    const isMe = storedUser.Username === Username;
 
     const [toggleFollowUser, { isLoading: toggleFollowUserIsLoading }] =
         useToggleFollowUserMutation();
@@ -37,31 +41,60 @@ const UserCard = ({
     const handleToggleFollowUser = async () => {
         try {
             await toggleFollowUser(ID!).unwrap();
+            if (alreadyFollowing) {
+                successToast('User unfollowed successfully');
+            } else {
+                successToast('User followed successfully');
+            }
         } catch (error) {
             errorToast('Error following user');
             console.log(error);
         }
     };
 
+    const handleNavigateToProfile = () => {
+        navigate('/app/profile');
+    };
+
+    const buttonTitle = ((alreadyFollowing: boolean, isMe: boolean) => {
+        if (isMe) return 'You cannot follow yourself';
+        if (alreadyFollowing) return 'Unfollow user';
+        return 'Follow user';
+    })(alreadyFollowing, isMe);
+
+    const buttonText = ((alreadyFollowing: boolean, isMe: boolean) => {
+        if (isMe) return 'View profile';
+        if (alreadyFollowing) return 'Unfollow';
+        return 'Follow';
+    })(alreadyFollowing, isMe);
+
+    const buttonVariant = ((alreadyFollowing: boolean, isMe: boolean) => {
+        if (isMe) return 'primary200';
+        if (alreadyFollowing) return 'danger';
+        return 'secondary';
+    })(alreadyFollowing, isMe);
+
+    const buttonOnClick = isMe
+        ? handleNavigateToProfile
+        : handleToggleFollowUser;
+
     return (
         <CardContainer to={profileURL(Username!)}>
             <UserImage src={ProfileImage} alt="user profile image" />
-            <UserFullName>{FullName}</UserFullName>
+            <UserFullName>{isMe ? 'You' : FullName}</UserFullName>
             <UserUsername>@{Username}</UserUsername>
-            <FollowButton
+            <CardMainButton
                 loading={toggleFollowUserIsLoading}
-                onClick={handleToggleFollowUser}
-                title={
-                    alreadyFollowing ? 'Unfollow this user' : 'Follow this user'
-                }
-                select={alreadyFollowing ? 'danger' : 'secondary'}
+                onClick={buttonOnClick}
+                title={buttonTitle}
+                select={buttonVariant}
                 outline={alreadyFollowing}
                 onClickCapture={(e: React.MouseEvent) => {
                     e.nativeEvent.preventDefault();
                 }}
             >
-                {alreadyFollowing ? 'Unfollow' : 'Follow'}
-            </FollowButton>
+                {buttonText}
+            </CardMainButton>
         </CardContainer>
     );
 };

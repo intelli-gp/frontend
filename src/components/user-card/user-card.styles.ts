@@ -50,8 +50,8 @@ export const UserUsername = styled.p<{ width?: string }>`
     ${CSSTextLengthLimit}
 `;
 
-export const FollowButton = styled(Button)`
-    border-radius: 99rem;
+export const CardMainButton = styled(Button)`
+    border-radius: 5rem;
     padding: 0.25rem 0;
     width: 90%;
     margin: 0 auto;
