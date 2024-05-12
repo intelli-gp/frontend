@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import { ReceivedArticle } from '../../types/article';
@@ -31,24 +31,24 @@ const WideArticleItem = ({
     CreatedAt,
     onClick,
 }: WideArticleItemProps) => {
-    const navigate = useNavigate();
     return (
         <ArticleContainer onClick={onClick} title={title}>
             <ArticleThumbnail src={CoverImage} alt={'thumbnail'} />
             <div className="flex flex-col justify-between flex-1 overflow-hidden py-3">
-                <AuthorData
-                    onClick={(e: React.MouseEvent) => {
-                        e.stopPropagation();
-                        navigate(profileURL(Author?.Username!));
-                    }}
-                    title={`View ${Author?.FullName}'s profile`}
-                >
+                <AuthorData>
                     <AuthorPicture
                         src={Author?.ProfileImage ?? defaultUserImage}
                         alt="user profile picture"
                     />
                     <div className="overflow-hidden">
-                        <AuthorFullName>{Author?.FullName}</AuthorFullName>
+                        <AuthorFullName
+                            to={profileURL(Author?.Username!)}
+                            onClick={(e: React.MouseEvent) => {
+                                e.stopPropagation();
+                            }}
+                        >
+                            {Author?.FullName}
+                        </AuthorFullName>
                         <UserUsername className="!text-inherit">
                             @{Author?.Username}
                         </UserUsername>

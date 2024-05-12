@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
 import EnhancedImage from '../image/image.component';
+import { Link } from 'react-router-dom';
 
 export const ArticleContainer = styled.article`
     margin: 0 auto;
@@ -43,11 +44,15 @@ export const AuthorData = styled.header`
     }
 `;
 
-export const AuthorFullName = styled.p<{ width?: string }>`
+export const AuthorFullName = styled(Link)<{ width?: string }>`
     line-height: 1.15;
     transition: border-color 0.2s ease-in-out;
     border-bottom: 1px solid transparent;
+    color: inherit;
     ${CSSTextLengthLimit}
+    &:hover {
+        text-decoration: underline;
+    }
 `;
 
 export const UserUsername = styled.p<{ width?: string }>`
