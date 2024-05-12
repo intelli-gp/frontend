@@ -25,7 +25,7 @@ function Skeleton({ times, className }: SkeletonInput) {
         'to-gray-200',
     );
 
-    const boxes = Array(times)
+    const boxes = Array(times ?? 1)
         .fill(0)
         .map((_, i) => {
             return (
