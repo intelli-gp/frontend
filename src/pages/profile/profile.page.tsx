@@ -93,6 +93,10 @@ const ProfilePage = () => {
     const isAnotherUserProfile = window.location.pathname.includes('/user/');
     const anotherUserUsername = useParams().username;
 
+    if (anotherUserUsername === storedUser.Username) {
+        navigate('/app/profile');
+    }
+
     const { isLoading: isImageLoading, trigger: uploadImage } =
         useUploadImage();
     const [
@@ -349,9 +353,14 @@ const ProfilePage = () => {
     };
 
     const handleToggleFollowUser = async (userID: number) => {
+        const alreadyFollowingThisUser = isFollowedByMe(userData.Username!);
         try {
             await toggleFollowUser(userID).unwrap();
-            successToast('User followed successfully');
+            if (alreadyFollowingThisUser) {
+                successToast('User unfollowed successfully');
+            } else {
+                successToast('User followed successfully');
+            }
         } catch (error) {
             errorToast('Error occurred while following the user!');
             console.log(error);

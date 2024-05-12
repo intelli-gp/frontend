@@ -19,8 +19,6 @@ import {
 } from '../../store';
 import {
     useLazyFetchGeneralArticlesRecommendationQuery,
-    useLazyFetchGeneralUsersRecommendationQuery,
-    useLazyFetchSpecificArticlesRecommendationQuery,
     useLazyFetchSpecificUsersRecommendationQuery,
 } from '../../store/apis/recommendationApi';
 import { useLazyGeneralSearchQuery } from '../../store/apis/searchApi';
