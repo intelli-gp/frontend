@@ -6,6 +6,7 @@ import defaultProfileImage from '../../assets/imgs/user.jpg';
 import { RootState } from '../../store';
 import { ReceivedUser } from '../../types/user';
 import { profileURL } from '../../utils/profileUrlBuilder';
+import { ButtonProps } from '../button/button.component';
 import {
     ActionButton,
     Emoji,
@@ -27,11 +28,14 @@ type UserItemProps = {
      */
     actionHandler?: React.MouseEventHandler<HTMLButtonElement>;
     /**
+     * Props to be passed to the action button
+     */
+    actionButtonProps?: Partial<ButtonProps>;
+    /**
      * Time section instead of the action button
      * pass the actual time string to be showed
      */
     timeInfo?: string;
-
     /**
      * Emoji to be displayed `instead of action button`
      */
@@ -46,6 +50,7 @@ const UserItem = ({
     action,
     emoji,
     actionHandler,
+    actionButtonProps,
 }: UserItemProps) => {
     const storedUser = useSelector((state: RootState) => state.auth.user);
     const isMe = Username === storedUser.Username;
@@ -67,7 +72,7 @@ const UserItem = ({
                 )}
             </div>
             {action && (
-                <ActionButton onClick={actionHandler}>
+                <ActionButton onClick={actionHandler} {...actionButtonProps}>
                     {capitalize(action)}
                 </ActionButton>
             )}

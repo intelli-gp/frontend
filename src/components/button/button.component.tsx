@@ -15,7 +15,7 @@ export type Choice =
     | 'primary200'
     | 'primary100';
 
-interface ButtonProps
+export interface ButtonProps
     extends ButtonHTMLAttributes<HTMLButtonElement>,
         Record<string, unknown> {
     children: React.ReactNode;
