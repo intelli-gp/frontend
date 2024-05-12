@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import Spinner from '../../components/Spinner';
+import Skeleton from '../../components/Skeleton';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import BackendSupportedPagination from '../../components/pagination/pagination.components';
 import UpButton from '../../components/up-button/up-button.components';
@@ -39,15 +39,20 @@ const ExploreArticlesPage = () => {
     );
 
     const prefetchSearch = usePrefetchSearch('articlesSearch');
-    const [triggerSearch, { data, isLoading, isFetching }] =
+    const [triggerSearch, { data, isFetching: searchIsFetching }] =
         useLazyArticlesSearchQuery();
     const { Results: articles, NumPages } = data?.data ?? {};
 
-    const [triggerArticleRecommendation, { data: _articleRecommendation }] =
-        useLazyFetchGeneralArticlesRecommendationQuery();
+    const [
+        triggerArticleRecommendation,
+        {
+            data: _articleRecommendation,
+            isFetching: articleRecommendationsFetching,
+        },
+    ] = useLazyFetchGeneralArticlesRecommendationQuery();
 
-    const recommendedArticles =
-        _articleRecommendation?.data?.Results as ReceivedArticle[];
+    const recommendedArticles = _articleRecommendation?.data
+        ?.Results as ReceivedArticle[];
 
     const searchHandler = async (searchTerm: string) => {
         if (searchTerm.trim().length === 0) return;
@@ -102,13 +107,10 @@ const ExploreArticlesPage = () => {
         }
     }, []);
 
-    const pageContent = isFetching ? (
-        <Spinner />
-    ) : (
-        <>
-            <SmallTitle>
-                {searchInitiated ? 'search results' : 'suggested articles'}
-            </SmallTitle>
+    const pageContent =
+        searchIsFetching || articleRecommendationsFetching ? (
+            <ArticlesSkeleton />
+        ) : (
             <MainContent
                 empty={
                     searchInitiated
@@ -130,12 +132,7 @@ const ExploreArticlesPage = () => {
                     },
                 )}
             </MainContent>
-        </>
-    );
-
-    if (isLoading) {
-        return <Spinner />;
-    }
+        );
 
     return (
         <PageContainer {...BetweenPageAnimation}>
@@ -151,6 +148,9 @@ const ExploreArticlesPage = () => {
                 placeholder="Search articles..."
             />
             <UpButton pageHeaderElement={headerRef.current!} />
+            <SmallTitle>
+                {searchInitiated ? 'search results' : 'suggested articles'}
+            </SmallTitle>
             {pageContent}
             {searchInitiated && (
                 <BackendSupportedPagination
@@ -164,6 +164,19 @@ const ExploreArticlesPage = () => {
                 />
             )}
         </PageContainer>
+    );
+};
+
+export const ArticlesSkeleton = () => {
+    return (
+        <MainContent>
+            {[...Array(10)].map((_, index) => (
+                <Skeleton
+                    key={index}
+                    className={'w-[min(800px, 100%)] h-[215px] rounded-[1rem]'}
+                />
+            ))}
+        </MainContent>
     );
 };
 

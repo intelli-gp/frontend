@@ -6,6 +6,7 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import { Swiper } from 'swiper/react';
 
+import Skeleton from '../../components/Skeleton';
 import GroupCard from '../../components/chat-group-card/chat-group-card.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import UserCard from '../../components/user-card/user-card.component';
@@ -26,6 +27,7 @@ import { ReceivedArticle } from '../../types/article';
 import { GeneralSearchData } from '../../types/search';
 import { ReceivedUser } from '../../types/user';
 import { errorToast } from '../../utils/toasts';
+import { ArticlesSkeleton } from '../explore-articles/explore-articles.page';
 import {
     ArticleSectionBody,
     ExploreMoreLink,
@@ -49,7 +51,11 @@ const SearchPage = () => {
 
     const [
         triggerSearch,
-        { isFetching: generalSearchIsFetching, data: _searchResult },
+        {
+            isFetching: generalSearchIsFetching,
+            data: _searchResult,
+            isUninitialized: generalSearchIsUnInitialized,
+        },
     ] = useLazyGeneralSearchQuery();
     const searchResult = _searchResult?.data as GeneralSearchData;
 
@@ -112,35 +118,45 @@ const SearchPage = () => {
             />
 
             <SearchPageSection
-                empty={searchResult && searchResult?.users?.length === 0}
+                empty={
+                    !generalSearchIsUnInitialized &&
+                    searchResult?.users?.length === 0
+                }
             >
                 <SectionTitle>
                     {searchInitiated
                         ? 'users search results'
                         : 'Suggested users'}
                 </SectionTitle>
-                <Swiper
-                    navigation={true}
-                    spaceBetween={20}
-                    modules={[Navigation]}
-                    className="w-full !p-2"
-                    slidesPerView={'auto'}
-                >
-                    {(searchInitiated
-                        ? searchResult?.users?.slice(0, 10)
-                        : recommendedUsers
-                    )?.map((user) => {
-                        return (
-                            <SwiperCustomSlide key={user.ID}>
-                                <UserCard {...user} />
-                            </SwiperCustomSlide>
-                        );
-                    })}
-                </Swiper>
+                {userRecommendationsIsFetching || generalSearchIsFetching ? (
+                    <UsersSkeleton />
+                ) : (
+                    <Swiper
+                        navigation={true}
+                        spaceBetween={20}
+                        modules={[Navigation]}
+                        className="w-full !p-2"
+                        slidesPerView={'auto'}
+                    >
+                        {(searchInitiated
+                            ? searchResult?.users?.slice(0, 10)
+                            : recommendedUsers
+                        )?.map((user) => {
+                            return (
+                                <SwiperCustomSlide key={user.ID}>
+                                    <UserCard {...user} />
+                                </SwiperCustomSlide>
+                            );
+                        })}
+                    </Swiper>
+                )}
             </SearchPageSection>
 
             <SearchPageSection
-                empty={searchResult && searchResult?.groups?.length === 0}
+                empty={
+                    !generalSearchIsUnInitialized &&
+                    searchResult?.groups?.length === 0
+                }
             >
                 <SectionTitle>
                     {searchInitiated
@@ -150,35 +166,42 @@ const SearchPage = () => {
                         Explore More
                     </ExploreMoreLink>
                 </SectionTitle>
-                {/* TODO: add skeleton here for loading groups */}
-                <Swiper
-                    navigation={true}
-                    spaceBetween={20}
-                    modules={[Navigation]}
-                    className="w-full !p-2"
-                    slidesPerView={'auto'}
-                >
-                    {searchResult?.groups?.slice(0, 10)?.map((group) => {
-                        return (
-                            <SwiperCustomSlide key={group.ID} width="250px">
-                                <GroupCard
-                                    {...group}
-                                    alreadyJoined={
-                                        group?.GroupMembers?.some(
-                                            (member) =>
-                                                member?.ID === storedUserId,
-                                        ) ||
-                                        group?.GroupOwner?.ID === storedUserId
-                                    }
-                                />
-                            </SwiperCustomSlide>
-                        );
-                    })}
-                </Swiper>
+                {generalSearchIsFetching || false /* */ ? (
+                    <GroupsSkeleton />
+                ) : (
+                    <Swiper
+                        navigation={true}
+                        spaceBetween={20}
+                        modules={[Navigation]}
+                        className="w-full !p-2"
+                        slidesPerView={'auto'}
+                    >
+                        {searchResult?.groups?.slice(0, 10)?.map((group) => {
+                            return (
+                                <SwiperCustomSlide key={group.ID} width="250px">
+                                    <GroupCard
+                                        {...group}
+                                        alreadyJoined={
+                                            group?.GroupMembers?.some(
+                                                (member) =>
+                                                    member?.ID === storedUserId,
+                                            ) ||
+                                            group?.GroupOwner?.ID ===
+                                                storedUserId
+                                        }
+                                    />
+                                </SwiperCustomSlide>
+                            );
+                        })}
+                    </Swiper>
+                )}
             </SearchPageSection>
 
             <SearchPageSection
-                empty={searchResult && searchResult?.articles?.length === 0}
+                empty={
+                    !generalSearchIsUnInitialized &&
+                    searchResult?.articles?.length === 0
+                }
             >
                 <SectionTitle>
                     {searchInitiated
@@ -188,25 +211,68 @@ const SearchPage = () => {
                         Explore More
                     </ExploreMoreLink>
                 </SectionTitle>
-                {/* TODO: add skeleton here for loading articles */}
-                <ArticleSectionBody>
-                    {(searchInitiated
-                        ? searchResult?.articles?.slice(0, 10)
-                        : recommendedArticles
-                    )?.map((article) => {
-                        return (
-                            <WideArticleItem
-                                {...article}
-                                key={article.ID}
-                                onClick={() =>
-                                    navigate(`/app/articles/${article.ID}`)
-                                }
-                            />
-                        );
-                    })}
-                </ArticleSectionBody>
+                {articleRecommendationIsFetching || generalSearchIsFetching ? (
+                    <ArticlesSkeleton />
+                ) : (
+                    <ArticleSectionBody>
+                        {(searchInitiated
+                            ? searchResult?.articles?.slice(0, 10)
+                            : recommendedArticles
+                        )?.map((article) => {
+                            return (
+                                <WideArticleItem
+                                    {...article}
+                                    key={article.ID}
+                                    onClick={() =>
+                                        navigate(`/app/articles/${article.ID}`)
+                                    }
+                                />
+                            );
+                        })}
+                    </ArticleSectionBody>
+                )}
             </SearchPageSection>
         </PageContainer>
+    );
+};
+
+export const UsersSkeleton = () => {
+    return (
+        <Swiper
+            navigation={true}
+            spaceBetween={20}
+            modules={[Navigation]}
+            className="w-full !p-2"
+            slidesPerView={'auto'}
+        >
+            {[...Array(10)].map((_, index) => {
+                return (
+                    <SwiperCustomSlide key={index}>
+                        <Skeleton className="w-[225px] h-[320px] rounded-[2rem]" />
+                    </SwiperCustomSlide>
+                );
+            })}
+        </Swiper>
+    );
+};
+
+export const GroupsSkeleton = () => {
+    return (
+        <Swiper
+            navigation={true}
+            spaceBetween={20}
+            modules={[Navigation]}
+            className="w-full !p-2"
+            slidesPerView={'auto'}
+        >
+            {[...Array(10)].map((_, index) => {
+                return (
+                    <SwiperCustomSlide key={index} width={"250px"}>
+                        <Skeleton className="w-[250px] h-[355px] rounded-[0.5rem]" />
+                    </SwiperCustomSlide>
+                );
+            })}
+        </Swiper>
     );
 };
 

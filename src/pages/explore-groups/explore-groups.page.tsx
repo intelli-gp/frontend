@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CreateGroupModal from '../../components/CreateGroupModal';
+import Skeleton from '../../components/Skeleton';
 import Spinner from '../../components/Spinner';
 import GroupCard from '../../components/chat-group-card/chat-group-card.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
@@ -37,7 +38,7 @@ const ExploreGroupsPage = () => {
         (state: RootState) => state?.auth?.user,
     );
 
-    const [triggerSearch, { data, isLoading, isFetching }] =
+    const [triggerSearch, { data, isLoading, isFetching: searchIsFetching }] =
         useLazyGroupsSearchQuery();
     let { Results: groups, NumPages } = data?.data ?? {};
 
@@ -97,27 +98,22 @@ const ExploreGroupsPage = () => {
         }
     }, []);
 
-    let pageContent = isFetching ? (
-        <Spinner />
+    let pageContent = searchIsFetching ? (
+        <GroupsSkeleton />
     ) : (
-        <>
-            <SmallTitle>
-                {searchInitiated ? `Search results` : 'suggested groups'}
-            </SmallTitle>
-            <GroupsGrid>
-                {groups?.map((group) => (
-                    <GroupCard
-                        key={group.ID}
-                        alreadyJoined={
-                            group?.GroupMembers?.some(
-                                (member) => member?.ID === storedUserId,
-                            ) || group?.GroupOwner?.ID === storedUserId
-                        }
-                        {...group}
-                    />
-                ))}
-            </GroupsGrid>
-        </>
+        <GroupsGrid>
+            {groups?.map((group) => (
+                <GroupCard
+                    key={group.ID}
+                    alreadyJoined={
+                        group?.GroupMembers?.some(
+                            (member) => member?.ID === storedUserId,
+                        ) || group?.GroupOwner?.ID === storedUserId
+                    }
+                    {...group}
+                />
+            ))}
+        </GroupsGrid>
     );
 
     if (isLoading) {
@@ -142,6 +138,9 @@ const ExploreGroupsPage = () => {
                 searchHandler={searchHandler}
             />
             <UpButton pageHeaderElement={headerRef.current!} />
+            <SmallTitle>
+                {searchInitiated ? `Search results` : 'suggested groups'}
+            </SmallTitle>
             {pageContent}
             {searchInitiated && (
                 <BackendSupportedPagination
@@ -155,6 +154,19 @@ const ExploreGroupsPage = () => {
                 />
             )}
         </PageContainer>
+    );
+};
+
+export const GroupsSkeleton = () => {
+    return (
+        <GroupsGrid>
+            {[...Array(150)].map((_, index) => (
+                <Skeleton
+                    key={index}
+                    className="w-[250px] h-[355px] rounded-[0.5rem]"
+                />
+            ))}
+        </GroupsGrid>
     );
 };
 
