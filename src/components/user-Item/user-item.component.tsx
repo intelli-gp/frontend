@@ -39,7 +39,7 @@ type UserItemProps = {
     /**
      * Emoji to be displayed `instead of action button`
      */
-    emoji?: string;
+    emoji?: string | JSX.Element;
 } & Partial<ReceivedUser>;
 
 const UserItem = ({
