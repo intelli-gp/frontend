@@ -21,14 +21,14 @@ export const pomodoroSlice = createSlice({
             state.isRunning = false;
         },
         setRound: (state) => {
-            state.round =1;
+            state.round = 1;
         },
         incrementRound: (state, action) => {
-            state.round =action.payload;
+            state.round = action.payload;
         },
-        setToggleTimer:  (state, action) => {
+        setToggleTimer: (state, action) => {
             state.autoBreaks = action.payload;
-          },
+        },
         setMode: (state, action) => {
             state.mode = action.payload;
         },

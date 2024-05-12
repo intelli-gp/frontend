@@ -1,8 +1,8 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
 import EnhancedImage from '../image/image.component';
-import { Link } from 'react-router-dom';
 
 export const ArticleContainer = styled.article`
     margin: 0 auto;

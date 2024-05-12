@@ -88,13 +88,12 @@ const usePomodoroTimer = () => {
     // Use the useEffect hook to handle the end of a timer cycle
     useEffect(() => {
         if (time.isRunning) {
-            if ((time.minutes === 0 && time.seconds === 0)||time.autoBreaks) {
+            if ((time.minutes === 0 && time.seconds === 0) || time.autoBreaks) {
                 stopTimer();
-                if(!time.autoBreaks)
-                  alarmAudio.play();
-                
+                if (!time.autoBreaks) alarmAudio.play();
+
                 if (time.mode === 'shortBreak' || time.mode === 'longBreak') {
-                    dispatch(incrementRound(time.round+1));
+                    dispatch(incrementRound(time.round + 1));
                 }
                 if (time.round % 3 === 0 && time.mode === 'pomodoro') {
                     dispatch(setMode('longBreak'));
@@ -112,7 +111,7 @@ const usePomodoroTimer = () => {
                 dispatch(setToggleTimer(false));
 
                 return;
-            } 
+            }
         }
     }, [time.isRunning, time.minutes, time.seconds]);
 

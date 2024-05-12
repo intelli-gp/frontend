@@ -13,15 +13,14 @@ export const PageContainer = styled(motion.div)`
 type TimerModesProps = {
     mode: string;
 };
-export const Skip =styled(IoMdSkipForward)`
-position: absolute;
-right: 18%;
-top: 7%;
-width:36px;
-height:36px;
-color:white;
-
-`
+export const Skip = styled(IoMdSkipForward)`
+    position: absolute;
+    right: 18%;
+    top: 7%;
+    width: 36px;
+    height: 36px;
+    color: white;
+`;
 export const PomodoroContainer = styled.div<TimerModesProps>`
     display: flex;
     flex-direction: column;

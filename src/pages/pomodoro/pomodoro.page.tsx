@@ -13,8 +13,8 @@ import {
     ModesContainer,
     PageContainer,
     PomodoroContainer,
+    Skip,
     Timer,
-    Skip
 } from './pomodoro.styles';
 
 const buttonSound = player({
@@ -80,13 +80,12 @@ const PomodoroPage = () => {
                     {String(time.seconds).padStart(2, '0')}
                 </Timer>
                 <div className="flex flex-col items-center gap-3 relative w-[600px] ">
-                        <ControlButton onClick={toggleTimer} mode={time.mode}>
-                            {time.isRunning ? 'PAUSE' : 'START'}
-                        </ControlButton>
-                        {time.isRunning &&
-                            <Skip
-                                onClick={() => dispatch(setToggleTimer(true))}
-                              />}
+                    <ControlButton onClick={toggleTimer} mode={time.mode}>
+                        {time.isRunning ? 'PAUSE' : 'START'}
+                    </ControlButton>
+                    {time.isRunning && (
+                        <Skip onClick={() => dispatch(setToggleTimer(true))} />
+                    )}
                     <p>Round #{time.round}</p>
                 </div>
             </PomodoroContainer>
