@@ -47,7 +47,7 @@ const ExploreArticlesPage = () => {
         useLazyFetchGeneralArticlesRecommendationQuery();
 
     const recommendedArticles =
-        _articleRecommendation?.data as ReceivedArticle[];
+        _articleRecommendation?.data?.Results as ReceivedArticle[];
 
     const searchHandler = async (searchTerm: string) => {
         if (searchTerm.trim().length === 0) return;

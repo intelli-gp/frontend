@@ -100,7 +100,7 @@ const ViewArticlePage = () => {
             offset: 0,
         });
     const recommendedArticles =
-        _articleRecommendations?.data as ReceivedArticle[];
+        _articleRecommendations?.data?.Results as ReceivedArticle[];
 
     const articleOptions = [
         {
