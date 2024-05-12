@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Spinner from '../../components/Spinner';
 import UpButton from '../../components/up-button/up-button.components';
 import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
 import { PageTitle } from '../../index.styles';
@@ -9,6 +8,7 @@ import {
     // usePrefetch as prefetch,
     useGetBookmarkedArticlesQuery,
 } from '../../store';
+import { ArticlesSkeleton } from '../explore-articles/explore-articles.page';
 import {
     MainContent,
     PageContainer,
@@ -30,7 +30,7 @@ const ArticlesBookmarksPage = () => {
             <PageTitle ref={headerRef}>My Bookmarks</PageTitle>
             <UpButton pageHeaderElement={headerRef.current!} />
             {isLoading ? (
-                <Spinner />
+                <ArticlesSkeleton />
             ) : (
                 <MainContent>
                     {articles?.map((article) => (
