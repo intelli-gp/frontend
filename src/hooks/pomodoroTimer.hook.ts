@@ -14,13 +14,15 @@ import {
     setToggleTimer,
 } from '../store';
 import { player } from '../utils/sounds';
+import MyWorker from '../utils/worker-script?worker&inline'
 
-// Create a new Web Worker
-const workerScriptPath = new URL('../utils/worker-script.ts', import.meta.url).toString();
-const timerWorker = new Worker(workerScriptPath, {
-  type: 'module',
-});
 
+// // Create a new Web Worker
+// const workerScriptPath = new URL('../utils/worker-script.ts', import.meta.url).toString();
+// const timerWorker = new Worker(workerScriptPath, {
+//   type: 'module',
+// });
+const timerWorker = new MyWorker()
 type State = {
     mode: string;
     round: number;
