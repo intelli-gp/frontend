@@ -14,10 +14,12 @@ import {
     setToggleTimer,
 } from '../store';
 import { player } from '../utils/sounds';
-import worker from '../utils/worker-script';
 
 // Create a new Web Worker
-const timerWorker = new Worker(worker);
+const workerScriptPath = new URL('../utils/worker-script.ts', import.meta.url).toString();
+const timerWorker = new Worker(workerScriptPath, {
+  type: 'module',
+});
 
 type State = {
     mode: string;
@@ -48,10 +50,8 @@ const usePomodoroTimer = () => {
     // Define the onmessage handler to recieve the data from web worker
     timerWorker.onmessage = ({ data: { minutes, seconds } }) => {
         // Use setTimeout to ensure that the state updates are not batched by React
-        setTimeout(() => {
             dispatch(setMinutes(minutes));
             dispatch(setSeconds(seconds));
-        }, 100);
     };
 
     // This function sends a message to the web worker to start the timer.

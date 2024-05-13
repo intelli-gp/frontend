@@ -1,4 +1,4 @@
-const workercode = () => {
+function workercode  () {
     let timerInterval: any;
     let minutes: number;
     let seconds: number;
@@ -31,14 +31,6 @@ const workercode = () => {
     };
 };
 
-// Convert the worker code to a string and remove the outer function definition
-let code = workercode.toString();
-code = code.substring(code.indexOf('{') + 1, code.lastIndexOf('}'));
+workercode();
 
-// Create a blob from the worker code string
-const blob = new Blob([code], { type: 'application/typescript' });
 
-// Create a URL for the blob
-const worker = URL.createObjectURL(blob);
-
-export default worker;
