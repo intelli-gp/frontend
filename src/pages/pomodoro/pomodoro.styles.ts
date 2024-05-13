@@ -16,10 +16,19 @@ type TimerModesProps = {
 export const Skip = styled(IoMdSkipForward)`
     position: absolute;
     right: 18%;
-    top: 7%;
-    width: 36px;
-    height: 36px;
+    top: 0%;
+    width: 42px;
+    height: 42px;
+    padding: 0.5rem;
+
     color: white;
+    box-sizing: content-box;
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+    border-radius: 50%;
+    &:hover {
+        background-color:  rgba(255, 255, 255, 0.2);
+    }
 `;
 export const PomodoroContainer = styled.div<TimerModesProps>`
     display: flex;

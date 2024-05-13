@@ -6,7 +6,6 @@ export function useDocumentTitle(
     isRunning: boolean,
 ) {
     useEffect(() => {
-        console.log('I AM HERE');
         if (isRunning) {
             document.title = ` ${String(minutes).padStart(2, '0')}:${String(
                 seconds,
