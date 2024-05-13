@@ -10,6 +10,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import App from './App.tsx';
 import './index.css';
 import { setCredentials, store } from './store';
+import { initializeNotificationsApi } from './utils/notifications-api.ts';
 import { getSocket } from './utils/socket.ts';
 import { connectSSE } from './utils/sse.ts';
 
@@ -18,6 +19,7 @@ let persistor = persistStore(store);
 let savedToken = window.localStorage.getItem('token');
 let savedUser = window.localStorage.getItem('user');
 if (savedToken) {
+    initializeNotificationsApi();
     store.dispatch(
         setCredentials({
             token: savedToken,

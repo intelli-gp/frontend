@@ -1,5 +1,6 @@
 import { EventSourcePolyfill } from 'event-source-polyfill';
 
+import defaultProfileImage from '../assets/imgs/user.jpg';
 import { UserNotification } from '../components/user-notification/user-notification.component';
 import {
     NOTIFICATION_SUB_TYPES,
@@ -9,6 +10,7 @@ import { notificationApi, store } from '../store';
 import { ArticleComment, ArticleLike } from '../types/article';
 import { NotificationReceiveType, SseEvents } from '../types/notifications';
 import { GenericResponse } from '../types/response';
+import { showSystemNotification } from './notifications-api';
 import { infoToast } from './toasts';
 
 let subscription: EventSourcePolyfill;
@@ -77,6 +79,12 @@ export function connectSSE(token?: string) {
                         console.error('Error refetching data:', error);
                     }
                 });
+                showSystemNotification(eventData?.message?.Group?.GroupTitle, {
+                    icon: eventData?.message?.Group?.GroupCoverImage,
+                    body: `${eventData?.message?.User?.FullName}: ${eventData?.message?.Content}`,
+                    badge: eventData?.message?.Group?.GroupCoverImage,
+                    data: `/app/chat-room/${eventData?.message?.Group?.ID}`,
+                });
                 return UserNotification({
                     ImageSrc: eventData?.message?.Group?.GroupCoverImage,
                     Title: eventData?.message?.Group?.GroupTitle,
@@ -114,6 +122,14 @@ export function connectSSE(token?: string) {
                             'article',
                             ArticleLike
                         >;
+                        showSystemNotification(data?.message?.Liker?.FullName, {
+                            icon:
+                                data?.message?.Liker?.ProfileImage ??
+                                defaultProfileImage,
+                            body: 'has liked your article',
+                            badge: data?.message?.Liker?.ProfileImage,
+                            data: `/app/articles/${data?.message?.ArticleID}`,
+                        });
                         return UserNotification({
                             ImageSrc: data?.message?.Liker?.ProfileImage,
                             ImageLinker: `/app/profile/${data?.message?.Liker?.Username}`,
@@ -137,6 +153,19 @@ export function connectSSE(token?: string) {
                             'article',
                             ArticleComment
                         >;
+                        showSystemNotification(
+                            data?.message?.Commenter?.FullName,
+                            {
+                                icon:
+                                    data?.message?.Commenter?.ProfileImage ??
+                                    defaultProfileImage,
+                                body: 'has commented on your article',
+                                badge:
+                                    data?.message?.Commenter?.ProfileImage ??
+                                    defaultProfileImage,
+                                data: `/app/articles/${data?.message?.ArticleID}`,
+                            },
+                        );
                         return UserNotification({
                             ImageSrc: data?.message?.Commenter?.ProfileImage,
                             ImageLinker: `/app/profile/${data?.message?.Commenter?.Username}`,
