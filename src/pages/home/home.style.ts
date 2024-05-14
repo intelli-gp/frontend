@@ -435,7 +435,7 @@ export const HeroContent = styled.div`
         }
     }
 `;
-export const FeedbackSection = styled.section`
+export const PricingSection = styled.section`
     padding: 2.5rem;
     width: 100%;
     display: flex;
@@ -534,100 +534,7 @@ export const Body = styled(motion.div)`
     background-color: white;
 `;
 
-export const CarouselItem = styled.div<{ isActive: boolean }>`
-    transition-duration: 700ms;
-    transition-timing-function: ease-in-out;
-    width: 100%;
-    margin-top: 4rem;
-    margin-bottom: 4rem;
-    display: ${({ isActive }) => (isActive ? 'block' : 'none')};
-`;
 
-export const FeedbackCard = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--indigo-900);
-    color: white;
-    border-radius: 1.5rem;
-    box-shadow:
-        0 10px 15px -3px rgba(0, 0, 0, 0.1),
-        0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    min-height: 300px;
-    width: 100%;
-`;
-
-export const ProfilePic = styled.img`
-    width: 50px;
-    height: 50px;
-    border-radius: 9999px;
-
-    @media (min-width: 768px) {
-        width: 80px;
-        height: 80px;
-    }
-`;
-
-export const SlideIndicator = styled.button<{ isActive: boolean }>`
-    width: 0.75rem;
-    height: 0.75rem;
-    border-radius: 50%;
-    margin-top: 1.5rem;
-    background-color: ${({ isActive }) => (isActive ? '#5a67d8' : '#e2e8f0')};
-`;
-
-export const ButtonRight = styled.button`
-    display: flex;
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 30;
-    justify-content: center;
-    align-items: center;
-    padding: 0 1rem;
-    height: 100%;
-    cursor: pointer;
-    &:focus {
-        outline: none;
-    }
-`;
-
-export const BodySpan = styled.span`
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 9999px;
-    background-color: rgba(75, 85, 99, 0.3);
-    transition: all 0.1s ease-in-out;
-
-    &:hover {
-        background-color: rgba(75, 85, 99, 0.5);
-    }
-
-    @media (min-width: 640px) {
-        width: 2.5rem;
-        height: 2.5rem;
-    }
-`;
-
-export const ButtonLeft = styled.button`
-    display: flex;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 30;
-    justify-content: center;
-    align-items: center;
-    padding: 0 1rem;
-    height: 100%;
-    cursor: pointer;
-    &:focus {
-        outline: none;
-    }
-`;
 export const PricingTitle = styled.div`
     margin-bottom: 1.25rem;
     align-items: center;

@@ -29,7 +29,7 @@ import {
     CardHolder,
     CopyRightText,
     FeaturesSection,
-    FeedbackSection,
+    PricingSection,
     FooterContainer,
     FooterLink,
     FooterNav,
@@ -73,7 +73,7 @@ function Nav() {
                         <ul className="flex px-1 ">
                             {menuItems.map((item, index) => (
                                 <li key={index}>
-                                    <MenuTitles href="#">{item}</MenuTitles>
+                                    <MenuTitles href={`#${item}`}>{item}</MenuTitles>
                                 </li>
                             ))}
                         </ul>
@@ -144,7 +144,7 @@ function Nav() {
 
 function Hero() {
     return (
-        <HeroSection>
+        <HeroSection id='Home'>
             <HeroContainer>
                 <HeroContent>
                     <h1>Turn Your Ambition Into Success Story.</h1>
@@ -192,7 +192,7 @@ function FeatureSection() {
         },
     ];
     return (
-        <>
+        <div id='Features'>
             <AISection>
                 <div>
                     <AIWrapper>
@@ -236,7 +236,7 @@ function FeatureSection() {
                     ))}
                 </div>
             </FeaturesSection>
-        </>
+        </div>
     );
 }
 
@@ -327,7 +327,7 @@ function PriceSection() {
 
     ];
     return (
-        <FeedbackSection>
+        <PricingSection id='Pricing'>
             <PricingTitle>
                 Our Prices
             </PricingTitle>
@@ -338,7 +338,7 @@ function PriceSection() {
             })}
             </PricesHolder>
            
-        </FeedbackSection>
+        </PricingSection>
     );
 }
 
