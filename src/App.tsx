@@ -1,6 +1,12 @@
 import { AnimatePresence } from 'framer-motion';
 import React, { Suspense } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import {
+    Navigate,
+    Route,
+    Routes,
+    useLocation,
+    useNavigate,
+} from 'react-router-dom';
 
 import ProtectedRoutes from './components/ProtectedRoutes';
 import { useDocumentTitle } from './hooks/docTitle.hook';
@@ -19,6 +25,7 @@ import { SettingsPage } from './pages/settings/settings.page';
 import AuthTemplatePage from './pages/templates/Auth';
 import LoggedInTemplatePage from './pages/templates/LoggedIn';
 import UpgradePage from './pages/upgrade/upgrade.page';
+import { routingHelper } from './utils/navigateHelper';
 
 const ChatroomPage = React.lazy(
     () => import('./pages/chat-room/chat-room.page'),
@@ -69,6 +76,8 @@ const ViewGroupPage = React.lazy(
 );
 
 function App() {
+    routingHelper.navigate = useNavigate();
+    
     const { time } = usePomodoroTimer();
     // This custom hook updates the browser tab's title to reflect the current state of the timer.
     // If the timer is running, it shows the remaining time in minutes and seconds.

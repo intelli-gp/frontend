@@ -15,6 +15,7 @@ export type ReceivedUser = {
     CoverImage: string;
     ProfileImage: string;
     UserTags: string[];
+    TwoFactorAuthEnabled: boolean;
     Connected?: boolean;
     GroupsCreated: Array<
         Pick<
