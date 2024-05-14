@@ -2,16 +2,16 @@ import { motion } from 'framer-motion';
 import { FaCircleCheck } from 'react-icons/fa6';
 import styled from 'styled-components';
 
+
+
 export const Check = styled(FaCircleCheck)`
     position: absolute;
-    left: -5%;
-    top: 4.5%;
-    height: 18px;
-    width: 18px;
-
-    color: var(--indigo-950);
+    left: -2%;
+    top: 6%;
+    color:var(--indigo-950);
+    height: 20px;
+    width: 20px;
 `;
-
 export const PageContainer = styled(motion.div)`
     display: flex;
     flex-direction: column;
@@ -52,47 +52,35 @@ export const ButtonsHolder = styled.div`
     box-shadow: var(--gray-shadow);
     border-radius: 25px;
 `;
-export const CircleHolder = styled.div`
-    position: absolute;
-    top: 3%;
-    right: 33%;
-    z-index: 30;
-    border-radius: 60px;
-    background-color: #f9f8c1;
-    padding: 7px 12px;
-    font-weight: 700;
-    font-size: 0.8rem;
-    border: 2px solid var(--indigo-950);
-    color: var(--indigo-950);
-`;
+
 export const CardsHolder = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     padding: 17px;
-    gap: 25px;
+    gap: 2.75rem;
     @media (max-width: 868px) {
         flex-direction: column;
     }
 `;
 
-export const CardHolder = styled.div<{ Border?: boolean }>`
+export const CardHolder = styled.div<{ Pro?: boolean }>`
     display: flex;
     flex-direction: column;
-    padding: 20px 25px;
+    padding: 30px;
     align-items: left;
     position: relative;
     justify-content: space-between;
     box-sizing: border-box;
-    width: 280px;
-    height: 382px;
-    background: #ffffff;
-    border: 2px solid
-        ${({ Border }) =>
-            Border ? 'var(--indigo-950)' : ' rgba(82, 82, 82, 0.27)'};
+    width: 400px;
+    height: 500px;
+    background:${({ Pro }) => (Pro ? 'var(--indigo-300)' : 'var(--indigo-50)')};
+    border: 2px solid rgba(82, 82, 82, 0.27);
     box-shadow: var(--gray-shadow);
-    border-radius: 5px;
+    color:var(--indigo-950);
+    border-radius: 12px;  
+
     & > div:first-child {
         gap: 6px;
         display: flex;
@@ -104,31 +92,32 @@ export const CardHolder = styled.div<{ Border?: boolean }>`
         align-items: center;
         gap: 6px;
     }
-    p {
-        color: var(--slate-500);
-    }
-
-    @media (min-height: 700px) {
-        height: 430px;
-        width: 300px;
-    }
+    
 `;
+export const UpperCardPart =styled.div`
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
+padding: 0.5rem;
+border-bottom: 2px solid var(--indigo-950);
+
+`
 export const UpgradeButton = styled.button`
-    width: 100%;
-    color: var(--indigo-950);
+    width: 95%;
     outline: none;
-    font-weight: 600;
+    font-weight: 700;
     padding: 0.5rem 1.5rem;
     text-align: center;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
-    border: 2px solid var(--indigo-950);
-    background: #f9f8c1;
+    font-size: 18px;
+    border-radius: 6px;
+    color: var(--indigo-50);
+    background: var(--indigo-950);
     transition: all 0.2s ease-in-out;
     &:hover {
-        color: #f9f8c1;
-        background: var(--indigo-950);
+        opacity:0.8;
     }
 `;
