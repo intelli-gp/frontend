@@ -18,7 +18,7 @@ interface ButtonProps {
 export const ButtonContainer = styled.button<ButtonProps>`
     font-family: 'Inter', sans-serif;
     font-weight: 500;
-    padding: 8px 12px;
+    padding: 0.5rem 1rem;
     text-align: center;
     display: inline-flex;
     align-items: center;
@@ -73,10 +73,10 @@ export const ButtonContainer = styled.button<ButtonProps>`
                     `;
                 case 'danger':
                     return css`
-                        border: 2px solid red;
-                        color: red;
+                        border: 2px solid #c92a2a;
+                        color: #c92a2a;
                         &:hover {
-                            background-color: rgba(255, 0, 0, 0.1);
+                            background-color: rgba(255, 0, 0, 0.075);
                         }
                     `;
                 default:

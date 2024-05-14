@@ -20,7 +20,7 @@ export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    gap: 0rem;
+    gap: 0.125rem;
 `;
 
 export const GridContainer = styled.div`
