@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import image from '../../assets/imgs/Hero-illustration.svg';
+import { FaCircleCheck } from 'react-icons/fa6';
 
 type navType = {
     $navbarOpen: boolean;
@@ -54,6 +55,7 @@ export const MenuList = styled.ul`
             color: var(--indigo-950);
             text-decoration: none;
             width: 100%;
+            transition: all 0.1s ease-in-out;
 
             &:hover {
                 background-color: var(--indigo-950);
@@ -73,6 +75,7 @@ export const StyledLink = styled(Link)`
     padding: 0.5rem 2.5rem;
     color: var(--indigo-950);
     text-decoration: none;
+    transition: all 0.2s ease-in-out;
 
     &:hover {
         background-color: var(--indigo-950);
@@ -318,11 +321,11 @@ export const BlogsTitle = styled.div`
     flex-direction: column;
     align-items: center;
 
-    h1 {
+  
         font-size: 2rem;
         font-weight: bold;
         color: var(--indigo-950);
-    }
+    
 
     @media (min-width: 640px) {
         margin-bottom: 3rem;
@@ -433,18 +436,24 @@ export const HeroContent = styled.div`
     }
 `;
 export const FeedbackSection = styled.section`
-    padding-top: 3rem;
-    padding-bottom: 3rem;
+    padding: 2.5rem;
     width: 100%;
-    padding-left: 1rem;
-    padding-right: 1rem;
     display: flex;
+    flex-direction:column;
     align-items: center;
     justify-content: center;
     min-height: calc(100vh - 64px);
-
-    @media (min-width: 640px) {
-        width: 90%;
+   gap:2.4rem;
+`;
+export const PricesHolder = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 17px;
+    gap: 2.5rem;
+    @media (max-width: 868px) {
+        flex-direction: column;
     }
 `;
 
@@ -492,6 +501,8 @@ export const FooterLink = styled.a`
     color: #e5e7eb;
     transition: color 0.3s;
     font-size: 1.2rem;
+    transition: all 0.1s ease-in-out;
+
     &:hover {
         color: rgba(229, 231, 235, 0.75);
     }
@@ -590,6 +601,7 @@ export const BodySpan = styled.span`
     height: 2rem;
     border-radius: 9999px;
     background-color: rgba(75, 85, 99, 0.3);
+    transition: all 0.1s ease-in-out;
 
     &:hover {
         background-color: rgba(75, 85, 99, 0.5);
@@ -615,4 +627,53 @@ export const ButtonLeft = styled.button`
     &:focus {
         outline: none;
     }
+`;
+export const PricingTitle = styled.div`
+    margin-bottom: 1.25rem;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--indigo-950);`
+    export const CardsHolder = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 17px;
+    gap: 2.75rem;
+    @media (max-width: 868px) {
+        flex-direction: column;
+    }
+`;
+
+export const CardHolder = styled.div<{ Pro?: boolean }>`
+    display: flex;
+    padding: 20px;
+    position: relative;
+    justify-content: space-between;
+    box-sizing: border-box;
+    width: 500px;
+    height: 325px;
+    background:${({ Pro }) => (Pro ? 'var(--indigo-300)' : 'var(--indigo-50)')};
+    border: 2px solid rgba(82, 82, 82, 0.27);
+    box-shadow: var(--gray-shadow);
+    color:var(--indigo-950);
+    border-radius: 12px;   
+    transition: all 0.2s ease-in-out;
+ 
+    &:hover {
+        transform: scale(0.95);
+    }
+`;
+export const PricingList = styled.ul`
+    font-size: 1rem;
+    border-left: 3px solid var(--indigo-950);
+    padding: 1rem 1.25rem;
+    flex: 1;
+`;
+export const Check = styled(FaCircleCheck)`
+    position: absolute;
+    left: 0;
+    top: 10%;
+    color:var(--indigo-950);
 `;

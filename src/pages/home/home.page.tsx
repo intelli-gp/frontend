@@ -2,18 +2,15 @@ import { useEffect, useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { CiLogin } from 'react-icons/ci';
 import { IoPersonOutline, IoPersonSharp } from 'react-icons/io5';
-import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
 import { MdLogin } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Section2img from '../../assets/imgs/about-illustration1.svg';
 import ChatBot from '../../assets/imgs/chatBot-illustration.svg';
 import Courses from '../../assets/imgs/courses-illustration.svg';
 import icons from '../../assets/imgs/icons.svg';
-import Star from '../../assets/imgs/star.svg';
 import StudyGroup from '../../assets/imgs/studyGroup-illustration.svg';
 import StudyPlanner from '../../assets/imgs/studyPlanner-illustration.svg';
-import defaultProfileImage from '../../assets/imgs/user.jpg';
 import Feature from '../../components/Feature';
 import SingleBlog from '../../components/article-item/article-item.component';
 import Button from '../../components/button/button.component';
@@ -29,13 +26,9 @@ import {
     BlogsSection,
     BlogsTitle,
     Body,
-    BodySpan,
-    ButtonLeft,
-    ButtonRight,
-    CarouselItem,
+    CardHolder,
     CopyRightText,
     FeaturesSection,
-    FeedbackCard,
     FeedbackSection,
     FooterContainer,
     FooterLink,
@@ -49,14 +42,16 @@ import {
     MenuTitles,
     NavContainer,
     PageContainer,
-    ProfilePic,
     Sidebar,
-    SlideIndicator,
+    Check,
     StyledFooter,
     StyledLink,
     TextAIContainer,
     Title,
     UpperContainer,
+    PricingList,
+    PricesHolder,
+    PricingTitle,
 } from './home.style';
 
 function Nav() {
@@ -257,7 +252,7 @@ function BlogSection() {
         <BlogsSection>
             <div>
                 <BlogsTitle>
-                    <h1>From Our Latest Blogs</h1>
+                    From Our Latest Blogs
                 </BlogsTitle>
                 <BlogsContainer>
                     {articles?.slice(0, 3).map((article: ReceivedArticle) => {
@@ -268,115 +263,81 @@ function BlogSection() {
         </BlogsSection>
     );
 }
+type Type = {
+    id: number;
+    type: string;
+    price: number;
+    para: string[];
+    payment: string;
+};
 
-function Feedback() {
-    const [currentIndex, setCurrentIndex] = useState(0);
+const Card = ({ el }: { el: Type }) => {
+    const navigate = useNavigate();
+    return (
+        <CardHolder Pro={el.type === 'Pro'}  onClick ={()=>navigate("/auth/login")}>
+            <span className='flex  flex-col justify-start gap-4 items-start w-[35%] p-2'>
+            <h2 className='text-[38px] '>
+                    {el.type}
+                </h2>
+                <div className=' w-[100%] flex text-xs py-6 items-end gap-2'>
+                    <h1 className="font-extrabold text-[44px]">
+                        {el.price}$
+                    </h1>
+                    <p>/Monthly</p>
+                </div>
+            </span>
+            <PricingList>
+                {el.para.map((sentence) => (
+                    <div className=" pb-2  pl-6 relative w-[100%] ">
+                        <Check/>
+                        <li>{sentence}</li>
+                    </div>
+                ))}
+            </PricingList>
+        </CardHolder>
+    );
+};
+function PriceSection() {
 
-    const person = [
+    const subscriptionPlans: Type[] = [
         {
-            name: 'Jane Smith',
-            rate: 5,
-            feedback: 'I love using this website it is very helpful.',
+            id: 1,
+            type: 'Free',
+            price: 0,
+            para: [
+                'Tailor and design personalized study plans.',
+                'Find and collaborate with study groups.',
+                'Receive personalized course recommendations based on your progress and interests.',
+                'Get assistance from chatbot helper for up to 3 questions per month.',
+            ],
+            payment: "Monthly",
         },
         {
-            name: 'Simon Adams',
-            rate: 4.4,
-            feedback:
-                'Outstanding! I am amazed by the attention to detail. Highly recommended.',
+            id: 2,
+            type: 'Pro',
+            price: 12,
+            para: [
+                'Enjoy all the features included in the Free Plan.',
+                'Enjoy unlimited access to the chatbot helper feature.',
+                'Enjoy all the features included in the Free Plan.',
+                'Enjoy unlimited access to the chatbot helper feature.',
+            ],
+            payment: 'Monthly',
         },
-        {
-            name: 'Jeffry Brad',
-            rate: 3.8,
-            feedback: 'Not bad.',
-        },
+
     ];
-
-    const changeSlide = (index: number) => {
-        setCurrentIndex((index + person.length) % person.length);
-    };
-
     return (
         <FeedbackSection>
-            <div className="lg:w-4/6 w-5/6">
-                <div
-                    id="default-carousel"
-                    className="relative mb-4 mt-4 ml-4"
-                    data-carousel="static"
-                >
-                    <div className="overflow-hidden relative h-auto rounded-lg ">
-                        {person.map((item, index) => (
-                            <CarouselItem
-                                key={index}
-                                isActive={index === currentIndex}
-                            >
-                                <FeedbackCard>
-                                    <ProfilePic
-                                        src={defaultProfileImage}
-                                        alt="profile pic"
-                                    />
-                                    <div className="relative flex flex-col gap-4 items-center justify-center">
-                                        <div className="flex gap-2">
-                                            <h1 className="text-lg sm:text-xl lg:text-2xl">
-                                                {item.name}
-                                            </h1>
-                                            <div className="flex items-center pl-6">
-                                                <img
-                                                    src={Star}
-                                                    alt="star"
-                                                    className="h-5 w-5"
-                                                />
-                                                <p className="ms-2  text-sm font-semibold text-white md:text-md ml-2">
-                                                    {item.rate}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <p className="lg:text-lg text-slate-300 text-center text-sm">
-                                            "{item.feedback}"
-                                        </p>
-                                    </div>
-                                </FeedbackCard>
-                            </CarouselItem>
-                        ))}
-                    </div>
-                    <div className="flex absolute bottom-5 left-1/2 z-30 space-x-3 -translate-x-1/2">
-                        {person.map((_, index) => (
-                            <SlideIndicator
-                                key={index}
-                                isActive={index === currentIndex}
-                                aria-current={
-                                    index === currentIndex ? 'true' : 'false'
-                                }
-                                onClick={() => changeSlide(index)}
-                            />
-                        ))}
-                    </div>
+            <PricingTitle>
+                Our Prices
+            </PricingTitle>
+            <PricesHolder>
+            {subscriptionPlans.map((plan) => {
+                return <Card el={plan}/>;
 
-                    <ButtonRight
-                        className="flex absolute top-0 right-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none"
-                        data-carousel-next
-                        onClick={() => changeSlide(currentIndex + 1)}
-                    >
-                        <BodySpan>
-                            <IoChevronForwardOutline
-                                className="w-6 h-6 rounded-full sm:w-8 sm:h-8 ml-1"
-                                color="white"
-                            />
-                        </BodySpan>
-                    </ButtonRight>
-                    <ButtonLeft
-                        className="flex absolute top-0 left-0  justify-center items-center px-4 h-full cursor-pointer group "
-                        data-carousel-prev
-                        onClick={() => changeSlide(currentIndex - 1)}
-                    >
-                        <BodySpan>
-                            <IoChevronBackOutline
-                                className="w-6 h-6 rounded-full sm:w-8 sm:h-8 mr-1"
-                                color="white"
-                            />
-                        </BodySpan>
-                    </ButtonLeft>
-                </div>
-            </div>
+            })}
+            </PricesHolder>
+           
         </FeedbackSection>
     );
 }
@@ -419,7 +380,7 @@ function HomePage() {
                     <Hero />
                     <FeatureSection />
                     <BlogSection />
-                    <Feedback />
+                    <PriceSection />
                 </Body>
                 <Footer />
             </PageContainer>
