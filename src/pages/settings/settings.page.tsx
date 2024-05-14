@@ -9,18 +9,22 @@ import Accordion from '../../components/accordion/accordion.component';
 import Button from '../../components/button/button.component';
 import CardInfo from '../../components/card-info/card-info.component';
 import { CustomInput } from '../../components/input/Input.component';
+import { Modal } from '../../components/modal/modal.component';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
     RootState,
     setCredentials,
+    useDisable2faMutation,
+    useEnable2faMutation,
     useGetAllTagsQuery,
+    useLazyGenerate2faQuery,
     useUpdateUserMutation,
 } from '../../store';
 import { useFetchPaymentMethodsQuery } from '../../store/apis/paymentMethodsApi';
 import { RecievePaymentMethod } from '../../types/payment-method';
 import { Response } from '../../types/response';
-import { ReceivedUser, UserToSend } from '../../types/user';
+import { UserToSend } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
     AddCardContainer,
@@ -29,23 +33,34 @@ import {
     PageContainer,
     PayTime,
     PlanButton,
+    QRCodeImg,
+    QRCodeModalButtons,
+    QRCodeTextContainer,
     SectionContainer,
     SectionTitle,
 } from './settings.styles';
 
 export const SettingsPage = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    // Network calls
+    const { user: storedUser, token: userToken } = useSelector(
+        (state: RootState) => state.auth,
+    );
+
     const { data: tagsRes } = useGetAllTagsQuery();
     const [triggerUpdateUser, { isLoading, reset: resetUserUpdateMutation }] =
         useUpdateUserMutation();
+    const { data: getPaymentMethods } = useFetchPaymentMethodsQuery(undefined);
+    const PaymentMethodsData: RecievePaymentMethod[] =
+        (getPaymentMethods as unknown as Response)?.data ?? [];
+    const [triggerGenerate2faCode, { isFetching: isGenerating2faQRCode }] =
+        useLazyGenerate2faQuery();
+    const [triggerEnable2fa, { isLoading: isEnabling2fa }] =
+        useEnable2faMutation();
+    const [triggerDisable2fa, { isLoading: isDisabling2fa }] =
+        useDisable2faMutation();
 
-    // Local state
-    const storedUser = useSelector(
-        (state: RootState) => state.auth.user,
-    ) as ReceivedUser;
-    const userToken = useSelector((state: RootState) => state.auth.token);
     const [firstName, setFirstName] = useState(
         storedUser.FullName?.split(' ')[0] ?? '',
     );
@@ -62,16 +77,17 @@ export const SettingsPage = () => {
     const [bio, setBio] = useState(storedUser.Bio);
     const [interests, setInterests] = useState(storedUser.UserTags);
     const [addCreditCardIsOpen, setAddCreditCardIsOpen] = useState(false);
-    const { data: getPaymentMethods } = useFetchPaymentMethodsQuery(undefined);
-    const PaymentMethodsData: RecievePaymentMethod[] =
-        (getPaymentMethods as unknown as Response)?.data ?? [];
-    console.log(PaymentMethodsData);
+    const [enable2faIsOpen, setEnable2faIsOpen] = useState(false);
+    const [disable2faIsOpen, setDisable2faIsOpen] = useState(false);
+    const [QRCode, setQRCode] = useState('');
+
     function formatExpirationDate(dateString: string) {
         const date = new Date(dateString);
         const month = date.toLocaleString('en-US', { month: '2-digit' });
         const year = date.getFullYear().toString().slice(2);
         return `${month}/${year}`;
     }
+
     const handleUpdatePersonalInformation = async () => {
         /**
          * 1. Check if any of the fields have changed
@@ -96,7 +112,8 @@ export const SettingsPage = () => {
             diff.headline = headline;
         }
         if (
-            new Date(storedUser.DOB).getTime() !== new Date(birthDate).getTime()
+            new Date(storedUser?.DOB ?? Date.now())?.getTime() !==
+            new Date(birthDate).getTime()
         ) {
             diff.dob = birthDate;
         }
@@ -104,10 +121,10 @@ export const SettingsPage = () => {
             diff.bio = bio;
         }
         if (JSON.stringify(storedUser.UserTags) !== JSON.stringify(interests)) {
-            diff.addedInterests = _.difference(interests, storedUser.UserTags);
+            diff.addedInterests = _.difference(interests, storedUser.UserTags!);
             diff.removedInterests = _.difference(
                 storedUser.UserTags,
-                interests,
+                interests!,
             );
         }
 
@@ -135,11 +152,68 @@ export const SettingsPage = () => {
         }
     };
 
+    const handleGenerate2faQRCode = async () => {
+        try {
+            const rawImage = await triggerGenerate2faCode().unwrap();
+            const reader = new FileReader();
+            reader.readAsDataURL(new Blob([rawImage]));
+            reader.onloadend = () => {
+                setQRCode(reader.result as string);
+                setEnable2faIsOpen(true);
+            };
+        } catch (error) {
+            errorToast('An error occurred while generating the 2FA code');
+            console.log(error);
+        }
+    };
+
+    const handleEnable2fa = async (otp: string) => {
+        try {
+            const res = await triggerEnable2fa(otp).unwrap();
+            const { access_token } = res.data;
+            dispatch(
+                setCredentials({
+                    user: {
+                        ...storedUser,
+                        TwoFactorAuthEnabled: true,
+                    },
+                    token: access_token,
+                }),
+            );
+            successToast('Two Factor Authentication has been enabled!');
+            setEnable2faIsOpen(false);
+        } catch (error) {
+            errorToast('An error occurred while enabling 2FA');
+            console.log(error);
+        }
+    };
+
+    const handleDisable2fa = async (otp: string) => {
+        try {
+            const res = await triggerDisable2fa(otp).unwrap();
+            const { access_token } = res.data;
+            dispatch(
+                setCredentials({
+                    user: {
+                        ...storedUser,
+                        TwoFactorAuthEnabled: false,
+                    },
+                    token: access_token,
+                }),
+            );
+            successToast('Two Factor Authentication has been disabled!');
+            setDisable2faIsOpen(false);
+        } catch (error) {
+            errorToast('An error occurred while disabling 2FA');
+            console.log(error);
+        }
+    };
+
     useEffect(() => {
-        setFirstName(storedUser.FullName?.split(' ')[0]);
-        setLastName(storedUser.FullName?.substring(firstName.length + 1));
-        setUsername(storedUser.Username);
-        setEmail(storedUser.Email);
+        setFirstName(storedUser?.FullName!?.split(' ')[0]);
+        setLastName(storedUser?.FullName!?.substring(firstName.length + 1));
+        setUsername(storedUser?.Username!);
+        setEmail(storedUser?.Email!);
         setPhone(storedUser.PhoneNumber);
         setBirthDate(
             new Date(storedUser.DOB ?? Date.now()).toISOString().split('T')[0],
@@ -147,7 +221,115 @@ export const SettingsPage = () => {
         setBio(storedUser.Bio);
         setInterests(storedUser.UserTags);
     }, [storedUser]);
-    const navigate = useNavigate();
+
+    const Enable2faModal = () => {
+        const [otp, setOtp] = useState('');
+        const [otpError, setOtpError] = useState('');
+
+        const handleEnable2faWithValidation = async () => {
+            if (otp.length !== 6 || isNaN(Number(otp))) {
+                setOtpError('Please enter a valid 6-digit code');
+            } else {
+                handleEnable2fa(otp);
+            }
+        };
+
+        return (
+            <Modal
+                title="Enable Two Factor Authentication"
+                isOpen={enable2faIsOpen}
+                setIsOpen={setEnable2faIsOpen}
+            >
+                <QRCodeImg src={QRCode} alt="QRCode" />
+                <QRCodeTextContainer>
+                    <li>
+                        Get any Authenticator app such as
+                        <strong> Google Authenticator</strong>, or
+                        <strong> Microsoft Authenticator</strong>.
+                    </li>
+                    <li>
+                        Scan the QR code above with the app to generate a
+                        6-digit.
+                    </li>
+                    <li>Enter the 6-digit code below to enable 2FA.</li>
+                </QRCodeTextContainer>
+                <CustomInput
+                    label={'Enter the 6-digit code'}
+                    Placeholder={'######'}
+                    value={otp}
+                    error={otpError}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setOtp(e.target.value)
+                    }
+                />
+                <QRCodeModalButtons>
+                    <Button
+                        onClick={handleEnable2faWithValidation}
+                        loading={isEnabling2fa}
+                    >
+                        Enable
+                    </Button>
+                    <Button
+                        select="danger"
+                        outline
+                        onClick={() => setEnable2faIsOpen(false)}
+                    >
+                        Cancel
+                    </Button>
+                </QRCodeModalButtons>
+            </Modal>
+        );
+    };
+
+    const Disable2faModal = () => {
+        const [otp, setOtp] = useState('');
+        const [otpError, setOtpError] = useState('');
+
+        const handleDisable2faWithValidation = async () => {
+            if (otp.length !== 6 || isNaN(Number(otp))) {
+                setOtpError('Please enter a valid 6-digit code');
+            } else {
+                handleDisable2fa(otp);
+            }
+        };
+
+        return (
+            <Modal
+                title="Disable Two Factor Authentication"
+                isOpen={disable2faIsOpen}
+                setIsOpen={setDisable2faIsOpen}
+            >
+                <QRCodeTextContainer>
+                    <li>
+                        Enter the <strong> 6-digit code </strong> from your
+                        Authenticator app to disable 2FA.
+                    </li>
+                </QRCodeTextContainer>
+                <CustomInput
+                    label={'Enter the 6-digit code'}
+                    Placeholder={'######'}
+                    value={otp}
+                    error={otpError}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setOtp(e.target.value)
+                    }
+                />
+                <QRCodeModalButtons>
+                    <Button
+                        onClick={handleDisable2faWithValidation}
+                        loading={isDisabling2fa}
+                        select="danger"
+                        outline
+                    >
+                        Disable
+                    </Button>
+                    <Button onClick={() => setDisable2faIsOpen(false)}>
+                        Cancel
+                    </Button>
+                </QRCodeModalButtons>
+            </Modal>
+        );
+    };
 
     return (
         <PageContainer {...BetweenPageAnimation}>
@@ -231,7 +413,7 @@ export const SettingsPage = () => {
                             setInterests(tags)
                         }
                         availableTags={tagsRes?.data ?? []}
-                        selectedTags={interests}
+                        selectedTags={interests!}
                     />
                     <CustomInput
                         type="date"
@@ -284,6 +466,34 @@ export const SettingsPage = () => {
                         Save
                     </EditButton>
                 </SectionContainer>
+            </Accordion>
+
+            <Accordion
+                title="Security"
+                className="!flex-row items-center justify-between"
+            >
+                <p className="text-lg">
+                    Two Factor Authentication
+                    <strong>
+                        {storedUser.TwoFactorAuthEnabled
+                            ? ' (Enabled)'
+                            : ' (Disabled)'}
+                    </strong>
+                </p>
+                <Button
+                    onClick={
+                        storedUser.TwoFactorAuthEnabled
+                            ? () => setDisable2faIsOpen(true)
+                            : handleGenerate2faQRCode
+                    }
+                    loading={isGenerating2faQRCode}
+                    outline={storedUser.TwoFactorAuthEnabled}
+                    select={
+                        storedUser.TwoFactorAuthEnabled ? 'danger' : 'success'
+                    }
+                >
+                    {storedUser.TwoFactorAuthEnabled ? 'Disable' : 'Enable'}
+                </Button>
             </Accordion>
 
             <Accordion title="Notifications">
@@ -368,15 +578,13 @@ export const SettingsPage = () => {
                 </div>
             </Accordion>
 
-            <Accordion title="Security">
-                <EditButton select="warning" title="Edit this section">
-                    Save
-                </EditButton>
-            </Accordion>
-
             <Button outline select="danger" className="self-start mt-auto">
                 Delete Account
             </Button>
+
+            {/* Modals */}
+            <Enable2faModal />
+            <Disable2faModal />
             <CreditCardModal
                 showModal={addCreditCardIsOpen}
                 setShowModal={setAddCreditCardIsOpen}

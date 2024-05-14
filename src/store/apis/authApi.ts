@@ -1,10 +1,13 @@
-import { Response } from '../../types/response';
-import { UserCredentials, UserToSend } from '../../types/user';
+import { GenericResponse, Response } from '../../types/response';
+import { ReceivedUser, UserCredentials, UserToSend } from '../../types/user';
 import { appApi } from './appApi';
 
 export const authApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
-        loginUser: builder.mutation<Response, UserCredentials>({
+        loginUser: builder.mutation<
+            GenericResponse<{ user: ReceivedUser; access_token: string }>,
+            UserCredentials
+        >({
             query: (user) => {
                 return {
                     url: '/auth/login',
@@ -13,7 +16,10 @@ export const authApi = appApi.injectEndpoints({
                 };
             },
         }),
-        signUpUser: builder.mutation<Response, Partial<UserToSend>>({
+        signUpUser: builder.mutation<
+            GenericResponse<{ user: ReceivedUser; access_token: string }>,
+            Partial<UserToSend>
+        >({
             query: (user) => {
                 return {
                     url: '/auth/signup',
@@ -41,6 +47,45 @@ export const authApi = appApi.injectEndpoints({
                 body: { password },
             }),
         }),
+        generate2fa: builder.query<ArrayBuffer, void>({
+            query: () => ({
+                url: '/auth/2fa/generate',
+                method: 'GET',
+                responseHandler: (response: any) => {
+                    return response.arrayBuffer();
+                },
+            }),
+        }),
+        enable2fa: builder.mutation<
+            GenericResponse<{ access_token: string }>,
+            string
+        >({
+            query: (otp) => ({
+                url: '/auth/2fa/enable',
+                method: 'POST',
+                body: { otp },
+            }),
+        }),
+        authenticate2fa: builder.mutation<
+            GenericResponse<{ access_token: string }>,
+            string
+        >({
+            query: (otp) => ({
+                url: '/auth/2fa/authenticate',
+                method: 'POST',
+                body: { otp },
+            }),
+        }),
+        disable2fa: builder.mutation<
+            GenericResponse<{ access_token: string }>,
+            string
+        >({
+            query: (otp) => ({
+                url: '/auth/2fa/disable',
+                method: 'POST',
+                body: { otp },
+            }),
+        }),
     }),
 });
 
@@ -50,4 +95,8 @@ export const {
     useLogoutUserMutation,
     useLazyResetPasswordQuery,
     useResetPasswordConfirmMutation,
+    useLazyGenerate2faQuery,
+    useEnable2faMutation,
+    useAuthenticate2faMutation,
+    useDisable2faMutation,
 } = authApi;

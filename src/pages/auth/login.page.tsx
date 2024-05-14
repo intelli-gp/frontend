@@ -1,30 +1,40 @@
 import { motion } from 'framer-motion';
-import React, { ChangeEvent, useLayoutEffect } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import Button from '../../components/button/button.component';
 import { CustomInput } from '../../components/input/Input.component';
+import { Modal } from '../../components/modal/modal.component';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
     RootState,
     changeEmail,
     changePassword,
     changeRememberMe,
-    reset,
+    reset as resetLoginForm,
     setCredentials,
+    useAuthenticate2faMutation,
     useLoginUserMutation,
 } from '../../store';
-import { Response } from '../../types/response';
 import { getSocket } from '../../utils/socket';
 import { connectSSE } from '../../utils/sse';
 import { errorToast } from '../../utils/toasts';
+import {
+    QRCodeModalButtons,
+    QRCodeTextContainer,
+} from '../settings/settings.styles';
 import { GoogleIcon, GoogleLoginButton, GoogleLoginLink } from './auth.styles';
 
 export default function LoginPage() {
     const dispatch = useDispatch();
-    const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
+
+    const { user: storedUser, token } = useSelector(
+        (state: RootState) => state.auth,
+    );
+    const [twoFactorIsOpen, setTwoFactorIsOpen] = useState(false);
+    const [searchParams, setSearchParams] = useSearchParams();
     const { email, password, rememberMe, isAuthenticated } = useSelector(
         (state: RootState) => {
             return {
@@ -34,18 +44,26 @@ export default function LoginPage() {
         },
     );
     const [loginUser, { isLoading }] = useLoginUserMutation();
+    const [trigger2faAuthentication, { isLoading: is2faAuthenticating }] =
+        useAuthenticate2faMutation();
 
     // Redirect to app page if user is already logged in
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (isAuthenticated) {
-            navigate('/app/search');
+            console.log('Google Auth useEffect');
+            if (storedUser.TwoFactorAuthEnabled) {
+                setTwoFactorIsOpen(true);
+            } else {
+                getIntoTheApp();
+            }
         }
     }, [isAuthenticated]);
 
     // Google oauth
-    useLayoutEffect(() => {
+    useEffect(() => {
         const token = searchParams.get('token');
         if (token) {
+            console.log('Google Auth useEffect');
             const user = JSON.parse(searchParams.get('user') as string);
             setSearchParams({}, { replace: true });
             dispatch(
@@ -54,37 +72,97 @@ export default function LoginPage() {
                     user,
                 }),
             );
-            navigate('/app/study-planner');
-            // Initialize socket connection.
-            getSocket(token);
-            connectSSE(token);
+            if (user.TwoFactorAuthEnabled) {
+                setTwoFactorIsOpen(true);
+            } else {
+                getIntoTheApp();
+            }
         }
     }, []);
+
+    const getIntoTheApp = () => {
+        navigate('/app/search');
+        dispatch(resetLoginForm());
+
+        // Initialize socket and sse connection.
+        getSocket(token);
+        connectSSE(token);
+    };
+
+    const handle2faAuthentication = async (otp: string) => {
+        try {
+            const res = await trigger2faAuthentication(otp).unwrap();
+            const { access_token } = res.data;
+            dispatch(setCredentials({ token: access_token, user: storedUser }));
+            getIntoTheApp();
+        } catch (error) {
+            errorToast('Invalid 2FA code');
+            console.error(error);
+        }
+    };
+
+    const TwoFactorModal = () => {
+        const [otp, setOtp] = useState('');
+        const [otpError, setOtpError] = useState('');
+
+        const handle2faAuthenticationWithValidation = async () => {
+            if (otp.length !== 6 || isNaN(Number(otp))) {
+                setOtpError('Please enter a valid 6-digit code');
+            } else {
+                handle2faAuthentication(otp);
+            }
+        };
+
+        return (
+            <Modal
+                title="2FA Required"
+                isOpen={twoFactorIsOpen}
+                setIsOpen={setTwoFactorIsOpen}
+            >
+                <QRCodeTextContainer>
+                    <li>
+                        Enter the 6-digit code from your
+                        <strong> Authenticator</strong> app to login.
+                    </li>
+                </QRCodeTextContainer>
+                <CustomInput
+                    label={'Enter the 6-digit code'}
+                    Placeholder={'######'}
+                    value={otp}
+                    error={otpError}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setOtp(e.target.value)
+                    }
+                />
+                <QRCodeModalButtons>
+                    <Button
+                        onClick={handle2faAuthenticationWithValidation}
+                        loading={is2faAuthenticating}
+                    >
+                        Continue
+                    </Button>
+                </QRCodeModalButtons>
+            </Modal>
+        );
+    };
 
     const handleSubmitLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const { data }: Response = await loginUser({
+            const { data } = await loginUser({
                 email,
                 password,
             }).unwrap();
-            if (data && data.access_token) {
-                dispatch(
-                    setCredentials({
-                        token: data.access_token,
-                        user: data.user,
-                    }),
-                );
-                navigate('/app/study-planner');
-                dispatch(reset());
-                // Initialize socket connection.
-                getSocket(data.access_token);
-                connectSSE(data.access_token);
+            dispatch(
+                setCredentials({
+                    token: data.access_token,
+                    user: data.user,
+                }),
+            );
+            if (data.user.TwoFactorAuthEnabled) {
+                setTwoFactorIsOpen(true);
             } else {
-                console.log(
-                    'The response for login request has returned with this data: ',
-                    data,
-                );
+                getIntoTheApp();
             }
         } catch (err) {
             errorToast('Invalid email or password.');
@@ -156,6 +234,9 @@ export default function LoginPage() {
                 Don't have an account?
                 <Link to="/auth/signup">Create one</Link>
             </p>
+
+            {/* Modals */}
+            <TwoFactorModal />
         </motion.form>
     );
 }

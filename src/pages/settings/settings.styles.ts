@@ -3,6 +3,7 @@ import { IoAddCircle } from 'react-icons/io5';
 import styled from 'styled-components';
 
 import Button from '../../components/button/button.component';
+import EnhancedImage from '../../components/image/image.component';
 
 export const PageContainer = styled(motion.div)`
     min-height: 100vh;
@@ -101,4 +102,28 @@ export const PayTime = styled.div`
         color: var(--slate-400);
         background: var(--slate-100);
     }
+`;
+
+export const QRCodeImg = styled(EnhancedImage)`
+    width: 200px;
+    aspect-ratio: 1/1;
+    margin: 0 auto;
+`;
+
+export const QRCodeTextContainer = styled.ul`
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    li {
+        font-size: 0.875rem;
+        list-style: disc;
+    }
+`;
+
+export const QRCodeModalButtons = styled.div`
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 1rem;
 `;
