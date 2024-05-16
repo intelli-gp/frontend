@@ -1,14 +1,17 @@
 import { EventSourcePolyfill } from 'event-source-polyfill';
 
-import defaultProfileImage from '../assets/imgs/user.jpg';
 import { UserNotification } from '../components/user-notification/user-notification.component';
 import {
     NOTIFICATION_SUB_TYPES,
     NOTIFICATION_TYPES,
 } from '../enums/notification.enum';
 import { notificationApi, store } from '../store';
-import { ArticleComment, ArticleLike } from '../types/article';
-import { NotificationReceiveType, SseEvents } from '../types/notifications';
+import {
+    ArticleNotification,
+    FollowNotification,
+    MessageNotification,
+    NotificationEvents,
+} from '../types/notifications';
 import { GenericResponse } from '../types/response';
 import { showSystemNotification } from './notifications-api';
 import { infoToast } from './toasts';
@@ -25,11 +28,13 @@ export function connectSSE(token?: string) {
         },
     });
     subscription.onmessage = async (event) => {
-        const eventData = JSON.parse(event.data) as SseEvents;
+        const eventData = JSON.parse(event.data) as NotificationEvents;
 
-        // console.log(eventData); // Debugging
-        switch (eventData.eventName) {
-            case 'chat-group-message': {
+        console.log(eventData); // Debugging
+        switch (eventData.EventName) {
+            case NOTIFICATION_TYPES.MESSAGE: {
+                const messageNotificationData =
+                    eventData as MessageNotification;
                 store.dispatch(async (dispatch) => {
                     try {
                         dispatch(
@@ -41,7 +46,8 @@ export function connectSSE(token?: string) {
                                         (group) => {
                                             if (
                                                 group.Group.ID ===
-                                                eventData.message.Group.ID
+                                                messageNotificationData.Entity
+                                                    .Group.ID
                                             ) {
                                                 return {
                                                     ...group,
@@ -50,21 +56,23 @@ export function connectSSE(token?: string) {
                                                             0) + 1,
                                                     LastMessage: {
                                                         Content:
-                                                            eventData.message
-                                                                .Content,
+                                                            messageNotificationData
+                                                                .Entity.Content,
                                                         CreatedAt:
-                                                            eventData.message
+                                                            messageNotificationData
+                                                                .Entity
                                                                 .CreatedAt,
-                                                        User: eventData.message
-                                                            .User,
+                                                        User: messageNotificationData.Sender,
                                                         IsDeleted:
-                                                            eventData.message
+                                                            messageNotificationData
+                                                                .Entity
                                                                 .IsDeleted,
                                                         MessageID:
-                                                            eventData.message
+                                                            messageNotificationData
+                                                                .Entity
                                                                 .MessageID,
-                                                        Type: eventData.message
-                                                            .Type,
+                                                        Type: messageNotificationData
+                                                            .Entity.Type,
                                                     },
                                                 };
                                             }
@@ -79,21 +87,30 @@ export function connectSSE(token?: string) {
                         console.error('Error refetching data:', error);
                     }
                 });
-                showSystemNotification(eventData?.message?.Group?.GroupTitle, {
-                    icon: eventData?.message?.Group?.GroupCoverImage,
-                    body: `${eventData?.message?.User?.FullName}: ${eventData?.message?.Content}`,
-                    badge: eventData?.message?.Group?.GroupCoverImage,
-                    data: `/app/chat-room/${eventData?.message?.Group?.ID}`,
-                });
+                showSystemNotification(
+                    messageNotificationData?.Entity?.Group?.GroupTitle,
+                    {
+                        icon: messageNotificationData?.Entity?.Group
+                            ?.GroupCoverImage,
+                        body: `${messageNotificationData?.Sender?.FullName}: ${messageNotificationData?.Entity?.Content}`,
+                        badge: messageNotificationData?.Entity?.Group
+                            ?.GroupCoverImage,
+                        data: `/app/chat-room/${messageNotificationData?.Entity?.Group?.ID}`,
+                    },
+                );
                 return UserNotification({
-                    ImageSrc: eventData?.message?.Group?.GroupCoverImage,
-                    Title: eventData?.message?.Group?.GroupTitle,
-                    ContentPrefix: eventData?.message?.User?.FullName,
-                    Content: eventData?.message?.Content,
-                    Linker: `/app/chat-room/${eventData?.message?.Group?.ID}`,
+                    ImageSrc:
+                        messageNotificationData?.Entity?.Group?.GroupCoverImage,
+                    Title: messageNotificationData?.Entity?.Group?.GroupTitle,
+                    ContentPrefix: messageNotificationData?.Sender?.FullName,
+                    Content: messageNotificationData?.Entity?.Content,
+                    Linker: `/app/chat-room/${messageNotificationData?.Entity?.Group?.ID}`,
                 });
             }
-            case 'article': {
+            case NOTIFICATION_TYPES.ARTICLE: {
+                const articleNotificationData =
+                    eventData as ArticleNotification;
+
                 store.dispatch(
                     notificationApi.util.updateQueryData(
                         'fetchUserNotifications',
@@ -105,93 +122,94 @@ export function connectSSE(token?: string) {
                             );
 
                             const updatedNotifications: GenericResponse<
-                                SseEvents[]
+                                NotificationEvents[]
                             > = {
                                 status: 'success',
-                                data: [eventData, ...existingNotificationsData],
+                                data: [
+                                    articleNotificationData,
+                                    ...existingNotificationsData,
+                                ],
                             };
                             return updatedNotifications;
                         },
                     ),
                 );
 
-                switch (eventData.type) {
+                let notificationContent = '';
+                switch (articleNotificationData.Type) {
                     case NOTIFICATION_SUB_TYPES[NOTIFICATION_TYPES.ARTICLE]
-                        .LIKE: {
-                        const data = eventData as NotificationReceiveType<
-                            'article',
-                            ArticleLike
-                        >;
-                        showSystemNotification(data?.message?.Liker?.FullName, {
-                            icon:
-                                data?.message?.Liker?.ProfileImage ??
-                                defaultProfileImage,
-                            body: 'has liked your article',
-                            badge: data?.message?.Liker?.ProfileImage,
-                            data: `/app/articles/${data?.message?.ArticleID}`,
-                        });
-                        return UserNotification({
-                            ImageSrc: data?.message?.Liker?.ProfileImage,
-                            ImageLinker: `/app/profile/${data?.message?.Liker?.Username}`,
-                            Title: data?.message?.Liker?.FullName,
-                            Content: 'has liked your article',
-                            Linker: `/app/articles/${data?.message?.ArticleID}`,
-                            ReadNotificationData: {
-                                ID: data?.message?.ArticleID,
-                                PrimaryType: NOTIFICATION_TYPES.ARTICLE,
-                                SubType:
-                                    NOTIFICATION_SUB_TYPES[
-                                        NOTIFICATION_TYPES.ARTICLE
-                                    ].LIKE,
-                                NotificationSenderID: +data?.message?.Liker?.ID,
-                            },
-                        });
-                    }
+                        .LIKE:
+                        notificationContent = `has liked ${
+                            store.getState().auth.user?.ID ===
+                            articleNotificationData?.Entity?.EntityCreator?.ID
+                                ? 'your'
+                                : `${articleNotificationData?.Entity?.EntityCreator?.FullName}'s`
+                        } article`;
+                        break;
                     case NOTIFICATION_SUB_TYPES[NOTIFICATION_TYPES.ARTICLE]
-                        .COMMENT: {
-                        const data = eventData as NotificationReceiveType<
-                            'article',
-                            ArticleComment
-                        >;
-                        showSystemNotification(
-                            data?.message?.Commenter?.FullName,
-                            {
-                                icon:
-                                    data?.message?.Commenter?.ProfileImage ??
-                                    defaultProfileImage,
-                                body: 'has commented on your article',
-                                badge:
-                                    data?.message?.Commenter?.ProfileImage ??
-                                    defaultProfileImage,
-                                data: `/app/articles/${data?.message?.ArticleID}`,
-                            },
-                        );
-                        return UserNotification({
-                            ImageSrc: data?.message?.Commenter?.ProfileImage,
-                            ImageLinker: `/app/profile/${data?.message?.Commenter?.Username}`,
-                            Title: data?.message?.Commenter?.FullName,
-                            Content: 'has commented on your article',
-                            Linker: `/app/articles/${data?.message?.ArticleID}`,
-                            ReadNotificationData: {
-                                ID: data?.message?.ID,
-                                PrimaryType: NOTIFICATION_TYPES.ARTICLE,
-                                SubType:
-                                    NOTIFICATION_SUB_TYPES[
-                                        NOTIFICATION_TYPES.ARTICLE
-                                    ].COMMENT,
-                            },
-                        });
-                    }
-                    default: {
-                        return infoToast(
-                            `${eventData.type} is not a supported article notification sub-type`,
-                        );
-                    }
+                        .COMMENT:
+                        notificationContent = `has commented on ${
+                            store.getState().auth.user?.ID ===
+                            articleNotificationData?.Entity?.EntityCreator?.ID
+                                ? 'your'
+                                : `${articleNotificationData?.Entity?.EntityCreator?.FullName}'s`
+                        } article`;
+                        break;
+                    case NOTIFICATION_SUB_TYPES[NOTIFICATION_TYPES.ARTICLE]
+                        .CREATE:
+                        notificationContent = 'has posted a new article';
+                        break;
+                    default:
+                        notificationContent =
+                            'You received an unsupported notification';
+                        break;
                 }
+                showSystemNotification(
+                    articleNotificationData?.Sender?.FullName,
+                    {
+                        icon: articleNotificationData?.Sender?.ProfileImage,
+                        body: notificationContent,
+                        badge: articleNotificationData?.Sender?.ProfileImage,
+                        data: `/app/articles/${articleNotificationData?.Entity?.ID}`,
+                    },
+                );
+
+                return UserNotification({
+                    ImageSrc: articleNotificationData?.Sender?.ProfileImage,
+                    ImageLinker: `/app/profile/${articleNotificationData?.Sender?.Username}`,
+                    Title: articleNotificationData?.Sender?.FullName,
+                    Content: notificationContent,
+                    Linker: `/app/articles/${articleNotificationData?.Entity?.ID}`,
+                    ReadNotificationData: {
+                        NotificationID: articleNotificationData?.ID,
+                    },
+                });
+            }
+            case NOTIFICATION_TYPES.FOLLOW: {
+                const followNotificationData = eventData as FollowNotification;
+                showSystemNotification(
+                    followNotificationData?.Sender?.FullName,
+                    {
+                        icon: followNotificationData?.Sender?.ProfileImage,
+                        body: 'followed you',
+                        badge: followNotificationData?.Sender?.ProfileImage,
+                        data: `/app/profile/${followNotificationData?.Sender?.Username}`,
+                    },
+                );
+                return UserNotification({
+                    ImageSrc: followNotificationData?.Sender?.ProfileImage,
+                    ImageLinker: `/app/profile/${followNotificationData?.Sender?.Username}`,
+                    Title: followNotificationData?.Sender?.FullName,
+                    Content: 'followed you',
+                    Linker: `/app/profile/${followNotificationData?.Sender?.Username}`,
+                    ReadNotificationData: {
+                        NotificationID: followNotificationData?.ID,
+                    },
+                });
             }
             default:
                 return infoToast(
-                    `${eventData.eventName} is not a supported notification type`,
+                    `${eventData.EventName} is not a supported notification type`,
                 );
         }
     };

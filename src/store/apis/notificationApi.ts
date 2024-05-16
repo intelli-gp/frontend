@@ -1,8 +1,8 @@
 import { appApi } from '.';
 import {
     MessagesNotification,
+    NotificationEvents,
     ReadNotificationDto,
-    SseEvents,
 } from '../../types/notifications';
 import { GenericResponse } from '../../types/response';
 import { PaginationDto } from '../../types/search';
@@ -16,7 +16,7 @@ export const notificationApi = appApi.injectEndpoints({
             }),
         }),
         fetchUserNotifications: builder.query<
-            GenericResponse<SseEvents[]>,
+            GenericResponse<NotificationEvents[]>,
             PaginationDto
         >({
             providesTags: ['User Notifications'],
@@ -29,9 +29,8 @@ export const notificationApi = appApi.injectEndpoints({
         readNotification: builder.mutation<void, ReadNotificationDto>({
             invalidatesTags: ['User Notifications'],
             query: (data) => ({
-                url: `/notifications/read`,
+                url: `/notifications/read/${data.NotificationID}`,
                 method: 'PATCH',
-                body: data,
             }),
         }),
     }),

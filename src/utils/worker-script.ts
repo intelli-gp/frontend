@@ -1,5 +1,5 @@
-function workercode  () {
-    let timerInterval: any;
+function workercode() {
+    let timerInterval: NodeJS.Timeout;
     let minutes: number;
     let seconds: number;
 
@@ -29,8 +29,6 @@ function workercode  () {
             }, 1000);
         }
     };
-};
+}
 
 workercode();
-
-

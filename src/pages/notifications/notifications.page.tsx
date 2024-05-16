@@ -10,8 +10,11 @@ import {
 } from '../../enums/notification.enum';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import { useFetchUserNotificationsQuery } from '../../store';
-import { ArticleComment, ArticleLike } from '../../types/article';
-import { NotificationReceiveType, SseEvents } from '../../types/notifications';
+import {
+    ArticleNotification,
+    FollowNotification,
+    NotificationEvents,
+} from '../../types/notifications';
 import { EditButton } from '../view-group/view-group.styles';
 import { NotificationsContainer, PageContainer } from './notifications.styles';
 
@@ -27,72 +30,61 @@ const NotificationsPage = () => {
         offset: 0,
     });
 
-    const notifications = userNotifications?.data?.map(
-        (notification: SseEvents) => {
-            switch (notification.eventName) {
-                case NOTIFICATION_TYPES.ARTICLE: {
-                    switch (notification?.type) {
-                        case ARTICLE_NOTIFICATION_TYPES.LIKE: {
-                            const data =
-                                notification as NotificationReceiveType<
-                                    'article',
-                                    ArticleLike
-                                >;
-                            return (
-                                <NotificationItem
-                                    key={`Article-${data?.message?.ArticleID}-Like-${data?.message?.Liker?.ID}-Notification${data?.message?.CreatedAt}`}
-                                    Action="liked"
-                                    UserImage={
-                                        data?.message?.Liker?.ProfileImage
-                                    }
-                                    Username={data?.message?.Liker?.Username}
-                                    CreatedAt={data?.createdAt?.toString()}
-                                    Read={data?.message?.IsNotificationViewed}
-                                    Link={`/app/articles/${data?.message?.ArticleID}`}
-                                    ReadNotificationData={{
-                                        ID: +data?.message?.ArticleID,
-                                        PrimaryType: NOTIFICATION_TYPES.ARTICLE,
-                                        SubType:
-                                            ARTICLE_NOTIFICATION_TYPES.LIKE,
-                                        NotificationSenderID:
-                                            +data?.message?.Liker?.ID,
-                                    }}
-                                />
-                            );
-                        }
-                        case ARTICLE_NOTIFICATION_TYPES.COMMENT: {
-                            const data =
-                                notification as NotificationReceiveType<
-                                    'article',
-                                    ArticleComment
-                                >;
-                            return (
-                                <NotificationItem
-                                    key={`Article-${data?.message?.ArticleID}-Comment-${data?.message?.Commenter?.ID}-Notification${data?.message?.CreatedAt}`}
-                                    Action="commented"
-                                    UserImage={
-                                        data?.message?.Commenter?.ProfileImage
-                                    }
-                                    Username={
-                                        data?.message?.Commenter?.Username
-                                    }
-                                    CreatedAt={data?.createdAt?.toString()}
-                                    Read={data?.message?.IsNotificationViewed}
-                                    Link={`/app/articles/${data?.message?.ArticleID}`}
-                                    ReadNotificationData={{
-                                        ID: +data?.message?.ID,
-                                        PrimaryType: NOTIFICATION_TYPES.ARTICLE,
-                                        SubType:
-                                            ARTICLE_NOTIFICATION_TYPES.COMMENT,
-                                    }}
-                                />
-                            );
-                        }
-                        default:
-                            break;
-                    }
+    const getNotificationAction = (notification: NotificationEvents) => {
+        switch (notification.EventName) {
+            case NOTIFICATION_TYPES.ARTICLE:
+                switch (notification.Type) {
+                    case ARTICLE_NOTIFICATION_TYPES.LIKE:
+                        return 'liked';
+                    case ARTICLE_NOTIFICATION_TYPES.COMMENT:
+                        return 'commented';
+                    case ARTICLE_NOTIFICATION_TYPES.CREATE:
+                        return 'created';
+                    default:
+                        return 'starred';
                 }
+            case NOTIFICATION_TYPES.FOLLOW:
+                return 'followed';
+            default:
+                return 'starred';
+        }
+    };
+
+    const getLink = (notification: NotificationEvents) => {
+        switch (notification.EventName) {
+            case NOTIFICATION_TYPES.ARTICLE: {
+                const articleNotificationData =
+                    notification as ArticleNotification;
+                return `/app/articles/${articleNotificationData?.Entity?.ID}`;
             }
+            case NOTIFICATION_TYPES.FOLLOW: {
+                const followNotificationData =
+                    notification as FollowNotification;
+                return `/app/user/${followNotificationData?.Sender?.Username}`;
+            }
+            default:
+                return '';
+        }
+    };
+
+    const notifications = userNotifications?.data?.map(
+        (notification: NotificationEvents) => {
+            return (
+                <NotificationItem
+                    key={`notification-${notification?.ID}`}
+                    Action={getNotificationAction(notification)}
+                    UserImage={notification?.Sender?.ProfileImage}
+                    Username={notification?.Sender?.Username}
+                    // TODO: add created At to the notification
+                    CreatedAt={(notification as any)?.CreatedAt}
+                    // TODO: add the notification message
+                    Read={(notification as any)?.IsRead}
+                    Link={getLink(notification)}
+                    ReadNotificationData={{
+                        NotificationID: notification?.ID,
+                    }}
+                />
+            );
         },
     );
 

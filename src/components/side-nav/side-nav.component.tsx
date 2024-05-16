@@ -60,7 +60,8 @@ export default function SideNav() {
     useEffect(() => {
         setNotificationsCounter(
             notificationsData?.data?.reduce((acc, cur) => {
-                return acc + (cur?.message?.IsNotificationViewed ? 0 : 1);
+                // TODO: notification add type
+                return acc + ((cur as any)?.IsRead ? 0 : 1);
             }, 0) ?? 0,
         );
     }, [notificationsData]);
