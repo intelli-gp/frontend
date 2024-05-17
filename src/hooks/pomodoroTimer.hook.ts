@@ -49,6 +49,17 @@ const usePomodoroTimer = () => {
         dispatch(setMinutes(minutes));
         dispatch(setSeconds(seconds));
     };
+    
+    //For the reload of the page
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            dispatch(setStopTimer());
+        };
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
 
     // This function sends a message to the web worker to start the timer.
     // It includes the current state's minutes and seconds as initial values.
