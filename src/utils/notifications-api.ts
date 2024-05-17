@@ -20,6 +20,9 @@ export const showSystemNotification = (
 ) => {
     let { permission } = Notification;
     let notificationObject: Notification = null!;
+    
+    if (document.hasFocus()) return; // Do not show notification if the tab is focused.
+
     if (permission === 'default') {
         Notification.requestPermission().then((response) => {
             if (response === 'granted') {

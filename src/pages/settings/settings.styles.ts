@@ -46,18 +46,17 @@ export const InlineInputsContainer = styled.div`
 
 export const EditButton = styled(Button)`
     align-self: end;
-    width: 80px;
-    height: 35px;
-    font-size: 0.875em;
     margin-top: 1rem;
     color: inherit;
 `;
+
 export const AddCard = styled(IoAddCircle)`
     width: 25px;
     height: 25px;
 
     color: var(--indigo-200);
 `;
+
 export const AddCardContainer = styled(Button)`
     display: flex;
     flex-direction: row;
@@ -72,6 +71,7 @@ export const AddCardContainer = styled(Button)`
         font-size: 0.85rem;
     }
 `;
+
 export const PlanButton = styled(Button)`
     display: flex;
     flex-direction: row;
@@ -85,6 +85,7 @@ export const PlanButton = styled(Button)`
         font-size: 0.85rem;
     }
 `;
+
 export const PayTime = styled.div`
     height: 12px;
     font-size: 0.75em;
