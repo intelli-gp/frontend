@@ -1,5 +1,6 @@
 import { appApi } from '.';
 import { ReceivedArticle } from '../../types/article';
+import { ReceivedGroup } from '../../types/group';
 import { PaginatedResult } from '../../types/pagination';
 import { GenericResponse } from '../../types/response';
 import { PaginationDto, SearchDto } from '../../types/search';
@@ -43,6 +44,24 @@ export const recommendationApi = appApi.injectEndpoints({
                 method: 'GET',
             }),
         }),
+        fetchGeneralGroupsRecommendation: builder.query<
+            GenericResponse<PaginatedResult<ReceivedGroup>>,
+            PaginationDto
+        >({
+            query: ({ limit = 10, offset = 0 }) => ({
+                url: `/recommender-system/groups?limit=${limit}&offset=${offset}`,
+                method: 'GET',
+            }),
+        }),
+        fetchSpecificGroupsRecommendation: builder.query<
+            GenericResponse<PaginatedResult<ReceivedGroup>>,
+            SearchDto<number>
+        >({
+            query: ({ searchTerm: GroupId, limit = 10, offset = 0 }) => ({
+                url: `/recommender-system/groups/${GroupId}?limit=${limit}&offset=${offset}`,
+                method: 'GET',
+            }),
+        }),
     }),
 });
 
@@ -51,8 +70,12 @@ export const {
     useFetchSpecificArticlesRecommendationQuery,
     useFetchGeneralUsersRecommendationQuery,
     useFetchSpecificUsersRecommendationQuery,
+    useFetchGeneralGroupsRecommendationQuery,
+    useFetchSpecificGroupsRecommendationQuery,
     useLazyFetchGeneralArticlesRecommendationQuery,
     useLazyFetchSpecificArticlesRecommendationQuery,
     useLazyFetchGeneralUsersRecommendationQuery,
     useLazyFetchSpecificUsersRecommendationQuery,
+    useLazyFetchGeneralGroupsRecommendationQuery,
+    useLazyFetchSpecificGroupsRecommendationQuery,
 } = recommendationApi;
