@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import 'swiper/css';
@@ -20,10 +20,12 @@ import {
 } from '../../store';
 import {
     useLazyFetchGeneralArticlesRecommendationQuery,
+    useLazyFetchGeneralGroupsRecommendationQuery,
     useLazyFetchSpecificUsersRecommendationQuery,
 } from '../../store/apis/recommendationApi';
 import { useLazyGeneralSearchQuery } from '../../store/apis/searchApi';
 import { ReceivedArticle } from '../../types/article';
+import { ReceivedGroup } from '../../types/group';
 import { GeneralSearchData } from '../../types/search';
 import { ReceivedUser } from '../../types/user';
 import { errorToast } from '../../utils/toasts';
@@ -40,11 +42,13 @@ const SearchPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const {
-        UserTags,
-        ID: storedUserId,
-        Username,
-    } = useSelector((state: RootState) => state.auth.user);
+    const [NoUsersFound, setNoUsersFound] = useState(false);
+    const [NoArticlesFound, setNoArticlesFound] = useState(false);
+    const [NoGroupsFound, setNoGroupsFound] = useState(false);
+
+    const { ID: storedUserId, Username } = useSelector(
+        (state: RootState) => state.auth.user,
+    );
     const { searchInitiated, searchTerm } = useSelector(
         (state: RootState) => state.appState.searchPage,
     );
@@ -59,17 +63,27 @@ const SearchPage = () => {
         triggerArticleRecommendation,
         {
             data: _articleRecommendation,
-            isFetching: articleRecommendationIsFetching,
+            isFetching: articlesRecommendationIsFetching,
         },
     ] = useLazyFetchGeneralArticlesRecommendationQuery();
     const recommendedArticles = _articleRecommendation?.data
         ?.Results as ReceivedArticle[];
 
     const [
+        triggerGroupsRecommendation,
+        {
+            data: _groupRecommendation,
+            isFetching: groupsRecommendationsIsFetching,
+        },
+    ] = useLazyFetchGeneralGroupsRecommendationQuery();
+    const recommendedGroups = _groupRecommendation?.data
+        ?.Results as ReceivedGroup[];
+
+    const [
         triggerUsersRecommendation,
         {
             data: _userRecommendation,
-            isFetching: userRecommendationsIsFetching,
+            isFetching: usersRecommendationsIsFetching,
         },
     ] = useLazyFetchSpecificUsersRecommendationQuery();
 
@@ -95,13 +109,36 @@ const SearchPage = () => {
         if (searchInitiated) {
             triggerSearch({ searchTerm });
         } else {
-            // TODO: leave for now till groups recommendation is implemented
-            const userTags = UserTags?.join(' ') ?? '';
-            triggerSearch({ searchTerm: userTags });
+            triggerGroupsRecommendation({});
             triggerArticleRecommendation({});
             triggerUsersRecommendation({ searchTerm: Username! });
         }
     }, []);
+
+    useEffect(() => {
+        if (searchInitiated) {
+            setNoUsersFound(searchResult?.users?.length === 0);
+            setNoArticlesFound(searchResult?.articles?.length === 0);
+            setNoGroupsFound(searchResult?.groups?.length === 0);
+        } else {
+            setNoUsersFound(recommendedUsers?.length === 0);
+            setNoArticlesFound(recommendedArticles?.length === 0);
+            setNoGroupsFound(recommendedGroups?.length === 0);
+        }
+    }, [
+        generalSearchIsFetching,
+        usersRecommendationsIsFetching,
+        articlesRecommendationIsFetching,
+        groupsRecommendationsIsFetching,
+    ]);
+
+    useEffect(() => {
+        if (generalSearchIsFetching) {
+            setNoArticlesFound(false);
+            setNoUsersFound(false);
+            setNoGroupsFound(false);
+        }
+    }, [generalSearchIsFetching]);
 
     return (
         <PageContainer {...BetweenPageAnimation}>
@@ -113,18 +150,13 @@ const SearchPage = () => {
                 suggestionsType={'all'}
             />
 
-            <SearchPageSection
-                empty={
-                    !generalSearchIsFetching &&
-                    searchResult?.users?.length === 0
-                }
-            >
+            <SearchPageSection empty={NoUsersFound}>
                 <SectionTitle>
                     {searchInitiated
                         ? 'users search results'
                         : 'Suggested users'}
                 </SectionTitle>
-                {userRecommendationsIsFetching || generalSearchIsFetching ? (
+                {usersRecommendationsIsFetching || generalSearchIsFetching ? (
                     <UsersSkeleton />
                 ) : (
                     <Swiper
@@ -148,12 +180,7 @@ const SearchPage = () => {
                 )}
             </SearchPageSection>
 
-            <SearchPageSection
-                empty={
-                    !generalSearchIsFetching &&
-                    searchResult?.groups?.length === 0
-                }
-            >
+            <SearchPageSection empty={NoGroupsFound}>
                 <SectionTitle>
                     {searchInitiated
                         ? 'groups search results'
@@ -162,7 +189,7 @@ const SearchPage = () => {
                         Explore More
                     </ExploreMoreLink>
                 </SectionTitle>
-                {generalSearchIsFetching || false /* */ ? (
+                {generalSearchIsFetching || groupsRecommendationsIsFetching ? (
                     <GroupsSkeleton />
                 ) : (
                     <Swiper
@@ -193,12 +220,7 @@ const SearchPage = () => {
                 )}
             </SearchPageSection>
 
-            <SearchPageSection
-                empty={
-                    !generalSearchIsFetching &&
-                    searchResult?.articles?.length === 0
-                }
-            >
+            <SearchPageSection empty={NoArticlesFound}>
                 <SectionTitle>
                     {searchInitiated
                         ? 'Articles search results'
@@ -207,7 +229,7 @@ const SearchPage = () => {
                         Explore More
                     </ExploreMoreLink>
                 </SectionTitle>
-                {articleRecommendationIsFetching || generalSearchIsFetching ? (
+                {articlesRecommendationIsFetching || generalSearchIsFetching ? (
                     <ArticlesSkeleton />
                 ) : (
                     <ArticleSectionBody>

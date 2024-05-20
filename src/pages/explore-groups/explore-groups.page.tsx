@@ -14,10 +14,12 @@ import {
     changeGroupsPageSearchInitiated,
     changeGroupsPageSearchQuery,
 } from '../../store';
+import { useLazyFetchGeneralGroupsRecommendationQuery } from '../../store/apis/recommendationApi';
 import {
     useLazyGroupsSearchQuery,
     usePrefetchSearch,
 } from '../../store/apis/searchApi';
+import { ReceivedGroup } from '../../types/group';
 import { errorToast } from '../../utils/toasts';
 import { GroupsGrid, PageContainer, SmallTitle } from './explore-groups.style';
 
@@ -33,13 +35,22 @@ const ExploreGroupsPage = () => {
         (state: RootState) => state.appState.groupsPage,
     );
 
-    const { UserTags, ID: storedUserId } = useSelector(
+    const { ID: storedUserId } = useSelector(
         (state: RootState) => state?.auth?.user,
     );
 
-    const [triggerSearch, { data, isFetching: searchIsFetching }] =
-        useLazyGroupsSearchQuery();
-    let { Results: groups, NumPages } = data?.data ?? {};
+    const [
+        triggerRecommendations,
+        { data: _recommendationsData, isFetching: recommendationIsFetching },
+    ] = useLazyFetchGeneralGroupsRecommendationQuery();
+    const recommendedGroups =
+        (_recommendationsData?.data?.Results as ReceivedGroup[]) ?? [];
+
+    const [
+        triggerSearch,
+        { data: _searchResults, isFetching: searchIsFetching },
+    ] = useLazyGroupsSearchQuery();
+    let { Results: searchResults, NumPages } = _searchResults?.data ?? {};
 
     const [createGroupModalOpen, setCreateGroupModalOpen] = useState(false);
 
@@ -92,28 +103,30 @@ const ExploreGroupsPage = () => {
         if (searchInitiated) {
             triggerSearch({ searchTerm, limit: PAGE_LIMIT });
         } else {
-            let userTags = UserTags?.join(' ') ?? '';
-            triggerSearch({ searchTerm: userTags, limit: PAGE_LIMIT });
+            triggerRecommendations({});
         }
     }, []);
 
-    let pageContent = searchIsFetching ? (
-        <GroupsSkeleton />
-    ) : (
-        <GroupsGrid>
-            {groups?.map((group) => (
-                <GroupCard
-                    key={group.ID}
-                    alreadyJoined={
-                        group?.GroupMembers?.some(
-                            (member) => member?.ID === storedUserId,
-                        ) || group?.GroupOwner?.ID === storedUserId
-                    }
-                    {...group}
-                />
-            ))}
-        </GroupsGrid>
-    );
+    let pageContent =
+        searchIsFetching || recommendationIsFetching ? (
+            <GroupsSkeleton />
+        ) : (
+            <GroupsGrid>
+                {(searchInitiated ? searchResults : recommendedGroups)?.map(
+                    (group) => (
+                        <GroupCard
+                            key={group.ID}
+                            alreadyJoined={
+                                group?.GroupMembers?.some(
+                                    (member) => member?.ID === storedUserId,
+                                ) || group?.GroupOwner?.ID === storedUserId
+                            }
+                            {...group}
+                        />
+                    ),
+                )}
+            </GroupsGrid>
+        );
 
     return (
         <PageContainer {...BetweenPageAnimation}>
