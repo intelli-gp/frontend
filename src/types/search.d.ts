@@ -8,8 +8,8 @@ export interface GeneralSearchData {
     groups: ReceivedGroup[];
 }
 
-export interface SearchDto extends PaginationDto {
-    searchTerm: string;
+export interface SearchDto<T = string> extends PaginationDto {
+    searchTerm: T;
 }
 
 export interface PaginationDto {
