@@ -1,13 +1,21 @@
 import { ReceivedArticle } from '../../types/article';
 import { ReceivedGroup } from '../../types/group';
 import { PaginatedResult } from '../../types/pagination';
-import { GenericResponse, Response } from '../../types/response';
-import { AutocompleteDto, SearchDto } from '../../types/search';
+import { GenericResponse } from '../../types/response';
+import {
+    AutocompleteDto,
+    GeneralSearchData,
+    SearchDto,
+} from '../../types/search';
+import { ReceivedUser } from '../../types/user';
 import { appApi } from './appApi';
 
 const searchApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
-        generalSearch: builder.query<Response, SearchDto>({
+        generalSearch: builder.query<
+            GenericResponse<GeneralSearchData>,
+            SearchDto
+        >({
             query: ({ searchTerm, limit = 10, offset = 0 }) => ({
                 url: `/search`,
                 method: 'GET',
@@ -49,7 +57,10 @@ const searchApi = appApi.injectEndpoints({
             }),
             keepUnusedDataFor: 5 * 60, // 5 minutes
         }),
-        usersSearch: builder.query<Response, SearchDto>({
+        usersSearch: builder.query<
+            GenericResponse<PaginatedResult<ReceivedUser>>,
+            SearchDto
+        >({
             query: ({ searchTerm, limit = 10, offset = 0 }) => ({
                 url: `/search/users`,
                 method: 'GET',
@@ -61,7 +72,10 @@ const searchApi = appApi.injectEndpoints({
             }),
             keepUnusedDataFor: 5 * 60, // 5 minutes
         }),
-        getAutocompleteSuggestions: builder.query<Response, AutocompleteDto>({
+        getAutocompleteSuggestions: builder.query<
+            GenericResponse<string[]>,
+            AutocompleteDto
+        >({
             query: ({ searchTerm, type }) => ({
                 url: `/search/autocomplete`,
                 method: 'GET',
