@@ -1,5 +1,12 @@
 import _ from 'lodash';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import {
+    Suspense,
+    lazy,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
 import { LuSave } from 'react-icons/lu';
@@ -7,9 +14,9 @@ import { RiDeleteBinLine } from 'react-icons/ri';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import Spinner from '../../components/Spinner';
 import { ImageUploadSection } from '../../components/article-image-section/article-image-section.component';
 import Button from '../../components/button/button.component';
-import MarkdownEditor from '../../components/markdown-editor/markdown.component';
 import DropdownMenu from '../../components/menu/menu.component';
 import { Modal } from '../../components/modal/modal.component';
 import OpenImage from '../../components/openImage/openImage.component';
@@ -49,6 +56,10 @@ import {
     PageContainer,
     SectionContainer,
 } from './create-article.styles';
+
+const MarkdownEditor = lazy(
+    () => import('../../components/markdown-editor/markdown.component'),
+);
 
 const CreateArticlePage = () => {
     const dispatch = useDispatch();
@@ -405,18 +416,20 @@ const CreateArticlePage = () => {
                 if (section.ContentType === ArticleSectionType.Markdown) {
                     return (
                         <SectionContainer>
-                            <MarkdownEditor
-                                key={section.ID!}
-                                value={section.Value}
-                                onChange={(value: string | undefined) =>
-                                    handleSectionEdit(section.ID!, value!)
-                                }
-                                onDelete={() => {
-                                    dispatch(
-                                        setSectionToBeDeleted(section.ID!),
-                                    );
-                                }}
-                            />
+                            <Suspense fallback={<Spinner />}>
+                                <MarkdownEditor
+                                    key={section.ID!}
+                                    value={section.Value}
+                                    onChange={(value: string | undefined) =>
+                                        handleSectionEdit(section.ID!, value!)
+                                    }
+                                    onDelete={() => {
+                                        dispatch(
+                                            setSectionToBeDeleted(section.ID!),
+                                        );
+                                    }}
+                                />
+                            </Suspense>
                         </SectionContainer>
                     );
                 } else if (section.ContentType === ArticleSectionType.Image) {

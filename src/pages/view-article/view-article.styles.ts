@@ -1,4 +1,3 @@
-import MDEditor from '@uiw/react-md-editor';
 import { motion } from 'framer-motion';
 import { BiSolidComment } from 'react-icons/bi';
 import { BsThreeDots } from 'react-icons/bs';
@@ -63,11 +62,7 @@ export const ArticleImageSection = styled.img`
     height: 100%;
 `;
 
-export const ArticleMDSection = styled(MDEditor.Markdown)`
-    & * {
-        font-family: 'Merriweather', serif;
-    }
-`;
+
 
 export const PublishDate = styled.p`
     margin-top: -0.5rem;

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import moment from 'moment';
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -34,7 +34,6 @@ import { ArticleSectionType, ReceivedArticle } from '../../types/article.d';
 import { ReceivedUser } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
-    ArticleMDSection,
     CommentsContainer,
     EmptyPlaceholder,
     IconWithCounter,
@@ -59,6 +58,8 @@ import {
     ToolbarIconsContainer,
     VerticalLine,
 } from './view-article.styles';
+
+const ArticleMDSection = lazy(() => import('./md-viewer.styles'));
 
 const ViewArticlePage = () => {
     const navigate = useNavigate();
@@ -356,7 +357,11 @@ const ViewArticlePage = () => {
                     } else if (
                         section.ContentType === ArticleSectionType.Markdown
                     ) {
-                        return <ArticleMDSection source={section.Value} />;
+                        return (
+                            <Suspense fallback={<Spinner />}>
+                                <ArticleMDSection source={section.Value} />
+                            </Suspense>
+                        );
                     }
                 })}
 
