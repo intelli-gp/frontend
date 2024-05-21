@@ -23,8 +23,6 @@ import TaskBox from '../../components/TaskBox';
 import Button from '../../components/button/button.component';
 import { BetweenPageAnimation } from '../../index.styles';
 import { useFetchTasksQuery } from '../../store';
-import './calendar.css'
-import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
 import {
     ButtonMV,
     CalendarHolder,
@@ -44,7 +42,7 @@ const formats = {
     dayFormat: 'ddd',
 };
 const localizer = momentLocalizer(moment);
-
+type View = 'day' | 'week' | 'month' | 'work_week' | 'agenda';
 export default function StudyPlanner() {
     const [showModal, setShowModal] = useState(false);
     const openModal = () => {
@@ -169,7 +167,7 @@ export default function StudyPlanner() {
         setContent(content);
     }, [isLoading, error, tasks]);
 
-    const [viewState, setViewState] = useState<string>('week');
+    const [viewState, setViewState] = useState<View>('week');
 
     const CustomToolbar = (props: ToolbarProps) => {
         const goToDayView = () => {
@@ -203,6 +201,7 @@ export default function StudyPlanner() {
         }
 
         useEffect(() => {
+            console.log(currentViewIndex+" "+viewState)
             if (viewState === 'week') {
                 setCurrentView(1)
                 goToWeekView();
@@ -302,12 +301,11 @@ export default function StudyPlanner() {
                 localizer={localizer}
                 startAccessor="start"
                 endAccessor="end"
-                defaultView={'week'}
+                defaultView= {viewState}
                 max={moment('2023-12-24T23:59:00').toDate()}
-                min={moment('2023-12-24T08:00:00').toDate()}
+                min={moment('2023-12-24T07:00:00').toDate()}
                 onView={view => {
-                    setViewState(view);
-                }}
+                        setViewState(view);         }}
                 components={{
                     toolbar: CustomToolbar,
                     event: ({ event }: { event: any }) => {
