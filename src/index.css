@@ -47,6 +47,13 @@
     --yellow-300: #f1ef70;
     --yellow-200: #f9f8c1;
 
+    --green-700: #2f9e44;
+    --green-500: #37b24d;
+    --green-400: #40c057;
+    --green-300: #51cf66;
+    --green-200: #69db7c;
+    --green-100: #d3f9d8;
+
     --gray-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
     --black-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
     --tag-shadow: rgb(30, 64, 175, 0.5) 0px 1px 4px;

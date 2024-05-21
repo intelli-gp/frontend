@@ -1,106 +1,107 @@
 import { useNavigate } from 'react-router-dom';
-import { BetweenPageAnimation } from '../../index.styles';
+
+import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
-    CardHolder,
-    CardsHolder,
-    Check,
+    BenefitsList,
+    CardContainer,
+    CardHeader,
+    CardPrice,
+    CardTitle,
+    CardsInnerContainer,
+    CardsOuterContainer,
+    CheckBoxIcon,
+    ListItem,
     PageContainer,
+    SwitchToPremiumButton,
     UpgradeButton,
-    UpgradeTitle,
-    UpperCardPart,
 } from './upgrade.styles';
 
-type Type = {
+type Plan = {
     id: number;
-    type: string;
+    title: 'starter' | 'premium';
     price: number;
-    para: string[];
-    payment: string;
+    benefits: string[];
+    subscriptionPeriod: 'month' | 'year';
     myPlan?: boolean;
 };
 
-const Card = ({ el }: { el: Type }) => {
+const Card = ({ title, price, benefits, subscriptionPeriod }: Plan) => {
     const navigate = useNavigate();
-
+    const isPro = title === 'premium';
 
     return (
-        <CardHolder Pro={el.type === 'Pro'}>
-            <div>
-                <UpperCardPart>
-                    <h2 className=" text-[42px]">
-                        {el.type}
-                    </h2>
-                    <span>
-                        <h1 className="font-extrabold text-[38px]">
-                            {el.price}$
-                        </h1>
-                        <p>/{el.payment} </p>
-                    </span>
-                </UpperCardPart>
-                <ul className="text-lg p-4 ">
-                    {el.para.map((sentence) => (
-                        <div className=" pb-2  pl-6 relative w-[100%] ">
-                            <Check />
-                            <li>{sentence}</li>
-                        </div>
-                    ))}
-                </ul>
-            </div>
-            {el.type == 'Free' ? (
-                <></>
-            ) :
-                <span className='flex w-[100%] justify-center'>
-
-                    <UpgradeButton onClick={() => navigate(`/app/checkout`)}>
-                        Get Started Now
-                    </UpgradeButton>
-                </span>
-            }
-        </CardHolder>
+        <CardContainer pro={isPro}>
+            <CardHeader pro={isPro}>
+                <CardTitle>{title}</CardTitle>
+                <CardPrice>
+                    ${price} <span>/ {subscriptionPeriod}</span>
+                </CardPrice>
+            </CardHeader>
+            <BenefitsList>
+                {benefits.map((benefit) => (
+                    <ListItem>
+                        <CheckBoxIcon pro={isPro} size={20} /> {benefit}
+                    </ListItem>
+                ))}
+            </BenefitsList>
+            {isPro ? (
+                <UpgradeButton
+                    select="success"
+                    onClick={() => navigate(`/app/checkout`)}
+                >
+                    Get Started Now
+                </UpgradeButton>
+            ) : (
+                <SwitchToPremiumButton
+                    onClick={() => navigate(`/app/checkout`)}
+                >
+                    Switch to Premium
+                </SwitchToPremiumButton>
+            )}
+        </CardContainer>
     );
 };
 
 const UpgradePage = () => {
-
-    const subscriptionPlans: Type[] = [
+    const subscriptionPlans: Plan[] = [
         {
             id: 1,
-            type: 'Free',
+            title: 'starter',
             price: 0,
-            para: [
+            benefits: [
                 'Tailor and design personalized study plans.',
                 'Find and collaborate with study groups.',
-                'Receive personalized course recommendations based on your progress and interests.',
+                'Receive personalized course recommendations based on your interests.',
                 'Get assistance from chatbot helper for up to 3 questions per month.',
             ],
-            payment: "Monthly",
+            subscriptionPeriod: 'month',
         },
         {
             id: 2,
-            type: 'Pro',
+            title: 'premium',
             price: 12,
-            para: [
+            benefits: [
                 'Enjoy all the features included in the Free Plan.',
                 'Enjoy unlimited access to the chatbot helper feature.',
                 'Enjoy all the features included in the Free Plan.',
                 'Enjoy unlimited access to the chatbot helper feature.',
             ],
-            payment: 'Monthly',
+            subscriptionPeriod: 'month',
             myPlan: true,
         },
-
     ];
     return (
         <PageContainer {...BetweenPageAnimation}>
-            <UpgradeTitle>
-                Find the plan that suits you the best
-            </UpgradeTitle>
-            <CardsHolder>
-                {subscriptionPlans.map((plan) => {
-                    return <Card el={plan} />;
-
-                })}
-            </CardsHolder>
+            <PageTitle size="lg" className="text-center !leading-none">
+                Find the plan that suits you <br /> the best
+            </PageTitle>
+            <CardsOuterContainer>
+                <CardsInnerContainer>
+                    {subscriptionPlans.map((plan) => {
+                        return <Card {...plan} />;
+                    })}
+                </CardsInnerContainer>
+            </CardsOuterContainer>
         </PageContainer>
     );
 };

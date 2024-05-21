@@ -1,10 +1,19 @@
 import styled, { css } from 'styled-components';
 
-export const PageTitle = styled.h1`
+export const PageTitle = styled.h1<{ size?: 'lg' | 'md' | 'sm' }>`
     user-select: none;
     line-height: 1.25;
     font-weight: 700;
-    font-size: 2.5rem;
+    font-size: ${({ size = 'md' }) => {
+        switch (size) {
+            case 'lg':
+                return '3.25rem';
+            case 'md':
+                return '2.5rem';
+            case 'sm':
+                return '2rem';
+        }
+    }};
     letter-spacing: -1.5px;
 
     @media (max-width: 768px) {

@@ -1,123 +1,134 @@
 import { motion } from 'framer-motion';
-import { FaCircleCheck } from 'react-icons/fa6';
-import styled from 'styled-components';
+import { RiCheckboxCircleLine } from 'react-icons/ri';
+import styled, { css } from 'styled-components';
 
+import Button from '../../components/button/button.component';
 
-
-export const Check = styled(FaCircleCheck)`
-    position: absolute;
-    left: -2%;
-    top: 6%;
-    color:var(--indigo-950);
-    height: 20px;
-    width: 20px;
-`;
 export const PageContainer = styled(motion.div)`
     display: flex;
     flex-direction: column;
-    height: 100vh;
     align-items: center;
-    justify-content: space-between;
-    padding: 20px;
-    gap: 1.7rem;
-`;
-export const UpgradeTitle = styled.h1`
-    font-style: normal;
-    font-weight: 600;
-    font-size: 48px;
-    line-height: 100%;
-    width: 80%;
-    display: flex;
-    width: 28rem;
+    height: 100%;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    letter-spacing: -0.04em;
-    color: #343a40;
-    @media (max-width: 768px) {
-        font-size: 36px;
-        line-height: 1;
-    }
-`;
-export const ButtonsHolder = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    gap: 11px;
-    width: 234px;
-    height: 66px;
-    background: #ffffff;
-    box-shadow: var(--gray-shadow);
-    border-radius: 25px;
+    padding: 2rem;
+    gap: 2rem;
 `;
 
-export const CardsHolder = styled.div`
+export const CheckBoxIcon = styled(RiCheckboxCircleLine)<{ pro?: boolean }>`
+    color: ${({ pro }) => (pro ? 'var(--green-500)' : 'var(--indigo-950)')};
+    width: 20px;
+    box-sizing: content-box;
+    flex-shrink: 0;
+`;
+
+export const CardHeader = styled.header<{ pro?: boolean }>`
+    width: 100%;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    padding: 0.5rem 0;
     align-items: center;
-    padding: 17px;
-    gap: 2.75rem;
-    @media (max-width: 868px) {
+    justify-content: space-between;
+    border-bottom: 1px solid;
+    border-color: ${({ pro }) => (pro ? 'var(--gray-600)' : 'var(--gray-500)')};
+`;
+
+export const CardTitle = styled.h2`
+    font-size: 1.75rem;
+    font-weight: 900;
+    text-transform: capitalize;
+`;
+
+export const CardsOuterContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 2rem;
+`;
+
+export const CardsInnerContainer = styled.div`
+    gap: 2rem;
+    display: flex;
+
+    @media (max-width: 768px) {
         flex-direction: column;
     }
 `;
 
-export const CardHolder = styled.div<{ Pro?: boolean }>`
+export const CardContainer = styled.div<{ pro?: boolean }>`
     display: flex;
     flex-direction: column;
-    padding: 30px;
-    align-items: left;
-    position: relative;
-    justify-content: space-between;
-    box-sizing: border-box;
-    width: 400px;
-    height: 500px;
-    background:${({ Pro }) => (Pro ? 'var(--indigo-300)' : 'var(--indigo-50)')};
-    border: 2px solid rgba(82, 82, 82, 0.27);
-    box-shadow: var(--gray-shadow);
-    color:var(--indigo-950);
-    border-radius: 12px;  
-
-    & > div:first-child {
-        gap: 6px;
-        display: flex;
-        flex-direction: column;
-    }
-    span {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 6px;
-    }
-    
-`;
-export const UpperCardPart =styled.div`
-display: flex;
-flex-direction: row;
-align-items: center;
-justify-content: space-between;
-padding: 0.5rem;
-border-bottom: 2px solid var(--indigo-950);
-
-`
-export const UpgradeButton = styled.button`
-    width: 95%;
-    outline: none;
-    font-weight: 700;
-    padding: 0.5rem 1.5rem;
-    text-align: center;
-    display: inline-flex;
+    padding: 1.5rem 2rem;
+    width: 350px;
+    gap: 1.5rem;
     align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    border-radius: 6px;
-    color: var(--indigo-50);
-    background: var(--indigo-950);
-    transition: all 0.2s ease-in-out;
-    &:hover {
-        opacity:0.8;
+    flex-grow: 1;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 10px 3px;
+    background: ${({ pro }) => (pro ? 'var(--gray-800)' : 'var(--indigo-100)')};
+    color: ${({ pro }) => (pro ? 'white' : 'var(--indigo-950)')};
+    border-radius: 1rem;
+    position: relative;
+
+    ${({ pro }) => {
+        if (pro) {
+            return css`
+                &::after {
+                    content: 'Most Popular';
+                    position: absolute;
+                    top: 0;
+                    right: 50%;
+                    transform: translate(50%, -50%);
+                    box-shadow: 0px 0px 15px 10px rgba(72, 187, 120, 0.2);
+                    font-weight: bold;
+                    background-color: var(--green-500);
+                    color: white;
+                    padding: 0.5rem 1.5rem;
+                    font-size: 0.875rem;
+                    border-radius: 5rem;
+                }
+            `;
+        }
+    }}
+`;
+
+export const CardPrice = styled.p`
+    font-size: 2.25rem;
+    font-weight: 700;
+
+    span {
+        font-size: 1rem;
+        font-weight: 400;
     }
+`;
+
+export const BenefitsList = styled.ul`
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+`;
+
+export const ListItem = styled.li`
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    line-height: 1.25;
+    hyphens: auto;
+`;
+
+const commonButtonStyles = css`
+    font-size: 0.875rem;
+    margin-top: 1rem;
+    width: 90%;
+`;
+
+export const UpgradeButton = styled(Button)`
+    box-shadow: 0px 0px 15px 5px rgba(72, 187, 120, 0.2);
+    background-color: var(--green-500);
+    ${commonButtonStyles}
+`;
+
+export const SwitchToPremiumButton = styled(Button)`
+    border: none;
+    background-color: var(--indigo-950);
+    box-shadow: 0px 0px 15px 5px rgba(99, 102, 241, 0.2);
+    ${commonButtonStyles}
 `;
