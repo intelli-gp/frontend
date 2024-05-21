@@ -55,10 +55,10 @@ export const ButtonContainer = styled.button<ButtonProps>`
                     `;
                 case 'success':
                     return css`
-                        border: 2px solid #48bb78;
-                        color: #48bb78;
+                        border: 2px solid var(--green-500);
+                        color: var(--green-500);
                         &:hover {
-                            background-color: #48bb78;
+                            background-color: var(--green-500);
                             color: white;
                         }
                     `;
@@ -122,11 +122,11 @@ export const ButtonContainer = styled.button<ButtonProps>`
                         background-color: #f1ee63;
                         border: 2px solid #f1ee63;
 
-                        color: #252f3f;
+                        color: var(--gray-800);
                     `;
                 case 'success':
                     return css`
-                        background-color: #48bb78;
+                        background-color: var(--green-500);
                     `;
                 case 'warning':
                     return css`
