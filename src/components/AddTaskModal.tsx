@@ -1,8 +1,8 @@
 import moment from 'moment';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { GoDash } from 'react-icons/go';
+import { GoDash, GoDotFill } from 'react-icons/go';
 
-import { ModalContent } from '../pages/study-planner/study-planner.styles';
+import { ModalContent, StatusContainer, StatusIcon, StatusInput, StatusItem } from '../pages/study-planner/study-planner.styles';
 import { useAddTasksMutation } from '../store';
 import { Task, sendTask } from '../types/event';
 import { errorToast, successToast } from '../utils/toasts';
@@ -15,33 +15,36 @@ type ModalProps = {
     showModal: boolean;
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
-// type Status = {
-//     icon: JSX.Element;
-//     status: string;
-// };
+type Status = {
+    color: string;
+    status: string;
+};
 export const AddTaskModal: React.FC<ModalProps> = ({
     Tasks,
     showModal,
     setShowModal,
 }) => {
     let currentDate = new Date();
-    // const statuses: Status[] = [
-    //     {
-    //       icon: <></>,
-    //       status: "In Progress",
-    //     },
-    //     {
-    //       icon:<> </>,
-    //       status: "Hold",
-    //     },
-    //     {
-    //       icon: <></>,
-    //       status: "Done",
-    //     },
-    //   ];
+
+    const statuses: Status[] = [
+        {
+            color: '#1F51FF',
+            status: "In Progress",
+        },
+        {
+            color: '#495057',
+            status: "Hold",
+        },
+        {
+            color: '#008200',
+            status: "Done",
+        },
+    ];
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [color, setColor] = useState('#0369a1');
+    const [statusColor, setStatusColor] = useState('#1F51FF');
+
     const [due_date, setDueDate] = useState(
         moment(currentDate).format().slice(0, 10),
     );
@@ -51,7 +54,9 @@ export const AddTaskModal: React.FC<ModalProps> = ({
     const [due_end, setDueEnd] = useState(
         moment(currentDate).add(1, 'hours').format().slice(11, 16),
     );
-    const [status, setStatus] = useState('');
+    const [status, setStatus] = useState('     In Progress');
+    const [statusIsRunning, setStatusIsRunning] = useState(false);
+
     const handleDueStartChange = (
         event: React.ChangeEvent<HTMLInputElement>,
     ) => {
@@ -86,7 +91,19 @@ export const AddTaskModal: React.FC<ModalProps> = ({
             successToast('Task created successfully!');
         }
     }, [isTaskCreatedSuccessfully, isTaskCreateError]);
+    useEffect(() => {
+        const handleClickOutside = (event: any) => {
+            const customInputForm = document.querySelector('.custom-input-form');
+            if (customInputForm && !customInputForm.contains(event.target)) {
+                setStatusIsRunning(false);
+            }
+        };
 
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const StartDateTime = new Date(`${due_date}T${due_start}`);
@@ -162,7 +179,8 @@ export const AddTaskModal: React.FC<ModalProps> = ({
         setDueStart(moment(currentDate).format().slice(11, 16));
         setDueEnd(moment(currentDate).add(1, 'hours').format().slice(11, 16));
         setColor('#0369a1');
-        setStatus('');
+        setStatus('      In Progress');
+        setStatusColor('#1F51FF');
     };
 
     return (
@@ -186,16 +204,32 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                         />
                     </div>
                     <div className="flex w-full justify-between pt-[6px] gap-6">
-                        <div className="w-1/2">
-                            <CustomInput
+                        <div className="w-1/2 relative">
+                            <StatusIcon size={24} color={statusColor} />
+                            <StatusInput
                                 required
+                                color={statusColor}
                                 label="Status"
                                 type="text"
+                                className="custom-input-form"
                                 value={status}
-                                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                    setStatus(e.target.value)
-                                }
+                                onClick={() => {
+                                    setStatusIsRunning(true)
+                                }}
                             />
+                            {statusIsRunning && <StatusContainer>
+                                {statuses.map((status) => (
+                                    <StatusItem
+                                        onClick={() => {
+                                            setStatus('      '+status.status)
+                                            setStatusColor(status.color)
+                                        }
+                                        }
+                                    >
+                                        <GoDotFill size={24} color={status.color} />
+                                        <span>{status.status}</span>
+                                    </StatusItem>))}
+                            </StatusContainer>}
                         </div>
                         <div className="w-1/2">
                             <CustomInput
@@ -275,6 +309,6 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                     </div>
                 </form>
             </ModalContent>
-        </Modal>
+        </Modal >
     );
 };
