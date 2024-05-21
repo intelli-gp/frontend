@@ -5,7 +5,7 @@ import { BetweenPageAnimation } from '../../index.styles';
 import { UpButtonContainer } from './up-buttons.styles';
 
 export type UpButtonProps = {
-    pageHeaderElement: HTMLElement;
+    pageHeaderElement?: HTMLElement;
 };
 export const UpButton = ({ pageHeaderElement }: UpButtonProps) => {
     const [showUpButton, setShowUpButton] = useState(false);
@@ -29,22 +29,17 @@ export const UpButton = ({ pageHeaderElement }: UpButtonProps) => {
         };
     }, [pageHeaderElement]);
     const onUpButtonClick = () => {
-        pageHeaderElement.scrollIntoView({ behavior: 'smooth' });
+        document
+            .getElementById('mujedd-root')
+            ?.scrollTo({ top: 0, behavior: 'smooth' });
     };
     if (!showUpButton) {
         return null;
     }
     return (
-        // <AnimatePresence>
-        <UpButtonContainer
-            // id="up-button"
-            // key={'up-button'}
-            {...BetweenPageAnimation}
-            onClick={onUpButtonClick}
-        >
+        <UpButtonContainer {...BetweenPageAnimation} onClick={onUpButtonClick}>
             <PiArrowFatLineUpFill />
         </UpButtonContainer>
-        // </AnimatePresence>
     );
 };
 
