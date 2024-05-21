@@ -64,7 +64,6 @@ export const ChatFooter = styled.div`
 `;
 
 export const UpgradeButton = styled(Button)`
-    border-radius: 0.25rem;
     font-size: 0.875rem;
     font-weight: bold;
     box-shadow: 0px 0px 15px 5px rgba(72, 187, 120, 0.2);
