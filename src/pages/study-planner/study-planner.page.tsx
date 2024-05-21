@@ -21,9 +21,10 @@ import Skeleton from '../../components/Skeleton';
 import Spinner from '../../components/Spinner';
 import TaskBox from '../../components/TaskBox';
 import Button from '../../components/button/button.component';
-import '../../index.css';
 import { BetweenPageAnimation } from '../../index.styles';
 import { useFetchTasksQuery } from '../../store';
+import './calendar.css'
+import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
 import {
     ButtonMV,
     CalendarHolder,
@@ -43,79 +44,6 @@ const formats = {
     dayFormat: 'ddd',
 };
 const localizer = momentLocalizer(moment);
-
-const CustomToolbar = (props: ToolbarProps) => {
-    const [viewState, setViewState] = useState<string>('week');
-
-    const goToDayView = () => {
-        props.onView('day');
-        setViewState('day');
-    };
-    const goToMonthView = () => {
-        props.onView('month');
-        setViewState('month');
-    };
-
-    const goToWeekView = () => {
-        props.onView('week');
-        setViewState('week');
-    };
-
-    const goToBack = () => {
-        props.onNavigate(Navigate.PREVIOUS);
-    };
-
-    const goToNext = () => {
-        props.onNavigate(Navigate.NEXT);
-    };
-
-    const viewFunctions = [goToWeekView, goToDayView, goToMonthView];
-    const [currentViewIndex, setCurrentView] = useState(0);
-    function cycleView() {
-        setCurrentView((currentViewIndex + 1) % viewFunctions.length);
-        const currentView = viewFunctions[currentViewIndex];
-        currentView();
-    }
-    return (
-        <div className="flex flex-column justify-between pt-[1rem]">
-            <div className="flex flex-row gap-3 pb-4  w-2/5 px-2">
-                {viewState == 'day' ? (
-                    <>
-                        <label className="lg:text-4xl text-3xl text-indigo-900 font-semibold">
-                            {moment(props.date).format('DD ')}
-                        </label>
-                        <label className="lg:text-4xl text-3xl text-indigo-900 font-normal">
-                            {moment(props.date).format('dddd')}
-                        </label>
-                    </>
-                ) : (
-                    <>
-                        <label className="lg:text-4xl text-3xl text-indigo-900 font-semibold">
-                            {moment(props.date).format('MMMM ')}
-                        </label>
-                        <label className="lg:text-4xl text-3xl text-indigo-900 font-light">
-                            {moment(props.date).format('YYYY ')}
-                        </label>
-                    </>
-                )}
-            </div>
-
-            <div className="flex flex-row justify-end items-center	justify-items-center lg:w-1/5 w-[10%] lg:mb-0 mb-4 ">
-                <div className="flex flex-row justify-items-center ">
-                    <LeftButton onClick={goToBack}>
-                        <FaChevronLeft color="white" size="12" />
-                    </LeftButton>
-                    <MiddleButton onClick={cycleView}>
-                        {viewState.charAt(0).toUpperCase() + viewState.slice(1)}
-                    </MiddleButton>
-                    <RightButton onClick={goToNext}>
-                        <FaChevronRight color="white" size="12" />
-                    </RightButton>
-                </div>
-            </div>
-        </div>
-    );
-};
 
 export default function StudyPlanner() {
     const [showModal, setShowModal] = useState(false);
@@ -241,10 +169,105 @@ export default function StudyPlanner() {
         setContent(content);
     }, [isLoading, error, tasks]);
 
+    const [viewState, setViewState] = useState<string>('week');
+
+    const CustomToolbar = (props: ToolbarProps) => {
+        const goToDayView = () => {
+            setViewState('day');
+            props.onView('day');
+        };
+        const goToMonthView = () => {
+            setViewState('month');
+            props.onView('month');
+        };
+
+        const goToWeekView = () => {
+            setViewState('week');
+            props.onView('week');
+        };
+
+        const goToBack = () => {
+            props.onNavigate(Navigate.PREVIOUS);
+        };
+
+        const goToNext = () => {
+            props.onNavigate(Navigate.NEXT);
+        };
+
+        const viewFunctions = [goToWeekView, goToDayView, goToMonthView];
+        const [currentViewIndex, setCurrentView] = useState(0);
+        function cycleView() {
+            setCurrentView((prevIndex) => ((prevIndex + 1) % (viewFunctions.length)));
+            const currentView = viewFunctions[currentViewIndex];
+            currentView();
+        }
+
+        useEffect(() => {
+            if (viewState === 'week') {
+                setCurrentView(1)
+                goToWeekView();
+            }
+            else if (viewState === 'day') {
+                goToDayView();
+                setCurrentView(2)
+            }
+            else if (viewState === 'month') {
+                goToMonthView();
+                setCurrentView(0)
+            }
+
+        }, [viewState]);
+        return (
+            <div className="flex flex-column justify-between pt-[1rem]">
+                <div className="flex flex-row gap-3 pb-4  w-2/5 px-2">
+                    {viewState === 'day' ? (
+                        <>
+                            <label className="lg:text-4xl text-3xl text-indigo-900 font-semibold">
+                                {moment(props.date).format('DD ')}
+                            </label>
+                            <label className="lg:text-4xl text-3xl text-indigo-900 font-normal">
+                                {moment(props.date).format('dddd')}
+                            </label>
+                        </>
+                    ) : (
+                        <>
+                            <label className="lg:text-4xl text-3xl text-indigo-900 font-semibold">
+                                {moment(props.date).format('MMMM ')}
+                            </label>
+                            <label className="lg:text-4xl text-3xl text-indigo-900 font-light">
+                                {moment(props.date).format('YYYY ')}
+                            </label>
+                        </>
+                    )}
+                </div>
+
+                <div className="flex flex-row justify-end items-center	justify-items-center lg:mb-0 mb-4 ">
+                    <div className="flex flex-row justify-center items-center ">
+                        <LeftButton onClick={goToBack}>
+                            <FaChevronLeft color="white" size="12" />
+                        </LeftButton>
+                        <MiddleButton onClick={cycleView}>
+                            {viewState.charAt(0).toUpperCase() + viewState.slice(1)}
+                        </MiddleButton>
+                        <RightButton onClick={goToNext}>
+                            <FaChevronRight color="white" size="12" />
+                        </RightButton>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+
     const Calendar = (props: Omit<CalendarProps, 'localizer'>) => {
         let EVENTS: any[] = [];
         if (isLoading) {
+            EVENTS = []
+
+
         } else if (error) {
+
+            EVENTS = []
         } else {
             EVENTS = data?.map(
                 (task: {
@@ -273,14 +296,18 @@ export default function StudyPlanner() {
         }
         return (
             <BigCalendar
-                popup
                 {...props}
                 events={EVENTS}
                 formats={formats}
                 localizer={localizer}
+                startAccessor="start"
+                endAccessor="end"
                 defaultView={'week'}
                 max={moment('2023-12-24T23:59:00').toDate()}
                 min={moment('2023-12-24T08:00:00').toDate()}
+                onView={view => {
+                    setViewState(view);
+                }}
                 components={{
                     toolbar: CustomToolbar,
                     event: ({ event }: { event: any }) => {
@@ -373,7 +400,6 @@ export default function StudyPlanner() {
                 </div>
                 <div className="flex flex-col mt-8 items-center justify-center w-full ">
                     <TasksContainer>
-                        {' '}
                         {React.Children.count(content) !== 0 ? (
                             content
                         ) : (

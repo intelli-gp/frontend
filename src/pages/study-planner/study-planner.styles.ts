@@ -1,75 +1,11 @@
 import { motion } from 'framer-motion';
+import { GoDotFill } from 'react-icons/go';
 import styled from 'styled-components';
+import { CustomInput } from '../../components/input/Input.component';
+
 
 export const PageContainer = styled(motion.div)`
-    .rbc-time-view .rbc-row:first-child {
-        font-size: 1rem;
-        min-height: 3rem !important;
-        flex-grow: 3 !important;
-    }
-    .rbc-header {
-        padding: 10px 0 0 0 !important;
-
-        color: #1b2547;
-        border-bottom: 0px solid !important;
-        font-size: larger;
-        font-weight: 400;
-    }
-    .rbc-header + .rbc-today {
-        color: #312e81;
-    }
-    .rbc-label {
-        color: #868e96;
-    }
-    .rbc-allday-cell {
-        visibility: hidden !important;
-        height: 0 !important;
-    }
-    .rbc-time-header-gutter {
-        border-style: solid;
-
-        border-width: 0 !important;
-    }
-    .rbc-today {
-        background-color: #e9eafd;
-    }
-
-    .rbc-event {
-        padding: 0px !important;
-        border-radius: 0px !important;
-        border: none !important;
-        background-color: transparent !important;
-        z-index: 2;
-        position: relative;
-    }
-
-    .rbc-background-event {
-        padding: 0px !important;
-        border-radius: 0px !important;
-        border: none !important;
-        background-color: transparent !important;
-    }
-
-    .rbc-event-label {
-        display: none !important;
-    }
-
-    .rbc-timeslot-group {
-        min-height: 80px !important;
-        border-color: transparent !important;
-    }
-
-    .rbc-events-container {
-        @media (min-width: 1441px) {
-            margin-right: 0px !important;
-        }
-    }
-    input[type='time']::-webkit-calendar-picker-indicator {
-        display: none;
-    }
-    .rbc-current-time-indicator {
-        background-color: #312e81 !important;
-    }
+   
 
     display: flex;
     flex-direction: column;
@@ -223,29 +159,77 @@ export const LeftButton = styled.button`
     border-radius: 0.5rem 0 0 0.5rem;
     border-right: 1px solid white;
     display: flex;
-    padding: 8px;
+    padding:12px 8px;
     flex-direction: row;
     justify-content: center;
     align-items: center;
 `;
 export const MiddleButton = styled.button`
-    width: 50%;
+    min-width: 3.5rem;
+    max-width: 3.5rem;
     background-color: var(--indigo-900);
     color: white;
-    font-size: 0.75rem;
-    padding: 5px;
-
-    @media (min-width: 768px) {
-        font-size: 0.875rem;
-    }
+    padding: 6px 5px;
+    font-size: 1rem;
 `;
+
 export const RightButton = styled.button`
     width: 25%;
-    padding: 8px;
+    height:100%;
+    padding:12px 8px;
     background-color: var(--indigo-900);
     border-left: 1px solid white;
     border-radius: 0 0.5rem 0.5rem 0;
     display: flex;
     align-items: center;
     justify-content: center;
+`;
+export const StatusIcon =styled(GoDotFill) <{ color?: string }>`
+    position: absolute;
+    left: 15;
+    top: 48%;
+    color: ${(props) => props.color};
+
+`
+export const StatusInput =styled(CustomInput) <{ color?: string }>`
+
+background-color: rgba(${(props) => hexToRgb(props.color)}, 0.2);
+font-size: 0.9rem;
+
+`
+
+export const StatusContainer = styled(motion.ul)`
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    z-index: 10;
+    width:100%;
+    box-shadow: 0 0 20px 10px rgb(99, 102, 241, 0.075);
+    border-bottom-left-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
+    border: 1px solid var(--gray-300);
+    padding:0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+
+`;
+
+export const StatusItem = styled(motion.li)<{ width?: string }>`
+    transition: background-color 0.15s ease-in-out;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap:0.25rem
+    padding: 0.5rem;
+    margin: 0.125rem 0.35rem;
+    font-size: 0.9rem;
+    &:hover {
+        background-color: var(--indigo-50);
+        color: black;
+    }
+
 `;
