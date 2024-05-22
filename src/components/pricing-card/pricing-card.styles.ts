@@ -47,14 +47,17 @@ export const CardContainer = styled.div<{
     position: relative;
 
     ${({ unique, withoutButton }) => {
+        let style = css``;
         if (withoutButton) {
-            return css`
+            style = css`
+                {...style}
                 gap: 2rem;
                 padding-bottom: 3rem;
             `;
         }
         if (unique) {
-            return css`
+            style = css`
+                {...style}
                 &::after {
                     content: 'Most Popular';
                     position: absolute;
@@ -71,6 +74,7 @@ export const CardContainer = styled.div<{
                 }
             `;
         }
+        return style;
     }}
 `;
 

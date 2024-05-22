@@ -1,8 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
-import { CiLogin } from 'react-icons/ci';
-import { IoPersonOutline, IoPersonSharp } from 'react-icons/io5';
-import { MdLogin } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { Navigation } from 'swiper/modules';
 import { Swiper } from 'swiper/react';
@@ -10,10 +7,8 @@ import { Swiper } from 'swiper/react';
 import Section2img from '../../assets/imgs/about-illustration1.svg';
 import ChatBot from '../../assets/imgs/chatBot-illustration.svg';
 import Courses from '../../assets/imgs/courses-illustration.svg';
-import icons from '../../assets/imgs/icons.svg';
 import StudyGroup from '../../assets/imgs/studyGroup-illustration.svg';
 import StudyPlanner from '../../assets/imgs/studyPlanner-illustration.svg';
-import Button from '../../components/button/button.component';
 import { FeatureCard } from '../../components/feature-card/feature-card.component';
 import PricingCard from '../../components/pricing-card/pricing-card.component';
 import { SwiperCustomSlide } from '../../components/user-card/user-card.styles';
@@ -30,24 +25,25 @@ import {
     CopyRightText,
     FeaturesSection,
     FeaturesWrapper,
-    FooterContainer,
     FooterLink,
     FooterNav,
     HeroContent,
     HeroSection,
+    HomePageFooter,
     HomeSideNav,
     HomeSideNavItemsContainer,
-    HomeSideNavLink,
-    IconContainer,
+    HorizontalNavLinksContainer,
     JoinButton,
-    NavContainer,
+    NAV_HEIGHT,
+    NavInnerContainer,
+    NavLink,
+    NavOuterContainer,
     PageBody,
     PageContainer,
     PricesHolder,
     PricingSection,
     SectionRegularText,
     SectionTitle,
-    StyledFooter,
     StyledLink,
 } from './home.style';
 
@@ -58,7 +54,77 @@ function Nav() {
         setMenuOpen(!navbarOpen);
     };
 
-    const menuItems = ['Home', 'Features', 'Pricing'];
+    const [horizontalNavLinks, setHorizontalNavLinks] = useState<
+        {
+            value: string;
+            isActive: boolean;
+            scrollTarget: HTMLElement | null;
+        }[]
+    >();
+
+    const scrollHandler = (scrollTarget: HTMLElement) => {
+        scrollTo({
+            top: scrollTarget.offsetTop - NAV_HEIGHT,
+            behavior: 'smooth',
+        });
+    };
+
+    useEffect(() => {
+        setHorizontalNavLinks(() => {
+            // Initialize the state here to make sure that the page is rendered and all scroll targets are available.
+            let newState = [
+                {
+                    value: 'Home',
+                    scrollTarget: document.getElementById('Home'),
+                    isActive: false,
+                },
+                {
+                    value: 'Features',
+                    scrollTarget: document.getElementById('Features'),
+                    isActive: false,
+                },
+                {
+                    value: 'Articles',
+                    scrollTarget: document.getElementById('Articles'),
+                    isActive: false,
+                },
+                {
+                    value: 'Pricing',
+                    scrollTarget: document.getElementById('Pricing'),
+                    isActive: false,
+                },
+            ];
+
+            let observerCallback = (entries: IntersectionObserverEntry[]) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setHorizontalNavLinks(
+                            (prev) =>
+                                prev?.map((link) => {
+                                    if (link.scrollTarget === entry.target) {
+                                        return { ...link, isActive: true };
+                                    }
+                                    return { ...link, isActive: false };
+                                }),
+                        );
+                    }
+                });
+            };
+
+            let intersectionObserver = new IntersectionObserver(
+                observerCallback,
+                {
+                    threshold: 0.25,
+                },
+            );
+
+            newState?.forEach((link) => {
+                intersectionObserver.observe(link.scrollTarget!);
+            });
+
+            return newState;
+        });
+    }, []);
 
     return (
         <>
@@ -71,70 +137,56 @@ function Nav() {
                     />
                 </div>
                 <HomeSideNavItemsContainer>
-                    {menuItems.map((item, index) => (
-                        <li key={index}>
-                            <StyledLink to={`#${item}`}>{item}</StyledLink>
-                        </li>
+                    {horizontalNavLinks?.map((link) => (
+                        <StyledLink
+                            active={link.isActive}
+                            to="#"
+                            onClick={(event: React.MouseEvent) => {
+                                event.preventDefault();
+                                scrollHandler(link.scrollTarget!);
+                            }}
+                        >
+                            {link.value}
+                        </StyledLink>
                     ))}
-                    <li>
-                        <StyledLink to="/auth/signup">
-                            <IoPersonOutline size={14} />
-                            Sign up
-                        </StyledLink>
-                    </li>
-                    <li>
-                        <StyledLink to="/auth/login">
-                            <CiLogin size={15} />
-                            Log in
-                        </StyledLink>
-                    </li>
+                    <StyledLink to="/auth/signup">Sign up</StyledLink>
+                    <StyledLink to="/auth/login">Log in</StyledLink>
                 </HomeSideNavItemsContainer>
             </HomeSideNav>
-            <NavContainer>
-                <Link to="/">
-                    <BrandName>Mujedd</BrandName>
-                </Link>
-                <div className="flex gap-16 items-center">
-                    <div className="hidden lg:flex">
-                        <ul className="flex px-1 ">
-                            {menuItems.map((item, index) => (
-                                <li key={index}>
-                                    <HomeSideNavLink href={`#${item}`}>
-                                        {item}
-                                    </HomeSideNavLink>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
 
-                    <div className="flex gap-6 items-center">
-                        <Link to="/auth/signup" className="lg:flex hidden">
-                            <Button
-                                select="primary"
-                                className="text-sm !px-8  !rounded-lg gap-2"
+            <NavOuterContainer>
+                <NavInnerContainer>
+                    <Link to="/">
+                        <BrandName>Mujedd</BrandName>
+                    </Link>
+                    <HorizontalNavLinksContainer>
+                        {horizontalNavLinks?.map((link) => (
+                            <NavLink
+                                key={link.value}
+                                active={link.isActive}
+                                onClick={(event: React.MouseEvent) => {
+                                    event.preventDefault();
+                                    scrollHandler(link.scrollTarget!);
+                                }}
+                                to="#"
                             >
-                                <IoPersonSharp size={14} />
-                                Signup
-                            </Button>
-                        </Link>
-                        <Link to="/auth/login" className="lg:flex hidden">
-                            <Button
-                                outline={true}
-                                className=" !px-8 !rounded-lg gap-2 text-sm"
-                            >
-                                <MdLogin size={15} />
-                                Login
-                            </Button>
-                        </Link>
-                        <AiOutlineMenu
-                            size={25}
-                            color="#fff"
-                            onClick={toggleMobileNav}
-                            className="lg:hidden"
-                        />
-                    </div>
-                </div>
-            </NavContainer>
+                                {link.value}
+                            </NavLink>
+                        ))}
+
+                        <NavLink to="/auth/signup" className="ml-10">
+                            Signup
+                        </NavLink>
+                        <NavLink to="/auth/login">Login</NavLink>
+                    </HorizontalNavLinksContainer>
+                    <AiOutlineMenu
+                        size={24}
+                        color="#fff"
+                        onClick={toggleMobileNav}
+                        className="lg:hidden"
+                    />
+                </NavInnerContainer>
+            </NavOuterContainer>
         </>
     );
 }
@@ -241,7 +293,7 @@ function BlogSection() {
     const articles = data?.data?.slice(0, 10) ?? [];
 
     return (
-        <BlogsSection>
+        <BlogsSection id="Articles">
             <SectionTitle>Latest Blogs</SectionTitle>
             <Swiper
                 navigation={true}
@@ -302,31 +354,16 @@ function PriceSection() {
 }
 
 function Footer() {
-    const menuItems = ['Blogs', 'About', 'Services', 'Projects'];
-
+    const menuItems = ['Articles', 'About', 'Services', 'Projects'];
     return (
-        <StyledFooter>
-            <FooterContainer>
-                <div>
-                    <FooterNav>
-                        {menuItems.map((item, index) => (
-                            <li key={index}>
-                                <FooterLink href="/">{item}</FooterLink>
-                            </li>
-                        ))}
-                    </FooterNav>
-                </div>
-                <div className="container pt-9 md:flex justify-between mt-10">
-                    <CopyRightText>
-                        Copyright &copy; 2022. All rights reserved.
-                    </CopyRightText>
-                    <IconContainer>
-                        <img src={icons} alt="icons" />
-                    </IconContainer>
-                </div>
-                <div className="mt-4 flex items-center space-x-4 sm:mt-0" />
-            </FooterContainer>
-        </StyledFooter>
+        <HomePageFooter>
+            <FooterNav>
+                {menuItems.map((item) => (
+                    <FooterLink href="#">{item}</FooterLink>
+                ))}
+            </FooterNav>
+            <CopyRightText>&copy;2024, Mujedd Team</CopyRightText>
+        </HomePageFooter>
     );
 }
 

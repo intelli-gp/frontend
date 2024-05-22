@@ -16,6 +16,7 @@ import {
     CardImage,
     ContinueReadingButton,
 } from './vertical-article.style';
+import moment from 'moment';
 
 const VerticalArticle = ({
     Author,
@@ -23,6 +24,7 @@ const VerticalArticle = ({
     Title,
     UpdatedAt,
     Sections,
+    CreatedAt,
 }: ReceivedArticle) => {
     const navigate = useNavigate();
     const articleText =
@@ -42,7 +44,9 @@ const VerticalArticle = ({
                 <div className="flex flex-col">
                     <AuthorName>by {Author.FullName}</AuthorName>
                     <ArticleTime dateTime={UpdatedAt}>
-                        {new Date(UpdatedAt).toDateString()}
+                        {moment(new Date(UpdatedAt! || CreatedAt!)).format(
+                            'DD MMM, YYYY',
+                        )}
                     </ArticleTime>
                 </div>
                 <ContinueReadingButton

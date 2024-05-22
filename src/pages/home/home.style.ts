@@ -6,9 +6,11 @@ import image from '../../assets/imgs/Hero-illustration.svg';
 import Button from '../../components/button/button.component';
 import EnhancedImage from '../../components/image/image.component';
 
-const SECTION_HEIGHT = 'calc(100vh - 70px)';
+export const NAV_HEIGHT = 54; // px
+const SECTION_HEIGHT = `calc(100vh - ${NAV_HEIGHT}px)`;
 
 const commonSectionStyles = css`
+    padding: 2rem 1rem;
     min-height: ${SECTION_HEIGHT};
 `;
 
@@ -61,13 +63,29 @@ export const PageBody = styled(motion.div)`
     gap: 2rem;
 `;
 
-export const NavContainer = styled.nav`
+export const NavOuterContainer = styled.nav`
+    width: 100%;
     position: sticky;
     top: 0;
     z-index: 50;
-    width: 100%;
-    background-color: var(--indigo-950);
-    padding: 0.5rem 2rem;
+    padding: 0.25rem 2.5rem;
+    background-color: rgba(30, 27, 75, 0.9);
+    backdrop-filter: blur(10px);
+`;
+
+export const HorizontalNavLinksContainer = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    @media (max-width: 1024px) {
+        display: none;
+    }
+`;
+
+export const NavInnerContainer = styled.div`
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -79,7 +97,8 @@ export const HomeSideNav = styled.div<{ isOpen?: boolean }>`
     width: 300px;
     height: 100vh;
     z-index: 100;
-    background-color: var(--indigo-950);
+    background-color: rgba(30, 27, 75, 0.9);
+    backdrop-filter: blur(10px);
     color: white;
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
@@ -90,14 +109,23 @@ export const HomeSideNav = styled.div<{ isOpen?: boolean }>`
     }
 `;
 
-export const HomeSideNavLink = styled.a`
-    font-size: 0.875rem;
+export const NavLink = styled(Link)<{ active?: boolean }>`
     font-weight: 500;
-    color: #ffffff;
-    margin-left: 2.5rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    opacity: ${({ active }) => (active ? 1 : 0.75)};
+    padding: 0.25rem 1rem;
+    border-radius: 0.5rem;
 
-    @media (min-width: 1024px) {
-        font-size: 1rem;
+    background-color: ${({ active }) =>
+        active ? 'rgba(255, 255, 255, 0.2)' : 'transparent'};
+
+    transition: all 0.2s ease-in-out;
+    &:hover {
+        opacity: 1;
     }
 `;
 
@@ -122,8 +150,10 @@ export const BrandName = styled.h1`
     user-select: none;
 `;
 
-export const StyledLink = styled(Link)`
+export const StyledLink = styled(Link)<{ active?: boolean }>`
     border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    background-color: ${({ active }) =>
+        active ? 'rgba(255, 255, 255, 0.15)' : 'transparent'};
     padding: 1rem 2rem;
     color: white;
     text-decoration: none;
@@ -132,8 +162,7 @@ export const StyledLink = styled(Link)`
     align-items: center;
     gap: 0.5rem;
     &:hover {
-        background-color: var(--indigo-950);
-        color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.15);
     }
 `;
 
@@ -259,48 +288,33 @@ export const BlogsSection = styled.div`
 
 export const PricingSection = styled.section`
     background-color: var(--indigo-50);
-    padding: 2.5rem;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 3rem;
-    height: calc(100vh - 64px);
+    ${commonSectionStyles}
 `;
 
 export const PricesHolder = styled.div`
     display: flex;
-    flex-direction: row;
     justify-content: center;
-    align-items: center;
     gap: 3rem;
     @media (max-width: 768px) {
         flex-direction: column;
     }
 `;
 
-export const StyledFooter = styled.footer`
-    background-color: #0d062d;
-`;
-
-export const FooterContainer = styled.div`
-    position: relative;
-
-    max-width: max-screen-xl;
-    padding: 4rem 7rem;
-    display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
+export const HomePageFooter = styled.footer`
+    background-color: rgba(30, 27, 75);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
-    align-content: space-between;
-
-    @media (max-width: 640px) {
-        padding-left: 1.5rem;
-    }
-
-    @media (min-width: 1024px) {
-        padding-top: 6rem;
-    }
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
 `;
 
 export const FooterNav = styled.ul`
@@ -332,7 +346,7 @@ export const FooterLink = styled.a`
 `;
 
 export const CopyRightText = styled.p`
-    margin-top: 5rem;
+    margin-top: 4rem;
     text-align: center;
     font-size: 1rem;
     color: #e5e7eb;
@@ -340,18 +354,4 @@ export const CopyRightText = styled.p`
     @media (min-width: 1024px) {
         text-align: right;
     }
-`;
-
-export const IconContainer = styled.div`
-    margin-top: 5rem;
-    display: flex;
-    justify-content: right;
-    height: 2rem;
-`;
-
-export const PricingList = styled.ul`
-    font-size: 1rem;
-    border-left: 3px solid var(--indigo-950);
-    padding: 1rem 1.25rem;
-    flex: 1;
 `;
