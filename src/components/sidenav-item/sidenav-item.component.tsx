@@ -75,9 +75,9 @@ export default function SideNavItem({
             <AnimatePresence>
                 {extended && (
                     <SubItemsContainer
-                        initial={{ height: 0, paddingTop: 0 }}
-                        animate={{ height: '', paddingTop: '0.75rem' }}
-                        exit={{ height: 0, paddingTop: 0 }}
+                        initial={{ height: 0, margin: 0 }}
+                        animate={{ height: '', margin: '1rem 0.5rem' }}
+                        exit={{ height: 0, margin: 0 }}
                     >
                         {subItems?.map((item) => {
                             return (

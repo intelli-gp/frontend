@@ -12,7 +12,7 @@ export const ItemContainer = styled(Link)<{ active?: boolean }>`
     border-radius: 0.5rem;
     background-color: ${({ active }) =>
         active ? 'rgba(255, 255, 255, 0.075)' : 'transparent'};
-    border: 2px solid transparent;
+    border: 1px solid transparent;
     &:hover {
         background-color: rgba(255, 255, 255, 0.075);
         border-color: rgba(255, 255, 255, 0.1);
@@ -50,17 +50,19 @@ export const SubItemsContainer = styled(motion.div)`
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    border-left: 3px solid rgba(255, 255, 255, 0.25);
+    margin: 1rem 0.5rem;
 `;
 
 export const SubItemLink = styled(Link)<{ active?: boolean }>`
     font-size: 0.875rem;
     padding: 0.5rem 0.75rem;
-    border-radius: 0.5rem;
+    border-radius: 0.25rem;
     display: flex;
     align-items: center;
     gap: 0.75rem;
     color: inherit;
-    margin: 0 1rem;
+    margin-left: 0.5rem;
     background-color: ${({ active }) =>
         active ? 'rgba(255, 255, 255, 0.125)' : 'transparent'};
     transition: all 0.2s ease-in-out;

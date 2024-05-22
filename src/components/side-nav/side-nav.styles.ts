@@ -7,7 +7,7 @@ import EnhancedImage from '../image/image.component';
 
 export const SideNavContainer = styled.aside<{ sideNavOpen: boolean }>`
     background-color: var(--indigo-950);
-    width: 250px;
+    width: 275px;
     height: 100vh;
     justify-content: center;
     max-height: 100vh;
@@ -45,7 +45,7 @@ export const LinksContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    padding: 0 0.5rem;
+    padding: 0 0.25rem;
     overflow-y: auto;
     &::-webkit-scrollbar-thumb {
         background: rgb(255, 255, 255, 0.1);

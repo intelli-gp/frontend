@@ -5,7 +5,7 @@ import { FiMenu } from 'react-icons/fi';
 import { GiBookshelf, GiRobotGolem, GiTomato, GiUpgrade } from 'react-icons/gi';
 import { HiMiniUserGroup } from 'react-icons/hi2';
 import { IoIosSettings } from 'react-icons/io';
-import { IoBookmark, IoPersonSharp } from 'react-icons/io5';
+import { IoPersonSharp } from 'react-icons/io5';
 import { LuListTodo, LuSearch } from 'react-icons/lu';
 import { MdLogout } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
@@ -107,14 +107,14 @@ export default function SideNav() {
             extendable: true,
             subItems: [
                 {
-                    icon: <LuSearch />,
+                    // icon: <LuSearch />,
                     path: '/app/articles',
                     text: 'Explore',
                     active: false,
                     id: 4.1,
                 },
                 {
-                    icon: <IoBookmark />,
+                    // icon: <IoBookmark />,
                     path: '/app/articles/my-bookmarks',
                     text: 'Bookmarks',
                     active: false,
@@ -130,14 +130,14 @@ export default function SideNav() {
             extendable: true,
             subItems: [
                 {
-                    icon: <LuSearch />,
+                    // icon: <LuSearch />,
                     path: '/app/courses',
                     text: 'Explore',
                     active: false,
                     id: 5.1,
                 },
                 {
-                    icon: <LuSearch />,
+                    // icon: <LuSearch />,
                     path: '/app/courses/search',
                     text: 'Search',
                     active: false,
