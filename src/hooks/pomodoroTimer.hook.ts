@@ -49,7 +49,7 @@ const usePomodoroTimer = () => {
         dispatch(setMinutes(minutes));
         dispatch(setSeconds(seconds));
     };
-    
+
     //For the reload of the page
     useEffect(() => {
         const handleBeforeUnload = () => {

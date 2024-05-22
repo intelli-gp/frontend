@@ -24,7 +24,6 @@ export const CardImage = styled(EnhancedImage)`
     border-radius: 0.75rem;
     width: 100%;
     height: 15rem;
-    
 `;
 
 export const CardBody = styled.div`

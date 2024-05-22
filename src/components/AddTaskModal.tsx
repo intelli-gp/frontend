@@ -2,7 +2,13 @@ import moment from 'moment';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { GoDash, GoDotFill } from 'react-icons/go';
 
-import { ModalContent, StatusContainer, StatusIcon, StatusInput, StatusItem } from '../pages/study-planner/study-planner.styles';
+import {
+    ModalContent,
+    StatusContainer,
+    StatusIcon,
+    StatusInput,
+    StatusItem,
+} from '../pages/study-planner/study-planner.styles';
 import { useAddTasksMutation } from '../store';
 import { Task, sendTask } from '../types/event';
 import { errorToast, successToast } from '../utils/toasts';
@@ -29,15 +35,15 @@ export const AddTaskModal: React.FC<ModalProps> = ({
     const statuses: Status[] = [
         {
             color: '#1F51FF',
-            status: "In Progress",
+            status: 'In Progress',
         },
         {
             color: '#495057',
-            status: "Hold",
+            status: 'Hold',
         },
         {
             color: '#008200',
-            status: "Done",
+            status: 'Done',
         },
     ];
     const [title, setTitle] = useState('');
@@ -93,7 +99,8 @@ export const AddTaskModal: React.FC<ModalProps> = ({
     }, [isTaskCreatedSuccessfully, isTaskCreateError]);
     useEffect(() => {
         const handleClickOutside = (event: any) => {
-            const customInputForm = document.querySelector('.custom-input-form');
+            const customInputForm =
+                document.querySelector('.custom-input-form');
             if (customInputForm && !customInputForm.contains(event.target)) {
                 setStatusIsRunning(false);
             }
@@ -214,22 +221,29 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                                 className="custom-input-form"
                                 value={status}
                                 onClick={() => {
-                                    setStatusIsRunning(true)
+                                    setStatusIsRunning(true);
                                 }}
                             />
-                            {statusIsRunning && <StatusContainer>
-                                {statuses.map((status) => (
-                                    <StatusItem
-                                        onClick={() => {
-                                            setStatus('      '+status.status)
-                                            setStatusColor(status.color)
-                                        }
-                                        }
-                                    >
-                                        <GoDotFill size={24} color={status.color} />
-                                        <span>{status.status}</span>
-                                    </StatusItem>))}
-                            </StatusContainer>}
+                            {statusIsRunning && (
+                                <StatusContainer>
+                                    {statuses.map((status) => (
+                                        <StatusItem
+                                            onClick={() => {
+                                                setStatus(
+                                                    '      ' + status.status,
+                                                );
+                                                setStatusColor(status.color);
+                                            }}
+                                        >
+                                            <GoDotFill
+                                                size={24}
+                                                color={status.color}
+                                            />
+                                            <span>{status.status}</span>
+                                        </StatusItem>
+                                    ))}
+                                </StatusContainer>
+                            )}
                         </div>
                         <div className="w-1/2">
                             <CustomInput
@@ -309,6 +323,6 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                     </div>
                 </form>
             </ModalContent>
-        </Modal >
+        </Modal>
     );
 };

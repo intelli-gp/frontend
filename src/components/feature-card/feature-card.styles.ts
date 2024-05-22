@@ -17,7 +17,7 @@ export const CardContainer = styled.div`
         transform: scale(1.025);
     }
 
-    @media(max-width: 768px) {
+    @media (max-width: 768px) {
         flex-direction: column-reverse;
         padding: 1.5rem;
         gap: 0.25rem;

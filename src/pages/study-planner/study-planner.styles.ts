@@ -1,93 +1,89 @@
 import { motion } from 'framer-motion';
 import { GoDotFill } from 'react-icons/go';
 import styled from 'styled-components';
+
 import { CustomInput } from '../../components/input/Input.component';
 
-
 export const PageContainer = styled(motion.div)`
-
-
-.rbc-time-view .rbc-row:first-child {
-    font-size: 1rem;
-    min-height: 3rem !important;
-    flex-grow: 1 !important;
-}
-.rbc-time-header-gutter{
-    width:79.85px !important;
-}
-.rbc-header {
-    padding: 10px 0 0 0 !important;
-    color: #1b2547;
-    border-bottom: 0px solid !important;
-    font-size: larger;
-    font-weight: 400;
-}
-.rbc-time-header-content{
-    flex: 1;
-    display:flex !important;
-    width:788px !important;
-}
-
-.rbc-row-bg {
-    border-top: 1px solid #ced4da !important;
-
-}
-.rbc-header + .rbc-today {
-    color: #312e81;
-}
-.rbc-label {
-    color: #868e96;
-}
-.rbc-allday-cell {
-    visibility: hidden !important;
-    height: 0 !important;
-}
-.rbc-time-header-gutter {
-    border-style: solid;
-
-    border-width: 0 !important;
-}
-.rbc-today {
-    background-color: #e9eafd;
-}
-
-.rbc-event {
-    padding: 0px !important;
-    border-radius: 0px !important;
-    border: none !important;
-    background-color: transparent !important;
-    z-index: 2;
-    position: relative;
-}
-
-.rbc-background-event {
-    padding: 0px !important;
-    border-radius: 0px !important;
-    border: none !important;
-    background-color: transparent !important;
-}
-
-.rbc-event-label {
-    display: none !important;
-}
-
-.rbc-timeslot-group {
-    min-height: 80px !important;
-    border-color: transparent !important;
-}
-
-.rbc-events-container {
-    @media (min-width: 1441px) {
-        margin-right: 0px !important;
+    .rbc-time-view .rbc-row:first-child {
+        font-size: 1rem;
+        min-height: 3rem !important;
+        flex-grow: 1 !important;
     }
-}
-input[type='time']::-webkit-calendar-picker-indicator {
-    display: none;
-}
-.rbc-current-time-indicator {
-    background-color: #312e81 !important;
-}
+    .rbc-time-header-gutter {
+        width: 79.85px !important;
+    }
+    .rbc-header {
+        padding: 10px 0 0 0 !important;
+        color: #1b2547;
+        border-bottom: 0px solid !important;
+        font-size: larger;
+        font-weight: 400;
+    }
+    .rbc-time-header-content {
+        flex: 1;
+        display: flex !important;
+        width: 788px !important;
+    }
 
+    .rbc-row-bg {
+        border-top: 1px solid #ced4da !important;
+    }
+    .rbc-header + .rbc-today {
+        color: #312e81;
+    }
+    .rbc-label {
+        color: #868e96;
+    }
+    .rbc-allday-cell {
+        visibility: hidden !important;
+        height: 0 !important;
+    }
+    .rbc-time-header-gutter {
+        border-style: solid;
+
+        border-width: 0 !important;
+    }
+    .rbc-today {
+        background-color: #e9eafd;
+    }
+
+    .rbc-event {
+        padding: 0px !important;
+        border-radius: 0px !important;
+        border: none !important;
+        background-color: transparent !important;
+        z-index: 2;
+        position: relative;
+    }
+
+    .rbc-background-event {
+        padding: 0px !important;
+        border-radius: 0px !important;
+        border: none !important;
+        background-color: transparent !important;
+    }
+
+    .rbc-event-label {
+        display: none !important;
+    }
+
+    .rbc-timeslot-group {
+        min-height: 80px !important;
+        border-color: transparent !important;
+    }
+
+    .rbc-events-container {
+        @media (min-width: 1441px) {
+            margin-right: 0px !important;
+        }
+    }
+    input[type='time']::-webkit-calendar-picker-indicator {
+        display: none;
+    }
+    .rbc-current-time-indicator {
+        background-color: #312e81 !important;
+    }
 
     display: flex;
     flex-direction: column;
@@ -151,12 +147,11 @@ export const TasksContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    max-height:  490px;
+    max-height: 490px;
     gap: 10px;
     width: 100%;
     padding: 0.4rem;
     overflow-y: auto;
-
 `;
 export const SideNav = styled.div`
     display: flex;
@@ -243,7 +238,7 @@ export const LeftButton = styled.button`
     border-radius: 0.5rem 0 0 0.5rem;
     border-right: 1px solid white;
     display: flex;
-    padding:12px 8px;
+    padding: 12px 8px;
     flex-direction: row;
     justify-content: center;
     align-items: center;
@@ -259,8 +254,8 @@ export const MiddleButton = styled.button`
 
 export const RightButton = styled.button`
     width: 25%;
-    height:100%;
-    padding:12px 8px;
+    height: 100%;
+    padding: 12px 8px;
     background-color: var(--indigo-900);
     border-left: 1px solid white;
     border-radius: 0 0.5rem 0.5rem 0;
@@ -268,19 +263,16 @@ export const RightButton = styled.button`
     align-items: center;
     justify-content: center;
 `;
-export const StatusIcon =styled(GoDotFill) <{ color?: string }>`
+export const StatusIcon = styled(GoDotFill)<{ color?: string }>`
     position: absolute;
     left: 15;
     top: 48%;
     color: ${(props) => props.color};
-
-`
-export const StatusInput =styled(CustomInput) <{ color?: string }>`
-
-background-color: rgba(${(props) => hexToRgb(props.color)}, 0.2);
-font-size: 0.9rem;
-
-`
+`;
+export const StatusInput = styled(CustomInput)<{ color?: string }>`
+    background-color: rgba(${(props) => hexToRgb(props.color)}, 0.2);
+    font-size: 0.9rem;
+`;
 
 export const StatusContainer = styled(motion.ul)`
     position: absolute;
@@ -291,15 +283,14 @@ export const StatusContainer = styled(motion.ul)`
     flex-direction: column;
     background-color: white;
     z-index: 10;
-    width:100%;
+    width: 100%;
     box-shadow: 0 0 20px 10px rgb(99, 102, 241, 0.075);
     border-bottom-left-radius: 0.75rem;
     border-bottom-right-radius: 0.75rem;
     border: 1px solid var(--gray-300);
-    padding:0.5rem;
+    padding: 0.5rem;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
-
 `;
 
 export const StatusItem = styled(motion.li)<{ width?: string }>`

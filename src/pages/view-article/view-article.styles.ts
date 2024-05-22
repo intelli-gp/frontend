@@ -62,8 +62,6 @@ export const ArticleImageSection = styled.img`
     height: 100%;
 `;
 
-
-
 export const PublishDate = styled.p`
     margin-top: -0.5rem;
     font-size: 0.875rem;

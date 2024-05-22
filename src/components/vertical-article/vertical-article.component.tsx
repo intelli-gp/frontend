@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 
 import { ReceivedArticle } from '../../types/article';
@@ -16,7 +17,6 @@ import {
     CardImage,
     ContinueReadingButton,
 } from './vertical-article.style';
-import moment from 'moment';
 
 const VerticalArticle = ({
     Author,

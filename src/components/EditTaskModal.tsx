@@ -2,7 +2,13 @@ import moment from 'moment';
 import { SetStateAction, useEffect, useState } from 'react';
 import { GoDash, GoDotFill } from 'react-icons/go';
 
-import { ModalContent, StatusContainer, StatusIcon, StatusInput, StatusItem } from '../pages/study-planner/study-planner.styles';
+import {
+    ModalContent,
+    StatusContainer,
+    StatusIcon,
+    StatusInput,
+    StatusItem,
+} from '../pages/study-planner/study-planner.styles';
 import {
     useEditTaskMutation,
     useFetchTaskQuery,
@@ -48,19 +54,19 @@ export const EditTaskModal: React.FC<ModalProps> = ({
     const [due_end, setDueEnd] = useState(
         moment(task.DueDate).format().slice(11, 16),
     );
-    const [status, setStatus] = useState('     '+task.Status);
+    const [status, setStatus] = useState('     ' + task.Status);
     const statuses: Status[] = [
         {
             color: '#1F51FF',
-            status: "In Progress",
+            status: 'In Progress',
         },
         {
             color: '#495057',
-            status: "Hold",
+            status: 'Hold',
         },
         {
             color: '#008200',
-            status: "Done",
+            status: 'Done',
         },
     ];
     const [statusColor, setStatusColor] = useState('');
@@ -73,13 +79,14 @@ export const EditTaskModal: React.FC<ModalProps> = ({
         setDueDate(moment(task.DueDate).format().slice(0, 10));
         setDueStart(moment(task.StartDate).format().slice(11, 16));
         setDueEnd(moment(task.DueDate).format().slice(11, 16));
-        setStatus('     '+task.Status);
-        const matchingStatus = statuses.find((s) => s.status === task.Status) ;
+        setStatus('     ' + task.Status);
+        const matchingStatus = statuses.find((s) => s.status === task.Status);
         if (matchingStatus) {
             setStatusColor(matchingStatus.color);
         } else {
-            setStatusColor('#000000'); 
-        }    }, [task]);
+            setStatusColor('#000000');
+        }
+    }, [task]);
 
     const handleDueStartChange = (
         event: React.ChangeEvent<HTMLInputElement>,
@@ -92,7 +99,8 @@ export const EditTaskModal: React.FC<ModalProps> = ({
     };
     useEffect(() => {
         const handleClickOutside = (event: any) => {
-            const customInputForm = document.querySelector('.custom-input-form');
+            const customInputForm =
+                document.querySelector('.custom-input-form');
             if (customInputForm && !customInputForm.contains(event.target)) {
                 setStatusIsRunning(false);
             }
@@ -250,7 +258,7 @@ export const EditTaskModal: React.FC<ModalProps> = ({
                         />
                     </div>
                     <div className="flex w-full justify-between pt-[6px] gap-6">
-                    <div className="w-1/2 relative">
+                        <div className="w-1/2 relative">
                             <StatusIcon size={24} color={statusColor} />
                             <StatusInput
                                 required
@@ -260,22 +268,29 @@ export const EditTaskModal: React.FC<ModalProps> = ({
                                 className="custom-input-form"
                                 value={status}
                                 onClick={() => {
-                                    setStatusIsRunning(true)
+                                    setStatusIsRunning(true);
                                 }}
                             />
-                            {statusIsRunning && <StatusContainer>
-                                {statuses.map((status) => (
-                                    <StatusItem
-                                        onClick={() => {
-                                            setStatus('      '+status.status)
-                                            setStatusColor(status.color)
-                                        }
-                                        }
-                                    >
-                                        <GoDotFill size={24} color={status.color} />
-                                        <span>{status.status}</span>
-                                    </StatusItem>))}
-                            </StatusContainer>}
+                            {statusIsRunning && (
+                                <StatusContainer>
+                                    {statuses.map((status) => (
+                                        <StatusItem
+                                            onClick={() => {
+                                                setStatus(
+                                                    '      ' + status.status,
+                                                );
+                                                setStatusColor(status.color);
+                                            }}
+                                        >
+                                            <GoDotFill
+                                                size={24}
+                                                color={status.color}
+                                            />
+                                            <span>{status.status}</span>
+                                        </StatusItem>
+                                    ))}
+                                </StatusContainer>
+                            )}
                         </div>
                         <div className="w-1/2">
                             <CustomInput

@@ -195,26 +195,25 @@ export default function StudyPlanner() {
         const viewFunctions = [goToWeekView, goToDayView, goToMonthView];
         const [currentViewIndex, setCurrentView] = useState(0);
         function cycleView() {
-            setCurrentView((prevIndex) => ((prevIndex + 1) % (viewFunctions.length)));
+            setCurrentView(
+                (prevIndex) => (prevIndex + 1) % viewFunctions.length,
+            );
             const currentView = viewFunctions[currentViewIndex];
             currentView();
         }
 
         useEffect(() => {
-            console.log(currentViewIndex+" "+viewState)
+            console.log(currentViewIndex + ' ' + viewState);
             if (viewState === 'week') {
-                setCurrentView(1)
+                setCurrentView(1);
                 goToWeekView();
-            }
-            else if (viewState === 'day') {
+            } else if (viewState === 'day') {
                 goToDayView();
-                setCurrentView(2)
-            }
-            else if (viewState === 'month') {
+                setCurrentView(2);
+            } else if (viewState === 'month') {
                 goToMonthView();
-                setCurrentView(0)
+                setCurrentView(0);
             }
-
         }, [viewState]);
         return (
             <div className="flex flex-column justify-between pt-[1rem]">
@@ -246,7 +245,8 @@ export default function StudyPlanner() {
                             <FaChevronLeft color="white" size="12" />
                         </LeftButton>
                         <MiddleButton onClick={cycleView}>
-                            {viewState.charAt(0).toUpperCase() + viewState.slice(1)}
+                            {viewState.charAt(0).toUpperCase() +
+                                viewState.slice(1)}
                         </MiddleButton>
                         <RightButton onClick={goToNext}>
                             <FaChevronRight color="white" size="12" />
@@ -257,16 +257,12 @@ export default function StudyPlanner() {
         );
     };
 
-
     const Calendar = (props: Omit<CalendarProps, 'localizer'>) => {
         let EVENTS: any[] = [];
         if (isLoading) {
-            EVENTS = []
-
-
+            EVENTS = [];
         } else if (error) {
-
-            EVENTS = []
+            EVENTS = [];
         } else {
             EVENTS = data?.map(
                 (task: {
@@ -301,11 +297,12 @@ export default function StudyPlanner() {
                 localizer={localizer}
                 startAccessor="start"
                 endAccessor="end"
-                defaultView= {viewState}
+                defaultView={viewState}
                 max={moment('2023-12-24T23:59:00').toDate()}
                 min={moment('2023-12-24T07:00:00').toDate()}
-                onView={view => {
-                        setViewState(view);         }}
+                onView={(view) => {
+                    setViewState(view);
+                }}
                 components={{
                     toolbar: CustomToolbar,
                     event: ({ event }: { event: any }) => {
