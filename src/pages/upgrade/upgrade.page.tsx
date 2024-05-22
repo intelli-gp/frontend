@@ -1,66 +1,11 @@
-import { useNavigate } from 'react-router-dom';
-
+import PricingCard from '../../components/pricing-card/pricing-card.component';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
+import { Plan } from '../../types/plan';
 import {
-    BenefitsList,
-    CardContainer,
-    CardHeader,
-    CardPrice,
-    CardTitle,
     CardsInnerContainer,
     CardsOuterContainer,
-    CheckBoxIcon,
-    ListItem,
     PageContainer,
-    SwitchToPremiumButton,
-    UpgradeButton,
 } from './upgrade.styles';
-
-type Plan = {
-    id: number;
-    title: 'starter' | 'premium';
-    price: number;
-    benefits: string[];
-    subscriptionPeriod: 'month' | 'year';
-    myPlan?: boolean;
-};
-
-const Card = ({ title, price, benefits, subscriptionPeriod }: Plan) => {
-    const navigate = useNavigate();
-    const isPro = title === 'premium';
-
-    return (
-        <CardContainer pro={isPro}>
-            <CardHeader pro={isPro}>
-                <CardTitle>{title}</CardTitle>
-                <CardPrice>
-                    ${price} <span>/ {subscriptionPeriod}</span>
-                </CardPrice>
-            </CardHeader>
-            <BenefitsList>
-                {benefits.map((benefit) => (
-                    <ListItem>
-                        <CheckBoxIcon pro={isPro} size={20} /> {benefit}
-                    </ListItem>
-                ))}
-            </BenefitsList>
-            {isPro ? (
-                <UpgradeButton
-                    select="success"
-                    onClick={() => navigate(`/app/checkout`)}
-                >
-                    Get Started Now
-                </UpgradeButton>
-            ) : (
-                <SwitchToPremiumButton
-                    onClick={() => navigate(`/app/checkout`)}
-                >
-                    Switch to Premium
-                </SwitchToPremiumButton>
-            )}
-        </CardContainer>
-    );
-};
 
 const UpgradePage = () => {
     const subscriptionPlans: Plan[] = [
@@ -74,7 +19,7 @@ const UpgradePage = () => {
                 'Receive personalized course recommendations based on your interests.',
                 'Get assistance from chatbot helper for up to 3 questions per month.',
             ],
-            subscriptionPeriod: 'month',
+            period: 'month',
         },
         {
             id: 2,
@@ -86,8 +31,7 @@ const UpgradePage = () => {
                 'Enjoy all the features included in the Free Plan.',
                 'Enjoy unlimited access to the chatbot helper feature.',
             ],
-            subscriptionPeriod: 'month',
-            myPlan: true,
+            period: 'month',
         },
     ];
     return (
@@ -98,7 +42,7 @@ const UpgradePage = () => {
             <CardsOuterContainer>
                 <CardsInnerContainer>
                     {subscriptionPlans.map((plan) => {
-                        return <Card {...plan} />;
+                        return <PricingCard {...plan} key={plan.id} />;
                     })}
                 </CardsInnerContainer>
             </CardsOuterContainer>

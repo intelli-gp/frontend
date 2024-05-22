@@ -6,12 +6,12 @@ export const ImageContainer = styled.div<{ width?: string; height?: string }>`
     height: ${({ height }) => height || '100%'};
 `;
 
-export const Image = styled.img`
+export const Image = styled.img<{ objectFit?: string }>`
     position: absolute;
     width: 100%;
     height: 100%;
     border-radius: inherit;
-    object-fit: cover;
+    object-fit: ${({ objectFit }) => objectFit || 'cover'};
     object-position: center;
     z-index: 2;
 `;

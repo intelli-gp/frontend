@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { CiLogin } from 'react-icons/ci';
 import { IoPersonOutline, IoPersonSharp } from 'react-icons/io5';
 import { MdLogin } from 'react-icons/md';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Navigation } from 'swiper/modules';
+import { Swiper } from 'swiper/react';
 
 import Section2img from '../../assets/imgs/about-illustration1.svg';
 import ChatBot from '../../assets/imgs/chatBot-illustration.svg';
@@ -11,69 +13,95 @@ import Courses from '../../assets/imgs/courses-illustration.svg';
 import icons from '../../assets/imgs/icons.svg';
 import StudyGroup from '../../assets/imgs/studyGroup-illustration.svg';
 import StudyPlanner from '../../assets/imgs/studyPlanner-illustration.svg';
-import Feature from '../../components/Feature';
-import SingleBlog from '../../components/article-item/article-item.component';
 import Button from '../../components/button/button.component';
+import { FeatureCard } from '../../components/feature-card/feature-card.component';
+import PricingCard from '../../components/pricing-card/pricing-card.component';
+import { SwiperCustomSlide } from '../../components/user-card/user-card.styles';
+import VerticalArticle from '../../components/vertical-article/vertical-article.component';
 import { BetweenPageAnimation } from '../../index.styles';
 import { useGetArticlesQuery } from '../../store';
-import { ReceivedArticle } from '../../types/article';
-import { Response } from '../../types/response';
+import { Plan } from '../../types/plan';
 import {
     AISection,
-    AIWrapper,
-    AItitle,
-    BlogsContainer,
+    AISectionWrapper,
+    AiImage,
     BlogsSection,
-    BlogsTitle,
-    Body,
-    CardHolder,
+    BrandName,
     CopyRightText,
     FeaturesSection,
-    PricingSection,
+    FeaturesWrapper,
     FooterContainer,
     FooterLink,
     FooterNav,
-    HeroContainer,
     HeroContent,
     HeroSection,
+    HomeSideNav,
+    HomeSideNavItemsContainer,
+    HomeSideNavLink,
     IconContainer,
-    ImgContainer,
-    MenuList,
-    MenuTitles,
+    JoinButton,
     NavContainer,
+    PageBody,
     PageContainer,
-    Sidebar,
-    Check,
+    PricesHolder,
+    PricingSection,
+    SectionRegularText,
+    SectionTitle,
     StyledFooter,
     StyledLink,
-    TextAIContainer,
-    Title,
-    UpperContainer,
-    PricingList,
-    PricesHolder,
-    PricingTitle,
 } from './home.style';
 
 function Nav() {
     const [navbarOpen, setMenuOpen] = useState(false);
 
-    const handleNav = () => {
+    const toggleMobileNav = () => {
         setMenuOpen(!navbarOpen);
     };
-    const menuItems = ['Home', 'About', 'Features', 'Pricing'];
+
+    const menuItems = ['Home', 'Features', 'Pricing'];
 
     return (
-        <NavContainer>
-            <UpperContainer>
-                <Link to="/" className="w-[130px] h-auto">
-                    <Title>Mujedd</Title>
+        <>
+            <HomeSideNav isOpen={navbarOpen}>
+                <div className="flex w-full items-center justify-end px-6">
+                    <AiOutlineClose
+                        size={25}
+                        onClick={toggleMobileNav}
+                        className="cursor-pointer"
+                    />
+                </div>
+                <HomeSideNavItemsContainer>
+                    {menuItems.map((item, index) => (
+                        <li key={index}>
+                            <StyledLink to={`#${item}`}>{item}</StyledLink>
+                        </li>
+                    ))}
+                    <li>
+                        <StyledLink to="/auth/signup">
+                            <IoPersonOutline size={14} />
+                            Sign up
+                        </StyledLink>
+                    </li>
+                    <li>
+                        <StyledLink to="/auth/login">
+                            <CiLogin size={15} />
+                            Log in
+                        </StyledLink>
+                    </li>
+                </HomeSideNavItemsContainer>
+            </HomeSideNav>
+            <NavContainer>
+                <Link to="/">
+                    <BrandName>Mujedd</BrandName>
                 </Link>
                 <div className="flex gap-16 items-center">
                     <div className="hidden lg:flex">
                         <ul className="flex px-1 ">
                             {menuItems.map((item, index) => (
                                 <li key={index}>
-                                    <MenuTitles href={`#${item}`}>{item}</MenuTitles>
+                                    <HomeSideNavLink href={`#${item}`}>
+                                        {item}
+                                    </HomeSideNavLink>
                                 </li>
                             ))}
                         </ul>
@@ -98,64 +126,33 @@ function Nav() {
                                 Login
                             </Button>
                         </Link>
-                        <div
-                            onClick={handleNav}
-                            id="navbarToggler"
+                        <AiOutlineMenu
+                            size={25}
+                            color="#fff"
+                            onClick={toggleMobileNav}
                             className="lg:hidden"
-                        >
-                            <AiOutlineMenu size={25} color="#fff" />
-                        </div>
+                        />
                     </div>
                 </div>
-            </UpperContainer>
-            <Sidebar $navbarOpen={navbarOpen}>
-                <div className="flex w-full items-center justify-end px-6">
-                    <div onClick={handleNav} className="cursor-pointer">
-                        <AiOutlineClose size={25} />
-                    </div>
-                </div>
-                <MenuList>
-                    {menuItems.map((item, index) => (
-                        <li key={index}>
-                            <a href="#">{item}</a>
-                        </li>
-                    ))}
-                    <li>
-                        <StyledLink to="/auth/signup">
-                            <span>
-                                <IoPersonOutline size={14} />
-                                Sign up
-                            </span>
-                        </StyledLink>
-                    </li>
-                    <li>
-                        <StyledLink to="/auth/login">
-                            <span>
-                                <CiLogin size={15} />
-                                Log in
-                            </span>
-                        </StyledLink>
-                    </li>
-                </MenuList>
-            </Sidebar>
-        </NavContainer>
+            </NavContainer>
+        </>
     );
 }
 
 function Hero() {
     return (
-        <HeroSection id='Home'>
-            <HeroContainer>
-                <HeroContent>
-                    <h1>Turn Your Ambition Into Success Story.</h1>
-                    <p>
-                        In our student platform, we designed features to support
-                        and enhance your educational journey, enabling you to
-                        thrive academically. Join us today and unlock your
-                        academic potential.
-                    </p>
-                </HeroContent>
-            </HeroContainer>
+        <HeroSection id="Home">
+            <HeroContent>
+                <SectionTitle>
+                    Turn Your Ambition Into Success Story.
+                </SectionTitle>
+                <SectionRegularText>
+                    In our student platform, we designed features to support and
+                    enhance your educational journey, enabling you to thrive
+                    academically. Join us today and unlock your academic
+                    potential.
+                </SectionRegularText>
+            </HeroContent>
         </HeroSection>
     );
 }
@@ -163,181 +160,143 @@ function Hero() {
 function FeatureSection() {
     const features = [
         {
-            color: 'bg-indigo-300',
-            imgURL: StudyPlanner,
+            image: StudyPlanner,
             title: 'Study Planner',
-            para: 'Stay organized and on track with our intuitive study planner, allowing you to schedule your study sessions, and monitor your progress.',
-            additionalClass: 'text-txt font-semibold',
+            description:
+                'Stay organized and on track with our intuitive study planner, allowing you to schedule your study sessions, and monitor your progress.',
+            className: 'bg-indigo-200',
         },
         {
-            color: 'bg-indigo-900',
-            imgURL: Courses,
+            image: Courses,
             title: 'Courses Recommendations',
-            para: 'Receive tailored course recommendations based on your academic interests, ensuring you make the most informed choices.',
-            additionalClass: 'text-white',
+            description:
+                'Receive tailored course recommendations based on your academic interests, ensuring you make the most informed choices.',
+            className: 'bg-indigo-900 text-[var(--gray-300)]',
         },
         {
-            color: 'bg-indigo-900',
-            imgURL: ChatBot,
+            image: ChatBot,
             title: 'Chatbot Helper',
-            para: 'Get instant assistance and guidance for your academic queries and challenges through our chatbot helper.',
-            additionalClass: 'text-white',
+            description:
+                'Get instant assistance and guidance for your academic queries and challenges through our chatbot helper.',
+            className: 'bg-indigo-900 text-[var(--gray-300)]',
         },
         {
-            color: 'bg-indigo-300',
-            imgURL: StudyGroup,
+            image: StudyGroup,
             title: 'Study Group Finder',
-            para: 'Connect with like-minded peers by using our study group finder, which helps you discover and join study groups for your courses.',
-            additionalClass: 'text-txt font-semibold',
+            description:
+                'Connect with like-minded peers by using our study group finder, which helps you discover and join study groups for your courses.',
+            className: 'bg-indigo-200',
         },
     ];
     return (
-        <div id='Features'>
-            <AISection>
-                <div>
-                    <AIWrapper>
-                        <ImgContainer>
-                            <img src={Section2img} alt="about img" />
-                        </ImgContainer>
-                        <TextAIContainer>
-                            <div className="mb-2 sm:mb-10">
-                                <AItitle>AI-Powered Service</AItitle>
-                            </div>
-                            <p>
-                                Gain access to our cutting-edge AI-based content
-                                service, where you can request video
-                                explanations on specific topics in your favorite
-                                professor's style, enhancing your understanding
-                                and engagement.
-                            </p>
-                            <Button
-                                select="secondary"
-                                className="w-4/6! rounded-lg text-xl! px-8 py-2.5 shadow-sm md:w-max! h-auto"
-                            >
-                                See more
-                            </Button>
-                        </TextAIContainer>
-                    </AIWrapper>
-                </div>
-            </AISection>
-
+        <section id="Features" className="w-full">
             <FeaturesSection>
-                <div>
+                <SectionTitle> Our Features</SectionTitle>
+                <FeaturesWrapper>
                     {features.map((feature, index) => (
-                        <Feature
+                        <FeatureCard
                             key={index}
-                            color={feature.color}
-                            imgURL={feature.imgURL}
+                            image={feature.image}
                             title={feature.title}
-                            para={feature.para}
-                            additionalClass={feature.additionalClass}
-                            typoStyles="w-[60%]"
+                            description={feature.description}
+                            className={feature.className}
                         />
                     ))}
-                </div>
+                </FeaturesWrapper>
             </FeaturesSection>
-        </div>
+            <AISection>
+                <AISectionWrapper>
+                    <AiImage
+                        transparentPlaceholder
+                        src={Section2img}
+                        objectFit="contain"
+                        alt="robot image"
+                    />
+                    <div className="flex flex-col">
+                        <SectionTitle>AI-Powered Service</SectionTitle>
+                        <SectionRegularText>
+                            Gain access to our cutting-edge AI-based content
+                            service, where you can request video explanations on
+                            specific topics in your favorite professor's style,
+                            enhancing your understanding and engagement.
+                        </SectionRegularText>
+
+                        <JoinButton select="success">
+                            <Link
+                                to={'/auth/signup'}
+                                className="w-full text-[inherit]"
+                            >
+                                Join now
+                            </Link>
+                        </JoinButton>
+                    </div>
+                </AISectionWrapper>
+            </AISection>
+        </section>
     );
 }
 
 function BlogSection() {
     const { data } = useGetArticlesQuery();
-    const [articles, setArticles] = useState<ReceivedArticle[]>([]);
-    const receivedData = (data as unknown as Response)?.data ?? [];
+    const articles = data?.data?.slice(0, 10) ?? [];
 
-    useEffect(() => {
-        setArticles(receivedData);
-    }, [data]);
     return (
         <BlogsSection>
-            <div>
-                <BlogsTitle>
-                    From Our Latest Blogs
-                </BlogsTitle>
-                <BlogsContainer>
-                    {articles?.slice(0, 3).map((article: ReceivedArticle) => {
-                        return <SingleBlog {...article} />;
-                    })}
-                </BlogsContainer>
-            </div>
+            <SectionTitle>Latest Blogs</SectionTitle>
+            <Swiper
+                navigation={true}
+                spaceBetween={20}
+                modules={[Navigation]}
+                className="w-full !p-2"
+                slidesPerView={'auto'}
+            >
+                {articles.map((article) => (
+                    <SwiperCustomSlide key={article.ID} width="350px">
+                        <VerticalArticle {...article} />
+                    </SwiperCustomSlide>
+                ))}
+            </Swiper>
         </BlogsSection>
     );
 }
-type Type = {
-    id: number;
-    type: string;
-    price: number;
-    para: string[];
-    payment: string;
-};
 
-const Card = ({ el }: { el: Type }) => {
-    const navigate = useNavigate();
-    return (
-        <CardHolder Pro={el.type === 'Pro'}  onClick ={()=>navigate("/auth/login")}>
-            <span className='flex  flex-col justify-start gap-4 items-start w-[35%] p-2'>
-            <h2 className='text-[38px] '>
-                    {el.type}
-                </h2>
-                <div className=' w-[100%] flex text-xs py-6 items-end gap-2'>
-                    <h1 className="font-extrabold text-[44px]">
-                        {el.price}$
-                    </h1>
-                    <p>/Monthly</p>
-                </div>
-            </span>
-            <PricingList>
-                {el.para.map((sentence) => (
-                    <div className=" pb-2  pl-6 relative w-[100%] ">
-                        <Check/>
-                        <li>{sentence}</li>
-                    </div>
-                ))}
-            </PricingList>
-        </CardHolder>
-    );
-};
 function PriceSection() {
-
-    const subscriptionPlans: Type[] = [
+    const subscriptionPlans: Plan[] = [
         {
             id: 1,
-            type: 'Free',
+            title: 'starter',
             price: 0,
-            para: [
+            benefits: [
                 'Tailor and design personalized study plans.',
                 'Find and collaborate with study groups.',
-                'Receive personalized course recommendations based on your progress and interests.',
+                'Receive personalized course recommendations based on your interests.',
                 'Get assistance from chatbot helper for up to 3 questions per month.',
             ],
-            payment: "Monthly",
+            period: 'month',
         },
         {
             id: 2,
-            type: 'Pro',
+            title: 'premium',
             price: 12,
-            para: [
+            benefits: [
                 'Enjoy all the features included in the Free Plan.',
                 'Enjoy unlimited access to the chatbot helper feature.',
                 'Enjoy all the features included in the Free Plan.',
                 'Enjoy unlimited access to the chatbot helper feature.',
             ],
-            payment: 'Monthly',
+            period: 'month',
         },
-
     ];
     return (
-        <PricingSection id='Pricing'>
-            <PricingTitle>
-                Our Prices
-            </PricingTitle>
+        <PricingSection id="Pricing">
+            <SectionTitle>Pricing</SectionTitle>
             <PricesHolder>
-            {subscriptionPlans.map((plan) => {
-                return <Card el={plan}/>;
-
-            })}
+                {subscriptionPlans.map((plan) => {
+                    return (
+                        <PricingCard {...plan} key={plan.id} withoutButton />
+                    );
+                })}
             </PricesHolder>
-           
         </PricingSection>
     );
 }
@@ -376,15 +335,16 @@ function HomePage() {
         <>
             <Nav />
             <PageContainer>
-                <Body {...BetweenPageAnimation}>
+                <PageBody {...BetweenPageAnimation}>
                     <Hero />
                     <FeatureSection />
                     <BlogSection />
                     <PriceSection />
-                </Body>
+                </PageBody>
                 <Footer />
             </PageContainer>
         </>
     );
 }
+
 export default HomePage;

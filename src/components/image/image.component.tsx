@@ -14,6 +14,11 @@ type EnhancedImageProps = {
     imageClassName?: string;
 
     transparentPlaceholder?: boolean;
+
+    /**
+     * @default 'cover'
+     */
+    objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
 };
 
 type ImageErrorEvent = React.SyntheticEvent<HTMLImageElement, Event>;
@@ -27,12 +32,14 @@ const EnhancedImage = ({
     alt,
     className,
     transparentPlaceholder = false,
+    objectFit = 'cover',
 }: EnhancedImageProps) => {
     return (
         <ImageContainer className={className}>
             <Image
                 src={src ?? 'invalid image'}
                 alt={alt ?? ''}
+                objectFit={objectFit}
                 onError={(e: ImageErrorEvent) => {
                     // TODO: may want to change placeholder to a default image
                     e.currentTarget.src = 'https://via.placeholder.com/150';

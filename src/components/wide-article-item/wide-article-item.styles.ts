@@ -67,11 +67,17 @@ export const ArticleTitle = styled.h1<{ lines?: number }>`
     hyphens: auto;
     font-size: 1.75rem;
     font-weight: 700;
-    line-height: 1.15;
+    line-height: 1.1;
+    letter-spacing: -1px;
     ${CSSTextLinesCountLimit}
     @media (max-width: 768px) {
         font-size: 1.25rem;
     }
+`;
+
+export const ArticleText = styled.p<{ lines?: number }>`
+    line-height: 1.5;
+    ${CSSTextLinesCountLimit}
 `;
 
 export const AuthorPicture = styled(EnhancedImage)`
