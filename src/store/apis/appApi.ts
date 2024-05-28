@@ -76,6 +76,7 @@ export const appApi = createApi({
         'Group',
         'Course',
         'PaymentMethods',
+        'Subscriptions',
         'Bookmarks',
         'User Notifications',
         'Followings',
