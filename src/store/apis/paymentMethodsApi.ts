@@ -1,27 +1,46 @@
 import { appApi } from '.';
+import {
+    AddPaymentMethodDto,
+    ReceivedPaymentMethod,
+} from '../../types/payment-method';
+import { GenericResponse } from '../../types/response';
 
 export const paymentMethodsApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
-        addPaymentMethods: builder.mutation({
+        addPaymentMethod: builder.mutation<
+            GenericResponse<ReceivedPaymentMethod>,
+            AddPaymentMethodDto
+        >({
             invalidatesTags: ['PaymentMethods'],
             query: (paymentMethod) => ({
-                url: '/payment-method',
+                url: '/payment/payment-method',
                 method: 'POST',
                 body: paymentMethod,
             }),
         }),
-        fetchPaymentMethods: builder.query({
+        setPaymentMethodAsDefault: builder.mutation<void, AddPaymentMethodDto>({
+            invalidatesTags: ['PaymentMethods'],
+            query: (paymentMethodData) => ({
+                url: `/payment/payment-method/default`,
+                body: paymentMethodData,
+                method: 'PATCH',
+            }),
+        }),
+        fetchPaymentMethods: builder.query<
+            GenericResponse<ReceivedPaymentMethod[]>,
+            void
+        >({
             providesTags: ['PaymentMethods'],
             query: () => ({
-                url: '/payment-method',
+                url: '/payment/payment-method',
                 method: 'GET',
             }),
         }),
-        removePaymentMethod: builder.mutation({
+        removePaymentMethod: builder.mutation<void, AddPaymentMethodDto>({
             invalidatesTags: ['PaymentMethods'],
-            query: (ID) => {
+            query: ({ paymentMethodId }) => {
                 return {
-                    url: `/payment-method/${ID}`,
+                    url: `/payment/payment-method/${paymentMethodId}`,
                     method: 'DELETE',
                 };
             },
@@ -30,7 +49,8 @@ export const paymentMethodsApi = appApi.injectEndpoints({
 });
 
 export const {
-    useAddPaymentMethodsMutation,
+    useAddPaymentMethodMutation,
     useFetchPaymentMethodsQuery,
     useRemovePaymentMethodMutation,
+    useSetPaymentMethodAsDefaultMutation,
 } = paymentMethodsApi;

@@ -4,10 +4,10 @@ import { FaCheckCircle } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import CreditCardModal from '../../components/CreditCardModal';
 import Accordion from '../../components/accordion/accordion.component';
 import Button from '../../components/button/button.component';
 import CardInfo from '../../components/card-info/card-info.component';
+import AddCreditCardModal from '../../components/credit-card-modal/CreditCardModal';
 import { CustomInput } from '../../components/input/Input.component';
 import { Modal } from '../../components/modal/modal.component';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
@@ -22,8 +22,10 @@ import {
     useUpdateUserMutation,
 } from '../../store';
 import { useFetchPaymentMethodsQuery } from '../../store/apis/paymentMethodsApi';
-import { RecievePaymentMethod } from '../../types/payment-method';
-import { Response } from '../../types/response';
+import {
+    useCancelSubscriptionMutation,
+    useGetSubscriptionQuery,
+} from '../../store/apis/subscriptionsApi';
 import { UserToSend } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
@@ -51,15 +53,24 @@ export const SettingsPage = () => {
     const { data: tagsRes } = useGetAllTagsQuery();
     const [triggerUpdateUser, { isLoading, reset: resetUserUpdateMutation }] =
         useUpdateUserMutation();
-    const { data: getPaymentMethods } = useFetchPaymentMethodsQuery(undefined);
-    const PaymentMethodsData: RecievePaymentMethod[] =
-        (getPaymentMethods as unknown as Response)?.data ?? [];
+
+    const { data: paymentMethodResponse } = useFetchPaymentMethodsQuery();
+    const PaymentMethodsData = paymentMethodResponse?.data;
+    console.log({ paymentMethodResponse });
+
     const [triggerGenerate2faCode, { isFetching: isGenerating2faQRCode }] =
         useLazyGenerate2faQuery();
     const [triggerEnable2fa, { isLoading: isEnabling2fa }] =
         useEnable2faMutation();
     const [triggerDisable2fa, { isLoading: isDisabling2fa }] =
         useDisable2faMutation();
+
+    const { data: subscriptionResponse, isLoading: isSubscriptionDataLoading } =
+        useGetSubscriptionQuery();
+    const subscriptionData = subscriptionResponse?.data;
+
+    const [cancelSubscription, { isLoading: isCancellingSubscription }] =
+        useCancelSubscriptionMutation();
 
     const [firstName, setFirstName] = useState(
         storedUser.FullName?.split(' ')[0] ?? '',
@@ -80,13 +91,6 @@ export const SettingsPage = () => {
     const [enable2faIsOpen, setEnable2faIsOpen] = useState(false);
     const [disable2faIsOpen, setDisable2faIsOpen] = useState(false);
     const [QRCode, setQRCode] = useState('');
-
-    function formatExpirationDate(dateString: string) {
-        const date = new Date(dateString);
-        const month = date.toLocaleString('en-US', { month: '2-digit' });
-        const year = date.getFullYear().toString().slice(2);
-        return `${month}/${year}`;
-    }
 
     const handleUpdatePersonalInformation = async () => {
         /**
@@ -205,6 +209,18 @@ export const SettingsPage = () => {
             setDisable2faIsOpen(false);
         } catch (error) {
             errorToast('An error occurred while disabling 2FA');
+            console.log(error);
+        }
+    };
+
+    const handleCancelSubscription = async () => {
+        try {
+            await cancelSubscription({
+                subscriptionId: subscriptionData?.ID as string,
+            }).unwrap();
+            successToast('Subscription cancelled successfully');
+        } catch (error) {
+            errorToast('An error occurred while cancelling your subscription');
             console.log(error);
         }
     };
@@ -503,64 +519,120 @@ export const SettingsPage = () => {
             </Accordion>
 
             <Accordion title="Billing">
+                {isSubscriptionDataLoading ? <p>Loading...</p> : null}
+
                 <div className="flex flex-col p-2">
                     <SectionTitle>Current Plan</SectionTitle>
-                    <div className="flex flex-row justify-between mb-6 font-bold">
-                        <div className="w-[70%] flex flex-col gap-2">
-                            <span className="flex justify-start gap-4 items-center mt-4">
-                                <p className="font-extrabold text-lg">
-                                    Premium{' '}
-                                </p>
-                                <PayTime>Monthly</PayTime>
-                                <p className="mr-6">
-                                    $200
-                                    <span className="text-xs text-[var(--slate-500)] font-medium">
-                                        /month
-                                    </span>
-                                </p>
-                            </span>
-                            <span className="flex gap-2 items-center">
-                                <p>Status: </p>
-                                <span className="flex gap-2 items-center font-extrabold">
-                                    <FaCheckCircle color="green" />
-                                    <p>Active</p>
+                    {!subscriptionData && (
+                        <div className="flex flex-row justify-between mb-6 font-bold">
+                            <div className="w-[70%] flex flex-col gap-2">
+                                <span className="flex justify-start gap-4 items-center mt-4">
+                                    <p className="font-extrabold text-lg">
+                                        Free Plan
+                                    </p>
                                 </span>
-                            </span>
-                            <span className="flex gap-2 items-center">
-                                <div>Joined:</div>
-                                <div className=" font-extrabold">
-                                    <span>April 20, 2024</span>
-                                </div>
-                            </span>
-                            <span className="flex gap-2">
-                                <p>Renew subscription by </p>
-                                <p className="font-extrabold"> May 20, 2024</p>
-                            </span>
+                            </div>
+                            <div className="flex flex-col justify-end gap-4 mt-6 w-[25%]">
+                                <PlanButton
+                                    onClick={() =>
+                                        navigate('/app/upgrade')
+                                    }
+                                >
+                                    Upgrade
+                                </PlanButton>
+                            </div>
                         </div>
-                        <div className="flex flex-col justify-end gap-4 mt-6 w-[25%]">
-                            <PlanButton
-                                onClick={() =>
-                                    navigate('/app/subscriptionManagement')
-                                }
-                            >
-                                Change Plan
-                            </PlanButton>
-                            <PlanButton select="danger" outline={true}>
-                                Cancel Plan
-                            </PlanButton>
+                    )}
+                    {subscriptionData && (
+                        <div className="flex flex-row justify-between mb-6 font-bold">
+                            <div className="w-[70%] flex flex-col gap-2">
+                                <span className="flex justify-start gap-4 items-center mt-4">
+                                    <p className="font-extrabold text-lg">
+                                        Professional
+                                    </p>
+                                    <PayTime>
+                                        {subscriptionData?.Interval}
+                                    </PayTime>
+                                    <p className="mr-6">
+                                        ${subscriptionResponse?.data?.Price}
+                                        <span className="text-xs text-[var(--slate-500)] font-medium">
+                                            /
+                                            {subscriptionData?.Interval ===
+                                            'monthly'
+                                                ? 'month'
+                                                : 'year'}
+                                        </span>
+                                    </p>
+                                </span>
+                                <span className="flex gap-2 items-center">
+                                    <p>Status: </p>
+                                    <span className="flex gap-2 items-center font-extrabold">
+                                        <FaCheckCircle color="green" />
+                                        <p>Active</p>
+                                    </span>
+                                </span>
+                                <span className="flex gap-2 items-center">
+                                    <div>Joined:</div>
+                                    <div className=" font-extrabold">
+                                        <span>
+                                            {new Date(
+                                                subscriptionResponse?.data
+                                                    ?.StartDate as Date,
+                                            ).toLocaleDateString('en-US', {
+                                                year: 'numeric',
+                                                month: '2-digit',
+                                                day: '2-digit',
+                                            })}
+                                        </span>
+                                    </div>
+                                </span>
+                                <span className="flex gap-2">
+                                    <p>Renew subscription by </p>
+                                    <p className="font-extrabold">
+                                        {new Date(
+                                            subscriptionResponse?.data
+                                                ?.RenewalDate as Date,
+                                        ).toLocaleDateString('en-US', {
+                                            year: 'numeric',
+                                            month: '2-digit',
+                                            day: '2-digit',
+                                        })}
+                                    </p>
+                                </span>
+                            </div>
+                            <div className="flex flex-col justify-end gap-4 mt-6 w-[25%]">
+                                <PlanButton
+                                    onClick={() =>
+                                        navigate('/app/upgrade')
+                                    }
+                                >
+                                    Change Plan
+                                </PlanButton>
+                                <PlanButton
+                                    onClick={handleCancelSubscription}
+                                    select="danger"
+                                    loading={isCancellingSubscription}
+                                    outline={true}
+                                >
+                                    Cancel Plan
+                                </PlanButton>
+                            </div>
                         </div>
-                    </div>
-
+                    )}
                     <SectionTitle>Payment Method</SectionTitle>
                     <div className="flex flex-col justify-center items-center gap-4 p-2">
-                        {PaymentMethodsData.map((paymentMethod, index) => (
+                        {PaymentMethodsData?.map((paymentMethod, index) => (
                             <div className="w-[100%]" key={index}>
                                 <CardInfo
-                                    Number={paymentMethod.cardNumber}
-                                    ID={paymentMethod.ID}
-                                    Expire={formatExpirationDate(
-                                        paymentMethod.expiryDate,
-                                    )}
+                                    paymentMethodId={
+                                        paymentMethod.PaymentMethodId
+                                    }
+                                    LastFourDigits={
+                                        paymentMethod.LastFourDigits
+                                    }
+                                    Expire={`${paymentMethod.ExpMonth.toString()}/${paymentMethod.ExpYear.toString()}`}
+                                    Brand={paymentMethod.Brand}
+                                    IsDefault={paymentMethod.IsDefault}
                                 />
                                 {index !== PaymentMethodsData.length - 1 && (
                                     <hr />
@@ -585,7 +657,7 @@ export const SettingsPage = () => {
             {/* Modals */}
             <Enable2faModal />
             <Disable2faModal />
-            <CreditCardModal
+            <AddCreditCardModal
                 showModal={addCreditCardIsOpen}
                 setShowModal={setAddCreditCardIsOpen}
             />

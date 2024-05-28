@@ -1,8 +1,8 @@
-import { number } from 'card-validator';
-import { CardNumberVerification } from 'card-validator/dist/card-number';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { BeatLoader } from 'react-spinners';
 import { PaymentIcon } from 'react-svg-credit-card-payment-icons/dist/index.mjs';
 
+import { useSetPaymentMethodAsDefaultMutation } from '../../store/apis/paymentMethodsApi';
 import { useRemovePaymentMethodMutation } from '../../store/apis/paymentMethodsApi';
 import { errorToast, successToast } from '../../utils/toasts';
 import Button from '../button/button.component';
@@ -11,36 +11,28 @@ import { Modal } from '../modal/modal.component';
 import { CardContainer, EditIcon } from './card-info.style';
 
 interface ModalProps {
-    id: number | undefined;
+    paymentMethodId: string;
     showModal: boolean;
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const DeleteSectionModal: React.FC<ModalProps> = ({
+    paymentMethodId,
     showModal,
     setShowModal,
-    id,
 }) => {
-    const [
-        deleteGroup,
-        { isLoading: isDeletingGroup, isSuccess: groupDeletedSuccessfully },
-    ] = useRemovePaymentMethodMutation();
+    const [deletePaymentMethod, { isLoading }] =
+        useRemovePaymentMethodMutation();
 
     const handleDeleteGroup = async () => {
         try {
-            await deleteGroup(id!).unwrap();
+            await deletePaymentMethod({ paymentMethodId }).unwrap();
+            successToast('Card deleted successfully');
             setShowModal(false);
         } catch (error) {
-            errorToast('Error occurred while deleting the card');
+            errorToast((error as any).data.data.errorMessage);
         }
     };
-
-    // Toasts handling
-    useEffect(() => {
-        if (groupDeletedSuccessfully) {
-            successToast('Deleted the card successfully!');
-        }
-    }, [groupDeletedSuccessfully]);
 
     return (
         <Modal
@@ -55,7 +47,7 @@ const DeleteSectionModal: React.FC<ModalProps> = ({
                         className="!px-8"
                         select="danger"
                         outline
-                        loading={isDeletingGroup}
+                        loading={isLoading}
                         onClick={handleDeleteGroup}
                     >
                         Yes
@@ -72,9 +64,11 @@ const DeleteSectionModal: React.FC<ModalProps> = ({
     );
 };
 type CardInfoProps = {
-    Number: string;
+    paymentMethodId: string;
+    LastFourDigits: string;
     Expire: string;
-    ID: number;
+    Brand: string;
+    IsDefault?: boolean;
 };
 type CardType =
     | 'Alipay'
@@ -94,22 +88,30 @@ type CardType =
     | 'Unionpay'
     | 'Visa';
 
-const CardInfo = ({ Number, Expire, ID }: CardInfoProps) => {
-    const [cardType, setCardType] = useState<CardType>();
+const CardInfo = ({
+    paymentMethodId,
+    LastFourDigits,
+    Expire,
+    Brand,
+    IsDefault = false,
+}: CardInfoProps) => {
     const [showDeleteModal, setDeleteModal] = useState(false);
 
-    const cardNumberValidator: CardNumberVerification = number(Number);
-    console.log(cardNumberValidator?.card?.niceType as CardType);
-    useEffect(() => {
-        setCardType(cardNumberValidator?.card?.niceType as CardType);
-    }, [cardNumberValidator]);
-    const maskedNumber = `**** ${Number.slice(-4)}`;
+    const [setCardAsDefault, { isLoading }] =
+        useSetPaymentMethodAsDefaultMutation();
+
+    const cardType = Brand as CardType;
+    const maskedNumber = `**** **** **** ${LastFourDigits}`;
+
+    console.log({ paymentMethodId, LastFourDigits, Expire, Brand, IsDefault });
 
     const CreditOptions = [
         {
             option: 'Set default',
             handler: () => {
-                setDeleteModal(true);
+                // TODO: call the API to set the default card and refetch the cards
+                setCardAsDefault({ paymentMethodId });
+                // setDeleteModal(true);
             },
         },
         {
@@ -129,6 +131,18 @@ const CardInfo = ({ Number, Expire, ID }: CardInfoProps) => {
                         width={50}
                     />
                     <p className="text-lg font-bold">{maskedNumber}</p>
+
+                    {IsDefault && (
+                        <span className="bg-[var(--indigo-25)] text-[var(--indigo-500)] rounded-full px-2 py-1 text-xs">
+                            Default
+                        </span>
+                    )}
+                    <BeatLoader
+                        className="pt-2"
+                        loading={isLoading}
+                        size={5}
+                        color="var(--indigo-500)"
+                    />
                 </span>
                 <DropdownMenu
                     options={CreditOptions}
@@ -147,7 +161,7 @@ const CardInfo = ({ Number, Expire, ID }: CardInfoProps) => {
                 Expires - {Expire}
             </p>
             <DeleteSectionModal
-                id={ID}
+                paymentMethodId={paymentMethodId}
                 showModal={showDeleteModal}
                 setShowModal={setDeleteModal}
             />
