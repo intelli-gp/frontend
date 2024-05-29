@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components';
 
 export const PageTitle = styled.h1<{ size?: 'lg' | 'md' | 'sm' }>`
+    background-color: white;
+    width: 100%;
     user-select: none;
     line-height: 1.25;
     font-weight: 700;
