@@ -3,10 +3,11 @@ import styled, { css } from 'styled-components';
 import { CSSTextLengthLimit } from '../../index.styles';
 
 const commonInputStyles = css<{ error?: string }>`
-    border: 1px solid var(--gray-600);
+    background-color: var(--indigo-25);
+    border: 1px solid var(--gray-500);
     padding: 0.5rem;
     min-width: 0;
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
     font-size: 0.875rem;
 
     outline-color: ${({ error }) => (error ? 'red' : 'var(--indigo-700)')};
@@ -20,7 +21,7 @@ export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    gap: 0.125rem;
+    gap: 0.25rem;
 `;
 
 export const GridContainer = styled.div`
