@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import Button from '../../../components/button/button.component';
 import TagsInput from '../../../components/tagsInput/tagsInput.component';
 import { FooterButtons } from '../../../components/tagsInput/tagsInput.styles';
 import { BetweenPageAnimation, PageTitle } from '../../../index.styles';
@@ -13,7 +12,7 @@ import {
 } from '../../../store';
 import { useGetAllTagsQuery } from '../../../store';
 import { errorToast } from '../../../utils/toasts';
-import { PageContainer } from './interests.styles';
+import { ContinueButton, PageContainer, SubTitle } from './interests.styles';
 
 const InterestsPage = () => {
     const { data: getTagsRes } = useGetAllTagsQuery(undefined);
@@ -64,13 +63,11 @@ const InterestsPage = () => {
 
     return (
         <PageContainer {...BetweenPageAnimation}>
-            <header>
+            <header className="sticky top-0 w-full z-10 bg-white">
                 <PageTitle className="text-center">
                     Add your interests
                 </PageTitle>
-                <h3 className="text-lg text-[var(--gray-800)] text-center">
-                    Help us to customize your feed
-                </h3>
+                <SubTitle>Help us to customize your feed</SubTitle>
             </header>
 
             <main className="flex flex-col flex-1 items-center justify-center w-full ">
@@ -83,9 +80,9 @@ const InterestsPage = () => {
             </main>
 
             <FooterButtons>
-                <Button onClick={handleContinue} loading={isLoading}>
+                <ContinueButton onClick={handleContinue} loading={isLoading}>
                     Continue
-                </Button>
+                </ContinueButton>
             </FooterButtons>
         </PageContainer>
     );

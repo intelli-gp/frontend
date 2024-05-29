@@ -1,22 +1,32 @@
+import { AnimatePresence } from 'framer-motion';
 import Fuse from 'fuse.js';
 import { kebabCase } from 'lodash';
 import { useEffect, useLayoutEffect, useState } from 'react';
 
 import { useGetSuggestedTagsQuery } from '../../store';
 import { infoToast, warningToast } from '../../utils/toasts';
-import Button from '../button/button.component';
 import { CustomInput } from '../input/Input.component';
+import { Label } from '../input/input.styles';
 import Tag from '../tag/tag.component';
 import {
-    Dropdown,
+    SectionWrapper,
+    SelectedTags,
     SelectedTagsContainer,
-    TagListItem,
+    SuggestionItem,
+    SuggestionsList,
     TypingSection,
 } from './tagsInput.styles';
 
 type TagsInputProps = {
+    /**
+     * List of initial available tags
+     */
     availableTags: string[];
+    /**
+     * List of selected tags
+     */
     selectedTags: string[];
+
     removeTagFromSelected: (tag: string) => void;
     addTagToSelected: (tag: string) => void;
 };
@@ -30,12 +40,13 @@ const TagsInput = ({
     const [typing, setTyping] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const [filteredTags, setFilteredTags] = useState(availableTags);
+    const [suggestedTags, setSuggestedTags] = useState<string[]>([]);
+
     let {
         data: suggestedTagsRes,
         isLoading,
         isError,
     } = useGetSuggestedTagsQuery(10);
-    const [suggestedTags, setSuggestedTags] = useState<string[]>([]);
 
     const handleUserTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTyping(e.target.value);
@@ -47,11 +58,18 @@ const TagsInput = ({
 
         if (filteredTags.length > 0) {
             setFilteredTags(filteredTags);
-            openDropdown();
+            openSuggestions();
         } else {
             setFilteredTags([]);
-            closeDropdown();
+            closeSuggestions();
         }
+    };
+
+    const handlePressEnter = (e: React.KeyboardEvent) => {
+        if (e.key !== 'Enter') return;
+        e.preventDefault();
+
+        createNewTag(typing);
     };
 
     const createNewTag = (tag: string) => {
@@ -68,11 +86,11 @@ const TagsInput = ({
         setTyping('');
     };
 
-    const closeDropdown = () => {
+    const closeSuggestions = () => {
         setIsOpen(false);
     };
 
-    const openDropdown = () => {
+    const openSuggestions = () => {
         setIsOpen(true);
     };
 
@@ -87,10 +105,14 @@ const TagsInput = ({
     };
 
     const ConditionalDropdown = isOpen && (
-        <Dropdown>
+        <SuggestionsList
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: '' }}
+            exit={{ opacity: 0, height: 0 }}
+        >
             {filteredTags.map((tag) => {
                 return (
-                    <TagListItem
+                    <SuggestionItem
                         key={tag}
                         onClick={() => {
                             addTagToSelected(tag);
@@ -98,16 +120,16 @@ const TagsInput = ({
                         }}
                     >
                         {tag}
-                    </TagListItem>
+                    </SuggestionItem>
                 );
             })}
-        </Dropdown>
+        </SuggestionsList>
     );
 
     useEffect(() => {
-        document.addEventListener('click', closeDropdown);
+        document.addEventListener('click', closeSuggestions);
         return () => {
-            document.removeEventListener('click', closeDropdown);
+            document.removeEventListener('click', closeSuggestions);
         };
     }, []);
 
@@ -125,47 +147,46 @@ const TagsInput = ({
                     value={typing}
                     autoComplete="off"
                     onChange={handleUserTyping}
-                    placeholder="software, programming, web-development, ..."
+                    onKeyDown={handlePressEnter}
+                    placeholder="Search for tags..."
                 />
-                {ConditionalDropdown}
-                <Button
-                    className="flex gap-2"
-                    onClick={() => createNewTag(typing)}
-                >
-                    Add new tag
-                </Button>
+                <AnimatePresence>{ConditionalDropdown}</AnimatePresence>
             </TypingSection>
 
-            <section>
-                <p className="font-bold mb-2">Suggested tags</p>
+            <SectionWrapper>
+                <Label>Suggested tags:</Label>
                 <SelectedTagsContainer>
-                    {suggestedTags.map((tag) => (
-                        <Tag
-                            key={tag}
-                            size="sm"
-                            text={tag}
-                            clickHandler={clickSuggestedTag}
-                        />
-                    ))}
+                    <SelectedTags>
+                        {suggestedTags.map((tag) => (
+                            <Tag
+                                key={tag}
+                                size="sm"
+                                text={tag}
+                                clickHandler={clickSuggestedTag}
+                            />
+                        ))}
+                    </SelectedTags>
                 </SelectedTagsContainer>
-            </section>
+            </SectionWrapper>
 
-            <section className="mb-20">
-                <p className="font-bold mb-2">Your selected tags</p>
+            <SectionWrapper className="mb-10">
+                <Label>Your selected tags:</Label>
                 <SelectedTagsContainer>
-                    {selectedTags.map((tag) => (
-                        <Tag
-                            key={tag}
-                            size="sm"
-                            text={tag}
-                            deletable={true}
-                            deleteHandler={() => {
-                                removeTagFromSelected(tag);
-                            }}
-                        />
-                    ))}
+                    <SelectedTags>
+                        {selectedTags.map((tag) => (
+                            <Tag
+                                key={tag}
+                                size="sm"
+                                text={tag}
+                                deletable={true}
+                                deleteHandler={() => {
+                                    removeTagFromSelected(tag);
+                                }}
+                            />
+                        ))}
+                    </SelectedTags>
                 </SelectedTagsContainer>
-            </section>
+            </SectionWrapper>
         </div>
     );
 };
