@@ -53,6 +53,7 @@ export default function SideNavItem({
 }: Omit<SideNavItemProps, 'id'>) {
     const handleClickExtendableItem = (event: React.MouseEvent) => {
         if (subItems && subItems[0]) {
+            event.stopPropagation();
             event.preventDefault();
             toggleExtend && toggleExtend(event);
         }
