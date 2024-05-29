@@ -1,15 +1,15 @@
 import { appApi } from '.';
-import { Response } from '../../types/response';
+import { GenericResponse } from '../../types/response';
 
 export const tagsApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
-        getAllTags: builder.query<Response, void>({
+        getAllTags: builder.query<GenericResponse<string[]>, void>({
             query: () => ({
                 url: '/tags',
                 method: 'GET',
             }),
         }),
-        getSuggestedTags: builder.query<Response, number>({
+        getSuggestedTags: builder.query<GenericResponse<string[]>, number>({
             query: (limit: number) => ({
                 url: '/tags/suggested',
                 method: 'GET',
