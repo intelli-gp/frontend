@@ -3,11 +3,10 @@ import styled, { css } from 'styled-components';
 import { CSSTextLengthLimit } from '../../index.styles';
 
 const commonInputStyles = css<{ error?: string }>`
-    background-color: var(--indigo-25);
     border: 1px solid var(--gray-500);
-    padding: 0.5rem;
+    padding: 0.5rem 0.75rem;
     min-width: 0;
-    border-radius: 0.5rem;
+    border-radius: 0.25rem;
     font-size: 0.875rem;
 
     outline-color: ${({ error }) => (error ? 'red' : 'var(--indigo-700)')};
