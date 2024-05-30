@@ -23,15 +23,22 @@ const articleApi = appApi.injectEndpoints({
                 body: article,
             }),
         }),
-        getArticles: builder.query<GenericResponse<ReceivedArticle[]>, void>({
+        getArticles: builder.query<
+            GenericResponse<ReceivedArticle[]>,
+            { limit?: number; offset?: number }
+        >({
             providesTags: (result) =>
                 result?.data?.map(({ ID }) => ({
                     type: 'Article',
                     id: ID,
                 })) ?? [],
-            query: () => ({
+            query: ({ limit = 15, offset = 0 }) => ({
                 url: '/articles',
                 method: 'GET',
+                params: {
+                    limit,
+                    offset,
+                },
             }),
         }),
         getArticle: builder.query<GenericResponse<ReceivedArticle>, number>({

@@ -5,7 +5,7 @@ import { appApi } from './appApi';
 
 const userApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
-        fetchUser: builder.query<Response, string>({
+        fetchUser: builder.query<GenericResponse<{user: ReceivedUser}>, string>({
             providesTags: (_result, _error, Username) => [
                 { type: 'User', Username },
             ],
