@@ -13,7 +13,7 @@ import { ChatsContainer, PageContainer } from './chats.styles';
 export const ChatsPage = () => {
     const [searchValue, setSearchValue] = useState('');
 
-    const { data, isLoading, error } = useFetchMessagesQuery();
+    const { data, isLoading } = useFetchMessagesQuery();
 
     const [groups, setGroups] = useState(data ?? []);
 
@@ -39,6 +39,48 @@ export const ChatsPage = () => {
             value === '' ? data : results.map((result) => result.item);
         setGroups(filteredSearch ?? []);
     };
+    const PageContent = () => {
+        if (isLoading) {
+            return (
+                <ChatsContainer>
+                    <Skeleton times={5} className="h-[100px] w-[100%] shrink-0" />
+                </ChatsContainer>
+            );
+        }
+        if (groups.length === 0 && searchValue.trim().length) {
+            return (
+                <EmptyPagePlaceholder
+                    variant="empty-search"
+                    text={`No chats found for "${searchValue}"`}
+                    button={{
+                        text: 'Explore Groups',
+                        path: '/app/groups',
+                    }}
+                />
+            );
+        }
+        if (groups.length === 0) {
+            return (
+                <EmptyPagePlaceholder
+                    variant="no-data"
+                    text="No chats available"
+                    button={{
+                        text: 'Explore Groups',
+                        path: '/app/groups',
+                    }}
+                />
+            );
+        }
+        if (groups.length > 0) {
+            return (
+                <ChatsContainer>
+                    {groups.map((group: Partial<MessagesNotification>) => (
+                        <ChatCard {...group} />
+                    ))}
+                </ChatsContainer>
+            );
+        }
+    };
 
     return (
         <PageContainer {...BetweenPageAnimation}>
@@ -50,28 +92,7 @@ export const ChatsPage = () => {
                 WithoutButton
             />
 
-            {isLoading ? (
-                <div className="h-auto w-full flex justify-center flex-col items-center gap-2">
-                    <Skeleton times={3} className="h-[120px] w-[80%]" />
-                </div>
-            ) : error ? (
-                <div>Error</div>
-            ) : groups?.length || 0 > 0 ? (
-                <ChatsContainer>
-                    {groups?.map((group: Partial<MessagesNotification>) => (
-                        <ChatCard {...group} />
-                    ))}
-                </ChatsContainer>
-            ) : (
-                <EmptyPagePlaceholder
-                    variant="no-data"
-                    text={`You have no messages yet!`}
-                    button={{
-                        text: 'Explore Groups',
-                        path: '/app/groups',
-                    }}
-                />
-            )}
+            <PageContent />
         </PageContainer>
     );
 };
