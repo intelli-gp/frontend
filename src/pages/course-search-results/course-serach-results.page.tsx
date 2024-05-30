@@ -7,6 +7,7 @@ import { CourseResultsGrid } from '../../components/course-results-grid/course-r
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import BackendSupportedPagination from '../../components/pagination/pagination.components';
 import UpButton from '../../components/up-button/up-button.components';
+import { PageTitle } from '../../index.styles';
 import {
     RootState,
     changeCoursesPagePaginationPageNumber,
@@ -24,7 +25,6 @@ import { PaginatedResult } from '../../types/pagination';
 import { errorToast } from '../../utils/toasts';
 import {
     CourseSearchPageHeader,
-    CourseSearchPageTitle,
     CourseSearchResultsPageContainer,
 } from './course-search-results.styles';
 
@@ -71,8 +71,6 @@ export const CoursesSearchResultsPage = () => {
         searchTerm === 'Recommended For You'
             ? isRecommendedCoursesIsLoading
             : isSearchResultsIsLoading;
-
-    console.log({ data });
 
     const prefetchSearchCourses = usePrefetchCourse('searchCourses');
     const prefetechRecommendedCourses = usePrefetchCourse(
@@ -178,20 +176,16 @@ export const CoursesSearchResultsPage = () => {
             <CourseResultsGrid courseResults={data?.Results || []} />
         );
 
-    // if (isDataLoading) {
-    //     return <Spinner />;
-    // }
     return (
         <CourseSearchResultsPageContainer>
             <CourseSearchPageHeader ref={pageHeaderRef}>
-                <CourseSearchPageTitle>Explore Courses</CourseSearchPageTitle>
+                <PageTitle className="text-center">Search Courses</PageTitle>
                 <ExplorePageHeader
                     placeholder="Search Courses..."
                     WithoutButton={true}
                     searchValue={searchTerm as string}
                     onSearchValueChange={onSearchValueChangeHandler}
                     searchHandler={onSearchSubmitHandler}
-                    // suggestionsType="all"
                 />
             </CourseSearchPageHeader>
             {pageContent}

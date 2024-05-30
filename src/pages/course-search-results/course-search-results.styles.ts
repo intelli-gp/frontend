@@ -1,20 +1,18 @@
 import styled from 'styled-components';
 
-export const CourseSearchPageTitle = styled.h1`
-    user-select: none;
-    line-height: 1.25;
-    font-weight: 700;
-    font-size: 2.5rem;
-    letter-spacing: -1.5px;
-`;
-
 export const CourseSearchResultsPageContainer = styled.div`
     position: relative;
-    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2rem;
+    padding: 2rem;
+    width: min(100%, 1200px);
+    margin: 0 auto;
+
+    @media (max-width: 768px) {
+        padding: 2rem 1rem;
+    }
 
     #container {
         margin: 1rem;
@@ -31,6 +29,5 @@ export const CourseSearchPageHeader = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
-    padding-top: 1.5rem;
+    gap: 2rem;
 `;
