@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import { Navigation } from 'swiper/modules';
-import { Swiper } from 'swiper/react';
 
 import Section2img from '../../assets/imgs/about-illustration1.svg';
 import ChatBot from '../../assets/imgs/chatBot-illustration.svg';
@@ -11,7 +9,7 @@ import StudyGroup from '../../assets/imgs/studyGroup-illustration.svg';
 import StudyPlanner from '../../assets/imgs/studyPlanner-illustration.svg';
 import { FeatureCard } from '../../components/feature-card/feature-card.component';
 import PricingCard from '../../components/pricing-card/pricing-card.component';
-import { SwiperCustomSlide } from '../../components/user-card/user-card.styles';
+import { SwiperSlider } from '../../components/swiper/swiper-slider.component';
 import VerticalArticle from '../../components/vertical-article/vertical-article.component';
 import { BetweenPageAnimation } from '../../index.styles';
 import { useGetArticlesQuery } from '../../store';
@@ -25,8 +23,6 @@ import {
     CopyRightText,
     FeaturesSection,
     FeaturesWrapper,
-    FooterLink,
-    FooterNav,
     HeroContent,
     HeroSection,
     HomePageFooter,
@@ -289,25 +285,17 @@ function FeatureSection() {
 }
 
 function BlogSection() {
-    const { data } = useGetArticlesQuery();
-    const articles = data?.data?.slice(0, 10) ?? [];
+    const { data } = useGetArticlesQuery({ limit: 10 });
+    const articles = data?.data ?? [];
 
     return (
         <BlogsSection id="Articles">
             <SectionTitle>Latest Blogs</SectionTitle>
-            <Swiper
-                navigation={true}
-                spaceBetween={20}
-                modules={[Navigation]}
-                className="w-full !p-2"
-                slidesPerView={'auto'}
-            >
+            <SwiperSlider>
                 {articles.map((article) => (
-                    <SwiperCustomSlide key={article.ID} width="350px">
-                        <VerticalArticle {...article} />
-                    </SwiperCustomSlide>
+                    <VerticalArticle {...article} />
                 ))}
-            </Swiper>
+            </SwiperSlider>
         </BlogsSection>
     );
 }
@@ -354,15 +342,11 @@ function PriceSection() {
 }
 
 function Footer() {
-    const menuItems = ['Articles', 'About', 'Services', 'Projects'];
     return (
         <HomePageFooter>
-            <FooterNav>
-                {menuItems.map((item) => (
-                    <FooterLink href="#">{item}</FooterLink>
-                ))}
-            </FooterNav>
-            <CopyRightText>&copy;2024, Mujedd Team</CopyRightText>
+            <CopyRightText>
+                Copyright &copy; 2024 Mujedd. All right reserved.
+            </CopyRightText>
         </HomePageFooter>
     );
 }

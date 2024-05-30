@@ -26,33 +26,6 @@ export const PageContainer = styled(motion.div)`
     &::-webkit-scrollbar-thumb:hover {
         background: var(--indigo-950);
     }
-
-    .swiper-button-next,
-    .swiper-button-prev {
-        &:after {
-            background-color: var(--gray-800);
-            aspect-ratio: 1/1;
-            width: 32px;
-            height: 52px;
-            color: var(--gray-100);
-            padding: 0.25rem;
-            font-size: 1.5rem;
-            font-weight: 900;
-            border-radius: 0.5rem;
-            box-sizing: content-box;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    }
-
-    .swiper-button-next {
-        right: 2.5px !important;
-    }
-
-    .swiper-button-prev {
-        left: 2.5px !important;
-    }
 `;
 
 export const PageBody = styled(motion.div)`
@@ -346,9 +319,8 @@ export const FooterLink = styled.a`
 `;
 
 export const CopyRightText = styled.p`
-    margin-top: 4rem;
     text-align: center;
-    font-size: 1rem;
+    font-size: 0.875rem;
     color: #e5e7eb;
 
     @media (min-width: 1024px) {
