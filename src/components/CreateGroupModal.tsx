@@ -25,7 +25,7 @@ const CreateGroupModal = ({ isOpen, setIsOpen }: CreateGroupModalProps) => {
         useUploadImage();
 
     const { data: allTags } = useGetAllTagsQuery();
-    let tags = allTags?.data;
+    let tags = allTags?.data ?? [];
 
     const resetForm = () => {
         setGroupName('');
