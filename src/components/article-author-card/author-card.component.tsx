@@ -1,20 +1,19 @@
 import { useEffect, useState } from 'react';
 
 import defaultUserImage from '../../assets/imgs/user.jpg';
-import { useLazyFetchUserQuery } from '../../store';
+import { useLazyFetchUserQuery, useLazyGetFollowersQuery } from '../../store';
 import { ReceivedArticle } from '../../types/article';
-import { Response } from '../../types/response';
 import { ReceivedUser } from '../../types/user';
 import { formatCompactNumber } from '../../utils/compactNumbers';
 import { profileURL } from '../../utils/profileUrlBuilder';
 import { errorToast } from '../../utils/toasts';
-import Button from '../button/button.component';
 import {
     AuthorData,
     AuthorDataContainer,
     AuthorHeadline,
     AuthorName,
     AuthorProfileImage,
+    FollowButtonComponent,
 } from './author-card.styles';
 
 type AuthorCardProps = {
@@ -23,31 +22,37 @@ type AuthorCardProps = {
 
 export const AuthorCard = ({ article }: AuthorCardProps) => {
     const [fetchUser] = useLazyFetchUserQuery();
+    const [fetchUserFollowers] = useLazyGetFollowersQuery();
+
     const [authorFullData, setAuthorFullData] = useState<ReceivedUser>();
+    const [authorFollowersCount, setAuthorFollowersCount] = useState<number>();
 
     useEffect(() => {
-        if (article?.Author?.Username) {
-            fetchUser(article?.Author?.Username)
-                .unwrap()
-                .then((data) => {
-                    setAuthorFullData(
-                        (data as Response)?.data?.user as ReceivedUser,
-                    );
-                    console.log(authorFullData);
-                })
-                .catch(() => errorToast("Couldn't fetch author data"));
-        }
+        if (!article?.Author?.Username) return;
+        fetchUser(article?.Author?.Username)
+            .unwrap()
+            .then((response) => {
+                setAuthorFullData(response?.data?.user);
+                fetchUserFollowers(response?.data?.user?.ID)
+                    .unwrap()
+                    .then((data) => {
+                        setAuthorFollowersCount(data?.data?.TotalEntityCount);
+                    });
+            })
+            .catch(() => errorToast("Couldn't fetch author data"));
     }, []);
 
     return (
-        <AuthorDataContainer to={profileURL(article?.Author?.Username)}>
+        <AuthorDataContainer>
             <AuthorProfileImage
                 src={article?.Author?.ProfileImage ?? defaultUserImage}
                 alt="author profile image"
             />
             <AuthorData>
                 <div>
-                    <AuthorName>{article?.Author?.FullName}</AuthorName>
+                    <AuthorName to={profileURL(article?.Author?.Username)}>
+                        {article?.Author?.FullName}
+                    </AuthorName>
                     <AuthorHeadline>{article?.Author?.Headline}</AuthorHeadline>
                 </div>
                 <div className="flex justify-evenly">
@@ -58,12 +63,15 @@ export const AuthorCard = ({ article }: AuthorCardProps) => {
                         title="articles"
                     />
                     <VerticalBadge
-                        count={formatCompactNumber(200)}
+                        count={formatCompactNumber(authorFollowersCount ?? 0)}
                         title="followers"
                     />
                 </div>
                 <div className="flex gap-2">
-                    <Button className="text-sm w-full !py-1">Follow</Button>
+                    <FollowButtonComponent
+                        AnotherUserUserName={article?.Author?.Username}
+                        AnotherUserID={authorFullData?.ID}
+                    />
                 </div>
             </AuthorData>
         </AuthorDataContainer>
