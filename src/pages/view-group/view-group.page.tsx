@@ -65,7 +65,7 @@ const ViewGroupPage = () => {
     const user = useSelector((state: any) => state.auth.user) as ReceivedUser;
     const { id: groupId } = useParams();
     const { data, isSuccess: isGroupDataFetched } = useGetGroupQuery(+groupId!);
-    const { data: allTags } = useGetAllTagsQuery();
+    const { data: _allTags } = useGetAllTagsQuery();
     const groupData: ReceivedGroup = (data as unknown as Response)?.data[0];
     const admins =
         groupData?.GroupMembers?.filter(
@@ -75,6 +75,7 @@ const ViewGroupPage = () => {
         groupData?.GroupMembers?.filter(
             (member) => member.Type === Role.member,
         ) ?? [];
+    const allTags = _allTags?.data ?? [];
 
     const userType =
         groupData?.GroupMembers?.find((member) => member.ID === user.ID)
@@ -363,7 +364,7 @@ const ViewGroupPage = () => {
                                     updateSelectedTags={(tags: string[]) =>
                                         setInterests(tags)
                                     }
-                                    availableTags={allTags?.data}
+                                    availableTags={allTags}
                                     selectedTags={interests}
                                 />
                             ) : (
@@ -419,6 +420,7 @@ const ViewGroupPage = () => {
                     </PeopleContainer>
                 </RightPart>
             </GroupInfoContainer>
+
             <DeleteSectionModal
                 id={groupId}
                 showModal={showDeleteModal}
