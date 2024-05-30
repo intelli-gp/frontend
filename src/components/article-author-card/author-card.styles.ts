@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { CSSTextLengthLimit } from '../../index.styles';
-import EnhancedImage from '../image/image.component';
 import { FollowButton } from '../follow-button/follow-button.component';
+import EnhancedImage from '../image/image.component';
 
 export const AuthorDataContainer = styled.div`
     color: inherit;
@@ -80,4 +80,4 @@ export const FollowButtonComponent = styled(FollowButton)`
     border-radius: 0.5rem;
     border-width: 1px;
     font-weight: 400;
-`
+`;

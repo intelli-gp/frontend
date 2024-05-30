@@ -102,7 +102,7 @@ const ExploreGroupsPage = () => {
 
     useEffect(() => {
         if (!searchInitiated || searchTerm.trim().length === 0) {
-            triggerRecommendations({limit: PAGE_LIMIT});
+            triggerRecommendations({ limit: PAGE_LIMIT });
             dispatch(changeGroupsPageSearchInitiated(false));
         } else {
             searchHandler(searchTerm);

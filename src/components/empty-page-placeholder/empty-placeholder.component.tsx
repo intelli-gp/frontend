@@ -38,7 +38,7 @@ const EmptyPagePlaceholder = ({ variant, text, button }: EmptyVectorProps) => {
                 src={getImage()}
                 alt="illustration"
                 transparentPlaceholder
-                objectFit='contain'
+                objectFit="contain"
             />
             <EmptyVectorText>{text}</EmptyVectorText>
             {button && (

@@ -11,7 +11,7 @@ export const ComponentContainer = styled.div`
 
 export const TagsContainer = styled.div<{ disabled?: boolean }>`
     cursor: ${({ disabled }) => (disabled ? 'auto' : 'text')};
-    
+
     background-color: ${({ disabled }) =>
         disabled ? 'var(--gray-100)' : 'white'};
     pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};

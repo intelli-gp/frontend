@@ -534,9 +534,7 @@ export const SettingsPage = () => {
                             </div>
                             <div className="flex flex-col justify-end gap-4 mt-6 w-[25%]">
                                 <PlanButton
-                                    onClick={() =>
-                                        navigate('/app/upgrade')
-                                    }
+                                    onClick={() => navigate('/app/upgrade')}
                                 >
                                     Upgrade
                                 </PlanButton>
@@ -602,9 +600,7 @@ export const SettingsPage = () => {
                             </div>
                             <div className="flex flex-col justify-end gap-4 mt-6 w-[25%]">
                                 <PlanButton
-                                    onClick={() =>
-                                        navigate('/app/upgrade')
-                                    }
+                                    onClick={() => navigate('/app/upgrade')}
                                 >
                                     Change Plan
                                 </PlanButton>

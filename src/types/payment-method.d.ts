@@ -12,7 +12,7 @@ export type ReceivedPaymentMethod = {
     ExpYear: number;
     FundingType: string;
     LastFourDigits: string;
-    IsDefault: boolean; 
+    IsDefault: boolean;
 };
 
 export type AddPaymentMethodDto = {

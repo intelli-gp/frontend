@@ -1,9 +1,9 @@
 import { IoIosArrowForward } from 'react-icons/io';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { CSSTextLengthLimit } from '../../index.styles';
 import EnhancedImage from '../image/image.component';
-import { Link } from 'react-router-dom';
 
 export const CardContainer = styled.div`
     height: 550px;

@@ -4,7 +4,7 @@ import { Swiper } from 'swiper/react';
 export const SwiperSliderContainer = styled(Swiper)`
     width: 100%;
     padding: 1rem;
-    
+
     .swiper-button-next,
     .swiper-button-prev {
         &:after {

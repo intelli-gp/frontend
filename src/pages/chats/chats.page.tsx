@@ -43,7 +43,10 @@ export const ChatsPage = () => {
         if (isLoading) {
             return (
                 <ChatsContainer>
-                    <Skeleton times={5} className="h-[100px] w-[100%] shrink-0" />
+                    <Skeleton
+                        times={5}
+                        className="h-[100px] w-[100%] shrink-0"
+                    />
                 </ChatsContainer>
             );
         }

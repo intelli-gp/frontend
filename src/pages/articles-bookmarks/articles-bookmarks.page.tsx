@@ -61,7 +61,7 @@ const ArticlesBookmarksPage = () => {
     };
 
     return (
-        <PageContainer className='h-full' {...BetweenPageAnimation}>
+        <PageContainer className="h-full" {...BetweenPageAnimation}>
             <PageTitle ref={headerRef}>My Bookmarks</PageTitle>
             <ContentWrapper>
                 <PageContent />

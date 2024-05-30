@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
+
 import Button from '../../../components/button/button.component';
 
 export const PageContainer = styled(motion.div)`
@@ -21,9 +22,9 @@ export const SubTitle = styled.h3`
     font-size: 1rem;
     margin-top: -0.25rem;
     text-align: center;
-`
+`;
 
 export const ContinueButton = styled(Button)`
     width: 100px;
     height: 40px;
-`
+`;
