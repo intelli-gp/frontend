@@ -11,7 +11,7 @@ export const CardContainer = styled.div<{ unread: boolean }>`
     padding: 0.75rem;
     border-radius: 10px;
     border-radius: 0.5rem;
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px 0px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 5px 1px;
     cursor: pointer;
     background-color: ${({ unread }) =>
         unread ? 'var(--indigo-25)' : 'white'};
