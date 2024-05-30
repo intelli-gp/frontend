@@ -19,7 +19,7 @@ export const PageTitle = styled.h1<{ size?: 'lg' | 'md' | 'sm' }>`
     letter-spacing: -1.5px;
 
     @media (max-width: 768px) {
-        font-size: 2rem;
+        font-size: 2.5rem;
         line-height: 1;
     }
 `;
