@@ -51,7 +51,6 @@ import {
     useLazyFetchUserQuery,
     useLazyGetFollowersQuery,
     useLazyGetFollowingQuery,
-    useToggleFollowUserMutation,
     useUpdateUserMutation,
 } from '../../store';
 import { useFetchSpecificUsersRecommendationQuery } from '../../store/apis/recommendationApi';
@@ -117,8 +116,6 @@ const ProfilePage = () => {
     const { data: _groups } = useGetUserGroupsQuery();
     const { data: _followers } = useGetFollowersQuery(storedUser?.ID!);
     const { data: _following } = useGetFollowingQuery(storedUser?.ID!);
-    const [toggleFollowUser, { isLoading: followUserIsLoading }] =
-        useToggleFollowUserMutation();
 
     const loggedInUserArticles: ReceivedArticle[] = _articles?.data ?? [];
     const loggedInUserGroups: ReceivedGroup[] = _groups?.data ?? [];
@@ -132,7 +129,8 @@ const ProfilePage = () => {
     const following = isAnotherUserProfile
         ? anotherUserFollowing
         : loggedInUserFollowing;
-    const anotherUserData: ReceivedUser = _anotherUserData?.data?.user ?? {};
+    const anotherUserData =
+        _anotherUserData?.data?.user ?? ({} as ReceivedUser);
 
     const [loggedInUserProfileImage, setLoggedInUserProfileImage] = useState(
         storedUser.ProfileImage,
@@ -154,14 +152,6 @@ const ProfilePage = () => {
         { title: 'Followers', isActive: false, label: 'followers' },
         { title: 'Following', isActive: false, label: 'following' },
     ]);
-
-    /**
-     * Check if the other user is followed by me
-     */
-    const isFollowedByMe = (username: string) =>
-        loggedInUserFollowing?.some((user) => {
-            return user.Username === username;
-        });
 
     // TODO: change this when social network is implemented ->> `If implemented hehe`
     const { data: usersRecommendation } =
@@ -361,21 +351,6 @@ const ProfilePage = () => {
         }
     };
 
-    const handleToggleFollowUser = async (userID: number, username: string) => {
-        const alreadyFollowingThisUser = isFollowedByMe(username);
-        try {
-            await toggleFollowUser(userID).unwrap();
-            if (alreadyFollowingThisUser) {
-                successToast('User unfollowed successfully');
-            } else {
-                successToast('User followed successfully');
-            }
-        } catch (error) {
-            errorToast('Error occurred while following the user!');
-            console.log(error);
-        }
-    };
-
     const openImgModal = () => {
         setImgModal((prev) => !prev);
     };
@@ -458,22 +433,18 @@ const ProfilePage = () => {
             <hr />
             <ul>
                 {youMayKnow?.map((user) => {
-                    const followedByMe = isFollowedByMe(user.Username);
                     return (
                         <UserItem
                             Username={user.Username}
                             FullName={user.FullName}
                             ProfileImage={user.ProfileImage}
-                            actionHandler={() =>
-                                handleToggleFollowUser(user.ID, user.Username)
+                            emoji={
+                                <FollowButton
+                                    AnotherUserID={user.ID}
+                                    AnotherUserUserName={user.Username}
+                                    small
+                                />
                             }
-                            actionButtonProps={{
-                                select: `${
-                                    followedByMe ? 'danger' : 'primary'
-                                }`,
-                                outline: followedByMe,
-                            }}
-                            action={`${followedByMe ? 'Unfollow' : 'Follow'}`}
                         />
                     );
                 })}
@@ -507,23 +478,12 @@ const ProfilePage = () => {
         </Button>
     );
 
-    const FollowUserButton = () => {
-        let followedByMe = isFollowedByMe(userData?.Username ?? 'NONE');
-        return (
-            <FollowButton
-                select={`${followedByMe ? 'danger' : 'primary'}`}
-                outline={isFollowedByMe(userData?.Username! ?? 'None')}
-                title={`${followedByMe ? 'Unfollow' : 'Follow'}`}
-                className="ml-auto"
-                onClick={() =>
-                    handleToggleFollowUser(userData?.ID!, userData?.Username!)
-                }
-                loading={followUserIsLoading}
-            >
-                {followedByMe ? 'Unfollow' : 'Follow'}
-            </FollowButton>
-        );
-    };
+    const FollowUserButton = (
+        <FollowButton
+            AnotherUserUserName={anotherUserData.Username!}
+            AnotherUserID={anotherUserData.ID}
+        />
+    );
 
     if (isAnotherUserProfile && anotherUserIsLoading) {
         return <Spinner />;
@@ -582,7 +542,7 @@ const ProfilePage = () => {
                         </UserHeadline>
                     </div>
 
-                    {isAnotherUserProfile ? <FollowUserButton /> : EditButton}
+                    {isAnotherUserProfile ? FollowUserButton : EditButton}
                 </UserDataContainer>
             </PageHeader>
 

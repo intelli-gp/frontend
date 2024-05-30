@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { FaUserCheck } from 'react-icons/fa';
 import styled from 'styled-components';
 
-import Button from '../../components/button/button.component';
+import { FollowButton as FollowButtonComponent } from '../../components/follow-button/follow-button.component';
 import EnhancedImage from '../../components/image/image.component';
 import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
 import { GroupsGrid } from '../explore-groups/explore-groups.style';
@@ -277,20 +277,24 @@ export const YouMayNowSection = styled.section`
     }
 `;
 
-export const FollowButton = styled(Button)`
+export const FollowButton = styled(FollowButtonComponent)<{
+    small?: boolean;
+}>`
     margin-left: auto;
-    padding: 0.35rem 1.5rem;
     align-self: flex-start;
-    height: 2.25rem;
-    width: 110px;
+    height: ${({ small }) => (small ? '30px' : '35px')};
+    font-size: ${({ small }) => (small ? '0.85rem' : '1rem')};
+    width: ${({ small }) => (small ? '85px' : '110px')};
+    border-width: ${({ small }) => (small ? '1px' : '2px')};
+    font-weight: ${({ small }) => (small ? '400' : '500')};
 `;
 
 export const UsersListContainer = styled.ul`
     width: min(500px, 100%);
     margin: 0 auto;
-    border-radius: 0.25rem;
+    border-radius: 1rem;
     background-color: white;
-    box-shadow: 0px 0px 25px 5px rgba(99, 102, 241, 0.1);
+    box-shadow: 0px 0px 10px 5px rgba(99, 102, 241, 0.1);
 `;
 
 export const UsersListContent = styled.div`
