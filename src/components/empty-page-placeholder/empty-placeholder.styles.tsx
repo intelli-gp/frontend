@@ -16,16 +16,17 @@ export const EmptyVectorContainer = styled.div`
 
 export const EmptyVectorImage = styled(EnhancedImage)`
     width: min(400px, 90%);
+    height: auto;
     aspect-ratio: 1/1;
 `;
 
 export const EmptyVectorText = styled.pre`
     font-family: inherit;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 500;
     color: var(--gray-600);
-    text-transform: capitalize;
     text-align: center;
+    white-space: pre-wrap;
 `;
 
 export const EmptyVectorButton = styled(Link)`
