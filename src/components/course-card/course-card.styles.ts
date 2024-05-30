@@ -9,7 +9,7 @@ export const CourseCardContainer = styled.div`
     min-width: 320px;
     max-width: 320px;
     height: 500px;
-    border: 1px solid #e1e1e1;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 8px 2px;
     border-radius: 5px;
 
     &:hover {
