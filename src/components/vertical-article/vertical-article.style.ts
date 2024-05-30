@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { CSSTextLengthLimit } from '../../index.styles';
 import EnhancedImage from '../image/image.component';
+import { Link } from 'react-router-dom';
 
 export const CardContainer = styled.div`
     height: 550px;
@@ -15,9 +16,6 @@ export const CardContainer = styled.div`
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
     user-select: none;
     transition: all 0.25s ease-in-out;
-    &:hover {
-        transform: scale(1.025);
-    }
 `;
 
 export const CardImage = styled(EnhancedImage)`
@@ -47,7 +45,7 @@ export const AuthorImage = styled(EnhancedImage)`
     height: 3rem;
 `;
 
-export const AuthorName = styled.p<{ width?: string }>`
+export const AuthorName = styled(Link)<{ width?: string }>`
     font-weight: bold;
     color: inherit;
     ${CSSTextLengthLimit}
