@@ -7,6 +7,8 @@ export type CourseResultsGridProps = {
     courseResults: Course[];
 };
 
+// Suggestion: move this into search courses page as it is only used there.
+
 export const CourseResultsGrid = ({
     courseResults,
 }: CourseResultsGridProps) => {
@@ -14,7 +16,7 @@ export const CourseResultsGrid = ({
         return (
             <EmptyPagePlaceholder
                 variant={'empty-search'}
-                text={'no results found!\ntry some other keywords.'}
+                text={'No results found! try some other keywords.'}
                 button={{ text: 'Explore Suggestions', path: '/app/courses' }}
             />
         );
