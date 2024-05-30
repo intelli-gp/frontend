@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import Skeleton from '../../components/Skeleton';
+import EmptyPagePlaceholder from '../../components/empty-page-placeholder/empty-placeholder.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import BackendSupportedPagination from '../../components/pagination/pagination.components';
 import UpButton from '../../components/up-button/up-button.components';
@@ -99,40 +100,71 @@ const ExploreArticlesPage = () => {
         }
     };
 
-    useEffect(() => {
+    const PageContent = () => {
+        if (searchIsFetching || articleRecommendationsFetching) {
+            return <ArticlesSkeleton />;
+        }
         if (searchInitiated) {
-            triggerSearch({ searchTerm, limit: PAGE_LIMIT });
+            if (articles?.length === 0) {
+                return (
+                    <EmptyPagePlaceholder
+                        variant="empty-search"
+                        text="No search results found, try some other keywords!"
+                    />
+                );
+            } else {
+                return (
+                    <MainContent>
+                        {articles?.map((article) => {
+                            return (
+                                <WideArticleItem
+                                    key={article.ID}
+                                    {...article}
+                                    onClick={() =>
+                                        navigate(`/app/articles/${article.ID}`)
+                                    }
+                                />
+                            );
+                        })}
+                    </MainContent>
+                );
+            }
         } else {
+            if (recommendedArticles?.length === 0) {
+                return (
+                    <EmptyPagePlaceholder
+                        variant="no-data"
+                        text={`No article suggestions found!, try to search for articles`}
+                    />
+                );
+            } else {
+                return (
+                    <MainContent>
+                        {recommendedArticles?.map((article) => {
+                            return (
+                                <WideArticleItem
+                                    key={article.ID}
+                                    {...article}
+                                    onClick={() =>
+                                        navigate(`/app/articles/${article.ID}`)
+                                    }
+                                />
+                            );
+                        })}
+                    </MainContent>
+                );
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (!searchInitiated || searchTerm.trim().length === 0) {
             triggerArticleRecommendation({ limit: PAGE_LIMIT });
+            dispatch(changeArticlesPageSearchInitiated(false));
+        } else {
+            searchHandler(searchTerm);
         }
     }, []);
-
-    const pageContent =
-        searchIsFetching || articleRecommendationsFetching ? (
-            <ArticlesSkeleton />
-        ) : (
-            <MainContent
-                empty={
-                    searchInitiated
-                        ? articles && !articles.length
-                        : recommendedArticles && !recommendedArticles.length
-                }
-            >
-                {(searchInitiated ? articles : recommendedArticles)?.map(
-                    (article) => {
-                        return (
-                            <WideArticleItem
-                                key={article.ID}
-                                {...article}
-                                onClick={() =>
-                                    navigate(`/app/articles/${article.ID}`)
-                                }
-                            />
-                        );
-                    },
-                )}
-            </MainContent>
-        );
 
     return (
         <PageContainer {...BetweenPageAnimation}>
@@ -151,7 +183,7 @@ const ExploreArticlesPage = () => {
             <SmallTitle>
                 {searchInitiated ? 'search results' : 'suggested articles'}
             </SmallTitle>
-            {pageContent}
+            <PageContent />
             {searchInitiated && (
                 <BackendSupportedPagination
                     pageHeaderElement={headerRef.current!}
