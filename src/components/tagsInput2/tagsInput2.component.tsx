@@ -1,10 +1,16 @@
+import { AnimatePresence } from 'framer-motion';
 import Fuse from 'fuse.js';
 import _ from 'lodash';
 import { KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 import { Label } from '../input/input.styles';
 import Tag from '../tag/tag.component';
-import { Dropdown, TagListItem, TagsContainer } from './tagsInput2.styles';
+import {
+    ComponentContainer,
+    Dropdown,
+    TagListItem,
+    TagsContainer,
+} from './tagsInput2.styles';
 
 type TagsInput2Props = {
     updateSelectedTags: (tags: string[]) => void;
@@ -67,6 +73,10 @@ const TagsInput2 = ({
         }
     };
 
+    const deleteTagHandler = (tag: string) => {
+        updateSelectedTags(selectedTags.filter((t) => t !== tag));
+    };
+
     const openDropdown = () => {
         setIsOpen(true);
     };
@@ -76,7 +86,7 @@ const TagsInput2 = ({
     };
 
     return (
-        <div className="flex flex-col gap-0">
+        <ComponentContainer>
             {label && <Label htmlFor={label}>{label}:</Label>}
             <TagsContainer
                 onClick={() => {
@@ -89,28 +99,29 @@ const TagsInput2 = ({
                     <Tag
                         key={tag}
                         text={tag}
-                        deletable={true}
+                        deleteHandler={() => deleteTagHandler(tag)}
                         size="sm"
-                        deleteHandler={() => {
-                            updateSelectedTags(
-                                selectedTags.filter((t) => t !== tag),
-                            );
-                        }}
+                        deletable
                     />
                 ))}
                 <input
-                    type="text"
                     ref={inputRef}
                     title="Add a new tag"
                     autoComplete="off"
                     className="flex-1"
                     onChange={handleUserTyping}
-                    value={typing}
                     id={label || 'tags-input-2'}
-                    placeholder={`Add tag...`}
+                    placeholder="Add a new tag..."
+                    value={typing}
                 />
+            </TagsContainer>
+            <AnimatePresence>
                 {isOpen && (
-                    <Dropdown>
+                    <Dropdown
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: '' }}
+                        exit={{ opacity: 0, height: 0 }}
+                    >
                         {filteredTags.map((tag) => {
                             return (
                                 <TagListItem
@@ -129,8 +140,8 @@ const TagsInput2 = ({
                         })}
                     </Dropdown>
                 )}
-            </TagsContainer>
-        </div>
+            </AnimatePresence>
+        </ComponentContainer>
     );
 };
 
