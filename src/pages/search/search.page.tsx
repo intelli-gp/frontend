@@ -3,14 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import { Navigation } from 'swiper/modules';
-import { Swiper } from 'swiper/react';
 
 import Skeleton from '../../components/Skeleton';
 import GroupCard from '../../components/chat-group-card/chat-group-card.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
+import { SwiperSlider } from '../../components/swiper/swiper-slider.component';
 import UserCard from '../../components/user-card/user-card.component';
-import { SwiperCustomSlide } from '../../components/user-card/user-card.styles';
 import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
 import { BetweenPageAnimation } from '../../index.styles';
 import {
@@ -159,24 +157,14 @@ const SearchPage = () => {
                 {usersRecommendationsIsFetching || generalSearchIsFetching ? (
                     <UsersSkeleton />
                 ) : (
-                    <Swiper
-                        navigation={true}
-                        spaceBetween={20}
-                        modules={[Navigation]}
-                        className="w-full !p-2"
-                        slidesPerView={'auto'}
-                    >
+                    <SwiperSlider>
                         {(searchInitiated
                             ? searchResult?.users?.slice(0, 10)
                             : recommendedUsers
                         )?.map((user) => {
-                            return (
-                                <SwiperCustomSlide key={user.ID}>
-                                    <UserCard {...user} />
-                                </SwiperCustomSlide>
-                            );
+                            return <UserCard {...user} />;
                         })}
-                    </Swiper>
+                    </SwiperSlider>
                 )}
             </SearchPageSection>
 
@@ -192,31 +180,22 @@ const SearchPage = () => {
                 {generalSearchIsFetching || groupsRecommendationsIsFetching ? (
                     <GroupsSkeleton />
                 ) : (
-                    <Swiper
-                        navigation={true}
-                        spaceBetween={20}
-                        modules={[Navigation]}
-                        className="w-full !p-2"
-                        slidesPerView={'auto'}
-                    >
+                    <SwiperSlider>
                         {searchResult?.groups?.slice(0, 10)?.map((group) => {
                             return (
-                                <SwiperCustomSlide key={group.ID} width="250px">
-                                    <GroupCard
-                                        {...group}
-                                        alreadyJoined={
-                                            group?.GroupMembers?.some(
-                                                (member) =>
-                                                    member?.ID === storedUserId,
-                                            ) ||
-                                            group?.GroupOwner?.ID ===
-                                                storedUserId
-                                        }
-                                    />
-                                </SwiperCustomSlide>
+                                <GroupCard
+                                    {...group}
+                                    alreadyJoined={
+                                        group?.GroupMembers?.some(
+                                            (member) =>
+                                                member?.ID === storedUserId,
+                                        ) ||
+                                        group?.GroupOwner?.ID === storedUserId
+                                    }
+                                />
                             );
                         })}
-                    </Swiper>
+                    </SwiperSlider>
                 )}
             </SearchPageSection>
 
@@ -256,41 +235,31 @@ const SearchPage = () => {
 
 export const UsersSkeleton = () => {
     return (
-        <Swiper
-            navigation={true}
-            spaceBetween={20}
-            modules={[Navigation]}
-            className="w-full !p-2"
-            slidesPerView={'auto'}
-        >
+        <SwiperSlider>
             {[...Array(10)].map((_, index) => {
                 return (
-                    <SwiperCustomSlide key={index}>
-                        <Skeleton className="w-[225px] h-[320px] rounded-[2rem]" />
-                    </SwiperCustomSlide>
+                    <Skeleton
+                        key={index}
+                        className="w-[225px] h-[312px] rounded-[2rem]"
+                    />
                 );
             })}
-        </Swiper>
+        </SwiperSlider>
     );
 };
 
 export const GroupsSkeleton = () => {
     return (
-        <Swiper
-            navigation={true}
-            spaceBetween={20}
-            modules={[Navigation]}
-            className="w-full !p-2"
-            slidesPerView={'auto'}
-        >
+        <SwiperSlider>
             {[...Array(10)].map((_, index) => {
                 return (
-                    <SwiperCustomSlide key={index} width={'250px'}>
-                        <Skeleton className="w-[250px] h-[355px] rounded-[0.5rem]" />
-                    </SwiperCustomSlide>
+                    <Skeleton
+                        key={index}
+                        className="w-[250px] h-[355px] rounded-[0.5rem]"
+                    />
                 );
             })}
-        </Swiper>
+        </SwiperSlider>
     );
 };
 

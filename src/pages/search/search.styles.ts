@@ -14,33 +14,6 @@ export const PageContainer = styled(motion.div)`
     @media (max-width: 768px) {
         padding: 2rem 1rem;
     }
-
-    .swiper-button-next,
-    .swiper-button-prev {
-        &:after {
-            background-color: var(--gray-800);
-            aspect-ratio: 1/1;
-            width: 32px;
-            height: 52px;
-            color: var(--gray-100);
-            padding: 0.25rem;
-            font-size: 1.5rem;
-            font-weight: 900;
-            border-radius: 0.5rem;
-            box-sizing: content-box;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    }
-
-    .swiper-button-next {
-        right: 2.5px !important;
-    }
-
-    .swiper-button-prev {
-        left: 2.5px !important;
-    }
 `;
 
 export const SearchPageSection = styled.div<{ empty?: boolean }>`
