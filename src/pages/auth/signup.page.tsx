@@ -109,7 +109,7 @@ export default function SignupPage() {
             {...BetweenPageAnimation}
             className="flex flex-col justify-center items-center w-full lg:w-3/5 py-8"
         >
-            <PageTitle className="text-center mb-6 sticky top-0">Create Account</PageTitle>
+            <PageTitle size="lg" className="text-center mb-6 sticky top-0">Create Account</PageTitle>
             <FormContainer className="!gap-[0.75rem] !p-0" onSubmit={handleSubmitForm}>
                 <div className="flex gap-2 w-full justify-between 3xs:max-md:flex-col">
                     <CustomInput

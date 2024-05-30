@@ -173,10 +173,12 @@ export default function LoginPage() {
     return (
         <motion.form
             {...BetweenPageAnimation}
-            className="flex flex-col gap-4 3xs:w-[20rem] md:!w-[25rem]"
+            className="flex flex-col gap-[0.75rem] 3xs:w-[20rem] md:!w-[25rem]"
             onSubmit={handleSubmitLogin}
         >
-            <PageTitle className="text-center mb-6">Welcome Back!</PageTitle>
+            <PageTitle size="lg" className="text-center mb-6">
+                Welcome Back!
+            </PageTitle>
 
             <CustomInput
                 required
@@ -214,21 +216,23 @@ export default function LoginPage() {
                 <Link to="/auth/forget-password">Forget your password?</Link>
             </div>
 
-            <Button
-                select="primary700"
-                type="submit"
-                className="flex items-center justify-center gap-2 text-lg h-11 py-2 w-full"
-                loading={isLoading}
-            >
-                Login
-            </Button>
+            <div className="flex flex-col gap-2">
+                <Button
+                    select="primary700"
+                    type="submit"
+                    className="flex items-center justify-center gap-2 text-lg h-11 py-2 w-full"
+                    loading={isLoading}
+                >
+                    Login
+                </Button>
 
-            <GoogleLoginButton>
-                <GoogleLoginLink href="http://localhost:3333/api/auth/login/google">
-                    <GoogleIcon />
-                    Login with google
-                </GoogleLoginLink>
-            </GoogleLoginButton>
+                <GoogleLoginButton>
+                    <GoogleLoginLink href="http://localhost:3333/api/auth/login/google">
+                        <GoogleIcon />
+                        Login with google
+                    </GoogleLoginLink>
+                </GoogleLoginButton>
+            </div>
 
             <p className="flex gap-2 justify-center">
                 Don't have an account?
