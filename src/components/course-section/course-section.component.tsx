@@ -24,6 +24,8 @@ export type CourseSectionProps = {
     courses: Course[];
 };
 
+// Suggestion: move this into search courses page as it is only used there.
+
 export const CourseSection = ({
     courses,
     sectionTitle,
