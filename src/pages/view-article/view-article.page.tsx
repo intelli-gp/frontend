@@ -17,9 +17,10 @@ import {
     ModalExitButton,
     ModalHeader,
 } from '../../components/modal/model.styles';
+import { SwiperSlider } from '../../components/swiper/swiper-slider.component';
 import Tag from '../../components/tag/tag.component';
 import UserItem from '../../components/user-Item/user-item.component';
-import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
+import VerticalArticle from '../../components/vertical-article/vertical-article.component';
 import { BetweenPageAnimation, ModalTitle } from '../../index.styles';
 import {
     useDeleteArticleMutation,
@@ -38,6 +39,7 @@ import {
     EmptyPlaceholder,
     IconWithCounter,
     InteractionCounter,
+    SuggestedArticlesTitle,
     UserItemsContainer,
 } from './view-article.styles';
 import {
@@ -364,28 +366,24 @@ const ViewArticlePage = () => {
                         );
                     }
                 })}
-
-                <hr />
-
-                <SuggestedArticlesContainer>
-                    <p className="font-bold text-xl">
-                        More from the same preference and author
-                    </p>
-                    <>
-                        {recommendedArticles?.map((article) => {
-                            return (
-                                <WideArticleItem
-                                    {...article}
-                                    key={article.ID}
-                                    onClick={() =>
-                                        navigate(`/app/articles/${article.ID}`)
-                                    }
-                                />
-                            );
-                        })}
-                    </>
-                </SuggestedArticlesContainer>
             </ArticleBodyContainer>
+
+            <SuggestedArticlesContainer>
+                <SuggestedArticlesTitle>
+                    More from the same preference:
+                </SuggestedArticlesTitle>
+                <SwiperSlider>
+                    {recommendedArticles?.map((article) => (
+                        <VerticalArticle
+                            {...article}
+                            enableAuthorLink
+                            continueReadingHandler={() => {
+                                navigate(`/app/articles/${article.ID}`);
+                            }}
+                        />
+                    ))}
+                </SwiperSlider>
+            </SuggestedArticlesContainer>
 
             <CommentsContainer ref={commentsPanelRef}>
                 <ModalHeader>
@@ -409,6 +407,7 @@ const ViewArticlePage = () => {
 type animatedIconWrapperProps = {
     children: React.ReactNode;
 };
+
 const AnimatedIconWrapper = ({ children }: animatedIconWrapperProps) => {
     return <motion.span whileTap={{ scale: 1.25 }}>{children}</motion.span>;
 };

@@ -38,8 +38,8 @@ export const ArticleBodyContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    margin-bottom: 6rem;
     padding: 2.5rem 1rem;
+    border-bottom: 2px solid var(--gray-200);
 `;
 
 export const ArticleTitle = styled.h1`
@@ -155,10 +155,17 @@ export const IconWithCounter = styled.div`
     color: var(--gray-600);
 `;
 
+export const SuggestedArticlesTitle = styled.h2`
+    font-size: 1.5rem;
+    font-weight: 700;
+`;
+
 export const SuggestedArticlesContainer = styled.div`
+    max-width: 1000px;
+    margin: 1rem auto 4rem auto;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 0.5rem;
 `;
 
 export const CommentsContainer = styled.div`
