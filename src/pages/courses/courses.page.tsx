@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Spinner from '../../components/Spinner';
 import { CourseSection } from '../../components/course-section/course-section.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
-import { BetweenPageAnimation } from '../../index.styles';
+import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
     RootState,
     changeCoursesPageSearchInitiated,
@@ -17,7 +17,6 @@ import {
 import { CategoryWithCourses, Course } from '../../types/course';
 import {
     CoursePageHeader,
-    CoursePageTitle,
     CourseSectionsWrapper,
     CoursesPageContainer,
 } from './courses.styles';
@@ -53,7 +52,7 @@ export const CoursesPage = () => {
     return (
         <CoursesPageContainer {...BetweenPageAnimation}>
             <CoursePageHeader>
-                <CoursePageTitle>Explore Courses</CoursePageTitle>
+                <PageTitle className="text-center">Explore Courses</PageTitle>
                 <ExplorePageHeader
                     placeholder="Search Courses..."
                     WithoutButton={true}
