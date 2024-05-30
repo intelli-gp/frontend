@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CreateGroupModal from '../../components/CreateGroupModal';
 import Skeleton from '../../components/Skeleton';
 import GroupCard from '../../components/chat-group-card/chat-group-card.component';
+import EmptyPagePlaceholder from '../../components/empty-page-placeholder/empty-placeholder.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import BackendSupportedPagination from '../../components/pagination/pagination.components';
 import UpButton from '../../components/up-button/up-button.components';
@@ -100,33 +101,72 @@ const ExploreGroupsPage = () => {
     };
 
     useEffect(() => {
-        if (searchInitiated) {
-            triggerSearch({ searchTerm, limit: PAGE_LIMIT });
+        if (!searchInitiated || searchTerm.trim().length === 0) {
+            triggerRecommendations({limit: PAGE_LIMIT});
+            dispatch(changeGroupsPageSearchInitiated(false));
         } else {
-            triggerRecommendations({});
+            searchHandler(searchTerm);
         }
     }, []);
 
-    let pageContent =
-        searchIsFetching || recommendationIsFetching ? (
-            <GroupsSkeleton />
-        ) : (
-            <GroupsGrid>
-                {(searchInitiated ? searchResults : recommendedGroups)?.map(
-                    (group) => (
-                        <GroupCard
-                            key={group.ID}
-                            alreadyJoined={
-                                group?.GroupMembers?.some(
-                                    (member) => member?.ID === storedUserId,
-                                ) || group?.GroupOwner?.ID === storedUserId
-                            }
-                            {...group}
-                        />
-                    ),
-                )}
-            </GroupsGrid>
-        );
+    const PageContent = () => {
+        if (searchIsFetching || recommendationIsFetching) {
+            return <GroupsSkeleton />;
+        }
+        if (searchInitiated) {
+            if (searchResults?.length === 0) {
+                return (
+                    <EmptyPagePlaceholder
+                        variant={'empty-search'}
+                        text={'No groups found, try some other keywords!'}
+                    />
+                );
+            } else {
+                return (
+                    <GroupsGrid>
+                        {searchResults?.map((group) => (
+                            <GroupCard
+                                key={group.ID}
+                                alreadyJoined={
+                                    group?.GroupMembers?.some(
+                                        (member) => member?.ID === storedUserId,
+                                    ) || group?.GroupOwner?.ID === storedUserId
+                                }
+                                {...group}
+                            />
+                        ))}
+                    </GroupsGrid>
+                );
+            }
+        } else {
+            if (recommendedGroups?.length === 0) {
+                return (
+                    <EmptyPagePlaceholder
+                        variant={'no-data'}
+                        text={
+                            'No groups suggestions found, try to search for groups!'
+                        }
+                    />
+                );
+            } else {
+                return (
+                    <GroupsGrid>
+                        {recommendedGroups?.map((group) => (
+                            <GroupCard
+                                key={group.ID}
+                                alreadyJoined={
+                                    group?.GroupMembers?.some(
+                                        (member) => member?.ID === storedUserId,
+                                    ) || group?.GroupOwner?.ID === storedUserId
+                                }
+                                {...group}
+                            />
+                        ))}
+                    </GroupsGrid>
+                );
+            }
+        }
+    };
 
     return (
         <PageContainer {...BetweenPageAnimation}>
@@ -149,7 +189,7 @@ const ExploreGroupsPage = () => {
             <SmallTitle>
                 {searchInitiated ? `Search results` : 'suggested groups'}
             </SmallTitle>
-            {pageContent}
+            <PageContent />
             {searchInitiated && (
                 <BackendSupportedPagination
                     pageSize={PAGE_LIMIT}
