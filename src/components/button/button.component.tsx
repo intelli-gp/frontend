@@ -3,7 +3,7 @@ import React, { ButtonHTMLAttributes } from 'react';
 import { ButtonContainer, ButtonIcon } from './button.style';
 
 type ButtonType = 'button' | 'submit' | 'reset' | undefined;
-export type Choice =
+export type ButtonVariant =
     | 'primary'
     | 'secondary'
     | 'success'
@@ -20,7 +20,7 @@ export interface ButtonProps
         Record<string, unknown> {
     children: React.ReactNode;
     type?: ButtonType;
-    select?: Choice;
+    select?: ButtonVariant;
     rounded?: boolean;
     loading?: boolean;
     className?: string;

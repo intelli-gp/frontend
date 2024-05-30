@@ -1,12 +1,12 @@
 import { GoSync } from 'react-icons/go';
 import styled, { css } from 'styled-components';
 
-import { Choice } from './button.component';
+import { ButtonVariant } from './button.component';
 
 interface ButtonProps {
     children: React.ReactNode;
     type: 'button' | 'submit' | 'reset';
-    select?: Choice;
+    select?: ButtonVariant;
     rounded?: boolean;
     loading?: boolean;
     className?: string;
@@ -18,7 +18,7 @@ interface ButtonProps {
 export const ButtonContainer = styled.button<ButtonProps>`
     font-family: 'Inter', sans-serif;
     font-weight: 500;
-    padding: 0.5rem 1rem;
+    padding: 0.35rem 1rem;
     text-align: center;
     display: inline-flex;
     align-items: center;
@@ -27,6 +27,7 @@ export const ButtonContainer = styled.button<ButtonProps>`
     color: white;
     transition: all 0.25s ease-in-out;
     border-radius: ${({ rounded }) => (rounded ? '50%' : '7px')};
+    border-width: 2px;
     cursor: ${({ loading }) => (loading ? 'not-allowed' : 'pointer')};
     ${({ className }) => className};
     &:hover {
@@ -37,17 +38,18 @@ export const ButtonContainer = styled.button<ButtonProps>`
             switch (select) {
                 case 'primary':
                     return css`
-                        border: 2px solid white;
-                        color: white;
+                        border-color: var(--indigo-800);
+                        color: var(--indigo-800);
                         &:hover {
-                            background-color: white;
-                            color: var(--indigo-950);
+                            background-color: var(--indigo-800);
+                            color: white;
                         }
                     `;
                 case 'secondary':
                     return css`
-                        border: 2px solid #718096;
+                        border-color: #718096;
                         color: #718096;
+                        background-color: transparent;
                         &:hover {
                             background-color: #718096;
                             color: white;
@@ -55,8 +57,9 @@ export const ButtonContainer = styled.button<ButtonProps>`
                     `;
                 case 'success':
                     return css`
-                        border: 2px solid var(--green-500);
+                        border-color: var(--green-500);
                         color: var(--green-500);
+                        background-color: transparent;
                         &:hover {
                             background-color: var(--green-500);
                             color: white;
@@ -64,7 +67,7 @@ export const ButtonContainer = styled.button<ButtonProps>`
                     `;
                 case 'warning':
                     return css`
-                        border: 2px solid #ecc94b;
+                        border-color: #ecc94b;
                         color: #ecc94b;
                         &:hover {
                             background-color: #ecc94b;
@@ -73,7 +76,7 @@ export const ButtonContainer = styled.button<ButtonProps>`
                     `;
                 case 'danger':
                     return css`
-                        border: 2px solid #c92a2a;
+                        border-color: #c92a2a;
                         color: #c92a2a;
                         &:hover {
                             background-color: rgba(255, 0, 0, 0.075);
@@ -87,54 +90,58 @@ export const ButtonContainer = styled.button<ButtonProps>`
                 case 'primary':
                     return css`
                         background-color: var(--indigo-800);
-                        border: 2px solid var(--indigo-800);
+                        border-color: var(--indigo-800);
                     `;
                 case 'primary700':
                     return css`
                         background-color: var(--indigo-700);
-                        border: 2px solid var(--indigo-700);
+                        border-color: var(--indigo-700);
                     `;
                 case 'primary500':
                     return css`
                         background-color: var(--indigo-500);
-                        border: 2px solid var(--indigo-500);
+                        border-color: var(--indigo-500);
                     `;
                 case 'primary300':
                     return css`
                         background-color: var(--indigo-300);
-                        border: 2px solid var(--indigo-300);
+                        border-color: var(--indigo-300);
                         color: var(--indigo-950);
                     `;
                 case 'primary200':
                     return css`
                         background-color: var(--indigo-200);
-                        border: 2px solid var(--indigo-200);
+                        border-color: var(--indigo-200);
                         color: var(--indigo-950);
                     `;
                 case 'primary100':
                     return css`
                         background-color: var(--indigo-100);
-                        border: 2px solid var(--indigo-100);
+                        border-color: var(--indigo-100);
                         color: var(--indigo-950);
                     `;
                 case 'secondary':
                     return css`
-                        background-color: #f1ee63;
-                        border: 2px solid #f1ee63;
-
+                        background-color: var(--yellow-400);
+                        border-color: var(--yellow-400);
                         color: var(--gray-800);
                     `;
                 case 'success':
                     return css`
                         background-color: var(--green-500);
+                        border-color: var(--green-500);
                     `;
                 case 'warning':
                     return css`
-                        background-color: #ecc94b;
+                        background-color: var(--yellow-500);
+                        border-color: var(--yellow-500);
+                        color: inherit;
                     `;
                 case 'danger':
                     return css`
-                        background-color: #f56565;
+                        background-color: #c92a2a;
+                        border-color: #c92a2a;
+                        color: white;
                     `;
                 default:
                     return null;
