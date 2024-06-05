@@ -76,8 +76,8 @@ const PomodoroPage = () => {
                     </ModeButton>
                 </ModesContainer>
                 <Timer>
-                    {String(time.minutes).padStart(2, '0')}:
-                    {String(time.seconds).padStart(2, '0')}
+                    {String(time.minutes).padStart(2, '0')||'25'}:
+                    {String(time.seconds).padStart(2, '0')||'00'}
                 </Timer>
                 <div className="flex flex-col items-center gap-3 relative w-[600px] ">
                     <ControlButton onClick={toggleTimer} mode={time.mode}>
