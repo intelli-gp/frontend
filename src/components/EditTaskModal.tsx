@@ -54,7 +54,7 @@ export const EditTaskModal: React.FC<ModalProps> = ({
     const [due_end, setDueEnd] = useState(
         moment.tz(task.DueDate, moment.tz.guess()).format().slice(11, 16),
     );
-    const [status, setStatus] = useState('     ' + task.Status);
+    const [status, setStatus] = useState(task.Status);
     const statuses: Status[] = [
         {
             color: '#1F51FF',
@@ -79,7 +79,7 @@ export const EditTaskModal: React.FC<ModalProps> = ({
         setDueDate(moment(task.DueDate).format().slice(0, 10));
         setDueStart(moment(task.StartDate).format().slice(11, 16));
         setDueEnd(moment(task.DueDate).format().slice(11, 16));
-        setStatus('     ' + task.Status);
+        setStatus(task.Status);
         const matchingStatus = statuses.find((s) => s.status === task.Status);
         if (matchingStatus) {
             setStatusColor(matchingStatus.color);
@@ -276,9 +276,7 @@ export const EditTaskModal: React.FC<ModalProps> = ({
                                     {statuses.map((status) => (
                                         <StatusItem
                                             onClick={() => {
-                                                setStatus(
-                                                    '      ' + status.status,
-                                                );
+                                                setStatus(status.status);
                                                 setStatusColor(status.color);
                                             }}
                                         >

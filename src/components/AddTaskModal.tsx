@@ -60,7 +60,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
     const [due_end, setDueEnd] = useState(
         moment(currentDate).add(1, 'hours').format().slice(11, 16),
     );
-    const [status, setStatus] = useState('     In Progress');
+    const [status, setStatus] = useState('In Progress');
     const [statusIsRunning, setStatusIsRunning] = useState(false);
 
     const handleDueStartChange = (
@@ -186,7 +186,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
         setDueStart(moment(currentDate).format().slice(11, 16));
         setDueEnd(moment(currentDate).add(1, 'hours').format().slice(11, 16));
         setColor('#0369a1');
-        setStatus('      In Progress');
+        setStatus('In Progress');
         setStatusColor('#1F51FF');
     };
 
@@ -229,9 +229,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
                                     {statuses.map((status) => (
                                         <StatusItem
                                             onClick={() => {
-                                                setStatus(
-                                                    '      ' + status.status,
-                                                );
+                                                setStatus(status.status);
                                                 setStatusColor(status.color);
                                             }}
                                         >

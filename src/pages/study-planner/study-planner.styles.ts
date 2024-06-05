@@ -277,6 +277,7 @@ export const StatusIcon = styled(GoDotFill)<{ color?: string }>`
 export const StatusInput = styled(CustomInput)<{ color?: string }>`
     background-color: rgba(${(props) => hexToRgb(props.color)}, 0.2);
     font-size: 0.9rem;
+    padding-left:30px;
 `;
 
 export const StatusContainer = styled(motion.ul)`
