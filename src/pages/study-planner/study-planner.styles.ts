@@ -1,90 +1,95 @@
 import { motion } from 'framer-motion';
 import { GoDotFill } from 'react-icons/go';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { CustomInput } from '../../components/input/Input.component';
 
+const Calendar = css`
+
+.rbc-time-view .rbc-row:first-child {
+    font-size: 1rem;
+    min-height: 3rem !important;
+    flex-grow: 1 !important;
+}
+.rbc-time-header-gutter {
+    width: 79.85px !important;
+}
+.rbc-header {
+    padding: 10px 0 0 0 !important;
+    color: #1b2547;
+    border-bottom: 0px solid !important;
+    font-size: larger;
+    font-weight: 400;
+}
+.rbc-time-header-content {
+    flex: 1;
+    display: flex !important;
+    width: 788px !important;
+}
+
+.rbc-row-bg {
+    border-top: 1px solid #ced4da !important;
+}
+.rbc-header + .rbc-today {
+    color: #312e81;
+}
+.rbc-label {
+    color: #868e96;
+}
+.rbc-allday-cell {
+    visibility: hidden !important;
+    height: 0 !important;
+}
+.rbc-time-header-gutter {
+    border-style: solid;
+
+    border-width: 0 !important;
+}
+.rbc-today {
+    background-color: #e9eafd;
+}
+
+.rbc-event {
+    padding: 0px !important;
+    border-radius: 0px !important;
+    border: none !important;
+    background-color: transparent !important;
+    z-index: 2;
+    position: relative;
+}
+
+.rbc-background-event {
+    padding: 0px !important;
+    border-radius: 0px !important;
+    border: none !important;
+    background-color: transparent !important;
+}
+
+.rbc-event-label {
+    display: none !important;
+}
+
+.rbc-timeslot-group {
+    min-height: 80px !important;
+    border-color: transparent !important;
+}
+
+.rbc-events-container {
+    @media (min-width: 1441px) {
+        margin-right: 0px !important;
+    }
+}
+input[type='time']::-webkit-calendar-picker-indicator {
+    display: none;
+}
+.rbc-current-time-indicator {
+    background-color: #312e81 !important;
+}
+`
+
+
 export const PageContainer = styled(motion.div)`
-    .rbc-time-view .rbc-row:first-child {
-        font-size: 1rem;
-        min-height: 3rem !important;
-        flex-grow: 1 !important;
-    }
-    .rbc-time-header-gutter {
-        width: 79.85px !important;
-    }
-    .rbc-header {
-        padding: 10px 0 0 0 !important;
-        color: #1b2547;
-        border-bottom: 0px solid !important;
-        font-size: larger;
-        font-weight: 400;
-    }
-    .rbc-time-header-content {
-        flex: 1;
-        display: flex !important;
-        width: 788px !important;
-    }
-
-    .rbc-row-bg {
-        border-top: 1px solid #ced4da !important;
-    }
-    .rbc-header + .rbc-today {
-        color: #312e81;
-    }
-    .rbc-label {
-        color: #868e96;
-    }
-    .rbc-allday-cell {
-        visibility: hidden !important;
-        height: 0 !important;
-    }
-    .rbc-time-header-gutter {
-        border-style: solid;
-
-        border-width: 0 !important;
-    }
-    .rbc-today {
-        background-color: #e9eafd;
-    }
-
-    .rbc-event {
-        padding: 0px !important;
-        border-radius: 0px !important;
-        border: none !important;
-        background-color: transparent !important;
-        z-index: 2;
-        position: relative;
-    }
-
-    .rbc-background-event {
-        padding: 0px !important;
-        border-radius: 0px !important;
-        border: none !important;
-        background-color: transparent !important;
-    }
-
-    .rbc-event-label {
-        display: none !important;
-    }
-
-    .rbc-timeslot-group {
-        min-height: 80px !important;
-        border-color: transparent !important;
-    }
-
-    .rbc-events-container {
-        @media (min-width: 1441px) {
-            margin-right: 0px !important;
-        }
-    }
-    input[type='time']::-webkit-calendar-picker-indicator {
-        display: none;
-    }
-    .rbc-current-time-indicator {
-        background-color: #312e81 !important;
-    }
-
+    ${Calendar}
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -265,8 +270,8 @@ export const RightButton = styled.button`
 `;
 export const StatusIcon = styled(GoDotFill)<{ color?: string }>`
     position: absolute;
-    left: 15;
-    top: 48%;
+    left: 2%;
+    top: 50%;
     color: ${(props) => props.color};
 `;
 export const StatusInput = styled(CustomInput)<{ color?: string }>`
