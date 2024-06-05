@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { SetStateAction, useEffect, useState } from 'react';
 import { GoDash, GoDotFill } from 'react-icons/go';
 
@@ -46,13 +46,13 @@ export const EditTaskModal: React.FC<ModalProps> = ({
     const [description, setDescription] = useState(task.Description);
     const [color, setColor] = useState(task?.Color || '#000ff3');
     const [due_date, setDueDate] = useState(
-        moment(task.DueDate).format().slice(0, 10),
+        moment.tz(task.DueDate, moment.tz.guess()).format().slice(0, 10)
     );
     const [due_start, setDueStart] = useState(
-        moment(task.StartDate).format().slice(11, 16),
+        moment.tz(task.StartDate, moment.tz.guess()).format().slice(11, 16)
     );
     const [due_end, setDueEnd] = useState(
-        moment(task.DueDate).format().slice(11, 16),
+        moment.tz(task.DueDate, moment.tz.guess()).format().slice(11, 16),
     );
     const [status, setStatus] = useState('     ' + task.Status);
     const statuses: Status[] = [
@@ -220,8 +220,8 @@ export const EditTaskModal: React.FC<ModalProps> = ({
             ID: id,
             Title: title,
             Description: description,
-            DueDate: due_date + 'T' + due_end,
-            StartDate: due_date + 'T' + due_start,
+            DueDate: moment.tz((due_date + 'T' + due_end), moment.tz.guess()).utc().format('YYYY-MM-DDTHH:mm'),
+            StartDate: moment.tz((due_date + 'T' + due_start), moment.tz.guess()).utc().format('YYYY-MM-DDTHH:mm'),
             Status: status,
             Color: color,
         };

@@ -71,6 +71,7 @@ export const AddTaskModal: React.FC<ModalProps> = ({
         if (newDueStart > due_end) {
             setDueEnd(newDueStart);
         }
+
     };
 
     const handleDueEndChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -172,12 +173,11 @@ export const AddTaskModal: React.FC<ModalProps> = ({
         const task: Partial<sendTask> = {
             Title: title,
             Description: description,
-            DueDate: due_date + 'T' + due_end,
-            StartDate: due_date + 'T' + due_start,
+            DueDate: moment.tz((due_date + 'T' + due_end), moment.tz.guess()).utc().format('YYYY-MM-DDTHH:mm'),
+            StartDate: moment.tz((due_date + 'T' + due_start), moment.tz.guess()).utc().format('YYYY-MM-DDTHH:mm'),
             Status: status,
             Color: color,
         };
-
         await createTask(task as sendTask).unwrap();
         setShowModal(false);
         setTitle('');

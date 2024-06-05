@@ -1,5 +1,5 @@
 import Fuse from 'fuse.js';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import {
@@ -20,6 +20,7 @@ import { EditTaskModal } from '../../components/EditTaskModal';
 import Skeleton from '../../components/Skeleton';
 import Spinner from '../../components/Spinner';
 import TaskBox from '../../components/TaskBox';
+import { Response } from '../../types/response';
 import Button from '../../components/button/button.component';
 import { BetweenPageAnimation } from '../../index.styles';
 import { useFetchTasksQuery } from '../../store';
@@ -36,6 +37,7 @@ import {
     TaskBoxContainer,
     TasksContainer,
 } from './study-planner.styles';
+import { Task } from '../../types/event';
 
 const formats = {
     weekdayFormat: 'ddd',
@@ -50,10 +52,15 @@ export default function StudyPlanner() {
     };
 
     const { data: getTasks, error, isLoading } = useFetchTasksQuery(undefined);
-    const data = getTasks?.data || [];
+    let data: Task[] = (getTasks as unknown as Response)?.data ?? [];
+    data = data.map((task) => ({
+        ...task,
+        DueDate: moment.tz(task.DueDate, moment.tz.guess()).format(),
+        StartDate: moment.tz(task.DueDate, moment.tz.guess()).format()
+    }));
     const [id, setID] = useState(0);
     const [editShow, setEdit] = useState(false);
-    const [tasks, setTasks] = useState(data);
+    const [tasks, setTasks] = useState<Task[]>();
 
     const [searchValue, setSearchValue] = useState('');
     const [showButtons, setShowButtons] = useState(true);
@@ -80,12 +87,14 @@ export default function StudyPlanner() {
         setID(ID);
         setEdit((prev) => !prev);
     };
-    useEffect(() => {
-        setTasks(data);
-    }, [data]);
     const [content, setContent] = useState<JSX.Element | JSX.Element[] | null>(
         null,
     );
+    useEffect(() => {
+
+        setTasks(data);
+    }, [data])
+
 
     useEffect(() => {
         let content;
@@ -107,7 +116,7 @@ export default function StudyPlanner() {
                 </NoTasksContainer>
             );
         } else {
-            const getSortedFutureTasks = (tasks: any[]) => {
+            const getSortedFutureTasks = (tasks: Task[]) => {
                 const currentDateTime = new Date();
                 return tasks
                     .filter((task) => new Date(task.DueDate) > currentDateTime)
@@ -117,18 +126,10 @@ export default function StudyPlanner() {
                             new Date(b.DueDate).getTime(),
                     );
             };
-            const futureTasks = getSortedFutureTasks(tasks);
+            const futureTasks = getSortedFutureTasks(tasks || []);
 
             content = futureTasks.map(
-                (tasks: {
-                    ID: any;
-                    Title: string | undefined;
-                    Status: string | undefined;
-                    Description: string | undefined;
-                    DueDate: string;
-                    StartDate: string;
-                    Color: string | undefined;
-                }) => {
+                (tasks: Task) => {
                     function formatTimestamp(timestamp: string): string {
                         const date = new Date(timestamp);
                         const formattedDate = date.toLocaleString('en-US', {
@@ -154,7 +155,7 @@ export default function StudyPlanner() {
                                 status={tasks.Status}
                                 description={tasks.Description}
                                 DueDate={tasks.DueDate}
-                                StartDate={tasks.StartDate}
+                                StartDate={tasks.DueDate}
                                 due_date={'Due: ' + time}
                                 color={tasks.Color}
                             />
@@ -203,7 +204,6 @@ export default function StudyPlanner() {
         }
 
         useEffect(() => {
-            console.log(currentViewIndex + ' ' + viewState);
             if (viewState === 'week') {
                 setCurrentView(1);
                 goToWeekView();
@@ -265,15 +265,8 @@ export default function StudyPlanner() {
             EVENTS = [];
         } else {
             EVENTS = data?.map(
-                (task: {
-                    ID: any;
-                    Title: string | undefined;
-                    Status: string | undefined;
-                    Description: string | undefined;
-                    StartDate: string;
-                    DueDate: string;
-                    Color: string | undefined;
-                }) => ({
+                (task: Task) => ({
+
                     start: moment(task.StartDate).toDate(),
                     end: moment(task.DueDate).toDate(),
                     data: {

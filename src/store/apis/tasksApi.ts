@@ -20,7 +20,7 @@ export const taskApi = appApi.injectEndpoints({
                 body: task,
             }),
         }),
-        fetchTasks: builder.query({
+        fetchTasks: builder.query<Response, void>({
             providesTags: ['Task'],
             query: () => ({
                 url: '/study-planner',
