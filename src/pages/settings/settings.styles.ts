@@ -58,32 +58,11 @@ export const AddCard = styled(IoAddCircle)`
 `;
 
 export const AddCardContainer = styled(Button)`
-    display: flex;
-    flex-direction: row;
-    justify-items: center;
-    justify-content: center;
-    align-items: center;
-    border: 0px;
-    width: 25%;
-    gap: 8px;
-    padding: 0.7rem 0.5rem;
-    @media (max-width: 1200px) {
-        font-size: 0.85rem;
-    }
+    padding:6px 8px;
 `;
 
 export const PlanButton = styled(Button)`
-    display: flex;
-    flex-direction: row;
-    justify-items: center;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    gap: 8px;
-    padding: 0.7rem 0.5rem;
-    @media (max-width: 1200px) {
-        font-size: 0.85rem;
-    }
+    width:185px;
 `;
 
 export const PayTime = styled.div`
@@ -104,6 +83,18 @@ export const PayTime = styled.div`
         background: var(--slate-100);
     }
 `;
+
+export const NoContentHolder =styled.div`
+    display:flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    padding:1.5rem;
+    width:100%;
+	font-size: 1.25rem;
+line-height: 1.75rem;   
+ font-weight: 540;
+`
 
 export const QRCodeImg = styled(EnhancedImage)`
     width: 200px;

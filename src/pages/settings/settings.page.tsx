@@ -31,6 +31,7 @@ import { errorToast, successToast } from '../../utils/toasts';
 import {
     AddCardContainer,
     EditButton,
+    NoContentHolder,
     InlineInputsContainer,
     PageContainer,
     PayTime,
@@ -55,8 +56,7 @@ export const SettingsPage = () => {
         useUpdateUserMutation();
 
     const { data: paymentMethodResponse } = useFetchPaymentMethodsQuery();
-    const PaymentMethodsData = paymentMethodResponse?.data;
-    console.log({ paymentMethodResponse });
+    const PaymentMethodsData = paymentMethodResponse?.data||[];
 
     const [triggerGenerate2faCode, { isFetching: isGenerating2faQRCode }] =
         useLazyGenerate2faQuery();
@@ -346,7 +346,6 @@ export const SettingsPage = () => {
             </Modal>
         );
     };
-
     return (
         <PageContainer {...BetweenPageAnimation}>
             <PageTitle>Settings</PageTitle>
@@ -442,7 +441,7 @@ export const SettingsPage = () => {
                 </SectionContainer>
 
                 <EditButton
-                    select="warning"
+                    select='secondary'
                     title="Edit this section"
                     loading={isLoading}
                     onClick={handleUpdatePersonalInformation}
@@ -457,27 +456,27 @@ export const SettingsPage = () => {
                         type="password"
                         label={'Current Password'}
                         value=""
-                        onChange={() => {}}
+                        onChange={() => { }}
                     />
                     <InlineInputsContainer>
                         <CustomInput
                             type="password"
                             label={'New Password'}
                             value=""
-                            onChange={() => {}}
+                            onChange={() => { }}
                         />
                         <CustomInput
                             type="password"
                             label={'Repeat New Password'}
                             value=""
-                            onChange={() => {}}
+                            onChange={() => { }}
                         />
                     </InlineInputsContainer>
                     <EditButton
-                        select="warning"
+                        select='secondary'
                         title="Edit this section"
                         loading={false}
-                        onClick={() => {}}
+                        onClick={() => { }}
                     >
                         Save
                     </EditButton>
@@ -513,28 +512,27 @@ export const SettingsPage = () => {
             </Accordion>
 
             <Accordion title="Notifications">
-                <EditButton select="warning" title="Edit this section">
+                <EditButton select='secondary' title="Edit this section">
                     Save
                 </EditButton>
             </Accordion>
 
             <Accordion title="Billing">
-                {isSubscriptionDataLoading ? <p>Loading...</p> : null}
-
                 <div className="flex flex-col p-2">
                     <SectionTitle>Current Plan</SectionTitle>
-                    {!subscriptionData && (
-                        <div className="flex flex-row justify-between mb-6 font-bold">
-                            <div className="w-[70%] flex flex-col gap-2">
-                                <span className="flex justify-start gap-4 items-center mt-4">
-                                    <p className="font-extrabold text-lg">
-                                        Free Plan
-                                    </p>
-                                </span>
-                            </div>
-                            <div className="flex flex-col justify-end gap-4 mt-6 w-[25%]">
+                    {isSubscriptionDataLoading ? 
+                    <NoContentHolder> <p>Loading...</p> </NoContentHolder>  :
+                    !subscriptionData && (
+                        <div className="flex flex-col justify-between mb-6 p-2">
+                            <NoContentHolder>
+                                <p>
+                                You don’t have any active subscription.
+                                </p>
+                            </NoContentHolder>
+                            <div className="flex justify-end gap-4 mt-6 w-full">
                                 <PlanButton
                                     onClick={() => navigate('/app/upgrade')}
+                                    select='secondary'
                                 >
                                     Upgrade
                                 </PlanButton>
@@ -556,7 +554,7 @@ export const SettingsPage = () => {
                                         <span className="text-xs text-[var(--slate-500)] font-medium">
                                             /
                                             {subscriptionData?.Interval ===
-                                            'monthly'
+                                                'monthly'
                                                 ? 'month'
                                                 : 'year'}
                                         </span>
@@ -600,11 +598,6 @@ export const SettingsPage = () => {
                             </div>
                             <div className="flex flex-col justify-end gap-4 mt-6 w-[25%]">
                                 <PlanButton
-                                    onClick={() => navigate('/app/upgrade')}
-                                >
-                                    Change Plan
-                                </PlanButton>
-                                <PlanButton
                                     onClick={handleCancelSubscription}
                                     select="danger"
                                     loading={isCancellingSubscription}
@@ -617,27 +610,35 @@ export const SettingsPage = () => {
                     )}
                     <SectionTitle>Payment Method</SectionTitle>
                     <div className="flex flex-col justify-center items-center gap-4 p-2">
-                        {PaymentMethodsData?.map((paymentMethod, index) => (
-                            <div className="w-[100%]" key={index}>
-                                <CardInfo
-                                    paymentMethodId={
-                                        paymentMethod.PaymentMethodId
-                                    }
-                                    LastFourDigits={
-                                        paymentMethod.LastFourDigits
-                                    }
-                                    Expire={`${paymentMethod.ExpMonth.toString()}/${paymentMethod.ExpYear.toString()}`}
-                                    Brand={paymentMethod.Brand}
-                                    IsDefault={paymentMethod.IsDefault}
-                                />
-                                {index !== PaymentMethodsData.length - 1 && (
-                                    <hr />
-                                )}
-                            </div>
-                        ))}
+                        {PaymentMethodsData?.length == 0 ?
+                            <NoContentHolder>
+                                <p>
+                                No Payment Method.
+                                </p>
+                            </NoContentHolder> :
+                            PaymentMethodsData?.map((paymentMethod, index) => (
+                                <div className="w-[100%]" key={index}>
+                                    <CardInfo
+                                        paymentMethodId={
+                                            paymentMethod.PaymentMethodId
+                                        }
+                                        LastFourDigits={
+                                            paymentMethod.LastFourDigits
+                                        }
+                                        Expire={`${paymentMethod.ExpMonth.toString()}/${paymentMethod.ExpYear.toString()}`}
+                                        Brand={paymentMethod.Brand}
+                                        IsDefault={paymentMethod.IsDefault}
+                                    />
+                                    {index !== PaymentMethodsData.length - 1 && (
+                                        <hr />
+                                    )}
+                                </div>
+                            ))
+                        }
                         <span className="flex justify-end w-full">
                             <AddCardContainer
                                 onClick={() => setAddCreditCardIsOpen(true)}
+                                select='secondary'
                             >
                                 Add Payment Method
                             </AddCardContainer>
