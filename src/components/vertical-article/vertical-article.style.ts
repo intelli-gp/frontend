@@ -60,14 +60,19 @@ export const ArticleTime = styled.time`
     font-weight: 500;
 `;
 
+export const ContinueWrapper = styled(Link)`
+    flex-shrink: 0;
+    margin-left: auto;
+`;
+
 export const ContinueReadingButton = styled(IoIosArrowForward)`
     padding: 0;
-    margin-left: auto;
+
     border-radius: 5rem;
     color: black;
     padding: 0.5rem;
     box-sizing: content-box;
-    flex-shrink: 0;
+
     cursor: pointer;
     transition: all 0.25s ease-in-out;
     background-color: var(--yellow-500);

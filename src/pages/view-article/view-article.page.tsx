@@ -91,6 +91,7 @@ const ViewArticlePage = () => {
         data,
         isLoading: articleIsLoading,
         isFetching: articleIsFetching,
+        isSuccess: articleLoadedSuccessfully,
     } = useGetArticleQuery(parseInt(articleId!));
     const article = data?.data;
     const isArticleOwner =
@@ -114,6 +115,7 @@ const ViewArticlePage = () => {
             },
         },
     ];
+
     if (isArticleOwner) {
         articleOptions.push({
             option: 'Edit',
@@ -224,6 +226,16 @@ const ViewArticlePage = () => {
             )}
         </Modal>
     );
+
+    // Set the title of the page to the article title
+    useEffect(() => {
+        if (articleLoadedSuccessfully) {
+            document.title = `Mujedd | ${article?.Title}`;
+        }
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, [articleLoadedSuccessfully]);
 
     useEffect(() => {
         if (articleIsLoading || articleIsFetching) return;
@@ -377,9 +389,7 @@ const ViewArticlePage = () => {
                         <VerticalArticle
                             {...article}
                             enableAuthorLink
-                            continueReadingHandler={() => {
-                                navigate(`/app/articles/${article.ID}`);
-                            }}
+                            continueReadingLink={`/app/articles/${article.ID}`}
                         />
                     ))}
                 </SwiperSlider>

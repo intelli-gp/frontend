@@ -293,7 +293,7 @@ function BlogSection() {
             <SectionTitle>Latest Blogs</SectionTitle>
             <SwiperSlider>
                 {articles.map((article) => (
-                    <VerticalArticle {...article} />
+                    <VerticalArticle {...article} key={article.ID} />
                 ))}
             </SwiperSlider>
         </BlogsSection>

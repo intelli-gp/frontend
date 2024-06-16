@@ -1,5 +1,4 @@
 import moment from 'moment';
-import { useNavigate } from 'react-router-dom';
 
 import { ReceivedArticle } from '../../types/article';
 import { profileURL } from '../../utils/profileUrlBuilder';
@@ -17,13 +16,14 @@ import {
     CardFooter,
     CardImage,
     ContinueReadingButton,
+    ContinueWrapper,
 } from './vertical-article.style';
 
 type VerticalArticleProps = ReceivedArticle & {
     /**
-     * Function to be called when the user clicks on the article's `continue reading` button
+     * Link to navigate to when the user clicks on the article's `continue reading` button
      */
-    continueReadingHandler?: () => void;
+    continueReadingLink?: string;
 
     /**
      * If true, the author's name will be a link to the author's profile
@@ -39,15 +39,12 @@ const VerticalArticle = ({
     Sections,
     CreatedAt,
     enableAuthorLink,
-    continueReadingHandler,
+    continueReadingLink = '/auth/signup',
 }: VerticalArticleProps) => {
-    const navigate = useNavigate();
     const articleText =
         Sections?.find(
             (section) => section.ContentType === 'markdown',
         )?.Value?.replaceAll('#', '') ?? '';
-
-    const defaultContinueReadingHandler = () => navigate('/auth/signup');
 
     return (
         <CardContainer>
@@ -71,13 +68,9 @@ const VerticalArticle = ({
                         )}
                     </ArticleTime>
                 </div>
-                <ContinueReadingButton
-                    size={24}
-                    title="continue reading"
-                    onClick={
-                        continueReadingHandler ?? defaultContinueReadingHandler
-                    }
-                />
+                <ContinueWrapper to={continueReadingLink}>
+                    <ContinueReadingButton size={24} title="continue reading" />
+                </ContinueWrapper>
             </CardFooter>
         </CardContainer>
     );
