@@ -31,9 +31,6 @@ export const FeatureCard = ({
             x: 0,
             transition: {
                 type: "spring",
-                delay: 0.1,
-                stiffness:100,
-                ease:'easeOut',
                 duration:0.8
             }
         }

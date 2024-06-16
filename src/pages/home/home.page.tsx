@@ -223,7 +223,7 @@ function FeatureSection() {
             description:
                 'Stay organized and on track with our intuitive study planner, allowing you to schedule your study sessions, and monitor your progress.',
             className: 'bg-indigo-200',
-            number: -200
+            number: -300
         },
         {
             image: Courses,
@@ -231,7 +231,7 @@ function FeatureSection() {
             description:
                 'Receive tailored course recommendations based on your academic interests, ensuring you make the most informed choices.',
             className: 'bg-indigo-900 text-[var(--gray-300)]',
-            number: 200
+            number: 300
         },
         {
             image: ChatBot,
@@ -239,7 +239,7 @@ function FeatureSection() {
             description:
                 'Get instant assistance and guidance for your academic queries and challenges through our chatbot helper.',
             className: 'bg-indigo-900 text-[var(--gray-300)]',
-            number: -200
+            number: -300
         },
         {
             image: StudyGroup,
@@ -247,7 +247,7 @@ function FeatureSection() {
             description:
                 'Connect with like-minded peers by using our study group finder, which helps you discover and join study groups for your courses.',
             className: 'bg-indigo-200',
-            number: 200
+            number: 300
         },
     ];
     const cardVariants: Variants = {
