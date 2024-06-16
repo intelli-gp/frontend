@@ -44,6 +44,7 @@ export const CreateButton = styled(motion.button)`
     padding: 0;
     background-color: var(--indigo-200);
     transition: filter 0.15s ease-in-out;
+    flex-shrink: 0;
     svg {
         stroke-width: 0.5;
     }
