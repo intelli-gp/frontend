@@ -50,6 +50,7 @@ export const SenderProfile = styled(EnhancedImage)<{ width?: string }>`
     height: ${({ width }) => (width ? width : '24px')};
     border-radius: 50%;
     aspect-ratio: 1/1;
+    flex-shrink: 0;
 `;
 
 export const SenderName = styled(Link)<{ isMine?: boolean; width?: string }>`
