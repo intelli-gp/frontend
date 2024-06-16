@@ -146,7 +146,6 @@ export const HeroSection = styled.section`
     display: flex;
     justify-content: center;
     background: var(--indigo-50);
-    position: relative; 
     text-align:center;
     background-repeat: no-repeat;
     background-position: center;
@@ -165,6 +164,7 @@ export const HeroContent = styled.div`
     padding: 1rem;
     justify-content: center;
     width: min(600px, 90%);
+    position: relative; 
 
     @media (min-width: 1024px) {
         transform: translateX(25%);
