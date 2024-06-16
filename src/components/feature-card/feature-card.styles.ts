@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
 import EnhancedImage from '../image/image.component';
+import { motion } from 'framer-motion';
 
-export const CardContainer = styled.div`
+export const CardContainer = styled(motion.div)`
     padding: 2rem;
     border-radius: 1rem;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 10px 3px;
