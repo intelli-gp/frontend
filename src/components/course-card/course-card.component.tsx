@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { Link } from 'react-router-dom';
 
 import Button from '../button/button.component';
 import { Rating } from '../rating/rating.component';
@@ -34,17 +35,12 @@ export const CourseCard = ({
     numReviews,
     price,
 }: CourseCardProps) => {
-    const openInNewTab = (url: string) => {
-        window.open(url, '_blank', 'noopener,noreferrer');
-    };
-    const handleLinkRedirect = () => {
-        openInNewTab(`${import.meta.env.VITE_UDEMY_URL}${redirectUrl}`);
-    };
+    const courseLink = `${import.meta.env.VITE_UDEMY_URL}${redirectUrl}`;
     return (
         <CourseCardContainer>
             <CourseThumbnail src={thumbnailUrl} alt="Course Thumbnail" />
             <CourseInfoWrapper>
-                <CourseTitle title={title} onClick={handleLinkRedirect}>
+                <CourseTitle title={title} to={courseLink} target="_blank">
                     {_.startCase(title)}
                 </CourseTitle>
                 <CourseDescription title={description}>
@@ -56,14 +52,15 @@ export const CourseCard = ({
                 <Rating value={avgRating} numParticipants={numReviews} />
             </CourseInfoWrapper>
             <CardFooter>
-                <Button
-                    title="Enroll In this Course"
-                    type="submit"
-                    select="secondary"
-                    onClick={handleLinkRedirect}
-                >
-                    Enroll now
-                </Button>
+                <Link to={courseLink} target="_blank">
+                    <Button
+                        title="Enroll In this Course"
+                        type="submit"
+                        select="secondary"
+                    >
+                        Enroll now
+                    </Button>
+                </Link>
                 <CoursePriceTag>{price}</CoursePriceTag>
             </CardFooter>
         </CourseCardContainer>

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import EnhancedImage from '../image/image.component';
+import { Link } from 'react-router-dom';
 
 export const CourseCardContainer = styled.div`
     position: relative;
@@ -36,10 +37,11 @@ export const CourseInfoWrapper = styled.div`
     padding: 1.5rem 1rem;
 `;
 
-export const CourseTitle = styled.h2`
+export const CourseTitle = styled(Link)`
     cursor: pointer;
     font-weight: 600;
     font-size: 1.3rem;
+    color: inherit;
     display: -webkit-box;
     -webkit-line-clamp: 2; /* Limit to 2 lines */
     -webkit-box-orient: vertical;
