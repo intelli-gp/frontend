@@ -348,5 +348,8 @@ export const Ellipse =styled(motion.div)`
   position: absolute;
   left:-6%;
   border-radius: 50%;
+  @media (max-width: 690px) {
+      left:-8%;
+    }
 `;
 
