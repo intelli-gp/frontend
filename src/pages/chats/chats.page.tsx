@@ -27,6 +27,13 @@ export const ChatsPage = () => {
         setGroups(sortedData ?? []);
     }, [data]);
 
+    useEffect(() => {
+        document.title = 'Messages | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
+
     const handleChangeSearchValue = (value: string) => {
         setSearchValue(value);
         const fuseOptions = {
@@ -39,6 +46,7 @@ export const ChatsPage = () => {
             value === '' ? data : results.map((result) => result.item);
         setGroups(filteredSearch ?? []);
     };
+
     const PageContent = () => {
         if (isLoading) {
             return (

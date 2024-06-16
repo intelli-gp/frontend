@@ -38,6 +38,13 @@ export default function ForgetPasswordPage() {
         }
     }, [isError, isSuccess]);
 
+    useEffect(() => {
+        document.title = 'Forget Password | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         resetPassword(email);

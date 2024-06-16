@@ -39,6 +39,7 @@ export const TagsContainer = styled.div<{ disabled?: boolean }>`
 
 export const Dropdown = styled(SuggestionsList)`
     top: 105%;
+    z-index: 10;
 `;
 
 export const TagListItem = styled(SuggestionItem)``;

@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import PricingCard from '../../components/pricing-card/pricing-card.component';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import { Plan } from '../../types/plan';
@@ -34,6 +36,14 @@ const UpgradePage = () => {
             period: 'month',
         },
     ];
+
+    useEffect(() => {
+        document.title = 'Upgrade | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
+
     return (
         <PageContainer {...BetweenPageAnimation}>
             <PageTitle size="lg" className="text-center !leading-none">

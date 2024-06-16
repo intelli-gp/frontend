@@ -166,6 +166,13 @@ const ExploreArticlesPage = () => {
         }
     }, []);
 
+    useEffect(() => {
+        document.title = 'Explore Articles | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
+
     return (
         <PageContainer {...BetweenPageAnimation}>
             <PageTitle className="text-center" ref={headerRef}>

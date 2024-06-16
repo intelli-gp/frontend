@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import AIimg from '../../assets/imgs/AI-profile.svg';
@@ -108,6 +108,13 @@ const AIHelperPage = () => {
             handleSendMessages();
         }
     };
+
+    useEffect(() => {
+        document.title = 'AI Helper | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
 
     return (
         <PageContainer {...BetweenPageAnimation} className="mujedd-ai-page">

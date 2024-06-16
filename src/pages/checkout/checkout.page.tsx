@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import moment from 'moment';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useCreditCardValidator } from 'react-creditcard-validator';
 import { useNavigate } from 'react-router-dom';
 
@@ -61,6 +61,13 @@ const CheckoutPage = () => {
         return expDateFormatter;
     };
     const navigate = useNavigate();
+
+    useEffect(() => {
+        document.title = 'Checkout | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
 
     return (
         <FlexContainer>

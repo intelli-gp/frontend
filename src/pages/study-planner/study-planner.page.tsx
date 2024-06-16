@@ -20,10 +20,11 @@ import { EditTaskModal } from '../../components/EditTaskModal';
 import Skeleton from '../../components/Skeleton';
 import Spinner from '../../components/Spinner';
 import TaskBox from '../../components/TaskBox';
-import { Response } from '../../types/response';
 import Button from '../../components/button/button.component';
 import { BetweenPageAnimation } from '../../index.styles';
 import { useFetchTasksQuery } from '../../store';
+import { Task } from '../../types/event';
+import { Response } from '../../types/response';
 import {
     ButtonMV,
     CalendarHolder,
@@ -37,7 +38,6 @@ import {
     TaskBoxContainer,
     TasksContainer,
 } from './study-planner.styles';
-import { Task } from '../../types/event';
 
 const formats = {
     weekdayFormat: 'ddd',
@@ -56,7 +56,7 @@ export default function StudyPlanner() {
     data = data.map((task) => ({
         ...task,
         DueDate: moment.tz(task.DueDate, moment.tz.guess()).format(),
-        StartDate: moment.tz(task.DueDate, moment.tz.guess()).format()
+        StartDate: moment.tz(task.DueDate, moment.tz.guess()).format(),
     }));
     const [id, setID] = useState(0);
     const [editShow, setEdit] = useState(false);
@@ -90,11 +90,17 @@ export default function StudyPlanner() {
     const [content, setContent] = useState<JSX.Element | JSX.Element[] | null>(
         null,
     );
+
     useEffect(() => {
+        document.title = 'Study Planner | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
 
+    useEffect(() => {
         setTasks(data);
-    }, [data])
-
+    }, [data]);
 
     useEffect(() => {
         let content;
@@ -128,41 +134,39 @@ export default function StudyPlanner() {
             };
             const futureTasks = getSortedFutureTasks(tasks || []);
 
-            content = futureTasks.map(
-                (tasks: Task) => {
-                    function formatTimestamp(timestamp: string): string {
-                        const date = new Date(timestamp);
-                        const formattedDate = date.toLocaleString('en-US', {
-                            month: 'long',
-                            day: 'numeric',
-                            hour: 'numeric',
-                            minute: 'numeric',
-                            hour12: true,
-                        });
+            content = futureTasks.map((tasks: Task) => {
+                function formatTimestamp(timestamp: string): string {
+                    const date = new Date(timestamp);
+                    const formattedDate = date.toLocaleString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true,
+                    });
 
-                        return formattedDate;
-                    }
-                    const time = formatTimestamp(tasks.DueDate);
-                    return (
-                        <div
-                            className="w-full"
-                            onClick={() => handleEdit(tasks.ID)}
-                        >
-                            <TaskBox
-                                key={tasks.ID}
-                                id={tasks.ID}
-                                title={tasks.Title + ' | '}
-                                status={tasks.Status}
-                                description={tasks.Description}
-                                DueDate={tasks.DueDate}
-                                StartDate={tasks.DueDate}
-                                due_date={'Due: ' + time}
-                                color={tasks.Color}
-                            />
-                        </div>
-                    );
-                },
-            );
+                    return formattedDate;
+                }
+                const time = formatTimestamp(tasks.DueDate);
+                return (
+                    <div
+                        className="w-full"
+                        onClick={() => handleEdit(tasks.ID)}
+                    >
+                        <TaskBox
+                            key={tasks.ID}
+                            id={tasks.ID}
+                            title={tasks.Title + ' | '}
+                            status={tasks.Status}
+                            description={tasks.Description}
+                            DueDate={tasks.DueDate}
+                            StartDate={tasks.DueDate}
+                            due_date={'Due: ' + time}
+                            color={tasks.Color}
+                        />
+                    </div>
+                );
+            });
         }
 
         setContent(content);
@@ -264,23 +268,20 @@ export default function StudyPlanner() {
         } else if (error) {
             EVENTS = [];
         } else {
-            EVENTS = data?.map(
-                (task: Task) => ({
-
-                    start: moment(task.StartDate).toDate(),
-                    end: moment(task.DueDate).toDate(),
-                    data: {
-                        task: {
-                            id: task.ID,
-                            status: task.Status,
-                            courseName: task.Title,
-                            start: moment(task.StartDate).format('LT'),
-                            end: moment(task.DueDate).format('LT'),
-                            color: task.Color,
-                        },
+            EVENTS = data?.map((task: Task) => ({
+                start: moment(task.StartDate).toDate(),
+                end: moment(task.DueDate).toDate(),
+                data: {
+                    task: {
+                        id: task.ID,
+                        status: task.Status,
+                        courseName: task.Title,
+                        start: moment(task.StartDate).format('LT'),
+                        end: moment(task.DueDate).format('LT'),
+                        color: task.Color,
                     },
-                }),
-            );
+                },
+            }));
         }
         return (
             <BigCalendar

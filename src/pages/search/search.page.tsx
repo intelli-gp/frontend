@@ -104,6 +104,13 @@ const SearchPage = () => {
     };
 
     useEffect(() => {
+        document.title = 'Search | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
+
+    useEffect(() => {
         if (searchInitiated) {
             triggerSearch({ searchTerm });
         } else {

@@ -98,6 +98,13 @@ export const CoursesSearchResultsPage = () => {
         }
     }, []);
 
+    useEffect(() => {
+        document.title = 'Search Courses | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
+
     const onSearchValueChangeHandler = (value: string) => {
         dispatch(changeCoursesPageSearchQuery(value));
     };

@@ -1,5 +1,10 @@
 import { motion } from 'framer-motion';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, {
+    ChangeEvent,
+    useEffect,
+    useLayoutEffect,
+    useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -47,17 +52,24 @@ export default function LoginPage() {
     const [trigger2faAuthentication, { isLoading: is2faAuthenticating }] =
         useAuthenticate2faMutation();
 
+    useLayoutEffect(() => {
+        document.title = 'Login | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
+
     // Redirect to app page if user is already logged in
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (isAuthenticated) {
             console.log('Google Auth useEffect');
             if (storedUser.TwoFactorAuthEnabled) {
                 setTwoFactorIsOpen(true);
             } else {
-                getIntoTheApp();
+                getIntoTheApp(token);
             }
         }
-    }, [isAuthenticated]);
+    }, []);
 
     // Google oauth
     useEffect(() => {
@@ -75,12 +87,12 @@ export default function LoginPage() {
             if (user.TwoFactorAuthEnabled) {
                 setTwoFactorIsOpen(true);
             } else {
-                getIntoTheApp();
+                getIntoTheApp(token);
             }
         }
     }, []);
 
-    const getIntoTheApp = () => {
+    const getIntoTheApp = (token: string) => {
         navigate('/app/search');
         dispatch(resetLoginForm());
 
@@ -94,7 +106,7 @@ export default function LoginPage() {
             const res = await trigger2faAuthentication(otp).unwrap();
             const { access_token } = res.data;
             dispatch(setCredentials({ token: access_token, user: storedUser }));
-            getIntoTheApp();
+            getIntoTheApp(access_token);
         } catch (error) {
             errorToast('Invalid 2FA code');
             console.error(error);
@@ -127,7 +139,7 @@ export default function LoginPage() {
                 </QRCodeTextContainer>
                 <CustomInput
                     label={'Enter the 6-digit code'}
-                    Placeholder={'######'}
+                    Placeholder={'- - - - - -'}
                     value={otp}
                     error={otpError}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -162,7 +174,7 @@ export default function LoginPage() {
             if (data.user.TwoFactorAuthEnabled) {
                 setTwoFactorIsOpen(true);
             } else {
-                getIntoTheApp();
+                getIntoTheApp(data.access_token);
             }
         } catch (err) {
             errorToast('Invalid email or password.');

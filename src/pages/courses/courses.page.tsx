@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -48,6 +49,13 @@ export const CoursesPage = () => {
         dispatch(changeCoursesPageSearchQuery(value));
         navigate(`/app/courses/search?query=${encodeURIComponent(value)}`);
     };
+
+    useEffect(() => {
+        document.title = 'Explore Courses | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
 
     return (
         <CoursesPageContainer {...BetweenPageAnimation}>

@@ -35,6 +35,13 @@ const RecoverPassword = () => {
         resetMutation();
     }, [isError, isSuccess]);
 
+    useEffect(() => {
+        document.title = 'Password Recovery | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    });
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         let token = searchParams.get('token');
