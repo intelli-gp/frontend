@@ -1,8 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-// import { useSearchParams } from 'react-router-dom';
-import Spinner from '../../components/Spinner';
 import { CourseResultsGrid } from '../../components/course-results-grid/course-results-grid.components';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import BackendSupportedPagination from '../../components/pagination/pagination.components';
@@ -73,7 +71,7 @@ export const CoursesSearchResultsPage = () => {
             : isSearchResultsIsLoading;
 
     const prefetchSearchCourses = usePrefetchCourse('searchCourses');
-    const prefetechRecommendedCourses = usePrefetchCourse(
+    const prefetchRecommendedCourses = usePrefetchCourse(
         'getRecommendedCourses',
     );
 
@@ -137,7 +135,7 @@ export const CoursesSearchResultsPage = () => {
         }
 
         if (searchTerm === 'Recommended For You') {
-            prefetechRecommendedCourses(
+            prefetchRecommendedCourses(
                 {
                     limit: paginationPageLimit,
                     offset: pageNum,
@@ -176,13 +174,6 @@ export const CoursesSearchResultsPage = () => {
         }
     };
 
-    const pageContent =
-        isDataFetching || isDataLoading ? (
-            <Spinner />
-        ) : (
-            <CourseResultsGrid courseResults={data?.Results || []} />
-        );
-
     return (
         <CourseSearchResultsPageContainer>
             <CourseSearchPageHeader ref={pageHeaderRef}>
@@ -195,7 +186,10 @@ export const CoursesSearchResultsPage = () => {
                     searchHandler={onSearchSubmitHandler}
                 />
             </CourseSearchPageHeader>
-            {pageContent}
+            <CourseResultsGrid
+                courseResults={data?.Results || []}
+                isLoading={isDataFetching || isDataLoading}
+            />
             {data?.NumPages && (
                 <BackendSupportedPagination
                     pageHeaderElement={pageHeaderRef?.current as HTMLDivElement}

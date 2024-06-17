@@ -21,7 +21,6 @@ import {
 } from '../../store';
 import { deleteSocket } from '../../utils/socket';
 import { disconnectSSE } from '../../utils/sse';
-import Button from '../button/button.component';
 import DropdownMenu from '../menu/menu.component';
 import SideNavItem, {
     SideNavItemProps,
@@ -29,11 +28,13 @@ import SideNavItem, {
 } from '../sidenav-item/sidenav-item.component';
 import {
     Brand,
+    BrandContainer,
     IconContainer,
     IconsContainer,
     LinksContainer,
     MessagesIcon,
     MobileNav,
+    MobileNavHamburger,
     NotificationsIcon,
     Separator,
     SideNavContainer,
@@ -318,10 +319,7 @@ export default function SideNav() {
         <>
             {!hidden && (
                 <SideNavContainer sideNavOpen={sideNavOpen} ref={sideNavRef}>
-                    <div>
-                        <Brand>Mujedd</Brand>
-                        <Separator />
-                    </div>
+                    <BrandComponent />
 
                     <LinksContainer>
                         {navItems.map((link) => (
@@ -407,13 +405,19 @@ export default function SideNav() {
                 </SideNavContainer>
             )}
             <MobileNav ref={verticalNavRef}>
-                <Button
-                    className="text-white z-10 !border-none !bg-transparent"
-                    onClick={openSideNav}
-                >
+                <MobileNavHamburger onClick={openSideNav}>
                     <FiMenu size={32} />
-                </Button>
+                </MobileNavHamburger>
             </MobileNav>
         </>
+    );
+}
+
+function BrandComponent() {
+    return (
+        <BrandContainer>
+            <Brand>Mujedd</Brand>
+            <Separator />
+        </BrandContainer>
     );
 }

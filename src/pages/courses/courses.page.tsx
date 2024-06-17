@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import Spinner from '../../components/Spinner';
 import { CourseSection } from '../../components/course-section/course-section.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
@@ -24,11 +23,11 @@ import {
 
 export const CoursesPage = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const { searchTerm } = useSelector(
         (state: RootState) => state.appState.coursesPage,
     );
-    const dispatch = useDispatch();
 
     const { data: recommendationData, isLoading: isRecommendationsLoading } =
         useGetRecommendedCoursesQuery({});
@@ -39,11 +38,10 @@ export const CoursesPage = () => {
     const recommendedCourses = recommendationData?.data?.Results as Course[];
     const previewCourses = previewData?.data as CategoryWithCourses[];
 
-    if (isRecommendationsLoading || isPreviewLoading) return <Spinner />;
-
     const onSearchValueChangeHandler = (value: string) => {
         dispatch(changeCoursesPageSearchQuery(value));
     };
+
     const onSearchSubmitHandler = (value: string) => {
         dispatch(changeCoursesPageSearchInitiated(true));
         dispatch(changeCoursesPageSearchQuery(value));
@@ -56,6 +54,33 @@ export const CoursesPage = () => {
             document.title = 'Mujedd';
         };
     }, []);
+
+    /**
+     * Provides a preview of the courses available in the categories with skeleton loading.
+     */
+    const PreviewCourses = () => {
+        if (previewCourses) {
+            return previewCourses.map((category, index) => (
+                <CourseSection
+                    key={`course-section-category-${category}-${index}`}
+                    courses={category.Courses}
+                    sectionTitle={category.Category}
+                    isLoading={isPreviewLoading}
+                />
+            ));
+        } else {
+            return Array(3)
+                .fill(0)
+                .map((item) => (
+                    <CourseSection
+                        key={item}
+                        courses={[]}
+                        sectionTitle={''}
+                        isLoading={isPreviewLoading}
+                    />
+                ));
+        }
+    };
 
     return (
         <CoursesPageContainer {...BetweenPageAnimation}>
@@ -73,14 +98,9 @@ export const CoursesPage = () => {
                 <CourseSection
                     courses={recommendedCourses}
                     sectionTitle="Recommended For You"
+                    isLoading={isRecommendationsLoading}
                 />
-                {previewCourses?.map((category, index) => (
-                    <CourseSection
-                        key={`course-section-category-${category}-${index}`}
-                        courses={category.Courses}
-                        sectionTitle={category.Category}
-                    />
-                ))}
+                <PreviewCourses />
             </CourseSectionsWrapper>
         </CoursesPageContainer>
     );
