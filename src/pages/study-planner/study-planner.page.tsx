@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js';
-import moment from 'moment-timezone';
-import { useEffect, useState } from 'react';
+import moment from 'moment';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import React from 'react';
 import {
     Calendar as BigCalendar,
@@ -43,14 +43,16 @@ const formats = {
     weekdayFormat: 'ddd',
     dayFormat: 'ddd',
 };
-const localizer = momentLocalizer(moment);
 type View = 'day' | 'week' | 'month' | 'work_week' | 'agenda';
 export default function StudyPlanner() {
+
+
+
     const [showModal, setShowModal] = useState(false);
     const openModal = () => {
         setShowModal((prev) => !prev);
     };
-
+    const localizer = useMemo(() => momentLocalizer(moment), [])
     const { data: getTasks, error, isLoading } = useFetchTasksQuery(undefined);
     let data: Task[] = (getTasks as unknown as Response)?.data ?? [];
     data = data.map((task) => ({
@@ -169,8 +171,37 @@ export default function StudyPlanner() {
     }, [isLoading, error, tasks]);
 
     const [viewState, setViewState] = useState<View>('week');
+    const [date, setDate] = useState(new Date())
+    const onNavigate = useCallback(
+    (newDate: Date) => {
+    return setDate(newDate)
+    },
+    [setDate]
+    )
+    const CustomToolbar = (props:ToolbarProps) => {
+         function addMonths(date: Date, months: number) {
+            const d = date.getDate();
+            date.setMonth(date.getMonth() + months);
+            if (date.getDate() != d) {
+              date.setDate(0);
+            }
+            setDate(date)
+            return date;
+          }
+          
+           function addWeeks(date: Date, weeks: number) {
+            date.setDate(date.getDate() + 7 * weeks);
+            setDate(date)
+            return date;
+          }
+          
+           function addDays(date: Date, days: number) {
+            date.setDate(date.getDate() + days);
+            setDate(date)
+            return date;
+          }
+            
 
-    const CustomToolbar = (props: ToolbarProps) => {
         const goToDayView = () => {
             setViewState('day');
             props.onView('day');
@@ -186,35 +217,39 @@ export default function StudyPlanner() {
         };
 
         const goToBack = () => {
-            props.onNavigate(Navigate.PREVIOUS);
-        };
-
-        const goToNext = () => {
-            props.onNavigate(Navigate.NEXT);
-        };
-
-        const viewFunctions = [goToWeekView, goToDayView, goToMonthView];
-        const [currentViewIndex, setCurrentView] = useState(0);
-        function cycleView() {
-            setCurrentView(
-                (prevIndex) => (prevIndex + 1) % viewFunctions.length,
-            );
-            const currentView = viewFunctions[currentViewIndex];
-            currentView();
-        }
-
-        useEffect(() => {
-            if (viewState === 'week') {
-                setCurrentView(1);
-                goToWeekView();
-            } else if (viewState === 'day') {
-                goToDayView();
-                setCurrentView(2);
-            } else if (viewState === 'month') {
-                goToMonthView();
-                setCurrentView(0);
+            if (viewState === 'month') {
+              props.onNavigate(Navigate.PREVIOUS, addMonths(props.date, -1));
+            } else if (viewState === 'week') {
+              props.onNavigate(Navigate.PREVIOUS, addWeeks(props.date, -1));
+            } else {
+              props.onNavigate(Navigate.PREVIOUS, addDays(props.date, -1));
             }
-        }, [viewState]);
+          };
+        
+          const goToNext = () => {
+            if (viewState === 'month') {
+              props.onNavigate(Navigate.NEXT, addMonths(props.date, +1));
+            } else if (viewState === 'week') {
+              props.onNavigate(Navigate.NEXT, addWeeks(props.date, +1));
+            } else {
+              props.onNavigate(Navigate.NEXT, addDays(props.date, +1));
+            }
+          };
+        
+
+        
+        function cycleView() {
+            if (viewState === 'week') {
+                goToDayView();
+
+            } else if (viewState === 'day') {
+                goToMonthView();
+            } else if (viewState === 'month') {
+                goToWeekView();
+            }
+        }
+    
+ 
         return (
             <div className="flex flex-column justify-between pt-[1rem]">
                 <div className="flex flex-row gap-3 pb-4  w-2/5 px-2">
@@ -241,7 +276,7 @@ export default function StudyPlanner() {
 
                 <div className="flex flex-row justify-end items-center	justify-items-center lg:mb-0 mb-4 ">
                     <div className="flex flex-row justify-center items-center ">
-                        <LeftButton onClick={goToBack}>
+                        <LeftButton  type="button" onClick={goToBack}>
                             <FaChevronLeft color="white" size="12" />
                         </LeftButton>
                         <MiddleButton onClick={cycleView}>
@@ -257,11 +292,9 @@ export default function StudyPlanner() {
         );
     };
 
-    const Calendar = (props: Omit<CalendarProps, 'localizer'>) => {
+    const Calendar = (props:CalendarProps) => {
         let EVENTS: any[] = [];
-        if (isLoading) {
-            EVENTS = [];
-        } else if (error) {
+        if (isLoading||error) {
             EVENTS = [];
         } else {
             EVENTS = data?.map(
@@ -282,20 +315,23 @@ export default function StudyPlanner() {
                 }),
             );
         }
+
         return (
             <BigCalendar
+                popup
                 {...props}
                 events={EVENTS}
                 formats={formats}
-                localizer={localizer}
-                startAccessor="start"
-                endAccessor="end"
-                defaultView={viewState}
+                localizer={localizer}                
                 max={moment('2023-12-24T23:59:00').toDate()}
                 min={moment('2023-12-24T07:00:00').toDate()}
+                view={viewState}
+                date={date}
+                onNavigate={onNavigate}
                 onView={(view) => {
-                    setViewState(view);
-                }}
+                    if (view !== viewState) {  
+                        setViewState(view);
+                    }                }}
                 components={{
                     toolbar: CustomToolbar,
                     event: ({ event }: { event: any }) => {
@@ -333,7 +369,7 @@ export default function StudyPlanner() {
     ) : (
         <PageContainer {...BetweenPageAnimation}>
             <CalendarHolder>
-                <Calendar className="w-[95%] h-full" />
+                <Calendar className="w-[95%] h-full" localizer={localizer} />
                 <ButtonMV>
                     <Button
                         select="primary300"
