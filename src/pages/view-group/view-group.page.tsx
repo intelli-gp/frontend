@@ -26,7 +26,6 @@ import {
     useUpdateGroupMutation,
 } from '../../store';
 import { GroupToSend, ReceivedGroup } from '../../types/group';
-import { Response } from '../../types/response';
 import { ReceivedUser } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
@@ -66,7 +65,7 @@ const ViewGroupPage = () => {
     const { id: groupId } = useParams();
     const { data, isSuccess: isGroupDataFetched } = useGetGroupQuery(+groupId!);
     const { data: _allTags } = useGetAllTagsQuery();
-    const groupData: ReceivedGroup = (data as unknown as Response)?.data[0];
+    const groupData: ReceivedGroup = data?.data[0];
     const admins =
         groupData?.GroupMembers?.filter(
             (member) => member.Type === Role.admin,
@@ -218,6 +217,13 @@ const ViewGroupPage = () => {
             successToast('Updated the group successfully!');
         }
     }, [isGroupJoinedSuccessfully, isGroupUpdatedSuccessfully]);
+
+    useEffect(() => {
+        document.title = `${groupData.GroupTitle} | Mujedd`;
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, [groupData]);
 
     const chatRoomButton = (
         <Button

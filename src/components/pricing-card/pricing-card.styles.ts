@@ -110,12 +110,14 @@ const commonButtonStyles = css`
 
 export const UpgradeButton = styled(Button)`
     box-shadow: 0px 0px 15px 5px rgba(72, 187, 120, 0.2);
-    background-color: var(--green-500);
+    height: 2.25rem;
+    /* background-color: var(--green-500); */
     ${commonButtonStyles}
 `;
 
 export const SwitchToPremiumButton = styled(Button)`
     border: none;
+    height: 2.25rem;
     background-color: var(--indigo-950);
     box-shadow: 0px 0px 15px 5px rgba(99, 102, 241, 0.2);
     ${commonButtonStyles}

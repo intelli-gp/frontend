@@ -1,5 +1,7 @@
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import { RootState } from '../../store';
 import { Plan } from '../../types/plan';
 import {
     BenefitsList,
@@ -25,11 +27,24 @@ const PricingCard = ({
     withoutButton = false,
 }: PricingCardProps) => {
     const navigate = useNavigate();
+    const userPlan = useSelector(
+        (state: RootState) => state.auth.user.SubscriptionsPlan,
+    );
     const isUnique = title === 'premium';
+    const isSubscribed = userPlan === 2;
+    const subscribedtext = isSubscribed
+        ? isUnique
+            ? 'Current'
+            : null
+        : isUnique
+          ? null
+          : 'Current';
+
+    console.log('isSubscribed', isSubscribed);
 
     const CardButton = () => {
         if (withoutButton) return <></>;
-        if (isUnique) {
+        if (isUnique && !isSubscribed) {
             return (
                 <UpgradeButton
                     select="success"
@@ -39,7 +54,7 @@ const PricingCard = ({
                 </UpgradeButton>
             );
         }
-        if (!isUnique) {
+        if (!isUnique && !isSubscribed) {
             return (
                 <SwitchToPremiumButton
                     onClick={() => navigate(`/app/checkout`)}
@@ -48,10 +63,33 @@ const PricingCard = ({
                 </SwitchToPremiumButton>
             );
         }
+
+        if (isSubscribed && isUnique) {
+            return (
+                <UpgradeButton
+                    select="danger"
+                    // outline
+                    onClick={() => navigate(`/app/settings/#Billing`)}
+                >
+                    Cancel Subscription
+                </UpgradeButton>
+            );
+        }
+
+        if (isSubscribed && !isUnique) {
+            return (
+                <SwitchToPremiumButton
+                    onClick={() => navigate(`/app/settings/#Billing`)}
+                >
+                    Switch to Starter
+                </SwitchToPremiumButton>
+            );
+        }
     };
 
     return (
         <CardContainer unique={isUnique} withoutButton={withoutButton}>
+            {subscribedtext}
             <CardHeader unique={isUnique}>
                 <CardTitle>{title}</CardTitle>
                 <CardPrice>

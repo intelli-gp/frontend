@@ -1,18 +1,29 @@
 import { Course } from '../../types/course';
+import Skeleton from '../Skeleton';
 import CourseCard from '../course-card/course-card.component';
 import EmptyPagePlaceholder from '../empty-page-placeholder/empty-placeholder.component';
 import { CourseSearchResultsGridContainer } from './course-results-grid.styles';
 
 export type CourseResultsGridProps = {
     courseResults: Course[];
+    isLoading?: boolean;
 };
 
 // Suggestion: move this into search courses page as it is only used there.
 
 export const CourseResultsGrid = ({
     courseResults,
+    isLoading,
 }: CourseResultsGridProps) => {
-    if (courseResults.length === 0)
+    if (isLoading) {
+        return (
+            <CourseSearchResultsGridContainer>
+                <Skeleton times={30} className="w-[320px] h-[500px]" />
+            </CourseSearchResultsGridContainer>
+        );
+    }
+
+    if (courseResults.length === 0) {
         return (
             <EmptyPagePlaceholder
                 variant={'empty-search'}
@@ -20,6 +31,8 @@ export const CourseResultsGrid = ({
                 button={{ text: 'Explore Suggestions', path: '/app/courses' }}
             />
         );
+    }
+
     return (
         <CourseSearchResultsGridContainer>
             {courseResults.map((course, index) => (

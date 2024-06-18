@@ -34,6 +34,13 @@ const InterestsPage = () => {
         }
     }, [isError, isSuccess]);
 
+    useEffect(() => {
+        document.title = 'Setting up Interests | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
+
     const removeTagFromSelected = (tag: string) => {
         setSelectedTags(selectedTags.filter((t) => t !== tag));
     };

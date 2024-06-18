@@ -168,6 +168,13 @@ const ExploreGroupsPage = () => {
         }
     };
 
+    useEffect(() => {
+        document.title = 'Explore Groups | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
+
     return (
         <PageContainer {...BetweenPageAnimation}>
             <PageTitle className={'text-center'} ref={headerRef}>

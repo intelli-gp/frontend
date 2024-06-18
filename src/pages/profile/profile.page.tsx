@@ -246,6 +246,18 @@ const ProfilePage = () => {
         }
     }, [anotherUserUsername]);
 
+    useEffect(() => {
+        if (isAnotherUserProfile) {
+            document.title = `${anotherUserData.FullName} | Mujedd`;
+        } else {
+            document.title = `Profile | Mujedd`;
+        }
+
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, [anotherUserData]);
+
     const MainContent = () => {
         return mainSectionHeaderTabs.map((tab) => {
             if (!tab.isActive) return null;

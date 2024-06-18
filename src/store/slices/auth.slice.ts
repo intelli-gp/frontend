@@ -8,7 +8,7 @@ type StoredCredentials = {
     isAuthenticated?: boolean;
 };
 
-let initialState: StoredCredentials = {
+const initialState: StoredCredentials = {
     token: '',
     isAuthenticated: false,
     user: {},
@@ -33,8 +33,17 @@ const authSlice = createSlice({
             window.localStorage.removeItem('token');
             window.localStorage.removeItem('user');
         },
+        changeUserPlan(state, action: PayloadAction<'free' | 'pro'>) {
+            const planMap = {
+                free: 1,
+                pro: 2,
+            };
+            state.user.SubscriptionsPlan = planMap[action.payload];
+            window.localStorage.setItem('user', JSON.stringify(state.user));
+        },
     },
 });
 
 export const authReducer = authSlice.reducer;
-export const { setCredentials, clearCredentials } = authSlice.actions;
+export const { setCredentials, clearCredentials, changeUserPlan } =
+    authSlice.actions;

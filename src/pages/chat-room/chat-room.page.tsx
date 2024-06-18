@@ -209,6 +209,13 @@ export const ChatroomPage = () => {
         };
     }, []);
 
+    useEffect(() => {
+        document.title = `${groupData?.GroupTitle} | Mujedd`;
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, [groupData]);
+
     return (
         <PageContainer className="mujedd-chat-room" {...BetweenPageAnimation}>
             <LeftPart>

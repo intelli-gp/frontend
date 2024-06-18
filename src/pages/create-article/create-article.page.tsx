@@ -313,6 +313,13 @@ const CreateArticlePage = () => {
         };
     }, []);
 
+    useEffect(() => {
+        document.title = `${isEdit ? 'Edit' : 'Create'} Article | Mujedd`;
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
+
     const DeleteSectionModal = (
         <Modal
             isOpen={deleteSectionModalIsOpen}

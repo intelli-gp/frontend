@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IoIosSettings } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 
@@ -66,6 +66,13 @@ const NotificationsPage = () => {
                 return '';
         }
     };
+
+    useEffect(() => {
+        document.title = 'Notifications | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
 
     const notifications = userNotifications?.data?.map(
         (notification: NotificationEvents) => {

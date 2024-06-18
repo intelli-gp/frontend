@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import errorImg from '../../assets/imgs/404-img.svg';
@@ -6,6 +7,13 @@ import { PageContainer, Title } from './not-found.styles';
 
 const NotFoundPage = () => {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        document.title = 'Page Not Found | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
 
     return (
         <PageContainer>

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import _ from 'lodash';
-import { ChangeEvent, useLayoutEffect } from 'react';
+import { ChangeEvent, useEffect, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -72,6 +72,13 @@ export default function SignupPage() {
             dispatch(changeSignupLastName(lname.join(' ')));
             dispatch(changeSignUpUserProfileImage(userData.ProfileImage!));
         }
+    }, []);
+
+    useEffect(() => {
+        document.title = 'Sign up | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
     }, []);
 
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {

@@ -45,9 +45,10 @@ export const InlineInputsContainer = styled.div`
 `;
 
 export const EditButton = styled(Button)`
+    width: 6.5rem;
+    height: 2.25rem;
     align-self: end;
     margin-top: 1rem;
-    color: inherit;
 `;
 
 export const AddCard = styled(IoAddCircle)`
@@ -103,6 +104,7 @@ export const QRCodeImg = styled(EnhancedImage)`
 `;
 
 export const QRCodeTextContainer = styled.ul`
+    margin: 1rem 0;
     padding: 0 1rem;
     display: flex;
     flex-direction: column;

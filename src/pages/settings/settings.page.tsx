@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useLayoutEffect, useState } from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +14,7 @@ import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
     RootState,
+    changeUserPlan,
     setCredentials,
     useDisable2faMutation,
     useEnable2faMutation,
@@ -31,8 +32,8 @@ import { errorToast, successToast } from '../../utils/toasts';
 import {
     AddCardContainer,
     EditButton,
-    NoContentHolder,
     InlineInputsContainer,
+    NoContentHolder,
     PageContainer,
     PayTime,
     PlanButton,
@@ -56,7 +57,7 @@ export const SettingsPage = () => {
         useUpdateUserMutation();
 
     const { data: paymentMethodResponse } = useFetchPaymentMethodsQuery();
-    const PaymentMethodsData = paymentMethodResponse?.data||[];
+    const PaymentMethodsData = paymentMethodResponse?.data || [];
 
     const [triggerGenerate2faCode, { isFetching: isGenerating2faQRCode }] =
         useLazyGenerate2faQuery();
@@ -218,12 +219,20 @@ export const SettingsPage = () => {
             await cancelSubscription({
                 subscriptionId: subscriptionData?.ID as string,
             }).unwrap();
+            dispatch(changeUserPlan('free'));
             successToast('Subscription cancelled successfully');
         } catch (error) {
             errorToast('An error occurred while cancelling your subscription');
             console.log(error);
         }
     };
+
+    useLayoutEffect(() => {
+        document.title = 'Settings | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
 
     useEffect(() => {
         setFirstName(storedUser?.FullName!?.split(' ')[0]);
@@ -271,7 +280,7 @@ export const SettingsPage = () => {
                 </QRCodeTextContainer>
                 <CustomInput
                     label={'Enter the 6-digit code'}
-                    Placeholder={'######'}
+                    Placeholder={'- - - - - -'}
                     value={otp}
                     error={otpError}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -441,7 +450,7 @@ export const SettingsPage = () => {
                 </SectionContainer>
 
                 <EditButton
-                    select='secondary'
+                    select="warning"
                     title="Edit this section"
                     loading={isLoading}
                     onClick={handleUpdatePersonalInformation}
@@ -456,27 +465,27 @@ export const SettingsPage = () => {
                         type="password"
                         label={'Current Password'}
                         value=""
-                        onChange={() => { }}
+                        onChange={() => {}}
                     />
                     <InlineInputsContainer>
                         <CustomInput
                             type="password"
                             label={'New Password'}
                             value=""
-                            onChange={() => { }}
+                            onChange={() => {}}
                         />
                         <CustomInput
                             type="password"
                             label={'Repeat New Password'}
                             value=""
-                            onChange={() => { }}
+                            onChange={() => {}}
                         />
                     </InlineInputsContainer>
                     <EditButton
-                        select='secondary'
+                        select="warning"
                         title="Edit this section"
                         loading={false}
-                        onClick={() => { }}
+                        onClick={() => {}}
                     >
                         Save
                     </EditButton>
@@ -495,7 +504,7 @@ export const SettingsPage = () => {
                             : ' (Disabled)'}
                     </strong>
                 </p>
-                <Button
+                <EditButton
                     onClick={
                         storedUser.TwoFactorAuthEnabled
                             ? () => setDisable2faIsOpen(true)
@@ -504,15 +513,15 @@ export const SettingsPage = () => {
                     loading={isGenerating2faQRCode}
                     outline={storedUser.TwoFactorAuthEnabled}
                     select={
-                        storedUser.TwoFactorAuthEnabled ? 'danger' : 'success'
+                        storedUser.TwoFactorAuthEnabled ? 'danger' : 'warning'
                     }
                 >
                     {storedUser.TwoFactorAuthEnabled ? 'Disable' : 'Enable'}
-                </Button>
+                </EditButton>
             </Accordion>
 
             <Accordion title="Notifications">
-                <EditButton select='secondary' title="Edit this section">
+                <EditButton select="warning" title="Edit this section">
                     Save
                 </EditButton>
             </Accordion>
@@ -520,24 +529,29 @@ export const SettingsPage = () => {
             <Accordion title="Billing">
                 <div className="flex flex-col p-2">
                     <SectionTitle>Current Plan</SectionTitle>
-                    {isSubscriptionDataLoading ? 
-                    <NoContentHolder> <p>Loading...</p> </NoContentHolder>  :
-                    !subscriptionData && (
-                        <div className="flex flex-col justify-between mb-6 p-2">
-                            <NoContentHolder>
-                                <p>
-                                You don’t have any active subscription.
-                                </p>
-                            </NoContentHolder>
-                            <div className="flex justify-end gap-4 mt-6 w-full">
-                                <PlanButton
-                                    onClick={() => navigate('/app/upgrade')}
-                                    select='secondary'
-                                >
-                                    Upgrade
-                                </PlanButton>
+                    {isSubscriptionDataLoading ? (
+                        <NoContentHolder>
+                            {' '}
+                            <p>Loading...</p>{' '}
+                        </NoContentHolder>
+                    ) : (
+                        !subscriptionData && (
+                            <div className="flex flex-col justify-between mb-6 p-2">
+                                <NoContentHolder>
+                                    <p>
+                                        You don’t have any active subscription.
+                                    </p>
+                                </NoContentHolder>
+                                <div className="flex justify-end gap-4 mt-6 w-full">
+                                    <PlanButton
+                                        onClick={() => navigate('/app/upgrade')}
+                                        select="warning"
+                                    >
+                                        Upgrade
+                                    </PlanButton>
+                                </div>
                             </div>
-                        </div>
+                        )
                     )}
                     {subscriptionData && (
                         <div className="flex flex-row justify-between mb-6 font-bold">
@@ -554,7 +568,7 @@ export const SettingsPage = () => {
                                         <span className="text-xs text-[var(--slate-500)] font-medium">
                                             /
                                             {subscriptionData?.Interval ===
-                                                'monthly'
+                                            'monthly'
                                                 ? 'month'
                                                 : 'year'}
                                         </span>
@@ -598,6 +612,11 @@ export const SettingsPage = () => {
                             </div>
                             <div className="flex flex-col justify-end gap-4 mt-6 w-[25%]">
                                 <PlanButton
+                                    onClick={() => navigate('/app/upgrade')}
+                                >
+                                    Change Plan
+                                </PlanButton>
+                                <PlanButton
                                     onClick={handleCancelSubscription}
                                     select="danger"
                                     loading={isCancellingSubscription}
@@ -610,35 +629,29 @@ export const SettingsPage = () => {
                     )}
                     <SectionTitle>Payment Method</SectionTitle>
                     <div className="flex flex-col justify-center items-center gap-4 p-2">
-                        {PaymentMethodsData?.length == 0 ?
-                            <NoContentHolder>
-                                <p>
-                                No Payment Method.
-                                </p>
-                            </NoContentHolder> :
-                            PaymentMethodsData?.map((paymentMethod, index) => (
-                                <div className="w-[100%]" key={index}>
-                                    <CardInfo
-                                        paymentMethodId={
-                                            paymentMethod.PaymentMethodId
-                                        }
-                                        LastFourDigits={
-                                            paymentMethod.LastFourDigits
-                                        }
-                                        Expire={`${paymentMethod.ExpMonth.toString()}/${paymentMethod.ExpYear.toString()}`}
-                                        Brand={paymentMethod.Brand}
-                                        IsDefault={paymentMethod.IsDefault}
-                                    />
-                                    {index !== PaymentMethodsData.length - 1 && (
-                                        <hr />
-                                    )}
-                                </div>
-                            ))
-                        }
+                        {PaymentMethodsData?.map((paymentMethod, index) => (
+                            <div className="w-[100%]" key={index}>
+                                <CardInfo
+                                    paymentMethodId={
+                                        paymentMethod.PaymentMethodId
+                                    }
+                                    LastFourDigits={
+                                        paymentMethod.LastFourDigits
+                                    }
+                                    ExpiryMonth={paymentMethod.ExpMonth}
+                                    ExpiryYear={paymentMethod.ExpYear}
+                                    Brand={paymentMethod.Brand}
+                                    IsDefault={paymentMethod.IsDefault}
+                                />
+                                {index !== PaymentMethodsData.length - 1 && (
+                                    <hr />
+                                )}
+                            </div>
+                        ))}
                         <span className="flex justify-end w-full">
                             <AddCardContainer
                                 onClick={() => setAddCreditCardIsOpen(true)}
-                                select='secondary'
+                                select="warning"
                             >
                                 Add Payment Method
                             </AddCardContainer>

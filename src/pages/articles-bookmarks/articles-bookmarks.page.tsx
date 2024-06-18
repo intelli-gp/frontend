@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import EmptyPagePlaceholder from '../../components/empty-page-placeholder/empty-placeholder.component';
@@ -59,6 +59,13 @@ const ArticlesBookmarksPage = () => {
             }
         }
     };
+
+    useEffect(() => {
+        document.title = 'My Bookmarks | Mujedd';
+        return () => {
+            document.title = 'Mujedd';
+        };
+    }, []);
 
     return (
         <PageContainer className="h-full" {...BetweenPageAnimation}>

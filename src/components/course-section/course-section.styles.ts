@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const CourseSectionContainer = styled.section`
@@ -10,7 +11,7 @@ export const CourseSectionContainer = styled.section`
 export const CourseSectionHeader = styled.div`
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: end;
     border-bottom: 1px solid var(--gray-200);
 
     @media (max-width: 768px) {
@@ -24,11 +25,15 @@ export const CourseSectionTitle = styled.h2`
     font-weight: bold;
 `;
 
-export const RedirectText = styled.p`
+export const RedirectText = styled(Link)`
+    color: inherit;
     cursor: pointer;
     font-size: 0.85;
     transition: opacity 0.2s ease-in-out;
     align-self: flex-end;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     &:hover {
         text-decoration: underline;
     }
