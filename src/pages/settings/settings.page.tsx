@@ -14,6 +14,7 @@ import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
     RootState,
+    changeUserPlan,
     setCredentials,
     useDisable2faMutation,
     useEnable2faMutation,
@@ -218,6 +219,7 @@ export const SettingsPage = () => {
             await cancelSubscription({
                 subscriptionId: subscriptionData?.ID as string,
             }).unwrap();
+            dispatch(changeUserPlan('free'));
             successToast('Subscription cancelled successfully');
         } catch (error) {
             errorToast('An error occurred while cancelling your subscription');
@@ -610,6 +612,11 @@ export const SettingsPage = () => {
                             </div>
                             <div className="flex flex-col justify-end gap-4 mt-6 w-[25%]">
                                 <PlanButton
+                                    onClick={() => navigate('/app/upgrade')}
+                                >
+                                    Change Plan
+                                </PlanButton>
+                                <PlanButton
                                     onClick={handleCancelSubscription}
                                     select="danger"
                                     loading={isCancellingSubscription}
@@ -622,29 +629,25 @@ export const SettingsPage = () => {
                     )}
                     <SectionTitle>Payment Method</SectionTitle>
                     <div className="flex flex-col justify-center items-center gap-4 p-2">
-                        {PaymentMethodsData?.length == 0 ? (
-                            <NoContentHolder>
-                                <p>No Payment Method.</p>
-                            </NoContentHolder>
-                        ) : (
-                            PaymentMethodsData?.map((paymentMethod, index) => (
-                                <div className="w-[100%]" key={index}>
-                                    <CardInfo
-                                        paymentMethodId={
-                                            paymentMethod.PaymentMethodId
-                                        }
-                                        LastFourDigits={
-                                            paymentMethod.LastFourDigits
-                                        }
-                                        Expire={`${paymentMethod.ExpMonth.toString()}/${paymentMethod.ExpYear.toString()}`}
-                                        Brand={paymentMethod.Brand}
-                                        IsDefault={paymentMethod.IsDefault}
-                                    />
-                                    {index !==
-                                        PaymentMethodsData.length - 1 && <hr />}
-                                </div>
-                            ))
-                        )}
+                        {PaymentMethodsData?.map((paymentMethod, index) => (
+                            <div className="w-[100%]" key={index}>
+                                <CardInfo
+                                    paymentMethodId={
+                                        paymentMethod.PaymentMethodId
+                                    }
+                                    LastFourDigits={
+                                        paymentMethod.LastFourDigits
+                                    }
+                                    ExpiryMonth={paymentMethod.ExpMonth}
+                                    ExpiryYear={paymentMethod.ExpYear}
+                                    Brand={paymentMethod.Brand}
+                                    IsDefault={paymentMethod.IsDefault}
+                                />
+                                {index !== PaymentMethodsData.length - 1 && (
+                                    <hr />
+                                )}
+                            </div>
+                        ))}
                         <span className="flex justify-end w-full">
                             <AddCardContainer
                                 onClick={() => setAddCreditCardIsOpen(true)}

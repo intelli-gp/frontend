@@ -9,7 +9,7 @@ export type ReceivedUser = {
     Headline: string;
     DOB: string;
     UserLevel: unknown;
-    SubscriptionsPlan: unknown;
+    SubscriptionsPlan: number;
     Bio: string;
     PhoneNumber: string;
     CoverImage: string;

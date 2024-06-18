@@ -66,7 +66,8 @@ const DeleteSectionModal: React.FC<ModalProps> = ({
 type CardInfoProps = {
     paymentMethodId: string;
     LastFourDigits: string;
-    Expire: string;
+    ExpiryMonth: number;
+    ExpiryYear: number;
     Brand: string;
     IsDefault?: boolean;
 };
@@ -91,7 +92,8 @@ type CardType =
 const CardInfo = ({
     paymentMethodId,
     LastFourDigits,
-    Expire,
+    ExpiryMonth,
+    ExpiryYear,
     Brand,
     IsDefault = false,
 }: CardInfoProps) => {
@@ -102,8 +104,7 @@ const CardInfo = ({
 
     const cardType = Brand as CardType;
     const maskedNumber = `**** **** **** ${LastFourDigits}`;
-
-    console.log({ paymentMethodId, LastFourDigits, Expire, Brand, IsDefault });
+    const Expire = `${ExpiryMonth}/${ExpiryYear}`;
 
     const CreditOptions = [
         {
