@@ -285,11 +285,16 @@ export default function SideNav() {
          * only in this case the order of operations matters
          * because the logoutUser need the token to send the request.
          */
-        logoutUser();
-        dispatch(clearCredentials());
-        deleteSocket(); // Clear socket connection
-        disconnectSSE(); // Clear SSE connection
-        navigate('/');
+        try {
+            await deleteSocket(); // Clear socket connection
+            disconnectSSE(); // Clear SSE connection
+            await logoutUser().unwrap();
+        } catch {
+            // Do nothing
+        } finally {
+            dispatch(clearCredentials());
+            navigate('/');
+        }
     };
 
     const handleToggleExtend = (
