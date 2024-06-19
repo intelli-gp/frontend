@@ -101,7 +101,6 @@ const ChatMessage = ({
     const handleUpdateMessage = async () => {
         try {
             if (editMessageText === message.Content) return;
-            console.log(editMessageText);
             await updateMessage({
                 MessageID: message.MessageID,
                 Content: editMessageText,
@@ -110,7 +109,6 @@ const ChatMessage = ({
             console.log(error);
         } finally {
             setEditMessageIsOpen(false);
-            setEditMessageText(message.Content);
         }
     };
 
