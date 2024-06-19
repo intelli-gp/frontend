@@ -145,6 +145,85 @@ const SearchPage = () => {
         }
     }, [generalSearchIsFetching]);
 
+    const UsersSectionContent = () => {
+        if (usersRecommendationsIsFetching || generalSearchIsFetching) {
+            return <UsersSkeleton />;
+        }
+
+        let itemsToShow: ReceivedUser[];
+
+        if (searchInitiated) {
+            itemsToShow = searchResult?.users?.slice(0, 10);
+        } else {
+            itemsToShow = recommendedUsers;
+        }
+
+        return (
+            <SwiperSlider>
+                {itemsToShow?.map((user) => <UserCard {...user} />)}
+            </SwiperSlider>
+        );
+    };
+
+    const GroupsSectionContent = () => {
+        if (generalSearchIsFetching || groupsRecommendationsIsFetching) {
+            return <GroupsSkeleton />;
+        }
+
+        let itemsToShow: ReceivedGroup[];
+
+        if (searchInitiated) {
+            itemsToShow = searchResult?.groups?.slice(0, 10);
+        } else {
+            itemsToShow = recommendedGroups;
+        }
+
+        return (
+            <SwiperSlider>
+                {itemsToShow?.map((group) => (
+                    <GroupCard
+                        {...group}
+                        alreadyJoined={
+                            group?.GroupMembers?.some(
+                                (member) => member?.ID === storedUserId,
+                            ) || group?.GroupOwner?.ID === storedUserId
+                        }
+                    />
+                ))}
+            </SwiperSlider>
+        );
+    };
+
+    const ArticlesSectionContent = () => {
+        if (articlesRecommendationIsFetching || generalSearchIsFetching) {
+            return <ArticlesSkeleton />;
+        }
+
+        let itemsToShow: ReceivedArticle[];
+
+        if (searchInitiated) {
+            itemsToShow = searchResult?.articles?.slice(0, 10);
+        } else {
+            itemsToShow = recommendedArticles;
+        }
+
+        return (
+            <ArticleSectionBody>
+                {itemsToShow?.map((article) => {
+                    return (
+                        <WideArticleItem
+                            {...article}
+                            key={article.ID}
+                            onClick={() =>
+                                navigate(`/app/articles/${article.ID}`)
+                            }
+                        />
+                    );
+                })}
+            </ArticleSectionBody>
+        );
+    };
+
     return (
         <PageContainer {...BetweenPageAnimation}>
             <ExplorePageHeader
@@ -161,18 +240,7 @@ const SearchPage = () => {
                         ? 'users search results'
                         : 'Suggested users'}
                 </SectionTitle>
-                {usersRecommendationsIsFetching || generalSearchIsFetching ? (
-                    <UsersSkeleton />
-                ) : (
-                    <SwiperSlider>
-                        {(searchInitiated
-                            ? searchResult?.users?.slice(0, 10)
-                            : recommendedUsers
-                        )?.map((user) => {
-                            return <UserCard {...user} />;
-                        })}
-                    </SwiperSlider>
-                )}
+                <UsersSectionContent />
             </SearchPageSection>
 
             <SearchPageSection empty={NoGroupsFound}>
@@ -184,26 +252,7 @@ const SearchPage = () => {
                         Explore More
                     </ExploreMoreLink>
                 </SectionTitle>
-                {generalSearchIsFetching || groupsRecommendationsIsFetching ? (
-                    <GroupsSkeleton />
-                ) : (
-                    <SwiperSlider>
-                        {searchResult?.groups?.slice(0, 10)?.map((group) => {
-                            return (
-                                <GroupCard
-                                    {...group}
-                                    alreadyJoined={
-                                        group?.GroupMembers?.some(
-                                            (member) =>
-                                                member?.ID === storedUserId,
-                                        ) ||
-                                        group?.GroupOwner?.ID === storedUserId
-                                    }
-                                />
-                            );
-                        })}
-                    </SwiperSlider>
-                )}
+                <GroupsSectionContent />
             </SearchPageSection>
 
             <SearchPageSection empty={NoArticlesFound}>
@@ -215,26 +264,7 @@ const SearchPage = () => {
                         Explore More
                     </ExploreMoreLink>
                 </SectionTitle>
-                {articlesRecommendationIsFetching || generalSearchIsFetching ? (
-                    <ArticlesSkeleton />
-                ) : (
-                    <ArticleSectionBody>
-                        {(searchInitiated
-                            ? searchResult?.articles?.slice(0, 10)
-                            : recommendedArticles
-                        )?.map((article) => {
-                            return (
-                                <WideArticleItem
-                                    {...article}
-                                    key={article.ID}
-                                    onClick={() =>
-                                        navigate(`/app/articles/${article.ID}`)
-                                    }
-                                />
-                            );
-                        })}
-                    </ArticleSectionBody>
-                )}
+                <ArticlesSectionContent />
             </SearchPageSection>
         </PageContainer>
     );
