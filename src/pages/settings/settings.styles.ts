@@ -59,11 +59,20 @@ export const AddCard = styled(IoAddCircle)`
 `;
 
 export const AddCardContainer = styled(Button)`
-    padding:6px 8px;
+    padding:8px;
+    border-radius: 55px;    
+
 `;
 
+export const CardsContainer =styled.div`
+    padding-top:1rem;
+    margin: 0 auto;
+    width:100%;
+    gap: 1rem;
+
+`
+
 export const PlanButton = styled(Button)`
-    width:185px;
 `;
 
 export const PayTime = styled.div`

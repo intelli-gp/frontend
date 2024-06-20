@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { ChangeEvent, useEffect, useLayoutEffect, useState } from 'react';
-import { FaCheckCircle } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -35,7 +34,6 @@ import {
     InlineInputsContainer,
     NoContentHolder,
     PageContainer,
-    PayTime,
     PlanButton,
     QRCodeImg,
     QRCodeModalButtons,
@@ -43,6 +41,8 @@ import {
     SectionContainer,
     SectionTitle,
 } from './settings.styles';
+import { MdOutlineAddCard } from 'react-icons/md';
+import SubscriptionInfo from '../../components/subscription-info/subscription-info.component';
 
 export const SettingsPage = () => {
     const dispatch = useDispatch();
@@ -58,7 +58,6 @@ export const SettingsPage = () => {
 
     const { data: paymentMethodResponse } = useFetchPaymentMethodsQuery();
     const PaymentMethodsData = paymentMethodResponse?.data || [];
-
     const [triggerGenerate2faCode, { isFetching: isGenerating2faQRCode }] =
         useLazyGenerate2faQuery();
     const [triggerEnable2fa, { isLoading: isEnabling2fa }] =
@@ -465,27 +464,27 @@ export const SettingsPage = () => {
                         type="password"
                         label={'Current Password'}
                         value=""
-                        onChange={() => {}}
+                        onChange={() => { }}
                     />
                     <InlineInputsContainer>
                         <CustomInput
                             type="password"
                             label={'New Password'}
                             value=""
-                            onChange={() => {}}
+                            onChange={() => { }}
                         />
                         <CustomInput
                             type="password"
                             label={'Repeat New Password'}
                             value=""
-                            onChange={() => {}}
+                            onChange={() => { }}
                         />
                     </InlineInputsContainer>
                     <EditButton
                         select="warning"
                         title="Edit this section"
                         loading={false}
-                        onClick={() => {}}
+                        onClick={() => { }}
                     >
                         Save
                     </EditButton>
@@ -554,78 +553,12 @@ export const SettingsPage = () => {
                         )
                     )}
                     {subscriptionData && (
-                        <div className="flex flex-row justify-between mb-6 font-bold">
-                            <div className="w-[70%] flex flex-col gap-2">
-                                <span className="flex justify-start gap-4 items-center mt-4">
-                                    <p className="font-extrabold text-lg">
-                                        Professional
-                                    </p>
-                                    <PayTime>
-                                        {subscriptionData?.Interval}
-                                    </PayTime>
-                                    <p className="mr-6">
-                                        ${subscriptionResponse?.data?.Price}
-                                        <span className="text-xs text-[var(--slate-500)] font-medium">
-                                            /
-                                            {subscriptionData?.Interval ===
-                                            'monthly'
-                                                ? 'month'
-                                                : 'year'}
-                                        </span>
-                                    </p>
-                                </span>
-                                <span className="flex gap-2 items-center">
-                                    <p>Status: </p>
-                                    <span className="flex gap-2 items-center font-extrabold">
-                                        <FaCheckCircle color="green" />
-                                        <p>Active</p>
-                                    </span>
-                                </span>
-                                <span className="flex gap-2 items-center">
-                                    <div>Joined:</div>
-                                    <div className=" font-extrabold">
-                                        <span>
-                                            {new Date(
-                                                subscriptionResponse?.data
-                                                    ?.StartDate as Date,
-                                            ).toLocaleDateString('en-US', {
-                                                year: 'numeric',
-                                                month: '2-digit',
-                                                day: '2-digit',
-                                            })}
-                                        </span>
-                                    </div>
-                                </span>
-                                <span className="flex gap-2">
-                                    <p>Renew subscription by </p>
-                                    <p className="font-extrabold">
-                                        {new Date(
-                                            subscriptionResponse?.data
-                                                ?.RenewalDate as Date,
-                                        ).toLocaleDateString('en-US', {
-                                            year: 'numeric',
-                                            month: '2-digit',
-                                            day: '2-digit',
-                                        })}
-                                    </p>
-                                </span>
-                            </div>
-                            <div className="flex flex-col justify-end gap-4 mt-6 w-[25%]">
-                                <PlanButton
-                                    onClick={() => navigate('/app/upgrade')}
-                                >
-                                    Change Plan
-                                </PlanButton>
-                                <PlanButton
-                                    onClick={handleCancelSubscription}
-                                    select="danger"
-                                    loading={isCancellingSubscription}
-                                    outline={true}
-                                >
-                                    Cancel Plan
-                                </PlanButton>
-                            </div>
-                        </div>
+                        <SubscriptionInfo
+                            subscriptionData={subscriptionData}
+                            subscriptionResponse={subscriptionResponse}
+                            isCancellingSubscription={isCancellingSubscription}
+                            handleCancelSubscription={handleCancelSubscription}
+                        />
                     )}
                     <SectionTitle>Payment Method</SectionTitle>
                     <div className="flex flex-col justify-center items-center gap-4 p-2">
@@ -643,17 +576,16 @@ export const SettingsPage = () => {
                                     Brand={paymentMethod.Brand}
                                     IsDefault={paymentMethod.IsDefault}
                                 />
-                                {index !== PaymentMethodsData.length - 1 && (
-                                    <hr />
-                                )}
+                                <hr />
                             </div>
                         ))}
                         <span className="flex justify-end w-full">
                             <AddCardContainer
                                 onClick={() => setAddCreditCardIsOpen(true)}
-                                select="warning"
+                                select='warning'
+                                title='Add credit card'
                             >
-                                Add Payment Method
+                                <MdOutlineAddCard size={26} />
                             </AddCardContainer>
                         </span>
                     </div>

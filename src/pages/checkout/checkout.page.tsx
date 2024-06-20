@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,13 +12,17 @@ import { useFetchPaymentMethodsQuery } from '../../store/apis/paymentMethodsApi'
 import { useCreateSubscriptionMutation } from '../../store/apis/subscriptionsApi';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
+    AddCardButton,
+    CardsContainer,
     ContentWrapper,
     FlexContainer,
     Image,
+    NoContentHolder,
     Return,
     SidePanel,
     Title,
 } from './checkout.style';
+import AddCreditCardModal from '../../components/credit-card-modal/CreditCardModal';
 
 const CheckoutPage = () => {
     const dispatch = useDispatch();
@@ -57,7 +61,9 @@ const CheckoutPage = () => {
         } catch (error) {
             errorToast((error as any).data.data.errorMessage);
         }
-    };
+    }
+    
+    const [addCreditCardIsOpen, setAddCreditCardIsOpen] = useState(false);
 
     return (
         <FlexContainer>
@@ -95,30 +101,49 @@ const CheckoutPage = () => {
             <div className="flex flex-col justify-center items-center w-[100%] lg:w-[60%]">
                 <motion.div
                     {...BetweenPageAnimation}
-                    className="flex flex-col justify-center lg:items-start items-center w-[90%] lg:w-[60%] py-8"
+                    className="flex flex-col justify-center lg:items-start items-center w-[90%] lg:w-[60%] py-8 gap-4"
                 >
-                    <PageTitle>Choose default to use</PageTitle>
-                    {paymentMethodsResponse?.data?.map((paymentMethod) => (
-                        <CardInfo
-                            paymentMethodId={paymentMethod.PaymentMethodId}
-                            LastFourDigits={paymentMethod.LastFourDigits}
-                            Brand={paymentMethod.Brand}
-                            ExpiryMonth={paymentMethod.ExpMonth}
-                            ExpiryYear={paymentMethod.ExpYear}
-                            IsDefault={paymentMethod.IsDefault}
-                        />
-                    ))}
+                    <PageTitle size='sm'>Select default card </PageTitle>
+                  { paymentMethodsResponse? <CardsContainer>
+                        {paymentMethodsResponse?.data?.map((paymentMethod,index) => (
+                            <div className="w-[100%]" key={index}>
+                                <CardInfo
+                                    paymentMethodId={
+                                        paymentMethod.PaymentMethodId
+                                    }
+                                    LastFourDigits={
+                                        paymentMethod.LastFourDigits
+                                    }
+                                    ExpiryMonth={paymentMethod.ExpMonth}
+                                    ExpiryYear={paymentMethod.ExpYear}
+                                    Brand={paymentMethod.Brand}
+                                    IsDefault={paymentMethod.IsDefault}
+                                />
+                            </div>
+                        ))}
+                    </CardsContainer>: <NoContentHolder> No Payment Methods Added.</NoContentHolder>}
+                    <div className='w-[100%] flex flex-col items-center gap-4'>
+                    <AddCardButton
+                      onClick={() => setAddCreditCardIsOpen(true)}
+                      title='Add credit card'>
+                            Add a new card
+                        </AddCardButton>
+                        <Button
+                            type="submit"
+                            className="w-[100%] "
+                            loading={isSubscriptionCreationLoading}
+                            onClick={handleCheckout}
+                        >
+                            Complete checkout
+                        </Button>
+                    </div>
 
-                    <Button
-                        type="submit"
-                        className="w-[85%]"
-                        loading={isSubscriptionCreationLoading}
-                        onClick={handleCheckout}
-                    >
-                        Complete checkout
-                    </Button>
                 </motion.div>
             </div>
+            <AddCreditCardModal
+                showModal={addCreditCardIsOpen}
+                setShowModal={setAddCreditCardIsOpen}
+            />
         </FlexContainer>
     );
 };

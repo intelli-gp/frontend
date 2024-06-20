@@ -32,14 +32,7 @@ const PricingCard = ({
     );
     const isUnique = title === 'premium';
     const isSubscribed = userPlan === 2;
-    const subscribedtext = isSubscribed
-        ? isUnique
-            ? 'Current'
-            : null
-        : isUnique
-          ? null
-          : 'Current';
-
+ 
     console.log('isSubscribed', isSubscribed);
 
     const CardButton = () => {
@@ -89,7 +82,6 @@ const PricingCard = ({
 
     return (
         <CardContainer unique={isUnique} withoutButton={withoutButton}>
-            {subscribedtext}
             <CardHeader unique={isUnique}>
                 <CardTitle>{title}</CardTitle>
                 <CardPrice>

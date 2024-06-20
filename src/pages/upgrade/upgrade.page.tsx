@@ -26,7 +26,7 @@ const UpgradePage = () => {
         {
             id: 2,
             title: 'premium',
-            price: 12,
+            price: 20,
             benefits: [
                 'Enjoy all the features included in the Free Plan.',
                 'Enjoy unlimited access to the chatbot helper feature.',
