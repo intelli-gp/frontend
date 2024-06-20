@@ -2,7 +2,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import styled from 'styled-components';
 
 export const CardContainer = styled.div`
-    padding: 1rem 0.28rem 1rem 1rem;
+    padding: 1rem;
     width: 100%;
     display: flex;
     gap: 12px;
@@ -10,7 +10,11 @@ export const CardContainer = styled.div`
     justify-content: space-between;
     align-items: flex-start;
     position: relative;
-    margin: 0 10px;
+    transition: all 0.25s ease-in-out;
+    border-radius:6px;
+    &:hover {
+        background-color:rgba(0, 0, 0, 0.01);
+    }
 `;
 
 export const EditIcon = styled(BsThreeDotsVertical)`

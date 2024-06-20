@@ -134,7 +134,7 @@ const CardInfo = ({
                     <p className="text-lg font-bold">{maskedNumber}</p>
 
                     {IsDefault && (
-                        <span className="bg-[var(--indigo-25)] text-[var(--indigo-500)] rounded-full px-2 py-1 text-xs">
+                        <span className="bg-[var(--indigo-25)] text-[var(--indigo-500)] font-bold rounded-full flex items-center px-2 py-1 text-xs">
                             Default
                         </span>
                     )}
@@ -147,7 +147,7 @@ const CardInfo = ({
                 </span>
                 <DropdownMenu
                     options={CreditOptions}
-                    top="70%"
+                    top="60%"
                     right="10%"
                     left="auto"
                     bottom="auto"
