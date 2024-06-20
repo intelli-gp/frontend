@@ -36,7 +36,11 @@ const PomodoroPage = () => {
 
     // This custom hook updates the browser tab's title to reflect the current state of the timer.
     useDocumentTitle(time.minutes, time.seconds, time.isRunning);
-
+     if(time.minutes ===undefined || time.seconds ===undefined){
+        dispatch(setMinutes(25));
+        dispatch(setSeconds(0));
+        dispatch(setMode('pomodoro'));
+     }
     return (
         <PageContainer {...BetweenPageAnimation}>
             <PomodoroContainer mode={time.mode}>
@@ -76,8 +80,8 @@ const PomodoroPage = () => {
                     </ModeButton>
                 </ModesContainer>
                 <Timer>
-                    {String(time.minutes).padStart(2, '0')||'25'}:
-                    {String(time.seconds).padStart(2, '0')||'00'}
+                    {String(time.minutes).padStart(2, '0')}:
+                    {String(time.seconds).padStart(2, '0')}
                 </Timer>
                 <div className="flex flex-col items-center gap-3 relative w-[600px] ">
                     <ControlButton onClick={toggleTimer} mode={time.mode}>
