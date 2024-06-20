@@ -12,7 +12,7 @@ import {
     ModalWrapper,
 } from './model.styles';
 
-interface ModalProps {
+export interface ModalProps {
     isOpen: boolean;
     setIsOpen: (show: boolean) => void;
     children: React.ReactNode;

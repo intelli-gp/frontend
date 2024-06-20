@@ -8,6 +8,7 @@ import Button from '../button/button.component';
 import { Modal } from '../modal/modal.component';
 import { ButtonsContainer } from './CreditCardModal.styles';
 import { FormContainer } from './CreditCardModal.styles';
+import { Label } from '../input/input.styles';
 
 interface ModalProps {
     showModal: boolean;
@@ -29,8 +30,8 @@ const AddCreditCardForm: React.FC<Pick<ModalProps, 'setShowModal'>> = ({
     return (
         <FormContainer onSubmit={handleAddPaymentMethod}>
             <span className="p-2 flex flex-col gap-2">
-                <h2 className="font-extrabold">Credit or debit card:</h2>
-                <CardElement />
+                <Label>Credit or debit card:</Label>
+                <CardElement className='border px-2 py-4 rounded-lg'/>
             </span>
 
             <ButtonsContainer>
@@ -41,6 +42,7 @@ const AddCreditCardForm: React.FC<Pick<ModalProps, 'setShowModal'>> = ({
                     loading={isLoading}
                     type="submit"
                     onClick={handleAddPaymentMethod}
+                    className='w-[90px] h-[38px]'
                 >
                     Save
                 </Button>
