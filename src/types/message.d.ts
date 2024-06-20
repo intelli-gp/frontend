@@ -69,16 +69,48 @@ export type ReactToMessageDTO = {
 export type SendIsTypingDTO = { IsTyping: boolean; GroupID: number };
 
 export type ClientToServerEvents = {
-    createMessage: (dto: CreateMessageDTO) => void;
-    joinRoom: (dto: { ChatGroupId: number }) => void;
-    leaveRoom: (dto: { ChatGroupId: number }) => void;
-    typing: (data: SendIsTypingDTO) => void;
-    deleteMessage: (data: DeleteMessageDTO) => void;
-    editMessage: (data: UpdateMessageDTO) => void;
-    getMessageInfo: (data: DeleteMessageDTO) => void;
-    leaveMessageInfoRoom: (data: DeleteMessageDTO) => void;
-    reactToMessage: (data: ReactToMessageDTO) => void;
+    createMessage: (
+        data: CreateMessageDTO,
+        feedback: (error: SocketCustomError) => Promise<void>,
+    ) => void;
+    joinRoom: (
+        data: { ChatGroupId: number },
+        feedback: (error: SocketCustomError) => Promise<void>,
+    ) => void;
+    leaveRoom: (
+        data: { ChatGroupId: number },
+        feedback: (error: SocketCustomError) => Promise<void>,
+    ) => void;
+    typing: (
+        data: SendIsTypingDTO,
+        feedback: (error: SocketCustomError) => Promise<void>,
+    ) => void;
+    deleteMessage: (
+        data: DeleteMessageDTO,
+        feedback: (error: SocketCustomError) => Promise<void>,
+    ) => void;
+    editMessage: (
+        data: UpdateMessageDTO,
+        feedback: (error: SocketCustomError) => Promise<void>,
+    ) => void;
+    getMessageInfo: (
+        data: DeleteMessageDTO,
+        feedback: (error: SocketCustomError) => Promise<void>,
+    ) => void;
+    leaveMessageInfoRoom: (
+        data: DeleteMessageDTO,
+        feedback: (error: SocketCustomError) => Promise<void>,
+    ) => void;
+    reactToMessage: (
+        data: ReactToMessageDTO,
+        feedback: (error: SocketCustomError) => Promise<void>,
+    ) => void;
+    refreshToken: (data: { accessToken: string }) => void;
 };
+
+type EmitTypes = Parameters<
+    ClientToServerEvents[keyof ClientToServerEvents]
+>[0];
 
 export type ServerToClientEvents = {
     isTyping: (data: ReceivedTypingDTO) => void;
@@ -92,4 +124,10 @@ export type ServerToClientEvents = {
         username: string;
         status: 'online' | 'offline';
     }) => void;
+    tokenRefreshed: (data: string) => void;
+};
+
+export type SocketCustomError = {
+    error?: string;
+    message?: string;
 };

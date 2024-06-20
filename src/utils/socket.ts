@@ -1,7 +1,12 @@
 import { Socket, io } from 'socket.io-client';
 
 import { RootState, clearCredentials, setCredentials, store } from '../store';
-import { ClientToServerEvents, ServerToClientEvents } from '../types/message';
+import {
+    ClientToServerEvents,
+    EmitTypes,
+    ServerToClientEvents,
+    SocketCustomError,
+} from '../types/message';
 import { GenericResponse, NestErrorResponse } from '../types/response';
 import { Lock } from './asyncLock';
 import { routingHelper } from './navigateHelper';
@@ -18,15 +23,19 @@ export async function getSocket(
             socket = io(import.meta.env.VITE_WS_BACKEND, {
                 auth: { token },
             });
-            socket.on('connect', async () => {
-                socket.on('error', socketErrorHandler);
-                await lock.release();
-                resolve(socket);
+            socket.on('error', socketErrorHandler);
+            socket.on('connect_error', async () => {
+                /**
+                 * Usually, this error is thrown when the token is invalid.
+                 * This is not the best way to handle this error, but it works for now.
+                 */
+                socket.auth = { token: await _getNewToken() };
+                socket.connect();
             });
-        } else {
-            await lock.release();
-            resolve(socket);
+            socket.on('tokenRefreshed', console.log);
         }
+        await lock.release();
+        resolve(socket);
     });
 }
 
@@ -40,40 +49,66 @@ export async function deleteSocket() {
 }
 
 export async function socketErrorHandler(error: NestErrorResponse) {
-    switch (error.statusCode) {
-        case 401: {
-            // Send a request to the server to refresh the token.
-            const response = await fetch(
-                `${import.meta.env.VITE_BACKEND}/api/auth/refresh`,
-                {
-                    method: 'POST',
-                },
-            );
+    console.log('Unimplemented socketErrorHandler', error);
+}
 
-            // Extract the data from the response.
-            const {
-                data,
-            }: GenericResponse<{
-                access_token: string;
-            }> = await response.json();
+async function _getNewToken() {
+    // Send a request to the server to refresh the token.
+    const response = await fetch(
+        `${import.meta.env.VITE_BACKEND}/api/auth/refresh`,
+        {
+            method: 'POST',
+            credentials: 'include', // Include cookies in the request.
+        },
+    );
 
-            // If the refresh request is successful, update the token and execute the request again.
-            const { access_token } = data;
-            if (access_token) {
-                const user = (store.getState() as RootState).auth.user;
-                store.dispatch(
-                    setCredentials({
-                        user,
-                        token: access_token,
-                    }),
-                );
-            } else {
-                store.dispatch(clearCredentials());
-                console.error('Failed to refresh token from inside socket');
-                routingHelper.navigate('/auth/login');
-            }
-        }
+    // Extract the data from the response.
+    const {
+        data,
+    }: GenericResponse<{
+        access_token: string;
+    }> = await response.json();
+
+    return data.access_token;
+}
+
+export async function renewSocketToken() {
+    const access_token = await _getNewToken();
+    if (access_token) {
+        const user = (store.getState() as RootState).auth.user;
+        store.dispatch(
+            setCredentials({
+                user,
+                token: access_token,
+            }),
+        );
+        const socket = await getSocket();
+        socket.emit('refreshToken', { accessToken: access_token });
+    } else {
+        store.dispatch(clearCredentials());
+        console.error('Failed to refresh token from inside socket');
+        routingHelper.navigate('/auth/login');
     }
-    await deleteSocket();
-    await getSocket(store.getState().auth.token);
+}
+
+/**
+ * Wrapper around socket.emit to handle authentication errors.
+ */
+export async function socketEmit(
+    event: keyof ClientToServerEvents,
+    data: EmitTypes,
+) {
+    const socket = await getSocket();
+    socket.emit(event, data as any, async ({ error }: SocketCustomError) => {
+        // Check of an error occurred.
+        if (!error) return;
+
+        switch (error) {
+            case 'AuthFailedError':
+                // If the error is an authentication error, try to refresh the token.
+                await renewSocketToken();
+                // Redo the failed request.
+                await socketEmit(event, data);
+        }
+    });
 }
