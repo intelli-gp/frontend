@@ -16,14 +16,12 @@ export const useNotificationsHook = ({}: Partial<useNotificationsHookType>) => {
     /**
      * This is a counter to set allOn on when it
      * reaches the maximum number of on buttons which currently is MAX_ON_BUTTONS.
-     * This logic may not work in dev environment because of React.Strict mode 
-     * don't 
+     * This logic may not work in dev environment because of React.Strict mode
+     * don't modify it unless you know what you are doing.
      */
     const [_counter, _setCounter] = useState(
         +messagesIsOn + +followIsOn + +commentsIsOn, // This is a trick to convert boolean to number to count number of on buttons
     );
-
-    console.log(_counter);
 
     const toggleMessages = () => {
         setMessagesIsOn((prev) => {
@@ -114,3 +112,8 @@ export const useNotificationsHook = ({}: Partial<useNotificationsHookType>) => {
         toggleAllOn,
     };
 };
+
+
+export const usePersonalInfoHook = () => {
+    
+}
