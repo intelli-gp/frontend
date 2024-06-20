@@ -1,7 +1,7 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import EnhancedImage from '../image/image.component';
-import { Link } from 'react-router-dom';
 
 export const CourseCardContainer = styled.div`
     position: relative;

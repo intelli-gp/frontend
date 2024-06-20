@@ -3,8 +3,8 @@ import { TbMessage2 } from 'react-icons/tb';
 import styled, { css } from 'styled-components';
 
 import { CSSTextLengthLimit } from '../../index.styles';
-import EnhancedImage from '../image/image.component';
 import Button from '../button/button.component';
+import EnhancedImage from '../image/image.component';
 
 export const SideNavContainer = styled.aside<{ sideNavOpen: boolean }>`
     background-color: var(--indigo-950);
@@ -28,8 +28,7 @@ export const SideNavContainer = styled.aside<{ sideNavOpen: boolean }>`
     left: ${(props) => (props.sideNavOpen ? '0' : '-100%')};
 `;
 
-export const BrandContainer = styled.div`
-`
+export const BrandContainer = styled.div``;
 
 export const Brand = styled.h1`
     text-align: center;
@@ -192,4 +191,4 @@ export const MobileNavHamburger = styled(Button)`
     &:hover {
         background-color: rgba(255, 255, 255, 0.1);
     }
-`
+`;

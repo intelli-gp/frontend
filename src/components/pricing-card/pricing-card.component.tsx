@@ -32,7 +32,7 @@ const PricingCard = ({
     );
     const isUnique = title === 'premium';
     const isSubscribed = userPlan === 2;
- 
+
     console.log('isSubscribed', isSubscribed);
 
     const CardButton = () => {

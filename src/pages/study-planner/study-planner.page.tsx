@@ -1,5 +1,6 @@
 import Fuse from 'fuse.js';
 import moment from 'moment';
+import 'moment-timezone';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import React from 'react';
 import {
@@ -38,7 +39,6 @@ import {
     TaskBoxContainer,
     TasksContainer,
 } from './study-planner.styles';
-import 'moment-timezone';
 
 const formats = {
     weekdayFormat: 'ddd',
@@ -174,13 +174,13 @@ export default function StudyPlanner() {
     }, [isLoading, error, tasks]);
 
     const [viewState, setViewState] = useState<View>('week');
-    const [date, setDate] = useState(new Date())
+    const [date, setDate] = useState(new Date());
     const onNavigate = useCallback(
         (newDate: Date) => {
-            return setDate(newDate)
+            return setDate(newDate);
         },
-        [setDate]
-    )
+        [setDate],
+    );
     const CustomToolbar = (props: ToolbarProps) => {
         function addMonths(date: Date, months: number) {
             const d = date.getDate();
@@ -188,22 +188,21 @@ export default function StudyPlanner() {
             if (date.getDate() != d) {
                 date.setDate(0);
             }
-            setDate(date)
+            setDate(date);
             return date;
         }
 
         function addWeeks(date: Date, weeks: number) {
             date.setDate(date.getDate() + 7 * weeks);
-            setDate(date)
+            setDate(date);
             return date;
         }
 
         function addDays(date: Date, days: number) {
             date.setDate(date.getDate() + days);
-            setDate(date)
+            setDate(date);
             return date;
         }
-
 
         const goToDayView = () => {
             setViewState('day');
@@ -239,12 +238,9 @@ export default function StudyPlanner() {
             }
         };
 
-
-
         function cycleView() {
             if (viewState === 'week') {
                 goToDayView();
-
             } else if (viewState === 'day') {
                 goToMonthView();
             } else if (viewState === 'month') {
@@ -297,30 +293,28 @@ export default function StudyPlanner() {
         let EVENTS;
         const prevDataRef = useRef<Task[]>();
 
-            if (isLoading || error) {
-            } else {
-                if (prevDataRef.current !== data) {
-                    console.log(data)
-                     EVENTS = data?.map((task) => ({
-                        start: moment(task.StartDate).toDate(),
-                        end: moment(task.DueDate).toDate(),
-                        data: {
-                            task: {
-                                id: task.ID,
-                                status: task.Status,
-                                courseName: task.Title,
-                                start: moment(task.StartDate).format('LT'),
-                                end: moment(task.DueDate).format('LT'),
-                                color: task.Color,
-                            },
+        if (isLoading || error) {
+        } else {
+            if (prevDataRef.current !== data) {
+                console.log(data);
+                EVENTS = data?.map((task) => ({
+                    start: moment(task.StartDate).toDate(),
+                    end: moment(task.DueDate).toDate(),
+                    data: {
+                        task: {
+                            id: task.ID,
+                            status: task.Status,
+                            courseName: task.Title,
+                            start: moment(task.StartDate).format('LT'),
+                            end: moment(task.DueDate).format('LT'),
+                            color: task.Color,
                         },
-                        resourceId: task.ID,
-                    }));
-                    prevDataRef.current = data;
-                }
+                    },
+                    resourceId: task.ID,
+                }));
+                prevDataRef.current = data;
             }
-        
-
+        }
 
         return (
             <BigCalendar

@@ -5,88 +5,86 @@ import styled, { css } from 'styled-components';
 import { CustomInput } from '../../components/input/Input.component';
 
 const Calendar = css`
-
-.rbc-time-view .rbc-row:first-child {
-    font-size: 1rem;
-    min-height: 3rem !important;
-    flex-grow: 1 !important;
-}
-.rbc-time-header-gutter {
-    width: 79.85px !important;
-}
-.rbc-header {
-    padding: 10px 0 0 0 !important;
-    color: #1b2547;
-    border-bottom: 0px solid !important;
-    font-size: larger;
-    font-weight: 400;
-}
-.rbc-time-header-content {
-    flex: 1;
-    display: flex !important;
-    width: 788px !important;
-}
-
-.rbc-row-bg {
-    border-top: 1px solid #ced4da !important;
-}
-.rbc-header + .rbc-today {
-    color: #312e81;
-}
-.rbc-label {
-    color: #868e96;
-}
-.rbc-allday-cell {
-    visibility: hidden !important;
-    height: 0 !important;
-}
-.rbc-time-header-gutter {
-    border-style: solid;
-
-    border-width: 0 !important;
-}
-.rbc-today {
-    background-color: #e9eafd;
-}
-
-.rbc-event {
-    padding: 0px !important;
-    border-radius: 0px !important;
-    border: none !important;
-    background-color: transparent !important;
-    z-index: 2;
-    position: relative;
-}
-
-.rbc-background-event {
-    padding: 0px !important;
-    border-radius: 0px !important;
-    border: none !important;
-    background-color: transparent !important;
-}
-
-.rbc-event-label {
-    display: none !important;
-}
-
-.rbc-timeslot-group {
-    min-height: 80px !important;
-    border-color: transparent !important;
-}
-
-.rbc-events-container {
-    @media (min-width: 1441px) {
-        margin-right: 0px !important;
+    .rbc-time-view .rbc-row:first-child {
+        font-size: 1rem;
+        min-height: 3rem !important;
+        flex-grow: 1 !important;
     }
-}
-input[type='time']::-webkit-calendar-picker-indicator {
-    display: none;
-}
-.rbc-current-time-indicator {
-    background-color: #312e81 !important;
-}
-`
+    .rbc-time-header-gutter {
+        width: 79.85px !important;
+    }
+    .rbc-header {
+        padding: 10px 0 0 0 !important;
+        color: #1b2547;
+        border-bottom: 0px solid !important;
+        font-size: larger;
+        font-weight: 400;
+    }
+    .rbc-time-header-content {
+        flex: 1;
+        display: flex !important;
+        width: 788px !important;
+    }
 
+    .rbc-row-bg {
+        border-top: 1px solid #ced4da !important;
+    }
+    .rbc-header + .rbc-today {
+        color: #312e81;
+    }
+    .rbc-label {
+        color: #868e96;
+    }
+    .rbc-allday-cell {
+        visibility: hidden !important;
+        height: 0 !important;
+    }
+    .rbc-time-header-gutter {
+        border-style: solid;
+
+        border-width: 0 !important;
+    }
+    .rbc-today {
+        background-color: #e9eafd;
+    }
+
+    .rbc-event {
+        padding: 0px !important;
+        border-radius: 0px !important;
+        border: none !important;
+        background-color: transparent !important;
+        z-index: 2;
+        position: relative;
+    }
+
+    .rbc-background-event {
+        padding: 0px !important;
+        border-radius: 0px !important;
+        border: none !important;
+        background-color: transparent !important;
+    }
+
+    .rbc-event-label {
+        display: none !important;
+    }
+
+    .rbc-timeslot-group {
+        min-height: 80px !important;
+        border-color: transparent !important;
+    }
+
+    .rbc-events-container {
+        @media (min-width: 1441px) {
+            margin-right: 0px !important;
+        }
+    }
+    input[type='time']::-webkit-calendar-picker-indicator {
+        display: none;
+    }
+    .rbc-current-time-indicator {
+        background-color: #312e81 !important;
+    }
+`;
 
 export const PageContainer = styled(motion.div)`
     ${Calendar}
@@ -277,7 +275,7 @@ export const StatusIcon = styled(GoDotFill)<{ color?: string }>`
 export const StatusInput = styled(CustomInput)<{ color?: string }>`
     background-color: rgba(${(props) => hexToRgb(props.color)}, 0.2);
     font-size: 0.9rem;
-    padding-left:30px;
+    padding-left: 30px;
 `;
 
 export const StatusContainer = styled(motion.ul)`

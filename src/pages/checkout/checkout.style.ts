@@ -1,5 +1,6 @@
 import { BsArrowLeft } from 'react-icons/bs';
 import styled from 'styled-components';
+
 import Button from '../../components/button/button.component';
 
 export const Return = styled(BsArrowLeft)`
@@ -14,34 +15,32 @@ export const Return = styled(BsArrowLeft)`
         border-radius: 100%;
     }
 `;
-export const CardsContainer =styled.div`
-border-top:2px solid var(--slate-200);
-margin: 0 auto;
+export const CardsContainer = styled.div`
+    border-top: 2px solid var(--slate-200);
+    margin: 0 auto;
 
-     width:100%;
-
-`
-export const NoContentHolder =styled.div`
-    display:flex;
+    width: 100%;
+`;
+export const NoContentHolder = styled.div`
+    display: flex;
     text-align: center;
     align-items: center;
     justify-content: center;
-    padding:2rem;
-    width:100%;
-	font-size: 1.25rem;
-line-height: 1.75rem;   
- font-weight: 500;
- border-top:2px solid var(--slate-200);
-color:var(--slate-400);
-`
+    padding: 2rem;
+    width: 100%;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: 500;
+    border-top: 2px solid var(--slate-200);
+    color: var(--slate-400);
+`;
 
 export const AddCardButton = styled(Button)`
-   background-color: var(--slate-200);
-        width:100%;
-border-color: var(--slate-200);
+    background-color: var(--slate-200);
+    width: 100%;
+    border-color: var(--slate-200);
 
     color: var(--indigo-900);
-
 `;
 export const FlexContainer = styled.div`
     display: flex;

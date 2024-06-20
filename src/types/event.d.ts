@@ -2,9 +2,9 @@ export type Task = {
     ID: number;
     Status: string;
     Title: string;
-    DueDate: string ;
+    DueDate: string;
     Description: string;
-    StartDate: string ;
+    StartDate: string;
     Color: string;
 };
 export type EventItem = {
@@ -16,8 +16,8 @@ export type EventItem = {
 export type sendTask = {
     Status: string;
     Title: string;
-    DueDate: string ;
+    DueDate: string;
     Description: string;
-    StartDate:  string;
+    StartDate: string;
     Color: string;
 };

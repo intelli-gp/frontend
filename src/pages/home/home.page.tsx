@@ -1,3 +1,4 @@
+import { Variants } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
@@ -43,7 +44,6 @@ import {
     SectionTitle,
     StyledLink,
 } from './home.style';
-import { Variants } from 'framer-motion';
 
 function Nav() {
     const [navbarOpen, setMenuOpen] = useState(false);
@@ -96,14 +96,13 @@ function Nav() {
             let observerCallback = (entries: IntersectionObserverEntry[]) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        setHorizontalNavLinks(
-                            (prev) =>
-                                prev?.map((link) => {
-                                    if (link.scrollTarget === entry.target) {
-                                        return { ...link, isActive: true };
-                                    }
-                                    return { ...link, isActive: false };
-                                }),
+                        setHorizontalNavLinks((prev) =>
+                            prev?.map((link) => {
+                                if (link.scrollTarget === entry.target) {
+                                    return { ...link, isActive: true };
+                                }
+                                return { ...link, isActive: false };
+                            }),
                         );
                     }
                 });
@@ -203,12 +202,12 @@ function Hero() {
                     potential.
                 </SectionRegularText>
                 <Ellipse
-                   animate={{ rotate: 360 }}
-                   transition={{
-                     repeat: Infinity,
-                     repeatType: "loop",
-                     duration: 10
-                   }}
+                    animate={{ rotate: 360 }}
+                    transition={{
+                        repeat: Infinity,
+                        repeatType: 'loop',
+                        duration: 10,
+                    }}
                 />
             </HeroContent>
         </HeroSection>
@@ -223,7 +222,7 @@ function FeatureSection() {
             description:
                 'Stay organized and on track with our intuitive study planner, allowing you to schedule your study sessions, and monitor your progress.',
             className: 'bg-indigo-200',
-            number: -300
+            number: -300,
         },
         {
             image: Courses,
@@ -231,7 +230,7 @@ function FeatureSection() {
             description:
                 'Receive tailored course recommendations based on your academic interests, ensuring you make the most informed choices.',
             className: 'bg-indigo-900 text-[var(--gray-300)]',
-            number: 300
+            number: 300,
         },
         {
             image: ChatBot,
@@ -239,7 +238,7 @@ function FeatureSection() {
             description:
                 'Get instant assistance and guidance for your academic queries and challenges through our chatbot helper.',
             className: 'bg-indigo-900 text-[var(--gray-300)]',
-            number: -300
+            number: -300,
         },
         {
             image: StudyGroup,
@@ -247,21 +246,21 @@ function FeatureSection() {
             description:
                 'Connect with like-minded peers by using our study group finder, which helps you discover and join study groups for your courses.',
             className: 'bg-indigo-200',
-            number: 300
+            number: 300,
         },
     ];
     const cardVariants: Variants = {
         offscreen: {
-            opacity: 0
+            opacity: 0,
         },
         onscreen: {
             opacity: 1,
             transition: {
-                type: "linear",
+                type: 'linear',
                 delay: 0.35,
-                duration: 0.8
-            }
-        }
+                duration: 0.8,
+            },
+        },
     };
 
     return (

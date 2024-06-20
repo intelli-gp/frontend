@@ -11,9 +11,9 @@ export const CardContainer = styled.div`
     align-items: flex-start;
     position: relative;
     transition: all 0.25s ease-in-out;
-    border-radius:6px;
+    border-radius: 6px;
     &:hover {
-        background-color:rgba(0, 0, 0, 0.01);
+        background-color: rgba(0, 0, 0, 0.01);
     }
 `;
 

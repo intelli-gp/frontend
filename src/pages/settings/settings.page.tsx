@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { ChangeEvent, useEffect, useLayoutEffect, useState } from 'react';
+import { MdOutlineAddCard } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,6 +10,7 @@ import CardInfo from '../../components/card-info/card-info.component';
 import AddCreditCardModal from '../../components/credit-card-modal/CreditCardModal';
 import { CustomInput } from '../../components/input/Input.component';
 import { Modal } from '../../components/modal/modal.component';
+import SubscriptionInfo from '../../components/subscription-info/subscription-info.component';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
@@ -41,8 +43,6 @@ import {
     SectionContainer,
     SectionTitle,
 } from './settings.styles';
-import { MdOutlineAddCard } from 'react-icons/md';
-import SubscriptionInfo from '../../components/subscription-info/subscription-info.component';
 
 export const SettingsPage = () => {
     const dispatch = useDispatch();
@@ -464,27 +464,27 @@ export const SettingsPage = () => {
                         type="password"
                         label={'Current Password'}
                         value=""
-                        onChange={() => { }}
+                        onChange={() => {}}
                     />
                     <InlineInputsContainer>
                         <CustomInput
                             type="password"
                             label={'New Password'}
                             value=""
-                            onChange={() => { }}
+                            onChange={() => {}}
                         />
                         <CustomInput
                             type="password"
                             label={'Repeat New Password'}
                             value=""
-                            onChange={() => { }}
+                            onChange={() => {}}
                         />
                     </InlineInputsContainer>
                     <EditButton
                         select="warning"
                         title="Edit this section"
                         loading={false}
-                        onClick={() => { }}
+                        onClick={() => {}}
                     >
                         Save
                     </EditButton>
@@ -582,8 +582,8 @@ export const SettingsPage = () => {
                         <span className="flex justify-end w-full">
                             <AddCardContainer
                                 onClick={() => setAddCreditCardIsOpen(true)}
-                                select='warning'
-                                title='Add credit card'
+                                select="warning"
+                                title="Add credit card"
                             >
                                 <MdOutlineAddCard size={26} />
                             </AddCardContainer>

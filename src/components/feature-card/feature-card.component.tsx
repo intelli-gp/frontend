@@ -1,4 +1,5 @@
 import { Variants } from 'framer-motion';
+
 import {
     CardContainer,
     CardDescription,
@@ -13,7 +14,6 @@ type FeatureCardProps = {
     description: string;
     className?: string;
     xenter: number;
-
 };
 
 export const FeatureCard = ({
@@ -21,26 +21,27 @@ export const FeatureCard = ({
     title,
     description,
     className,
-    xenter
+    xenter,
 }: FeatureCardProps) => {
     const cardVariants: Variants = {
         offscreen: {
-            x: xenter,             
+            x: xenter,
         },
         onscreen: {
             x: 0,
             transition: {
-                type: "spring",
-                duration:0.8
-            }
-        }
+                type: 'spring',
+                duration: 0.8,
+            },
+        },
     };
     return (
         <CardContainer
             initial="offscreen"
             whileInView="onscreen"
             variants={cardVariants}
-            className={className}>
+            className={className}
+        >
             <CardTextContainer>
                 <CardTitle>{title}</CardTitle>
                 <CardDescription>{description}</CardDescription>

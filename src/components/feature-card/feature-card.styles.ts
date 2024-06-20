@@ -1,7 +1,7 @@
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
 import EnhancedImage from '../image/image.component';
-import { motion } from 'framer-motion';
 
 export const CardContainer = styled(motion.div)`
     padding: 2rem;

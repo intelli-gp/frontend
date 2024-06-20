@@ -46,10 +46,10 @@ export const EditTaskModal: React.FC<ModalProps> = ({
     const [description, setDescription] = useState(task.Description);
     const [color, setColor] = useState(task?.Color || '#000ff3');
     const [due_date, setDueDate] = useState(
-        moment.tz(task.DueDate, moment.tz.guess()).format().slice(0, 10)
+        moment.tz(task.DueDate, moment.tz.guess()).format().slice(0, 10),
     );
     const [due_start, setDueStart] = useState(
-        moment.tz(task.StartDate, moment.tz.guess()).format().slice(11, 16)
+        moment.tz(task.StartDate, moment.tz.guess()).format().slice(11, 16),
     );
     const [due_end, setDueEnd] = useState(
         moment.tz(task.DueDate, moment.tz.guess()).format().slice(11, 16),
@@ -220,8 +220,14 @@ export const EditTaskModal: React.FC<ModalProps> = ({
             ID: id,
             Title: title,
             Description: description,
-            DueDate: moment.tz((due_date + 'T' + due_end), moment.tz.guess()).utc().format('YYYY-MM-DDTHH:mm'),
-            StartDate: moment.tz((due_date + 'T' + due_start), moment.tz.guess()).utc().format('YYYY-MM-DDTHH:mm'),
+            DueDate: moment
+                .tz(due_date + 'T' + due_end, moment.tz.guess())
+                .utc()
+                .format('YYYY-MM-DDTHH:mm'),
+            StartDate: moment
+                .tz(due_date + 'T' + due_start, moment.tz.guess())
+                .utc()
+                .format('YYYY-MM-DDTHH:mm'),
             Status: status,
             Color: color,
         };

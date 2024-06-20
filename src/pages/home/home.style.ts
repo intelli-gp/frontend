@@ -84,7 +84,7 @@ export const HomeSideNav = styled.div<{ isOpen?: boolean }>`
     }
 `;
 
-export const NavLink = styled(Link) <{ active?: boolean }>`
+export const NavLink = styled(Link)<{ active?: boolean }>`
     font-weight: 500;
     color: white;
     display: flex;
@@ -125,7 +125,7 @@ export const BrandName = styled.h1`
     user-select: none;
 `;
 
-export const StyledLink = styled(Link) <{ active?: boolean }>`
+export const StyledLink = styled(Link)<{ active?: boolean }>`
     border-bottom: 1px solid rgba(255, 255, 255, 0.25);
     background-color: ${({ active }) =>
         active ? 'rgba(255, 255, 255, 0.15)' : 'transparent'};
@@ -146,13 +146,13 @@ export const HeroSection = styled.section`
     display: flex;
     justify-content: center;
     background: var(--indigo-50);
-    text-align:center;
+    text-align: center;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: contain;  
+    background-size: contain;
     @media (min-width: 1024px) {
         justify-content: left;
-        text-align:left;
+        text-align: left;
         background-image: url(${image});
     }
     ${commonSectionStyles}
@@ -164,7 +164,7 @@ export const HeroContent = styled.div`
     padding: 1rem;
     justify-content: center;
     width: min(600px, 90%);
-    position: relative; 
+    position: relative;
 
     @media (min-width: 1024px) {
         transform: translateX(25%);
@@ -177,21 +177,19 @@ export const SectionTitle = styled.h1`
     margin-bottom: 0.75rem;
     letter-spacing: -2px;
     font-weight: 700;
-    z-index:3;
-        text-align:center;
+    z-index: 3;
+    text-align: center;
 
     @media (min-width: 768px) {
         font-size: 3.5rem;
-                text-align:left;
-
+        text-align: left;
     }
 `;
 
 export const SectionRegularText = styled.p`
     font-size: 1.125rem;
     color: var(--gray-700);
-    z-index:3;
-
+    z-index: 3;
 `;
 
 export const AISection = styled.section`
@@ -339,17 +337,18 @@ export const CopyRightText = styled.p`
     }
 `;
 
-
-
-export const Ellipse =styled(motion.div)`
-  width: 650px;
-  height: 600px;
-  background: radial-gradient(96.46% 80.72% at 56.39% 69.37%, #CECFFB 37.5%, rgba(255, 255, 255, 0.5) 100%);
-  position: absolute;
-  left:-6%;
-  border-radius: 50%;
-  @media (max-width: 690px) {
-      left:-8%;
+export const Ellipse = styled(motion.div)`
+    width: 650px;
+    height: 600px;
+    background: radial-gradient(
+        96.46% 80.72% at 56.39% 69.37%,
+        #cecffb 37.5%,
+        rgba(255, 255, 255, 0.5) 100%
+    );
+    position: absolute;
+    left: -6%;
+    border-radius: 50%;
+    @media (max-width: 690px) {
+        left: -8%;
     }
 `;
-
