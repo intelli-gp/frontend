@@ -5,24 +5,22 @@ import { useNavigate } from 'react-router-dom';
 
 import checkout from '../../assets/imgs/checkout.svg';
 import Button from '../../components/button/button.component';
-import CardInfo from '../../components/card-info/card-info.component';
 import AddCreditCardModal from '../../components/credit-card-modal/CreditCardModal';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import { changeUserPlan } from '../../store';
-import { useFetchPaymentMethodsQuery } from '../../store/apis/paymentMethodsApi';
 import { useCreateSubscriptionMutation } from '../../store/apis/subscriptionsApi';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
     AddCardButton,
-    CardsContainer,
     ContentWrapper,
     FlexContainer,
     Image,
-    NoContentHolder,
+    Line,
     Return,
     SidePanel,
     Title,
 } from './checkout.style';
+import CardsInfo from '../../components/card-info/cards-info.component';
 
 const CheckoutPage = () => {
     const dispatch = useDispatch();
@@ -37,8 +35,6 @@ const CheckoutPage = () => {
 
     const [subscribeToPro, { isLoading: isSubscriptionCreationLoading }] =
         useCreateSubscriptionMutation();
-
-    const { data: paymentMethodsResponse } = useFetchPaymentMethodsQuery();
 
     const price = Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -104,33 +100,9 @@ const CheckoutPage = () => {
                     className="flex flex-col justify-center lg:items-start items-center w-[90%] lg:w-[60%] py-8 gap-4"
                 >
                     <PageTitle size="sm">Select default card </PageTitle>
-                    {paymentMethodsResponse ? (
-                        <CardsContainer>
-                            {paymentMethodsResponse?.data?.map(
-                                (paymentMethod, index) => (
-                                    <div className="w-[100%]" key={index}>
-                                        <CardInfo
-                                            paymentMethodId={
-                                                paymentMethod.PaymentMethodId
-                                            }
-                                            LastFourDigits={
-                                                paymentMethod.LastFourDigits
-                                            }
-                                            ExpiryMonth={paymentMethod.ExpMonth}
-                                            ExpiryYear={paymentMethod.ExpYear}
-                                            Brand={paymentMethod.Brand}
-                                            IsDefault={paymentMethod.IsDefault}
-                                        />
-                                    </div>
-                                ),
-                            )}
-                        </CardsContainer>
-                    ) : (
-                        <NoContentHolder>
-                            {' '}
-                            No Payment Methods Added.
-                        </NoContentHolder>
-                    )}
+                    <Line/>
+                    <CardsInfo/>
+
                     <div className="w-[100%] flex flex-col items-center gap-4">
                         <AddCardButton
                             onClick={() => setAddCreditCardIsOpen(true)}

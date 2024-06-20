@@ -64,10 +64,8 @@ export const AddCardContainer = styled(Button)`
 `;
 
 export const CardsContainer = styled.div`
-    padding-top: 1rem;
     margin: 0 auto;
     width: 100%;
-    gap: 1rem;
 `;
 
 export const PlanButton = styled(Button)``;
@@ -96,12 +94,14 @@ export const NoContentHolder = styled.div`
     text-align: center;
     align-items: center;
     justify-content: center;
-    padding: 1.5rem;
+    padding: 2rem;
     width: 100%;
     font-size: 1.25rem;
     line-height: 1.75rem;
-    font-weight: 540;
+    font-weight: 500;
+    color: var(--slate-400);
 `;
+
 
 export const QRCodeImg = styled(EnhancedImage)`
     width: 200px;

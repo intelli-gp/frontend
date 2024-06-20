@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Accordion from '../../components/accordion/accordion.component';
 import Button from '../../components/button/button.component';
-import CardInfo from '../../components/card-info/card-info.component';
+import CardsInfo from '../../components/card-info/cards-info.component';
 import AddCreditCardModal from '../../components/credit-card-modal/CreditCardModal';
 import { CustomInput } from '../../components/input/Input.component';
 import { Modal } from '../../components/modal/modal.component';
@@ -23,7 +23,6 @@ import {
     useLazyGenerate2faQuery,
     useUpdateUserMutation,
 } from '../../store';
-import { useFetchPaymentMethodsQuery } from '../../store/apis/paymentMethodsApi';
 import {
     useCancelSubscriptionMutation,
     useGetSubscriptionQuery,
@@ -55,9 +54,6 @@ export const SettingsPage = () => {
     const { data: tagsRes } = useGetAllTagsQuery();
     const [triggerUpdateUser, { isLoading, reset: resetUserUpdateMutation }] =
         useUpdateUserMutation();
-
-    const { data: paymentMethodResponse } = useFetchPaymentMethodsQuery();
-    const PaymentMethodsData = paymentMethodResponse?.data || [];
     const [triggerGenerate2faCode, { isFetching: isGenerating2faQRCode }] =
         useLazyGenerate2faQuery();
     const [triggerEnable2fa, { isLoading: isEnabling2fa }] =
@@ -562,23 +558,8 @@ export const SettingsPage = () => {
                     )}
                     <SectionTitle>Payment Method</SectionTitle>
                     <div className="flex flex-col justify-center items-center gap-4 p-2">
-                        {PaymentMethodsData?.map((paymentMethod, index) => (
-                            <div className="w-[100%]" key={index}>
-                                <CardInfo
-                                    paymentMethodId={
-                                        paymentMethod.PaymentMethodId
-                                    }
-                                    LastFourDigits={
-                                        paymentMethod.LastFourDigits
-                                    }
-                                    ExpiryMonth={paymentMethod.ExpMonth}
-                                    ExpiryYear={paymentMethod.ExpYear}
-                                    Brand={paymentMethod.Brand}
-                                    IsDefault={paymentMethod.IsDefault}
-                                />
-                                <hr />
-                            </div>
-                        ))}
+                    <CardsInfo/>
+
                         <span className="flex justify-end w-full">
                             <AddCardContainer
                                 onClick={() => setAddCreditCardIsOpen(true)}

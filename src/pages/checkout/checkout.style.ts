@@ -21,20 +21,12 @@ export const CardsContainer = styled.div`
 
     width: 100%;
 `;
-export const NoContentHolder = styled.div`
-    display: flex;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    width: 100%;
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-    font-weight: 500;
-    border-top: 2px solid var(--slate-200);
-    color: var(--slate-400);
-`;
 
+export const Line = styled.div`
+    border-top: 2px solid var(--slate-200);
+    width: 100%;
+
+`
 export const AddCardButton = styled(Button)`
     background-color: var(--slate-200);
     width: 100%;

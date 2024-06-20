@@ -16,7 +16,18 @@ export const CardContainer = styled.div`
         background-color: rgba(0, 0, 0, 0.01);
     }
 `;
-
+export const NoContentHolder = styled.div`
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    width: 100%;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: 500;
+    color: var(--slate-400);
+`;
 export const EditIcon = styled(BsThreeDotsVertical)`
     color: var(--slate-400);
     width: 20px;
