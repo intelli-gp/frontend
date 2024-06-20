@@ -28,6 +28,7 @@ import {
     FollowIcon,
     GroupsContainer,
     MainContainer,
+    ModalButtonsContainer,
     PageContainer,
     PageHeader,
     PictureOverlay,
@@ -57,7 +58,7 @@ import { useFetchSpecificUsersRecommendationQuery } from '../../store/apis/recom
 import { ReceivedArticle } from '../../types/article.d';
 import { GroupWithRole, ReceivedGroup } from '../../types/group';
 import { ReceivedUser, UserToSend } from '../../types/user';
-import { errorToast, successToast } from '../../utils/toasts';
+import { errorToast, infoToast, successToast } from '../../utils/toasts';
 import { ContactInfoLink } from './profile.styles';
 import {
     AboutList,
@@ -75,22 +76,190 @@ import {
     ProfilePicture,
 } from './profile.styles';
 
-type ModalProps = {
+type UploadImageModalProps = {
+    /**
+     * Modal open state
+     */
     isOpen: boolean;
+    /**
+     * Set modal open state
+     */
     setIsOpen: (isOpen: boolean) => void;
-    image: string;
-    setImage: (image: string) => void;
-    title: string;
-};
 
-const ProfilePage = () => {
-    const navigate = useNavigate();
+    /**
+     * Image to be uploaded
+     */
+    image: string;
+    /**
+     * Set image to be uploaded
+     */
+    setImage: (image: string) => void;
+
+    /**
+     * Title of the modal
+     */
+    title: 'Profile' | 'Cover';
+};
+const UploadImageModal = ({
+    isOpen,
+    setIsOpen,
+    image: newImage,
+    setImage: setNewImage,
+    title,
+}: UploadImageModalProps) => {
     const dispatch = useDispatch();
-    const location = useLocation();
 
     const { token, user: storedUser } = useSelector(
         (state: RootState) => state.auth,
     );
+
+    const { isLoading: isImageLoading, trigger: uploadImage } =
+        useUploadImage();
+    const [updateUser, { isLoading: updateUserIsLoading }] =
+        useUpdateUserMutation();
+
+    let userCurrentImage: string;
+    if (title === 'Cover') {
+        userCurrentImage = storedUser.CoverImage!;
+    } else {
+        userCurrentImage = storedUser.ProfileImage!;
+    }
+
+    const handleUpdate = async () => {
+        try {
+            const update: Partial<UserToSend> = {};
+
+            if (userCurrentImage === newImage) {
+                infoToast('No changes detected');
+                return;
+            }
+
+            const imageURL = await uploadImage(newImage!);
+            if (!imageURL) return;
+
+            if (title === 'Cover') {
+                update.coverImage = imageURL;
+            } else {
+                update.image = imageURL;
+            }
+
+            const {
+                data: { updatedUser },
+            } = await updateUser(update).unwrap();
+
+            dispatch(
+                setCredentials({
+                    user: updatedUser,
+                    token: token,
+                }),
+            );
+            successToast(`${title} image updated successfully`);
+
+            setIsOpen(false);
+        } catch {
+            errorToast(`Failed to update ${title} image`);
+        }
+    };
+
+    return (
+        <Modal
+            className="items-center"
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            title={`Edit ${title} Image`}
+            width="lg"
+        >
+            <OpenImage
+                height="250px"
+                width={title === 'Cover' ? '450px' : '250px'}
+                value={newImage}
+                onChange={setNewImage}
+                radius={title === 'Cover' ? '5px' : '50%'}
+                cover={title === 'Cover' ? 'contain' : 'cover'}
+            />
+
+            <ModalButtonsContainer>
+                <Button
+                    select="primary"
+                    className="w-[80px] h-[40px]"
+                    loading={isImageLoading || updateUserIsLoading}
+                    onClick={handleUpdate}
+                >
+                    Apply
+                </Button>
+                <Button
+                    select="danger"
+                    onClick={() => {
+                        setNewImage(
+                            title === 'Cover'
+                                ? storedUser.CoverImage!
+                                : storedUser.ProfileImage!,
+                        );
+                        setIsOpen(false);
+                    }}
+                    outline
+                >
+                    Cancel
+                </Button>
+            </ModalButtonsContainer>
+        </Modal>
+    );
+};
+
+type UsersListProps = {
+    users: ReceivedUser[];
+    type: 'Following' | 'Followers';
+};
+export const UsersListWithSearch = ({ users, type }: UsersListProps) => {
+    const [searchValue, setSearchValue] = useState('');
+    const [visibleUsers, setVisibleUsers] = useState(users);
+
+    let fuzzy = new Fuse<ReceivedUser>(users, {
+        keys: ['Username', 'FullName'],
+    });
+
+    const handleSearchValueChange = (newValue: string) => {
+        setSearchValue(newValue);
+        if (newValue.trim().length === 0) return setVisibleUsers(users);
+        let searchResult =
+            fuzzy.search(newValue)?.reduce((acc, cur) => {
+                acc.push(cur.item);
+                return acc;
+            }, [] as ReceivedUser[]) ?? [];
+        setVisibleUsers(searchResult);
+    };
+
+    const iconTitle =
+        type === 'Following'
+            ? "You'r following this user."
+            : 'This user follows you.';
+
+    return (
+        <UsersListContainer>
+            <UsersListHeader>
+                <ExplorePageHeader
+                    WithoutButton
+                    searchValue={searchValue}
+                    onSearchValueChange={handleSearchValueChange}
+                />
+            </UsersListHeader>
+            <UsersListContent>
+                {visibleUsers?.map((user) => (
+                    <UserItem
+                        {...user}
+                        emoji={<FollowIcon title={iconTitle} size={18} />}
+                    />
+                ))}
+            </UsersListContent>
+        </UsersListContainer>
+    );
+};
+
+const ProfilePage = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const { user: storedUser } = useSelector((state: RootState) => state.auth);
 
     /**
      * Check if the user is viewing another user's profile
@@ -102,16 +271,12 @@ const ProfilePage = () => {
         navigate('/app/profile');
     }
 
-    const { isLoading: isImageLoading, trigger: uploadImage } =
-        useUploadImage();
     const [
         getUserData,
         { data: _anotherUserData, isLoading: anotherUserIsLoading },
     ] = useLazyFetchUserQuery();
     const [getFollowers, { data: __followers }] = useLazyGetFollowersQuery();
     const [getFollowing, { data: __following }] = useLazyGetFollowingQuery();
-    const [updateUser, { isLoading: updateUserIsLoading }] =
-        useUpdateUserMutation();
     const { data: _articles } = useGetUserArticlesQuery();
     const { data: _groups } = useGetUserGroupsQuery();
     const { data: _followers } = useGetFollowersQuery(storedUser?.ID!);
@@ -138,8 +303,9 @@ const ProfilePage = () => {
     const [loggedInUserCoverImage, setLoggedInUserCoverImage] = useState(
         storedUser.CoverImage,
     );
-    const [showCoverModal, setCoverModal] = useState(false);
-    const [showImgModal, setImgModal] = useState(false);
+    const [coverImageModalIsOpen, setCoverImageModalIsOpen] = useState(false);
+    const [profileImageModalIsOpen, setProfileImageModalIsOpen] =
+        useState(false);
     const [contactInfoModal, setContactInfoModal] = useState(false);
     const [userData, setUserData] = useState<Partial<ReceivedUser>>({});
     const [userGroups, setUserGroups] = useState<Partial<ReceivedGroup>[]>([]);
@@ -233,7 +399,7 @@ const ProfilePage = () => {
             setUserGroups(loggedInUserGroups);
             setUserArticles(loggedInUserArticles);
         }
-    }, [_anotherUserData, _articles, _groups, location]);
+    }, [_anotherUserData, _articles, _groups, location, storedUser]);
 
     useEffect(() => {
         if (isAnotherUserProfile && anotherUserUsername) {
@@ -316,109 +482,6 @@ const ProfilePage = () => {
             }),
         );
     };
-
-    const handleUpdate = async () => {
-        try {
-            const update: Partial<UserToSend> = {};
-
-            if (storedUser?.ProfileImage !== loggedInUserProfileImage) {
-                const imageURL = await uploadImage(loggedInUserProfileImage!);
-                update.image = imageURL;
-                const {
-                    data: { updatedUser },
-                } = await updateUser(update).unwrap();
-
-                dispatch(
-                    setCredentials({
-                        user: updatedUser,
-                        token: token,
-                    }),
-                );
-
-                successToast('Image uploaded successfully');
-            }
-            if (storedUser?.CoverImage !== loggedInUserCoverImage) {
-                const imageURL = await uploadImage(loggedInUserCoverImage!);
-                update.coverImage = imageURL;
-                const {
-                    data: { updatedUser },
-                } = await updateUser(update).unwrap();
-
-                dispatch(
-                    setCredentials({
-                        user: updatedUser,
-                        token: token,
-                    }),
-                );
-                successToast('Image uploaded successfully');
-            }
-            setImgModal(false);
-            setCoverModal(false);
-        } catch (error: any) {
-            if (error.response?.status === 401) {
-                errorToast('Unauthorized. Please log in again.');
-            } else {
-                errorToast('Error occurred while updating the image!');
-            }
-        }
-    };
-
-    const openImgModal = () => {
-        setImgModal((prev) => !prev);
-    };
-
-    const openCoverModal = () => {
-        setCoverModal((prev) => !prev);
-    };
-
-    const ModalUploadImage: React.FC<ModalProps> = ({
-        isOpen,
-        setIsOpen,
-        image,
-        setImage,
-        title,
-    }) => (
-        <Modal
-            className="items-center"
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            title={`Edit ${title} Image`}
-            width="lg"
-        >
-            <OpenImage
-                height="250px"
-                width={title === 'Cover' ? '450px' : '250px'}
-                value={image}
-                onChange={setImage}
-                radius={title === 'Cover' ? '5px' : '50%'}
-                cover={title === 'Cover' ? 'contain' : 'cover'}
-            />
-
-            <div className="flex flex-row-reverse gap-4 w-full mt-4">
-                <Button
-                    select="primary"
-                    loading={isImageLoading || updateUserIsLoading}
-                    onClick={handleUpdate}
-                >
-                    Apply
-                </Button>
-                <Button
-                    select="danger"
-                    onClick={() => {
-                        setImage(
-                            title === 'Cover'
-                                ? storedUser.CoverImage!
-                                : storedUser.ProfileImage!,
-                        );
-                        setIsOpen(false);
-                    }}
-                    outline
-                >
-                    Cancel
-                </Button>
-            </div>
-        </Modal>
-    );
 
     const ContactInfoModal = (
         <Modal
@@ -511,7 +574,7 @@ const ProfilePage = () => {
                         className={`!rounded-none ${
                             isAnotherUserProfile && 'hidden'
                         }`}
-                        onClick={openCoverModal}
+                        onClick={() => setCoverImageModalIsOpen(true)}
                     />
                     <CoverImage
                         src={
@@ -530,7 +593,7 @@ const ProfilePage = () => {
                         <PictureOverlay
                             src={cameraImage}
                             title="Edit profile picture"
-                            onClick={openImgModal}
+                            onClick={() => setProfileImageModalIsOpen(true)}
                             className={`${isAnotherUserProfile && 'hidden'}`}
                         />
                     </ProfilePictureContainer>
@@ -592,71 +655,22 @@ const ProfilePage = () => {
 
             {ContactInfoModal}
 
-            <ModalUploadImage
-                isOpen={showImgModal}
-                setIsOpen={setImgModal}
+            <UploadImageModal
+                isOpen={profileImageModalIsOpen}
+                setIsOpen={setProfileImageModalIsOpen}
                 image={loggedInUserProfileImage!}
                 setImage={setLoggedInUserProfileImage}
                 title="Profile"
             />
 
-            <ModalUploadImage
-                isOpen={showCoverModal}
-                setIsOpen={setCoverModal}
+            <UploadImageModal
+                isOpen={coverImageModalIsOpen}
+                setIsOpen={setCoverImageModalIsOpen}
                 image={loggedInUserCoverImage!}
                 setImage={setLoggedInUserCoverImage}
                 title="Cover"
             />
         </PageContainer>
-    );
-};
-
-type UsersListProps = {
-    users: ReceivedUser[];
-    type: 'Following' | 'Followers';
-};
-export const UsersListWithSearch = ({ users, type }: UsersListProps) => {
-    const [searchValue, setSearchValue] = useState('');
-    const [visibleUsers, setVisibleUsers] = useState(users);
-
-    let fuzzy = new Fuse<ReceivedUser>(users, {
-        keys: ['Username', 'FullName'],
-    });
-
-    const handleSearchValueChange = (newValue: string) => {
-        setSearchValue(newValue);
-        if (newValue.trim().length === 0) return setVisibleUsers(users);
-        let searchResult =
-            fuzzy.search(newValue)?.reduce((acc, cur) => {
-                acc.push(cur.item);
-                return acc;
-            }, [] as ReceivedUser[]) ?? [];
-        setVisibleUsers(searchResult);
-    };
-
-    const iconTitle =
-        type === 'Following'
-            ? "You'r following this user."
-            : 'This user follows you.';
-
-    return (
-        <UsersListContainer>
-            <UsersListHeader>
-                <ExplorePageHeader
-                    WithoutButton
-                    searchValue={searchValue}
-                    onSearchValueChange={handleSearchValueChange}
-                />
-            </UsersListHeader>
-            <UsersListContent>
-                {visibleUsers?.map((user) => (
-                    <UserItem
-                        {...user}
-                        emoji={<FollowIcon title={iconTitle} size={18} />}
-                    />
-                ))}
-            </UsersListContent>
-        </UsersListContainer>
     );
 };
 
