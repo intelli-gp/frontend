@@ -28,10 +28,14 @@ const AddCreditCardForm: React.FC<Pick<ModalProps, 'setShowModal'>> = ({
 
     return (
         <FormContainer onSubmit={handleAddPaymentMethod}>
+            <span className='p-2 flex flex-col gap-2'>
+                <h2 className='font-extrabold'>Credit or debit card:</h2>
             <CardElement />
 
+            </span>
+
             <ButtonsContainer>
-                <Button select="danger" outline onClick={handleCancel}>
+                <Button select="danger"  outline onClick={handleCancel}>
                     Cancel
                 </Button>
                 <Button
@@ -39,7 +43,7 @@ const AddCreditCardForm: React.FC<Pick<ModalProps, 'setShowModal'>> = ({
                     type="submit"
                     onClick={handleAddPaymentMethod}
                 >
-                    Submit
+                    Save
                 </Button>
             </ButtonsContainer>
         </FormContainer>
@@ -58,7 +62,7 @@ const AddCreditCardModal: React.FC<ModalProps> = ({
 
     return (
         <Elements stripe={stripePromise}>
-            <Modal isOpen={showModal} setIsOpen={setShowModal} width="md">
+            <Modal isOpen={showModal} setIsOpen={setShowModal} title={'Add a new card'} width="md">
                 <AddCreditCardForm setShowModal={setShowModal} />
             </Modal>
         </Elements>
