@@ -239,7 +239,7 @@ export default function LoginPage() {
                 </Button>
 
                 <GoogleLoginButton>
-                    <GoogleLoginLink href="http://localhost:3333/api/auth/login/google">
+                    <GoogleLoginLink href={`${import.meta.env.VITE_BACKEND}/api/auth/login/google`}>
                         <GoogleIcon />
                         Login with google
                     </GoogleLoginLink>
