@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { BsFillPostcardFill } from 'react-icons/bs';
-import { FaHandsHelping } from 'react-icons/fa';
+import { BsFillPostcardFill, BsStars } from 'react-icons/bs';
 import { FiMenu } from 'react-icons/fi';
 import { GiBookshelf, GiRobotGolem, GiTomato, GiUpgrade } from 'react-icons/gi';
 import { HiMiniUserGroup } from 'react-icons/hi2';
@@ -147,7 +146,7 @@ export default function SideNav() {
             ],
         },
         {
-            icon: <FaHandsHelping />,
+            icon: <BsStars />,
             path: '/app/AI-helper',
             text: 'AI helper',
             id: 6,

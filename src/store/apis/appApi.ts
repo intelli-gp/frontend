@@ -81,5 +81,6 @@ export const appApi = createApi({
         'User Notifications',
         'Followings',
         'Followers',
+        "Ai Messages"
     ],
 });

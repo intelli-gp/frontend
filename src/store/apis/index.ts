@@ -6,3 +6,4 @@ export * from './articlesApi';
 export * from './tasksApi';
 export * from './groupsApi';
 export * from './notificationApi';
+export * from './aiApi';

@@ -1,3 +1,4 @@
+import MDEditor from '@uiw/react-md-editor';
 import { IoCloseOutline } from 'react-icons/io5';
 import { IoClose } from 'react-icons/io5';
 import { MdFileDownload } from 'react-icons/md';
@@ -8,7 +9,7 @@ import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
 import EnhancedImage from '../image/image.component';
 
 export const Message = styled.div<{
-    isMine: boolean;
+    isMine?: boolean;
     hasReactions?: boolean;
     isReply?: boolean;
 }>`
@@ -23,7 +24,7 @@ export const Message = styled.div<{
         isMine ? '16px 16px 0px 16px' : '16px 16px 16px 0px'};
     display: flex;
     flex-direction: column;
-    max-width: 70%;
+    max-width: 75%;
     min-width: 20%;
     gap: ${({ isReply }) => (isReply ? '0.75rem' : '0.5rem')};
     position: relative;
@@ -36,6 +37,9 @@ export const Message = styled.div<{
         .options-button {
             opacity: 1;
         }
+    }
+    @media (max-width: 768px) {
+        max-width: 100%;
     }
 `;
 
@@ -285,4 +289,13 @@ export const ReplyToMessageCloseButton = styled(IoCloseOutline)`
 export const ReplyToMessageContent = styled(MessageContent)`
     ${CSSTextLinesCountLimit}
     color: inherit;
+`;
+
+export const AIReplyContent = styled(MDEditor.Markdown)`
+    padding: 0 1rem;
+    background-color: transparent;
+    color: inherit;
+    ul {
+        list-style-type: disc;
+    }
 `;

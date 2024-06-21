@@ -4,7 +4,7 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { MdDoNotDisturb } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
-import AIBotImage from '../../assets/imgs/AI-profile.svg';
+import AIBotImage from '../../assets/imgs/ai-icon.png';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import { RootState } from '../../store';
 import {
@@ -13,18 +13,17 @@ import {
     useReactToMessageMutation,
     useUpdateMessageMutation,
 } from '../../store/apis/messagesApi';
-import {
-    AIMessageType,
-    MessageInfo,
-    SerializedMessage,
-} from '../../types/message';
+import { ReceivedAiMessage } from '../../types/ai';
+import { MessageInfo, SerializedMessage } from '../../types/message';
 import { profileURL } from '../../utils/profileUrlBuilder';
+import Skeleton from '../Skeleton';
 import Button from '../button/button.component';
 import { CustomInput } from '../input/Input.component';
 import DropdownMenu from '../menu/menu.component';
 import { Modal } from '../modal/modal.component';
 import UserItem from '../user-Item/user-item.component';
 import {
+    AIReplyContent,
     CloseIcon,
     ImageContainer,
     ImageContent,
@@ -541,23 +540,59 @@ export const ReplyMessage = ({
 };
 
 type AIMessageProps = {
-    message: AIMessageType;
+    message: ReceivedAiMessage;
+    isLoading?: boolean;
 };
 
-export const AIMessage = ({ message }: AIMessageProps) => {
+export const AIMessage = ({ message, isLoading }: AIMessageProps) => {
+    const AiReplyContent = () => {
+        if (isLoading) {
+            return (
+                <div className="flex flex-col gap-0">
+                    <Skeleton
+                        times={1}
+                        className="w-[300px] h-[24px] rounded-full"
+                        darker
+                    />
+                    <Skeleton
+                        times={1}
+                        className="w-[300px] h-[24px] rounded-full"
+                        darker
+                    />
+                    <Skeleton
+                        times={1}
+                        className="w-[100px] h-[24px] rounded-full"
+                        darker
+                    />
+                </div>
+            );
+        } else {
+            return <AIReplyContent source={message.Reply} />;
+        }
+    };
+
     return (
-        <Message isMine={!message.AIGenerated}>
-            <MessageHeader isMine={!message.AIGenerated}>
-                <SenderProfile alt="AI bot image" src={AIBotImage} />
-                <SenderName to={'#'}>AI Helper</SenderName>
-            </MessageHeader>
-            <MessageContent dir="auto" isMine={!message.AIGenerated}>
-                {message.Content}
-            </MessageContent>
-            <MessageDate isMine={!message.AIGenerated}>
-                {new Date(message.CreatedAt ?? Date.now()).toLocaleString()}
-            </MessageDate>
-        </Message>
+        <>
+            <Message isMine>
+                <MessageContent dir="auto" isMine>
+                    {message.Prompt}
+                </MessageContent>
+                <MessageDate isMine>
+                    {new Date(message.CreatedAt ?? Date.now()).toLocaleString()}
+                </MessageDate>
+            </Message>
+
+            <Message data-color-mode="light">
+                <MessageHeader>
+                    <SenderProfile alt="AI bot image" src={AIBotImage} />
+                    <SenderName to={'#'}>Ai</SenderName>
+                </MessageHeader>
+                <AiReplyContent />
+                <MessageDate>
+                    {new Date(message.CreatedAt ?? Date.now()).toLocaleString()}
+                </MessageDate>
+            </Message>
+        </>
     );
 };
 
