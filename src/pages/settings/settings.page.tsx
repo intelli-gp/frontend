@@ -109,9 +109,7 @@ const Enable2faModal = ({
                     <strong> Google Authenticator</strong>, or
                     <strong> Microsoft Authenticator</strong>.
                 </li>
-                <li>
-                    Scan the QR code above with the app to generate a code.
-                </li>
+                <li>Scan the QR code above with the app to generate a code.</li>
                 <li>
                     Enter the six-digit code below to enable two factor
                     authentication.
@@ -257,6 +255,8 @@ export const SettingsPage = () => {
         toggleComments,
         toggleMessages,
         toggleAllOn,
+        updateNotificationsSettings,
+        isUpdateNotificationsLoading,
     } = useNotificationsHook({});
     const {
         firstName,
@@ -540,7 +540,12 @@ export const SettingsPage = () => {
                         <Label>Likes & Comments Notifications</Label>
                     </NotificationSettingsRow>
                 </NotificationSettingsContainer>
-                <EditButton select="secondary" title="Save changes">
+                <EditButton
+                    select="secondary"
+                    title="Save changes"
+                    onClick={updateNotificationsSettings}
+                    loading={isUpdateNotificationsLoading}
+                >
                     Save
                 </EditButton>
             </Accordion>

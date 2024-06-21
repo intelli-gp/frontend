@@ -33,7 +33,7 @@ export type ReceivedUser = {
         ReceivedArticle,
         'ID' | 'Title' | 'CoverImage' | 'CreatedAt' | 'ArticleTags'
     >[];
-};
+} & UserNotificationSettings;
 
 export type UserToSend = {
     id: string;
@@ -49,6 +49,13 @@ export type UserToSend = {
     removedInterests: string[];
     password: string;
     headline: string;
+} & UserNotificationSettings;
+
+export type UserNotificationSettings = {
+    IsAllNotificationsMuted: boolean;
+    IsGroupNotificationsMuted: boolean;
+    IsArticleNotificationsMuted: boolean;
+    IsFollowNotificationsMuted: boolean;
 };
 
 export type UserCredentials = {

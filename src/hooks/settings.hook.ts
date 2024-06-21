@@ -1,9 +1,14 @@
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { RootState } from '../store';
-import { UserToSend } from '../types/user';
+import {
+    RootState,
+    setCredentials,
+    useUpdateNotificationsSettingsMutation,
+} from '../store';
+import { UserNotificationSettings, UserToSend } from '../types/user';
+import { errorToast, successToast } from '../utils/toasts';
 
 type useNotificationsHookType = {
     messageIsOn: boolean;
@@ -14,9 +19,11 @@ type useNotificationsHookType = {
 const MAX_ON_BUTTONS = 3;
 
 export const useNotificationsHook = ({}: Partial<useNotificationsHookType>) => {
+    const dispatch = useDispatch();
+
     const [messagesIsOn, setMessagesIsOn] = useState(true);
     const [followIsOn, setFollowIsOn] = useState(true);
-    const [commentsIsOn, setCommentsIsOn] = useState(true);
+    const [articlesIsOn, setArticlesIsOn] = useState(true);
     const [allOn, setAllOn] = useState(true);
     /**
      * This is a counter to set allOn on when it
@@ -25,8 +32,64 @@ export const useNotificationsHook = ({}: Partial<useNotificationsHookType>) => {
      * don't modify it unless you know what you are doing.
      */
     const [_counter, _setCounter] = useState(
-        +messagesIsOn + +followIsOn + +commentsIsOn, // This is a trick to convert boolean to number to count number of on buttons
+        +messagesIsOn + +followIsOn + +articlesIsOn, // This is a trick to convert boolean to number to count number of on buttons
     );
+
+    const { user, token } = useSelector((state: RootState) => state.auth);
+
+    const [triggerUpdateNotifications, { isLoading }] =
+        useUpdateNotificationsSettingsMutation();
+
+    const getUpdateDiff = () => {
+        const diff: UserNotificationSettings = {
+            IsAllNotificationsMuted: !!user.IsAllNotificationsMuted,
+            IsGroupNotificationsMuted: !!user.IsGroupNotificationsMuted,
+            IsArticleNotificationsMuted: !!user.IsAllNotificationsMuted,
+            IsFollowNotificationsMuted: !!user.IsFollowNotificationsMuted,
+        };
+
+        if (user.IsAllNotificationsMuted !== !allOn) {
+            diff.IsAllNotificationsMuted = !allOn;
+        }
+        if (user.IsGroupNotificationsMuted !== !messagesIsOn) {
+            diff.IsGroupNotificationsMuted = !messagesIsOn;
+        }
+        if (user.IsFollowNotificationsMuted !== !followIsOn) {
+            diff.IsFollowNotificationsMuted = !followIsOn;
+        }
+        if (user.IsArticleNotificationsMuted !== !articlesIsOn) {
+            diff.IsArticleNotificationsMuted = !articlesIsOn;
+        }
+
+        return diff;
+    };
+
+    const updateNotificationsSettings = async () => {
+        const diff = getUpdateDiff();
+        if (Object.keys(diff).length) {
+            try {
+                const {
+                    data: { updatedUser },
+                } = await triggerUpdateNotifications(diff).unwrap();
+                dispatch(
+                    setCredentials({
+                        user: updatedUser,
+                        token,
+                    }),
+                );
+                successToast('Notifications settings updated successfully');
+            } catch {
+                errorToast('Failed to update notifications settings');
+            }
+        }
+    };
+
+    useEffect(() => {
+        setAllOn(!Boolean(user.IsAllNotificationsMuted));
+        setMessagesIsOn(!Boolean(user.IsGroupNotificationsMuted));
+        setFollowIsOn(!Boolean(user.IsFollowNotificationsMuted));
+        setArticlesIsOn(!Boolean(user.IsArticleNotificationsMuted));
+    }, [user]);
 
     const toggleMessages = () => {
         setMessagesIsOn((prev) => {
@@ -71,7 +134,7 @@ export const useNotificationsHook = ({}: Partial<useNotificationsHookType>) => {
     };
 
     const toggleComments = () => {
-        setCommentsIsOn((prev) => {
+        setArticlesIsOn((prev) => {
             if (prev) {
                 /**
                  * If we go from on to off, so the allOn button
@@ -96,11 +159,11 @@ export const useNotificationsHook = ({}: Partial<useNotificationsHookType>) => {
             if (!prev) {
                 setMessagesIsOn(true);
                 setFollowIsOn(true);
-                setCommentsIsOn(true);
+                setArticlesIsOn(true);
             } else {
                 setMessagesIsOn(false);
                 setFollowIsOn(false);
-                setCommentsIsOn(false);
+                setArticlesIsOn(false);
             }
             return !prev;
         });
@@ -109,12 +172,14 @@ export const useNotificationsHook = ({}: Partial<useNotificationsHookType>) => {
     return {
         messagesIsOn,
         followIsOn,
-        commentsIsOn,
+        commentsIsOn: articlesIsOn,
         allOn,
         toggleMessages,
         toggleFollow,
         toggleComments,
         toggleAllOn,
+        updateNotificationsSettings,
+        isUpdateNotificationsLoading: isLoading,
     };
 };
 
