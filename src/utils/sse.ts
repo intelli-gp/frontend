@@ -227,7 +227,7 @@ export function connectSSE(token?: string) {
     };
 
     subscription.onerror = async (error) => {
-        switch (error.status) {
+        switch ((error as any).status) {
             case 401:
             case 403: {
                 console.log('Token expired, renewing token...')
