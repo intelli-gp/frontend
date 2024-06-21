@@ -136,7 +136,7 @@ const AIHelperPage = () => {
             </ChatHeader>
 
             <ChatBody ref={chatBodyRef}>
-                {messageIsSending ? (
+                {messagesIsLoading ? (
                     <ChatSkeleton />
                 ) : (
                     <>
