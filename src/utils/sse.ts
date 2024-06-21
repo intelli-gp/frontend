@@ -29,8 +29,8 @@ export function connectSSE(token?: string) {
     });
     subscription.onmessage = async (event) => {
         const eventData = JSON.parse(event.data) as NotificationEvents;
-
-        console.log(eventData); // Debugging
+        const isEventMuted = eventData?.isMuted;
+        console.log({ eventData }); // Debugging
         switch (eventData.EventName) {
             case NOTIFICATION_TYPES.MESSAGE: {
                 const messageNotificationData =
@@ -87,6 +87,9 @@ export function connectSSE(token?: string) {
                         console.error('Error refetching data:', error);
                     }
                 });
+
+                if (isEventMuted) return;
+
                 showSystemNotification(
                     messageNotificationData?.Entity?.Group?.GroupTitle,
                     {
@@ -107,6 +110,7 @@ export function connectSSE(token?: string) {
                     Linker: `/app/chat-room/${messageNotificationData?.Entity?.Group?.ID}`,
                 });
             }
+
             case NOTIFICATION_TYPES.ARTICLE: {
                 const articleNotificationData =
                     eventData as ArticleNotification;
@@ -164,6 +168,9 @@ export function connectSSE(token?: string) {
                             'You received an unsupported notification';
                         break;
                 }
+
+                if (isEventMuted) return;
+
                 showSystemNotification(
                     articleNotificationData?.Sender?.FullName,
                     {
@@ -185,8 +192,11 @@ export function connectSSE(token?: string) {
                     },
                 });
             }
+
             case NOTIFICATION_TYPES.FOLLOW: {
                 const followNotificationData = eventData as FollowNotification;
+
+                if (isEventMuted) return;
                 showSystemNotification(
                     followNotificationData?.Sender?.FullName,
                     {
