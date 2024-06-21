@@ -5,7 +5,7 @@ export const tagsApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
         getAllTags: builder.query<GenericResponse<string[]>, void>({
             query: () => ({
-                url: '/tags',
+                url: `/tags?limit=1000&offset=0`,
                 method: 'GET',
             }),
         }),
