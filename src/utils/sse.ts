@@ -14,6 +14,7 @@ import {
 } from '../types/notifications';
 import { GenericResponse } from '../types/response';
 import { showSystemNotification } from './notifications-api';
+import { getNewToken } from './socket';
 import { infoToast } from './toasts';
 
 let subscription: EventSourcePolyfill;
@@ -27,6 +28,7 @@ export function connectSSE(token?: string) {
             Authorization: `Bearer ${token}`,
         },
     });
+    console.log('Connected to SSE'); // Debugging
     subscription.onmessage = async (event) => {
         const eventData = JSON.parse(event.data) as NotificationEvents;
         const isEventMuted = eventData?.isMuted;
@@ -221,6 +223,22 @@ export function connectSSE(token?: string) {
                 return infoToast(
                     `${eventData.EventName} is not a supported notification type`,
                 );
+        }
+    };
+
+    subscription.onerror = async (error) => {
+        switch (error.status) {
+            case 401:
+            case 403: {
+                console.log('Token expired, renewing token...')
+                const newToken = await getNewToken();
+                if (newToken) {
+                    disconnectSSE();
+                    connectSSE(newToken);
+                } else {
+                    console.error('Failed to renew token');
+                }
+            }
         }
     };
 }

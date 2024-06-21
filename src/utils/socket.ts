@@ -29,7 +29,7 @@ export async function getSocket(
                  * Usually, this error is thrown when the token is invalid.
                  * This is not the best way to handle this error, but it works for now.
                  */
-                socket.auth = { token: await _getNewToken() };
+                socket.auth = { token: await getNewToken() };
                 socket.connect();
             });
             socket.on('tokenRefreshed', console.log);
@@ -52,7 +52,10 @@ export async function socketErrorHandler(error: NestErrorResponse) {
     console.log('Unimplemented socketErrorHandler', error);
 }
 
-async function _getNewToken() {
+/**
+ * Get a new token from the server.
+ */
+export async function getNewToken() {
     // Send a request to the server to refresh the token.
     const response = await fetch(
         `${import.meta.env.VITE_BACKEND}/api/auth/refresh`,
@@ -73,7 +76,7 @@ async function _getNewToken() {
 }
 
 export async function renewSocketToken() {
-    const access_token = await _getNewToken();
+    const access_token = await getNewToken();
     if (access_token) {
         const user = (store.getState() as RootState).auth.user;
         store.dispatch(
