@@ -157,7 +157,8 @@ export const EmojisCounter = styled.span`
 
 export const MessageDate = styled.p<{ isMine?: boolean }>`
     display: flex;
-    justify-content: flex-end;
+    /* justify-content: flex-end; */
+    justify-content: space-between;
     font-size: 0.6rem;
     color: ${({ isMine }) => (isMine ? 'white' : 'var(--gray-800)')};
     opacity: 0.85;
