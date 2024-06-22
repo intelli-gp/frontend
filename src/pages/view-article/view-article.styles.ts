@@ -162,6 +162,7 @@ export const SuggestedArticlesTitle = styled.h2`
 
 export const SuggestedArticlesContainer = styled.div`
     max-width: 1000px;
+    width: 100%;
     margin: 1rem auto 4rem auto;
     display: flex;
     flex-direction: column;

@@ -162,8 +162,8 @@ const SearchPage = () => {
             isFetching: articlesRecommendationIsFetching,
         },
     ] = useLazyFetchGeneralArticlesRecommendationQuery();
-    const recommendedArticles = _articleRecommendation?.data
-        ?.Results as ReceivedArticle[];
+    const recommendedArticles =
+        (_articleRecommendation?.data?.Results as ReceivedArticle[]) ?? [];
 
     const [
         triggerGroupsRecommendation,
@@ -172,8 +172,8 @@ const SearchPage = () => {
             isFetching: groupsRecommendationsIsFetching,
         },
     ] = useLazyFetchGeneralGroupsRecommendationQuery();
-    const recommendedGroups = _groupRecommendation?.data
-        ?.Results as ReceivedGroup[];
+    const recommendedGroups =
+        (_groupRecommendation?.data?.Results as ReceivedGroup[]) ?? [];
 
     const [
         triggerUsersRecommendation,
@@ -183,8 +183,8 @@ const SearchPage = () => {
         },
     ] = useLazyFetchSpecificUsersRecommendationQuery();
 
-    const recommendedUsers = _userRecommendation?.data
-        ?.Results as ReceivedUser[];
+    const recommendedUsers =
+        (_userRecommendation?.data?.Results as ReceivedUser[]) ?? [];
 
     const handleSearchValueChange = (newValue: string) => {
         dispatch(changeSearchPageQuery(newValue));
