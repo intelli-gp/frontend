@@ -8,7 +8,7 @@ import {
     useUpdateNotificationsSettingsMutation,
 } from '../store';
 import { UserNotificationSettings, UserToSend } from '../types/user';
-import { errorToast, successToast } from '../utils/toasts';
+import { errorToast, infoToast, successToast } from '../utils/toasts';
 
 type useNotificationsHookType = {
     messageIsOn: boolean;
@@ -42,15 +42,14 @@ export const useNotificationsHook = ({}: Partial<useNotificationsHookType>) => {
 
     const getUpdateDiff = () => {
         const diff: UserNotificationSettings = {
-            IsAllNotificationsMuted: !!user.IsAllNotificationsMuted,
+            IsAllNotificationsMuted: false,
             IsGroupNotificationsMuted: !!user.IsGroupNotificationsMuted,
             IsArticleNotificationsMuted: !!user.IsAllNotificationsMuted,
             IsFollowNotificationsMuted: !!user.IsFollowNotificationsMuted,
         };
 
-        if (user.IsAllNotificationsMuted !== !allOn) {
-            diff.IsAllNotificationsMuted = !allOn;
-        }
+        const originalCopy = { ...diff };
+
         if (user.IsGroupNotificationsMuted !== !messagesIsOn) {
             diff.IsGroupNotificationsMuted = !messagesIsOn;
         }
@@ -61,31 +60,42 @@ export const useNotificationsHook = ({}: Partial<useNotificationsHookType>) => {
             diff.IsArticleNotificationsMuted = !articlesIsOn;
         }
 
+        if (JSON.stringify(originalCopy) === JSON.stringify(diff)) {
+            return {} as UserNotificationSettings;
+        }
+
         return diff;
     };
 
     const updateNotificationsSettings = async () => {
         const diff = getUpdateDiff();
-        if (Object.keys(diff).length) {
-            try {
-                const {
-                    data: { updatedUser },
-                } = await triggerUpdateNotifications(diff).unwrap();
-                dispatch(
-                    setCredentials({
-                        user: updatedUser,
-                        token,
-                    }),
-                );
-                successToast('Notifications settings updated successfully');
-            } catch {
-                errorToast('Failed to update notifications settings');
-            }
+        if (Object.keys(diff).length === 0) {
+            infoToast('No changes detected');
+            return;
+        }
+
+        try {
+            const {
+                data: { updatedUser },
+            } = await triggerUpdateNotifications(diff).unwrap();
+            dispatch(
+                setCredentials({
+                    user: updatedUser,
+                    token,
+                }),
+            );
+            successToast('Notifications settings updated successfully');
+        } catch {
+            errorToast('Failed to update notifications settings');
         }
     };
 
     useEffect(() => {
-        setAllOn(!Boolean(user.IsAllNotificationsMuted));
+        setAllOn(
+            !Boolean(user.IsGroupNotificationsMuted) &&
+                !Boolean(user.IsFollowNotificationsMuted) &&
+                !Boolean(user.IsArticleNotificationsMuted),
+        );
         setMessagesIsOn(!Boolean(user.IsGroupNotificationsMuted));
         setFollowIsOn(!Boolean(user.IsFollowNotificationsMuted));
         setArticlesIsOn(!Boolean(user.IsArticleNotificationsMuted));

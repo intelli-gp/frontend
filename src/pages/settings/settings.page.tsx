@@ -537,7 +537,7 @@ export const SettingsPage = () => {
                             isOn={commentsIsOn}
                             toggle={toggleComments}
                         />
-                        <Label>Likes & Comments Notifications</Label>
+                        <Label>Articles Notifications</Label>
                     </NotificationSettingsRow>
                 </NotificationSettingsContainer>
                 <EditButton
