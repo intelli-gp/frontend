@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-import Button from '../../components/button/button.component';
+import EnhancedImage from '../../components/image/image.component';
 
 export const PageContainer = styled(motion.div)`
     padding: 0.5rem;
@@ -22,7 +22,6 @@ export const ChatHeader = styled.div`
     justify-content: space-between;
     align-items: center;
     box-shadow: 0px 0px 22px 10px rgba(99, 102, 241, 0.1);
-    z-index: 100;
     height: 75px;
     border-radius: 0.5rem;
 `;
@@ -33,10 +32,10 @@ export const AIAvatarContainer = styled.div`
     gap: 1rem;
 `;
 
-export const AIicon = styled.img`
+export const AIicon = styled(EnhancedImage)`
     border-radius: 50%;
-    height: 50px;
-    width: 50px;
+    height: 40px;
+    width: 40px;
 `;
 
 export const ChatBody = styled.div`
@@ -61,13 +60,4 @@ export const ChatFooter = styled.div`
     gap: 0.5rem;
     height: 90px;
     border-radius: 0.5rem;
-`;
-
-export const UpgradeButton = styled(Button)`
-    font-size: 0.875rem;
-    font-weight: bold;
-    box-shadow: 0px 0px 15px 5px rgba(72, 187, 120, 0.2);
-    &:hover {
-        box-shadow: 0px 0px 20px 5px rgba(72, 187, 120, 0.2);
-    }
 `;

@@ -36,17 +36,115 @@ import {
     SectionTitle,
 } from './search.styles';
 
-const SearchPage = () => {
+type SectionProps = {
+    isLoading: boolean;
+    searchResults: GeneralSearchData;
+    recommendations: any[];
+    searchInitiated: boolean;
+};
+const UsersSectionContent = ({
+    isLoading,
+    searchResults,
+    recommendations,
+    searchInitiated,
+}: SectionProps) => {
+    if (isLoading) {
+        return <UsersSkeleton />;
+    }
+
+    let itemsToShow: ReceivedUser[];
+
+    if (searchInitiated) {
+        itemsToShow = searchResults?.users?.slice(0, 10);
+    } else {
+        itemsToShow = recommendations;
+    }
+
+    return (
+        <SwiperSlider>
+            {itemsToShow?.map((user) => <UserCard {...user} />)}
+        </SwiperSlider>
+    );
+};
+
+const GroupsSectionContent = ({
+    isLoading,
+    searchResults,
+    recommendations,
+    searchInitiated,
+}: SectionProps) => {
+    const { user } = useSelector((state: RootState) => state.auth);
+
+    if (isLoading) {
+        return <GroupsSkeleton />;
+    }
+
+    let itemsToShow: ReceivedGroup[];
+
+    if (searchInitiated) {
+        itemsToShow = searchResults?.groups?.slice(0, 10);
+    } else {
+        itemsToShow = recommendations;
+    }
+
+    return (
+        <SwiperSlider>
+            {itemsToShow?.map((group) => (
+                <GroupCard
+                    {...group}
+                    alreadyJoined={
+                        group?.GroupMembers?.some(
+                            (member) => member?.ID === user.ID!,
+                        ) || group?.GroupOwner?.ID === user.ID!
+                    }
+                />
+            ))}
+        </SwiperSlider>
+    );
+};
+
+const ArticlesSectionContent = ({
+    isLoading,
+    searchResults,
+    recommendations,
+    searchInitiated,
+}: SectionProps) => {
     const navigate = useNavigate();
+    if (isLoading) {
+        return <ArticlesSkeleton />;
+    }
+
+    let itemsToShow: ReceivedArticle[];
+
+    if (searchInitiated) {
+        itemsToShow = searchResults?.articles?.slice(0, 10);
+    } else {
+        itemsToShow = recommendations;
+    }
+
+    return (
+        <ArticleSectionBody>
+            {itemsToShow?.map((article) => {
+                return (
+                    <WideArticleItem
+                        {...article}
+                        key={article.ID}
+                        onClick={() => navigate(`/app/articles/${article.ID}`)}
+                    />
+                );
+            })}
+        </ArticleSectionBody>
+    );
+};
+
+const SearchPage = () => {
     const dispatch = useDispatch();
 
     const [NoUsersFound, setNoUsersFound] = useState(false);
     const [NoArticlesFound, setNoArticlesFound] = useState(false);
     const [NoGroupsFound, setNoGroupsFound] = useState(false);
 
-    const { ID: storedUserId, Username } = useSelector(
-        (state: RootState) => state.auth.user,
-    );
+    const { Username } = useSelector((state: RootState) => state.auth.user);
     const { searchInitiated, searchTerm } = useSelector(
         (state: RootState) => state.appState.searchPage,
     );
@@ -64,8 +162,8 @@ const SearchPage = () => {
             isFetching: articlesRecommendationIsFetching,
         },
     ] = useLazyFetchGeneralArticlesRecommendationQuery();
-    const recommendedArticles = _articleRecommendation?.data
-        ?.Results as ReceivedArticle[];
+    const recommendedArticles =
+        (_articleRecommendation?.data?.Results as ReceivedArticle[]) ?? [];
 
     const [
         triggerGroupsRecommendation,
@@ -74,8 +172,8 @@ const SearchPage = () => {
             isFetching: groupsRecommendationsIsFetching,
         },
     ] = useLazyFetchGeneralGroupsRecommendationQuery();
-    const recommendedGroups = _groupRecommendation?.data
-        ?.Results as ReceivedGroup[];
+    const recommendedGroups =
+        (_groupRecommendation?.data?.Results as ReceivedGroup[]) ?? [];
 
     const [
         triggerUsersRecommendation,
@@ -85,8 +183,8 @@ const SearchPage = () => {
         },
     ] = useLazyFetchSpecificUsersRecommendationQuery();
 
-    const recommendedUsers = _userRecommendation?.data
-        ?.Results as ReceivedUser[];
+    const recommendedUsers =
+        (_userRecommendation?.data?.Results as ReceivedUser[]) ?? [];
 
     const handleSearchValueChange = (newValue: string) => {
         dispatch(changeSearchPageQuery(newValue));
@@ -161,18 +259,15 @@ const SearchPage = () => {
                         ? 'users search results'
                         : 'Suggested users'}
                 </SectionTitle>
-                {usersRecommendationsIsFetching || generalSearchIsFetching ? (
-                    <UsersSkeleton />
-                ) : (
-                    <SwiperSlider>
-                        {(searchInitiated
-                            ? searchResult?.users?.slice(0, 10)
-                            : recommendedUsers
-                        )?.map((user) => {
-                            return <UserCard {...user} />;
-                        })}
-                    </SwiperSlider>
-                )}
+                <UsersSectionContent
+                    searchInitiated={searchInitiated}
+                    recommendations={recommendedUsers}
+                    isLoading={
+                        usersRecommendationsIsFetching ||
+                        generalSearchIsFetching
+                    }
+                    searchResults={searchResult}
+                />
             </SearchPageSection>
 
             <SearchPageSection empty={NoGroupsFound}>
@@ -184,26 +279,15 @@ const SearchPage = () => {
                         Explore More
                     </ExploreMoreLink>
                 </SectionTitle>
-                {generalSearchIsFetching || groupsRecommendationsIsFetching ? (
-                    <GroupsSkeleton />
-                ) : (
-                    <SwiperSlider>
-                        {searchResult?.groups?.slice(0, 10)?.map((group) => {
-                            return (
-                                <GroupCard
-                                    {...group}
-                                    alreadyJoined={
-                                        group?.GroupMembers?.some(
-                                            (member) =>
-                                                member?.ID === storedUserId,
-                                        ) ||
-                                        group?.GroupOwner?.ID === storedUserId
-                                    }
-                                />
-                            );
-                        })}
-                    </SwiperSlider>
-                )}
+                <GroupsSectionContent
+                    searchInitiated={searchInitiated}
+                    searchResults={searchResult}
+                    recommendations={recommendedGroups}
+                    isLoading={
+                        generalSearchIsFetching ||
+                        groupsRecommendationsIsFetching
+                    }
+                />
             </SearchPageSection>
 
             <SearchPageSection empty={NoArticlesFound}>
@@ -215,26 +299,15 @@ const SearchPage = () => {
                         Explore More
                     </ExploreMoreLink>
                 </SectionTitle>
-                {articlesRecommendationIsFetching || generalSearchIsFetching ? (
-                    <ArticlesSkeleton />
-                ) : (
-                    <ArticleSectionBody>
-                        {(searchInitiated
-                            ? searchResult?.articles?.slice(0, 10)
-                            : recommendedArticles
-                        )?.map((article) => {
-                            return (
-                                <WideArticleItem
-                                    {...article}
-                                    key={article.ID}
-                                    onClick={() =>
-                                        navigate(`/app/articles/${article.ID}`)
-                                    }
-                                />
-                            );
-                        })}
-                    </ArticleSectionBody>
-                )}
+                <ArticlesSectionContent
+                    searchInitiated={searchInitiated}
+                    searchResults={searchResult}
+                    recommendations={recommendedArticles}
+                    isLoading={
+                        articlesRecommendationIsFetching ||
+                        generalSearchIsFetching
+                    }
+                />
             </SearchPageSection>
         </PageContainer>
     );

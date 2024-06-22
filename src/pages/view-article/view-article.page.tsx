@@ -103,8 +103,8 @@ const ViewArticlePage = () => {
             limit: 5,
             offset: 0,
         });
-    const recommendedArticles = _articleRecommendations?.data
-        ?.Results as ReceivedArticle[];
+    const recommendedArticles =
+        (_articleRecommendations?.data?.Results as ReceivedArticle[]) ?? [];
 
     const articleOptions = [
         {
@@ -393,6 +393,9 @@ const ViewArticlePage = () => {
                         />
                     ))}
                 </SwiperSlider>
+                {recommendedArticles?.length === 0 && (
+                    <h2 className='mx-auto my-6 text-xl'>No suggestions found</h2>
+                )}
             </SuggestedArticlesContainer>
 
             <CommentsContainer ref={commentsPanelRef}>

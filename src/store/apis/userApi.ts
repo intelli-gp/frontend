@@ -1,6 +1,10 @@
 import { PaginatedResult } from '../../types/pagination';
-import { GenericResponse, Response } from '../../types/response';
-import { ReceivedUser, UserToSend } from '../../types/user';
+import { GenericResponse } from '../../types/response';
+import {
+    ReceivedUser,
+    UserNotificationSettings,
+    UserToSend,
+} from '../../types/user';
 import { appApi } from './appApi';
 
 const userApi = appApi.injectEndpoints({
@@ -20,7 +24,10 @@ const userApi = appApi.injectEndpoints({
             },
             keepUnusedDataFor: 0,
         }),
-        updateUser: builder.mutation<Response, Partial<UserToSend>>({
+        updateUser: builder.mutation<
+            GenericResponse<{ updatedUser: ReceivedUser }>, // need to be fixed in swagger
+            Partial<UserToSend>
+        >({
             invalidatesTags: (_result, _error, user) => [
                 { type: 'User', id: user.id },
             ],
@@ -65,6 +72,18 @@ const userApi = appApi.injectEndpoints({
                 };
             },
         }),
+        updateNotificationsSettings: builder.mutation<
+            GenericResponse<{ updatedUser: ReceivedUser }>,
+            UserNotificationSettings
+        >({
+            query: (settings) => {
+                return {
+                    url: '/users/settings/mute',
+                    method: 'PATCH',
+                    body: settings,
+                };
+            },
+        }),
     }),
 });
 
@@ -77,4 +96,5 @@ export const {
     useGetFollowingQuery,
     useLazyGetFollowersQuery,
     useLazyGetFollowingQuery,
+    useUpdateNotificationsSettingsMutation,
 } = userApi;

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { BsFillPostcardFill } from 'react-icons/bs';
-import { FaHandsHelping } from 'react-icons/fa';
+import { BsFillPostcardFill, BsStars } from 'react-icons/bs';
 import { FiMenu } from 'react-icons/fi';
 import { GiBookshelf, GiRobotGolem, GiTomato, GiUpgrade } from 'react-icons/gi';
 import { HiMiniUserGroup } from 'react-icons/hi2';
@@ -147,7 +146,7 @@ export default function SideNav() {
             ],
         },
         {
-            icon: <FaHandsHelping />,
+            icon: <BsStars />,
             path: '/app/AI-helper',
             text: 'AI helper',
             id: 6,
@@ -285,11 +284,16 @@ export default function SideNav() {
          * only in this case the order of operations matters
          * because the logoutUser need the token to send the request.
          */
-        logoutUser();
-        dispatch(clearCredentials());
-        deleteSocket(); // Clear socket connection
-        disconnectSSE(); // Clear SSE connection
-        navigate('/');
+        try {
+            await deleteSocket(); // Clear socket connection
+            disconnectSSE(); // Clear SSE connection
+            await logoutUser().unwrap();
+        } catch {
+            // Do nothing
+        } finally {
+            dispatch(clearCredentials());
+            navigate('/');
+        }
     };
 
     const handleToggleExtend = (

@@ -30,7 +30,7 @@ export const AccordionContent = styled.main`
     gap: 1rem;
     position: relative;
     @media (max-width: 768px) {
-        padding: 1rem;
+        padding: 2rem 1.5rem;
         font-size: 1rem;
     }
 `;

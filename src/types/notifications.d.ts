@@ -81,6 +81,7 @@ export type ArticleNotification = {
             'ID' | 'ProfileImage' | 'Username' | 'FullName'
         >;
     };
+    isMuted: boolean;
 };
 
 export type MessageNotification = {
@@ -94,6 +95,7 @@ export type MessageNotification = {
     > & {
         Group: Pick<ReceivedGroup, 'ID' | 'GroupTitle' | 'GroupCoverImage'>;
     };
+    isMuted: boolean;
 };
 
 export type FollowNotification = {
@@ -102,6 +104,7 @@ export type FollowNotification = {
     Type: null;
     Sender: Pick<ReceivedUser, 'ID' | 'ProfileImage' | 'Username' | 'FullName'>;
     Entity: null;
+    isMuted: boolean;
 };
 
 export type NotificationEvents =

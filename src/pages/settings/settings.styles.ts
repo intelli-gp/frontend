@@ -45,8 +45,8 @@ export const InlineInputsContainer = styled.div`
 `;
 
 export const EditButton = styled(Button)`
-    width: 6.5rem;
-    height: 2.25rem;
+    width: 5.5rem;
+    height: 2rem;
     align-self: end;
     margin-top: 1rem;
 `;
@@ -66,9 +66,13 @@ export const AddCardContainer = styled(Button)`
 export const CardsContainer = styled.div`
     margin: 0 auto;
     width: 100%;
+    gap: 1rem;
+    padding: 6px 8px;
 `;
 
-export const PlanButton = styled(Button)``;
+export const PlanButton = styled(Button)`
+    width: 185px;
+`;
 
 export const PayTime = styled.div`
     height: 12px;
@@ -121,9 +125,46 @@ export const QRCodeTextContainer = styled.ul`
     }
 `;
 
+export const QRCodeText = styled.p`
+    text-align: center;
+    font-size: 1.15rem;
+    margin: 1rem 0;
+`;
+
 export const QRCodeModalButtons = styled.div`
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
+    gap: 0.5rem;
+`;
+
+export const NotificationSettingsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
+    margin: 0 min(2rem, 5%);
+`;
+
+export const NotificationSettingsRow = styled.div`
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+`;
+
+export const TwoFaContainer = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+`;
+
+export const TwoFABadge = styled.p<{ isEnabled: boolean }>`
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.125rem 0.75rem;
+    border-radius: 5rem;
+    color: ${({ isEnabled }) => (isEnabled ? 'var(--green-700)' : 'red')};
+    background: ${({ isEnabled }) =>
+        isEnabled ? 'var(--green-100)' : 'rgba(255, 0, 0, 0.1)'};
 `;

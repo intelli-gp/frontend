@@ -11,7 +11,7 @@ import {
     UpdateMessageDTO,
 } from '../../types/message';
 import { ReactToMessageDTO } from '../../types/message';
-import { getSocket } from '../../utils/socket';
+import { getSocket, socketEmit } from '../../utils/socket';
 import { appApi } from './appApi';
 
 const messageApi = appApi.injectEndpoints({
@@ -24,7 +24,9 @@ const messageApi = appApi.injectEndpoints({
             ) {
                 try {
                     let socket = await getSocket();
-                    socket.emit('joinRoom', { ChatGroupId: groupId });
+                    await socketEmit('joinRoom', {
+                        ChatGroupId: groupId,
+                    });
                     socket.on(
                         'allMessages',
                         (messages: SerializedMessage[]) => {
@@ -66,7 +68,9 @@ const messageApi = appApi.injectEndpoints({
                         },
                     );
                     await cacheEntryRemoved;
-                    socket.emit('leaveRoom', { ChatGroupId: groupId });
+                    await socketEmit('leaveRoom', {
+                        ChatGroupId: groupId,
+                    });
                     socket.off('allMessages');
                     socket.off('newMessage');
                 } catch (error) {
@@ -79,8 +83,7 @@ const messageApi = appApi.injectEndpoints({
             queryFn: () => ({ data: [] }),
             async onCacheEntryAdded(data: CreateMessageDTO) {
                 try {
-                    let socket = await getSocket();
-                    socket.emit('createMessage', data);
+                    await socketEmit('createMessage', data);
                 } catch (error) {
                     console.error(error);
                 }
@@ -90,8 +93,7 @@ const messageApi = appApi.injectEndpoints({
             queryFn: () => ({ data: [] }),
             async onCacheEntryAdded(data: SendIsTypingDTO) {
                 try {
-                    let socket = await getSocket();
-                    socket.emit('typing', data);
+                    await socketEmit('typing', data);
                 } catch (error) {
                     console.error(error);
                 }
@@ -132,8 +134,7 @@ const messageApi = appApi.injectEndpoints({
             queryFn: () => ({ data: [] }),
             async onCacheEntryAdded(data: DeleteMessageDTO) {
                 try {
-                    const socket = await getSocket();
-                    socket.emit('deleteMessage', data);
+                    await socketEmit('deleteMessage', data);
                 } catch (error) {
                     console.error(error);
                 }
@@ -143,8 +144,7 @@ const messageApi = appApi.injectEndpoints({
             queryFn: () => ({ data: [] }),
             async onCacheEntryAdded(data: UpdateMessageDTO) {
                 try {
-                    let socket = await getSocket();
-                    socket.emit('editMessage', data);
+                    await socketEmit('editMessage', data);
                 } catch (error) {
                     console.log(error);
                 }
@@ -154,8 +154,7 @@ const messageApi = appApi.injectEndpoints({
             queryFn: () => ({ data: [] }),
             async onCacheEntryAdded(data: ReactToMessageDTO) {
                 try {
-                    let socket = await getSocket();
-                    socket.emit('reactToMessage', data);
+                    await socketEmit('reactToMessage', data);
                 } catch (error) {
                     console.error(error);
                 }
@@ -166,9 +165,11 @@ const messageApi = appApi.injectEndpoints({
             async onCacheEntryAdded(MessageID, { cacheEntryRemoved }) {
                 // runs when a new component subscribe to the query
                 try {
-                    let socket = await getSocket();
                     await cacheEntryRemoved;
-                    socket.emit('leaveMessageInfoRoom', { MessageID });
+                    await socketEmit('leaveMessageInfoRoom', {
+                        MessageID,
+                    });
+                    let socket = await getSocket();
                     socket.off('newMessageReadInfo');
                     socket.off('messageInfo');
                 } catch (error) {
@@ -178,8 +179,8 @@ const messageApi = appApi.injectEndpoints({
             async onQueryStarted(MessageID, { updateCachedData }) {
                 // runs when the query is called
                 try {
+                    await socketEmit('getMessageInfo', { MessageID });
                     let socket = await getSocket();
-                    socket.emit('getMessageInfo', { MessageID });
                     socket.on('messageInfo', (messages: MessageInfo[]) => {
                         updateCachedData(() => messages);
                     });

@@ -6,6 +6,7 @@ import { FollowButton as FollowButtonComponent } from '../../components/follow-b
 import EnhancedImage from '../../components/image/image.component';
 import { CSSTextLengthLimit, CSSTextLinesCountLimit } from '../../index.styles';
 import { GroupsGrid } from '../explore-groups/explore-groups.style';
+import { QRCodeModalButtons } from '../settings/settings.styles';
 
 const SECTION_SHADOW = '';
 const SECTION_BACKGROUND = 'var(--indigo-50)';
@@ -312,4 +313,8 @@ export const FollowIcon = styled(FaUserCheck)`
     &:hover {
         cursor: help;
     }
+`;
+
+export const ModalButtonsContainer = styled(QRCodeModalButtons)`
+    align-self: end;
 `;

@@ -6,11 +6,11 @@ import React, {
     useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 import Button from '../../components/button/button.component';
 import { CustomInput } from '../../components/input/Input.component';
-import { Modal } from '../../components/modal/modal.component';
+import { Modal, ModalProps } from '../../components/modal/modal.component';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
     RootState,
@@ -22,23 +22,84 @@ import {
     useAuthenticate2faMutation,
     useLoginUserMutation,
 } from '../../store';
+import { store } from '../../store';
+import { routingHelper } from '../../utils/navigateHelper';
 import { getSocket } from '../../utils/socket';
 import { connectSSE } from '../../utils/sse';
 import { errorToast } from '../../utils/toasts';
-import {
-    QRCodeModalButtons,
-    QRCodeTextContainer,
-} from '../settings/settings.styles';
+import { QRCodeModalButtons, QRCodeText } from '../settings/settings.styles';
 import { GoogleIcon, GoogleLoginButton, GoogleLoginLink } from './auth.styles';
+
+const TwoFactorModal = ({
+    isOpen,
+    setIsOpen,
+}: Pick<ModalProps, 'isOpen' | 'setIsOpen'>) => {
+    const dispatch = useDispatch();
+
+    const [otp, setOtp] = useState('');
+    const [otpError, setOtpError] = useState('');
+
+    const { user: storedUser } = useSelector((state: RootState) => state.auth);
+
+    const [trigger2faAuthentication, { isLoading: is2faAuthenticating }] =
+        useAuthenticate2faMutation();
+
+    const handle2faAuthentication = async (otp: string) => {
+        try {
+            const res = await trigger2faAuthentication(otp).unwrap();
+            const { access_token } = res.data;
+            dispatch(setCredentials({ token: access_token, user: storedUser }));
+            getIntoTheApp(access_token);
+        } catch (error) {
+            errorToast('Invalid 2FA code');
+            console.error(error);
+        }
+    };
+
+    const handle2faAuthenticationWithValidation = async () => {
+        if (otp.length !== 6 || isNaN(Number(otp))) {
+            setOtpError('Please enter a valid six-digit code');
+        } else {
+            handle2faAuthentication(otp);
+        }
+    };
+
+    return (
+        <Modal title="Two Factor Code Required" isOpen={isOpen} setIsOpen={setIsOpen}>
+            <QRCodeText>
+                Enter the six-digit code from your <br />
+                <strong> Authenticator app</strong>
+            </QRCodeText>
+            <CustomInput
+                label={'Six-digit code'}
+                Placeholder={'- - - - - -'}
+                value={otp}
+                error={otpError}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setOtp(e.target.value)
+                }
+            />
+            <QRCodeModalButtons>
+                <Button
+                    onClick={handle2faAuthenticationWithValidation}
+                    loading={is2faAuthenticating}
+                    className="w-[100px] h-[36px]"
+                >
+                    Continue
+                </Button>
+            </QRCodeModalButtons>
+        </Modal>
+    );
+};
 
 export default function LoginPage() {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
+
+    const [twoFactorIsOpen, setTwoFactorIsOpen] = useState(false);
 
     const { user: storedUser, token } = useSelector(
         (state: RootState) => state.auth,
     );
-    const [twoFactorIsOpen, setTwoFactorIsOpen] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
     const { email, password, rememberMe, isAuthenticated } = useSelector(
         (state: RootState) => {
@@ -49,8 +110,6 @@ export default function LoginPage() {
         },
     );
     const [loginUser, { isLoading }] = useLoginUserMutation();
-    const [trigger2faAuthentication, { isLoading: is2faAuthenticating }] =
-        useAuthenticate2faMutation();
 
     useLayoutEffect(() => {
         document.title = 'Login | Mujedd';
@@ -91,72 +150,6 @@ export default function LoginPage() {
             }
         }
     }, []);
-
-    const getIntoTheApp = (token: string) => {
-        navigate('/app/search');
-        dispatch(resetLoginForm());
-
-        // Initialize socket and sse connection.
-        getSocket(token);
-        connectSSE(token);
-    };
-
-    const handle2faAuthentication = async (otp: string) => {
-        try {
-            const res = await trigger2faAuthentication(otp).unwrap();
-            const { access_token } = res.data;
-            dispatch(setCredentials({ token: access_token, user: storedUser }));
-            getIntoTheApp(access_token);
-        } catch (error) {
-            errorToast('Invalid 2FA code');
-            console.error(error);
-        }
-    };
-
-    const TwoFactorModal = () => {
-        const [otp, setOtp] = useState('');
-        const [otpError, setOtpError] = useState('');
-
-        const handle2faAuthenticationWithValidation = async () => {
-            if (otp.length !== 6 || isNaN(Number(otp))) {
-                setOtpError('Please enter a valid 6-digit code');
-            } else {
-                handle2faAuthentication(otp);
-            }
-        };
-
-        return (
-            <Modal
-                title="2FA Required"
-                isOpen={twoFactorIsOpen}
-                setIsOpen={setTwoFactorIsOpen}
-            >
-                <QRCodeTextContainer>
-                    <li>
-                        Enter the 6-digit code from your
-                        <strong> Authenticator</strong> app to login.
-                    </li>
-                </QRCodeTextContainer>
-                <CustomInput
-                    label={'Enter the 6-digit code'}
-                    Placeholder={'- - - - - -'}
-                    value={otp}
-                    error={otpError}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setOtp(e.target.value)
-                    }
-                />
-                <QRCodeModalButtons>
-                    <Button
-                        onClick={handle2faAuthenticationWithValidation}
-                        loading={is2faAuthenticating}
-                    >
-                        Continue
-                    </Button>
-                </QRCodeModalButtons>
-            </Modal>
-        );
-    };
 
     const handleSubmitLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -252,7 +245,20 @@ export default function LoginPage() {
             </p>
 
             {/* Modals */}
-            <TwoFactorModal />
+            <TwoFactorModal
+                isOpen={twoFactorIsOpen}
+                setIsOpen={setTwoFactorIsOpen}
+            />
         </motion.form>
     );
 }
+
+// Helper function
+const getIntoTheApp = (token: string) => {
+    routingHelper.navigate('/app/search');
+    store.dispatch(resetLoginForm());
+
+    // Initialize socket and sse connection.
+    getSocket(token);
+    connectSSE(token);
+};

@@ -14,6 +14,7 @@ import {
 } from '../types/notifications';
 import { GenericResponse } from '../types/response';
 import { showSystemNotification } from './notifications-api';
+import { getNewToken } from './socket';
 import { infoToast } from './toasts';
 
 let subscription: EventSourcePolyfill;
@@ -27,10 +28,11 @@ export function connectSSE(token?: string) {
             Authorization: `Bearer ${token}`,
         },
     });
+    console.log('Connected to SSE'); // Debugging
     subscription.onmessage = async (event) => {
         const eventData = JSON.parse(event.data) as NotificationEvents;
-
-        console.log(eventData); // Debugging
+        const isEventMuted = eventData?.isMuted;
+        console.log({ eventData }); // Debugging
         switch (eventData.EventName) {
             case NOTIFICATION_TYPES.MESSAGE: {
                 const messageNotificationData =
@@ -87,6 +89,9 @@ export function connectSSE(token?: string) {
                         console.error('Error refetching data:', error);
                     }
                 });
+
+                if (isEventMuted) return;
+
                 showSystemNotification(
                     messageNotificationData?.Entity?.Group?.GroupTitle,
                     {
@@ -107,6 +112,7 @@ export function connectSSE(token?: string) {
                     Linker: `/app/chat-room/${messageNotificationData?.Entity?.Group?.ID}`,
                 });
             }
+
             case NOTIFICATION_TYPES.ARTICLE: {
                 const articleNotificationData =
                     eventData as ArticleNotification;
@@ -164,6 +170,9 @@ export function connectSSE(token?: string) {
                             'You received an unsupported notification';
                         break;
                 }
+
+                if (isEventMuted) return;
+
                 showSystemNotification(
                     articleNotificationData?.Sender?.FullName,
                     {
@@ -185,8 +194,11 @@ export function connectSSE(token?: string) {
                     },
                 });
             }
+
             case NOTIFICATION_TYPES.FOLLOW: {
                 const followNotificationData = eventData as FollowNotification;
+
+                if (isEventMuted) return;
                 showSystemNotification(
                     followNotificationData?.Sender?.FullName,
                     {
@@ -211,6 +223,22 @@ export function connectSSE(token?: string) {
                 return infoToast(
                     `${eventData.EventName} is not a supported notification type`,
                 );
+        }
+    };
+
+    subscription.onerror = async (error) => {
+        switch ((error as any).status) {
+            case 401:
+            case 403: {
+                console.log('Token expired, renewing token...')
+                const newToken = await getNewToken();
+                if (newToken) {
+                    disconnectSSE();
+                    connectSSE(newToken);
+                } else {
+                    console.error('Failed to renew token');
+                }
+            }
         }
     };
 }

@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { QRCodeModalButtons } from '../../pages/settings/settings.styles';
+
 export const FormContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -12,8 +14,4 @@ export const CardInfoContainer = styled.div`
     gap: 1rem;
 `;
 
-export const ButtonsContainer = styled.div`
-    display: flex;
-    gap: 1rem;
-    justify-content: end;
-`;
+export const ButtonsContainer = QRCodeModalButtons;

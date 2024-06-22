@@ -1,3 +1,5 @@
+import { Stripe } from "@stripe/stripe-js";
+
 export type CreateSubscriptionDto = {
     interval: 'monthly' | 'yearly';
 };
@@ -12,6 +14,10 @@ export type ReceivedSubscription = {
     RenewalDate: Date;
 
     Price: number;
+
+    Status: Stripe.Subscription.Status;
+
+    IsCancelled: boolean;
 };
 
 export type CancelSubscriptionDto = {

@@ -219,7 +219,7 @@ const ViewGroupPage = () => {
     }, [isGroupJoinedSuccessfully, isGroupUpdatedSuccessfully]);
 
     useEffect(() => {
-        document.title = `${groupData.GroupTitle} | Mujedd`;
+        document.title = `${groupData?.GroupTitle} | Mujedd`;
         return () => {
             document.title = 'Mujedd';
         };
@@ -229,7 +229,7 @@ const ViewGroupPage = () => {
         <Button
             select="secondary"
             title="Go to chat room"
-            className="!absolute bottom-8 right-8"
+            className="!absolute bottom-10 right-10 !rounded-full aspect-square"
             onClick={() => navigate(`/app/chat-room/${groupId}`)}
         >
             <MdMessage size={24} />
