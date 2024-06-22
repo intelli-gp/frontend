@@ -1,5 +1,6 @@
 import { appApi } from '.';
 import { Task, sendTask } from '../../types/event';
+import { Response } from '../../types/response';
 
 export const taskApi = appApi.injectEndpoints({
     endpoints: (builder) => ({

@@ -1,7 +1,7 @@
 import Fuse from 'fuse.js';
 import moment from 'moment';
 import 'moment-timezone';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect,  useRef, useState } from 'react';
 import React from 'react';
 import {
     Calendar as BigCalendar,
@@ -51,7 +51,7 @@ export default function StudyPlanner() {
     const openModal = () => {
         setShowModal((prev) => !prev);
     };
-    const localizer = useMemo(() => momentLocalizer(moment), []);
+    const localizer = momentLocalizer(moment);
     const { data: getTasks, error, isLoading } = useFetchTasksQuery(undefined);
     let data: Task[] = (getTasks as unknown as Response)?.data ?? [];
     data = data.map((task) => ({
@@ -99,9 +99,7 @@ export default function StudyPlanner() {
         };
     }, []);
 
-    useEffect(() => {
-        setTasks(data);
-    }, [data]);
+   
 
     useEffect(() => {
         let content;
@@ -123,6 +121,7 @@ export default function StudyPlanner() {
                 </NoTasksContainer>
             );
         } else {
+            setTasks(data)
             const getSortedFutureTasks = (tasks: Task[]) => {
                 const currentDateTime = new Date();
                 return tasks
@@ -152,7 +151,6 @@ export default function StudyPlanner() {
                 return (
                     <div
                         className="w-full"
-                        onClick={() => handleEdit(tasks.ID)}
                     >
                         <TaskBox
                             key={tasks.ID}
@@ -171,7 +169,7 @@ export default function StudyPlanner() {
         }
 
         setContent(content);
-    }, [isLoading, error, tasks]);
+    }, [isLoading, error]);
 
     const [viewState, setViewState] = useState<View>('week');
     const [date, setDate] = useState(new Date());
@@ -296,7 +294,6 @@ export default function StudyPlanner() {
         if (isLoading || error) {
         } else {
             if (prevDataRef.current !== data) {
-                console.log(data);
                 EVENTS = data?.map((task) => ({
                     start: moment(task.StartDate).toDate(),
                     end: moment(task.DueDate).toDate(),
