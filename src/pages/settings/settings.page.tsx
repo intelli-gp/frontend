@@ -579,7 +579,6 @@ export const SettingsPage = () => {
                     {subscriptionData && (
                         <SubscriptionInfo
                             subscriptionData={subscriptionData}
-                            subscriptionResponse={subscriptionResponse}
                             isCancellingSubscription={isCancellingSubscription}
                             handleCancelSubscription={handleCancelSubscription}
                         />
