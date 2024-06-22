@@ -157,6 +157,12 @@ const AIHelperPage = () => {
                         setMessage(e.target.value)
                     }
                     multiline
+                    onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSendMessages();
+                        }
+                    }}
                 />
                 <SendIcon size={26} onClick={handleSendMessages} />
             </ChatFooter>
