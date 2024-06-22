@@ -5,6 +5,9 @@ import styled, { css } from 'styled-components';
 import { CustomInput } from '../../components/input/Input.component';
 
 const Calendar = css`
+    .rbc-time-view {
+        border-radius: 0.5rem;
+    }
     .rbc-time-view .rbc-row:first-child {
         font-size: 1rem;
         min-height: 3rem !important;
@@ -24,6 +27,7 @@ const Calendar = css`
         flex: 1;
         display: flex !important;
         width: 788px !important;
+        border-top-width: 1px;
     }
 
     .rbc-row-bg {
@@ -158,11 +162,11 @@ export const TasksContainer = styled.div`
 `;
 export const SideNav = styled.div`
     display: flex;
-    flex-basis: 18%;
+    flex-basis: 20%;
     height: 100%;
     flex-direction: column;
-    border-left: 2px solid #cbd5e0;
-    padding: 1.8rem;
+    box-shadow: 0 0 10px 5px rgb(0, 0, 0, 0.1);
+    padding: 2rem;
     @media (max-width: 1024px) {
         display: none;
     }
@@ -184,6 +188,7 @@ export const NoTasksContainer = styled.div`
     padding: 2rem;
     flex-direction: column;
     gap: 1rem;
+    margin: 0 auto;
 `;
 export const ButtonMV = styled.div`
     display: flex;
@@ -212,16 +217,15 @@ export const CalendarHolder = styled.div`
     }
 `;
 
-export const Searchbar = styled.div`
+export const SearchBar = styled.div`
     display: flex;
     align-items: center;
+    gap: 0.5rem;
     width: 100%;
-    padding: 5px;
-    padding-left: 8px;
+    padding: 0.5rem;
+    padding-left: 0.75rem;
     border-radius: 36px;
-    background: #f4f4f5;
-    border: 2px solid #f4f4f5;
-    transition: background 0.25s;
+    border: 1px solid var(--gray-500);
     input {
         font-size: 0.875rem;
         margin-left: 8px;
@@ -230,9 +234,6 @@ export const Searchbar = styled.div`
         outline: none;
         border: none;
         flex: 1;
-    }
-    &:focus-within {
-        border: 2px solid #4f46e5;
     }
 `;
 export const LeftButton = styled.button`
@@ -302,7 +303,7 @@ export const StatusItem = styled(motion.li)<{ width?: string }>`
     display: flex;
     align-items: center;
     cursor: pointer;
-    gap:0.25rem
+    gap: 0.25rem;
     padding: 0.5rem;
     margin: 0.125rem 0.35rem;
     font-size: 0.9rem;
@@ -310,5 +311,4 @@ export const StatusItem = styled(motion.li)<{ width?: string }>`
         background-color: var(--indigo-50);
         color: black;
     }
-
 `;

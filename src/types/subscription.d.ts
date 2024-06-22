@@ -1,4 +1,4 @@
-import { Stripe } from "@stripe/stripe-js";
+import { Stripe } from '@stripe/stripe-js';
 
 export type CreateSubscriptionDto = {
     interval: 'monthly' | 'yearly';

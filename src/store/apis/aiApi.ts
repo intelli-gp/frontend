@@ -4,7 +4,10 @@ import { appApi } from './appApi';
 
 const aiApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
-        getAiMessages: builder.query<GenericResponse<ReceivedAiMessage[]>, void>({
+        getAiMessages: builder.query<
+            GenericResponse<ReceivedAiMessage[]>,
+            void
+        >({
             providesTags: ['Ai Messages'],
             query: () => ({
                 url: '/ai-service/chat',

@@ -65,7 +65,11 @@ const TwoFactorModal = ({
     };
 
     return (
-        <Modal title="Two Factor Code Required" isOpen={isOpen} setIsOpen={setIsOpen}>
+        <Modal
+            title="Two Factor Code Required"
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+        >
             <QRCodeText>
                 Enter the six-digit code from your <br />
                 <strong> Authenticator app</strong>
@@ -232,7 +236,11 @@ export default function LoginPage() {
                 </Button>
 
                 <GoogleLoginButton>
-                    <GoogleLoginLink href={`${import.meta.env.VITE_BACKEND}/api/auth/login/google`}>
+                    <GoogleLoginLink
+                        href={`${
+                            import.meta.env.VITE_BACKEND
+                        }/api/auth/login/google`}
+                    >
                         <GoogleIcon />
                         Login with google
                     </GoogleLoginLink>

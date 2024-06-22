@@ -106,7 +106,6 @@ export const NoContentHolder = styled.div`
     color: var(--slate-400);
 `;
 
-
 export const QRCodeImg = styled(EnhancedImage)`
     width: 200px;
     aspect-ratio: 1/1;

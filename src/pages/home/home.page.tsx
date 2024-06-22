@@ -96,13 +96,14 @@ function Nav() {
             let observerCallback = (entries: IntersectionObserverEntry[]) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        setHorizontalNavLinks((prev) =>
-                            prev?.map((link) => {
-                                if (link.scrollTarget === entry.target) {
-                                    return { ...link, isActive: true };
-                                }
-                                return { ...link, isActive: false };
-                            }),
+                        setHorizontalNavLinks(
+                            (prev) =>
+                                prev?.map((link) => {
+                                    if (link.scrollTarget === entry.target) {
+                                        return { ...link, isActive: true };
+                                    }
+                                    return { ...link, isActive: false };
+                                }),
                         );
                     }
                 });

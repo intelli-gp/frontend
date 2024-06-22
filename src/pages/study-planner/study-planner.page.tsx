@@ -13,7 +13,6 @@ import {
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import { GoPlus } from 'react-icons/go';
 import { IoMdSearch } from 'react-icons/io';
-import { RiRobot2Line } from 'react-icons/ri';
 
 import noTask from '../../assets/imgs/no-task.png';
 import { AddTaskModal } from '../../components/AddTaskModal';
@@ -34,7 +33,7 @@ import {
     NoTasksContainer,
     PageContainer,
     RightButton,
-    Searchbar,
+    SearchBar,
     SideNav,
     TaskBoxContainer,
     TasksContainer,
@@ -89,16 +88,20 @@ export default function StudyPlanner() {
         };
     }, []);
 
-
-
-
     const getSortedFutureTasks = (tasks: any[]) => {
         const currentDateTime = new Date();
         return tasks
-            .filter((task: { DueDate: string | number | Date; }) => new Date(task.DueDate) > currentDateTime)
+            .filter(
+                (task: { DueDate: string | number | Date }) =>
+                    new Date(task.DueDate) > currentDateTime,
+            )
             .sort(
-                (a: { DueDate: string | number | Date; }, b: { DueDate: string | number | Date; }) =>
-                    new Date(a.DueDate).getTime() - new Date(b.DueDate).getTime()
+                (
+                    a: { DueDate: string | number | Date },
+                    b: { DueDate: string | number | Date },
+                ) =>
+                    new Date(a.DueDate).getTime() -
+                    new Date(b.DueDate).getTime(),
             );
     };
 
@@ -113,10 +116,7 @@ export default function StudyPlanner() {
         });
     };
 
-  data = getSortedFutureTasks(data || []);
-
- 
-
+    data = getSortedFutureTasks(data || []);
 
     const [viewState, setViewState] = useState<View>('week');
     const [date, setDate] = useState(new Date());
@@ -327,26 +327,20 @@ export default function StudyPlanner() {
                     >
                         <GoPlus size="28" color="#0D062D" />
                     </Button>
-                    <Button
-                        select="primary"
-                        rounded
-                        className="!w-[55px] !h-[55px]"
-                    >
-                        <RiRobot2Line size="24" color="white" />
-                    </Button>
                 </ButtonMV>
             </CalendarHolder>
             <SideNav>
-                <div>
-                    <Searchbar>
+                <div className="flex flex-col !gap-4">
+                    <SearchBar>
                         <IoMdSearch color="#312E81" size="20" />
                         <input
                             type="search"
+                            placeholder="Search tasks..."
                             id="default-search"
                             value={searchValue}
                             onChange={handleInputChange}
                         />
-                    </Searchbar>
+                    </SearchBar>
                     {showButtons && (
                         <>
                             <Button
@@ -354,15 +348,7 @@ export default function StudyPlanner() {
                                 onClick={openModal}
                                 className="!text-txt"
                             >
-                                + Add a task
-                            </Button>
-
-                            <Button
-                                select="primary"
-                                className="flex flex-row gap-2 py-[10px]"
-                            >
-                                <RiRobot2Line size="16" color="white" />
-                                <span className="text-sm">Make plan</span>
+                                Add new task
                             </Button>
                         </>
                     )}
@@ -372,16 +358,26 @@ export default function StudyPlanner() {
                         {data.length > 0 ? (
                             isLoading ? (
                                 <div className="h-auto w-full">
-                                    <Skeleton times={3} className="h-20 w-full" />
+                                    <Skeleton
+                                        times={3}
+                                        className="h-20 w-full"
+                                    />
                                 </div>
                             ) : error ? (
                                 <NoTasksContainer>
-                                    <img alt="" src={noTask} className="w-[90%]" />
+                                    <img
+                                        alt=""
+                                        src={noTask}
+                                        className="w-[90%]"
+                                    />
                                     <div className="flex flex-col w-full justify-center items-center mr-6">
-                                        <p className="text-txt text-lg font-extrabold">Error loading...</p>
+                                        <p className="text-txt text-lg font-extrabold">
+                                            Error loading...
+                                        </p>
                                     </div>
                                 </NoTasksContainer>
-                            ) : showButtons?(data.map((task: Task) => {
+                            ) : showButtons ? (
+                                data.map((task: Task) => {
                                     const time = formatTimestamp(task.DueDate);
                                     return (
                                         <div
@@ -401,8 +397,9 @@ export default function StudyPlanner() {
                                             />
                                         </div>
                                     );
-                                })):
-                                (filteredTasks.map((task: Task) => {
+                                })
+                            ) : (
+                                filteredTasks.map((task: Task) => {
                                     const time = formatTimestamp(task.DueDate);
                                     return (
                                         <div
@@ -422,12 +419,18 @@ export default function StudyPlanner() {
                                             />
                                         </div>
                                     );
-                                }))
+                                })
+                            )
                         ) : (
                             <NoTasksContainer>
-                                <img src={noTask} className="w-[90%]" />
+                                <img
+                                    src={noTask}
+                                    className="w-[90%] !max-w-[100px]"
+                                />
                                 <div className="flex flex-col w-full justify-center items-center mr-6">
-                                    <p className="text-txt text-lg font-extrabold">No tasks</p>
+                                    <p className="text-txt text-lg font-extrabold">
+                                        No tasks
+                                    </p>
                                     <p className="text-slate-400 text-sm text-center">
                                         You have no tasks to do.
                                     </p>

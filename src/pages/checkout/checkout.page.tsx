@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import checkout from '../../assets/imgs/checkout.svg';
 import Button from '../../components/button/button.component';
+import CardsInfo from '../../components/card-info/cards-info.component';
 import AddCreditCardModal from '../../components/credit-card-modal/CreditCardModal';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import { changeUserPlan } from '../../store';
@@ -20,7 +21,6 @@ import {
     SidePanel,
     Title,
 } from './checkout.style';
-import CardsInfo from '../../components/card-info/cards-info.component';
 
 const CheckoutPage = () => {
     const dispatch = useDispatch();
@@ -100,8 +100,8 @@ const CheckoutPage = () => {
                     className="flex flex-col justify-center lg:items-start items-center w-[90%] lg:w-[60%] py-8 gap-4"
                 >
                     <PageTitle size="sm">Select default card </PageTitle>
-                    <Line/>
-                    <CardsInfo/>
+                    <Line />
+                    <CardsInfo />
 
                     <div className="w-[100%] flex flex-col items-center gap-4">
                         <AddCardButton

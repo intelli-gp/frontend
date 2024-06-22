@@ -25,8 +25,7 @@ export const CardsContainer = styled.div`
 export const Line = styled.div`
     border-top: 2px solid var(--slate-200);
     width: 100%;
-
-`
+`;
 export const AddCardButton = styled(Button)`
     background-color: var(--slate-200);
     width: 100%;

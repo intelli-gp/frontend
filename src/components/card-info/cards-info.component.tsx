@@ -2,14 +2,17 @@ import { useState } from 'react';
 import { BeatLoader } from 'react-spinners';
 import { PaymentIcon } from 'react-svg-credit-card-payment-icons/dist/index.mjs';
 
-import { useFetchPaymentMethodsQuery, useSetPaymentMethodAsDefaultMutation } from '../../store/apis/paymentMethodsApi';
+import { CardsContainer } from '../../pages/settings/settings.styles';
+import {
+    useFetchPaymentMethodsQuery,
+    useSetPaymentMethodAsDefaultMutation,
+} from '../../store/apis/paymentMethodsApi';
 import { useRemovePaymentMethodMutation } from '../../store/apis/paymentMethodsApi';
 import { errorToast, successToast } from '../../utils/toasts';
 import Button from '../button/button.component';
 import DropdownMenu from '../menu/menu.component';
 import { Modal } from '../modal/modal.component';
-import { CardContainer, EditIcon,NoContentHolder } from './cards-info.style';
-import { CardsContainer } from '../../pages/settings/settings.styles';
+import { CardContainer, EditIcon, NoContentHolder } from './cards-info.style';
 
 interface ModalProps {
     paymentMethodId: string;
@@ -173,30 +176,24 @@ const CardInfo = ({
 const CardsInfo: React.FC = () => {
     const { data: paymentMethodResponse } = useFetchPaymentMethodsQuery();
     const PaymentMethodsData = paymentMethodResponse?.data || [];
-    return (
-        PaymentMethodsData.length > 0 ? (
-            <CardsContainer>
-                {PaymentMethodsData.map((paymentMethod, index:number) => (
-                    <div className="w-[100%] flex flex-col gap-2" key={index}>
-                        <CardInfo
-                            paymentMethodId={paymentMethod.PaymentMethodId}
-                            LastFourDigits={paymentMethod.LastFourDigits}
-                            ExpiryMonth={paymentMethod.ExpMonth}
-                            ExpiryYear={paymentMethod.ExpYear}
-                            Brand={paymentMethod.Brand}
-                            IsDefault={paymentMethod.IsDefault}
-                        />
-                        {index !== PaymentMethodsData.length - 1 && (
-                            <hr />
-                        )}
-                    </div>
-                ))}
-            </CardsContainer>
-        ) : (
-            <NoContentHolder>
-                No Payment Methods Added.
-            </NoContentHolder>
-        )
+    return PaymentMethodsData.length > 0 ? (
+        <CardsContainer>
+            {PaymentMethodsData.map((paymentMethod, index: number) => (
+                <div className="w-[100%] flex flex-col gap-2" key={index}>
+                    <CardInfo
+                        paymentMethodId={paymentMethod.PaymentMethodId}
+                        LastFourDigits={paymentMethod.LastFourDigits}
+                        ExpiryMonth={paymentMethod.ExpMonth}
+                        ExpiryYear={paymentMethod.ExpYear}
+                        Brand={paymentMethod.Brand}
+                        IsDefault={paymentMethod.IsDefault}
+                    />
+                    {index !== PaymentMethodsData.length - 1 && <hr />}
+                </div>
+            ))}
+        </CardsContainer>
+    ) : (
+        <NoContentHolder>No Payment Methods Added.</NoContentHolder>
     );
 };
 
