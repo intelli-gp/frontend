@@ -1,7 +1,7 @@
 import Fuse from 'fuse.js';
 import moment from 'moment';
 import 'moment-timezone';
-import { useCallback, useEffect,  useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import React from 'react';
 import {
     Calendar as BigCalendar,
@@ -54,17 +54,12 @@ export default function StudyPlanner() {
     const localizer = momentLocalizer(moment);
     const { data: getTasks, error, isLoading } = useFetchTasksQuery(undefined);
     let data: Task[] = (getTasks as unknown as Response)?.data ?? [];
-    data = data.map((task) => ({
-        ...task,
-        DueDate: moment.tz(task.DueDate, moment.tz.guess()).format(),
-        StartDate: moment.tz(task.StartDate, moment.tz.guess()).format(),
-    }));
     const [id, setID] = useState(0);
     const [editShow, setEdit] = useState(false);
-    const [tasks, setTasks] = useState<Task[]>();
 
     const [searchValue, setSearchValue] = useState('');
     const [showButtons, setShowButtons] = useState(true);
+    let filteredTasks: Task[] = data;
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
@@ -79,19 +74,14 @@ export default function StudyPlanner() {
         const fuse = new Fuse(data, fuseOptions);
         const searchResult = fuse.search(searchValue);
 
-        const filteredTasks =
+        filteredTasks =
             value === '' ? data : searchResult.map((result) => result.item);
-        setTasks(filteredTasks);
     };
 
     const handleEdit = (ID: number) => {
         setID(ID);
         setEdit((prev) => !prev);
     };
-    const [content, setContent] = useState<JSX.Element | JSX.Element[] | null>(
-        null,
-    );
-
     useEffect(() => {
         document.title = 'Study Planner | Mujedd';
         return () => {
@@ -99,77 +89,34 @@ export default function StudyPlanner() {
         };
     }, []);
 
-   
 
-    useEffect(() => {
-        let content;
-        if (isLoading) {
-            content = (
-                <div className="h-auto w-full">
-                    <Skeleton times={3} className="h-20 w-full" />
-                </div>
+
+
+    const getSortedFutureTasks = (tasks: any[]) => {
+        const currentDateTime = new Date();
+        return tasks
+            .filter((task: { DueDate: string | number | Date; }) => new Date(task.DueDate) > currentDateTime)
+            .sort(
+                (a: { DueDate: string | number | Date; }, b: { DueDate: string | number | Date; }) =>
+                    new Date(a.DueDate).getTime() - new Date(b.DueDate).getTime()
             );
-        } else if (error) {
-            content = (
-                <NoTasksContainer>
-                    <img alt="" src={noTask} className="w-[90%]" />
-                    <div className="flex flex-col w-full justify-center items-center mr-6">
-                        <p className="text-txt text-lg font-extrabold">
-                            Error loading...
-                        </p>
-                    </div>
-                </NoTasksContainer>
-            );
-        } else {
-            setTasks(data)
-            const getSortedFutureTasks = (tasks: Task[]) => {
-                const currentDateTime = new Date();
-                return tasks
-                    .filter((task) => new Date(task.DueDate) > currentDateTime)
-                    .sort(
-                        (a, b) =>
-                            new Date(a.DueDate).getTime() -
-                            new Date(b.DueDate).getTime(),
-                    );
-            };
-            const futureTasks = getSortedFutureTasks(tasks || []);
+    };
 
-            content = futureTasks.map((tasks: Task) => {
-                function formatTimestamp(timestamp: string): string {
-                    const date = new Date(timestamp);
-                    const formattedDate = date.toLocaleString('en-US', {
-                        month: 'long',
-                        day: 'numeric',
-                        hour: 'numeric',
-                        minute: 'numeric',
-                        hour12: true,
-                    });
+    const formatTimestamp = (timestamp: string | number | Date) => {
+        const date = new Date(timestamp);
+        return date.toLocaleString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+        });
+    };
 
-                    return formattedDate;
-                }
-                const time = formatTimestamp(tasks.DueDate);
-                return (
-                    <div
-                        className="w-full"
-                    >
-                        <TaskBox
-                            key={tasks.ID}
-                            id={tasks.ID}
-                            title={tasks.Title + ' | '}
-                            status={tasks.Status}
-                            description={tasks.Description}
-                            DueDate={tasks.DueDate}
-                            StartDate={tasks.DueDate}
-                            due_date={'Due: ' + time}
-                            color={tasks.Color}
-                        />
-                    </div>
-                );
-            });
-        }
+  data = getSortedFutureTasks(data || []);
 
-        setContent(content);
-    }, [isLoading, error]);
+ 
+
 
     const [viewState, setViewState] = useState<View>('week');
     const [date, setDate] = useState(new Date());
@@ -422,15 +369,65 @@ export default function StudyPlanner() {
                 </div>
                 <div className="flex flex-col mt-8 items-center justify-center w-full ">
                     <TasksContainer>
-                        {React.Children.count(content) !== 0 ? (
-                            content
+                        {data.length > 0 ? (
+                            isLoading ? (
+                                <div className="h-auto w-full">
+                                    <Skeleton times={3} className="h-20 w-full" />
+                                </div>
+                            ) : error ? (
+                                <NoTasksContainer>
+                                    <img alt="" src={noTask} className="w-[90%]" />
+                                    <div className="flex flex-col w-full justify-center items-center mr-6">
+                                        <p className="text-txt text-lg font-extrabold">Error loading...</p>
+                                    </div>
+                                </NoTasksContainer>
+                            ) : showButtons?(data.map((task: Task) => {
+                                    const time = formatTimestamp(task.DueDate);
+                                    return (
+                                        <div
+                                            className="w-full"
+                                            onClick={() => handleEdit(task.ID)}
+                                            key={task.ID}
+                                        >
+                                            <TaskBox
+                                                id={task.ID}
+                                                title={`${task.Title} | `}
+                                                status={task.Status}
+                                                description={task.Description}
+                                                DueDate={task.DueDate}
+                                                StartDate={task.DueDate}
+                                                due_date={`Due: ${time}`}
+                                                color={task.Color}
+                                            />
+                                        </div>
+                                    );
+                                })):
+                                (filteredTasks.map((task: Task) => {
+                                    const time = formatTimestamp(task.DueDate);
+                                    return (
+                                        <div
+                                            className="w-full"
+                                            onClick={() => handleEdit(task.ID)}
+                                            key={task.ID}
+                                        >
+                                            <TaskBox
+                                                id={task.ID}
+                                                title={`${task.Title} | `}
+                                                status={task.Status}
+                                                description={task.Description}
+                                                DueDate={task.DueDate}
+                                                StartDate={task.DueDate}
+                                                due_date={`Due: ${time}`}
+                                                color={task.Color}
+                                            />
+                                        </div>
+                                    );
+                                }))
                         ) : (
                             <NoTasksContainer>
                                 <img src={noTask} className="w-[90%]" />
                                 <div className="flex flex-col w-full justify-center items-center mr-6">
-                                    <p className="text-txt text-lg font-extrabold">
-                                        No tasks
-                                    </p>
+                                    <p className="text-txt text-lg font-extrabold">No tasks</p>
                                     <p className="text-slate-400 text-sm text-center">
                                         You have no tasks to do.
                                     </p>
