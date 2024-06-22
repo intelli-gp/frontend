@@ -220,13 +220,29 @@ const SearchPage = () => {
 
     useEffect(() => {
         if (searchInitiated) {
-            setNoUsersFound(searchResult?.users?.length === 0);
-            setNoArticlesFound(searchResult?.articles?.length === 0);
-            setNoGroupsFound(searchResult?.groups?.length === 0);
+            setNoUsersFound(
+                !generalSearchIsFetching && searchResult?.users?.length === 0,
+            );
+            setNoArticlesFound(
+                !generalSearchIsFetching &&
+                    searchResult?.articles?.length === 0,
+            );
+            setNoGroupsFound(
+                !generalSearchIsFetching && searchResult?.groups?.length === 0,
+            );
         } else {
-            setNoUsersFound(recommendedUsers?.length === 0);
-            setNoArticlesFound(recommendedArticles?.length === 0);
-            setNoGroupsFound(recommendedGroups?.length === 0);
+            setNoUsersFound(
+                !usersRecommendationsIsFetching &&
+                    recommendedUsers?.length === 0,
+            );
+            setNoArticlesFound(
+                !articlesRecommendationIsFetching &&
+                    recommendedArticles?.length === 0,
+            );
+            setNoGroupsFound(
+                !groupsRecommendationsIsFetching &&
+                    recommendedGroups?.length === 0,
+            );
         }
     }, [
         generalSearchIsFetching,
