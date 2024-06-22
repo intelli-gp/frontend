@@ -25,7 +25,28 @@ const aiApi = appApi.injectEndpoints({
                 body: message,
             }),
         }),
+        generateAiVideo: builder.mutation<
+            GenericResponse<{ Url: string }>,
+            AIMessageToSend
+        >({
+            query: (message: AIMessageToSend) => ({
+                url: '/ai-service/video',
+                method: 'POST',
+                body: message,
+            }),
+        }),
+        testSubscription: builder.query<GenericResponse<boolean>, void>({
+            query: () => ({
+                url: '/auth/forbidden',
+                method: 'GET',
+            }),
+        }),
     }),
 });
 
-export const { useGetAiMessagesQuery, useSendAiMessageMutation } = aiApi;
+export const {
+    useGetAiMessagesQuery,
+    useSendAiMessageMutation,
+    useGenerateAiVideoMutation,
+    useTestSubscriptionQuery,
+} = aiApi;
