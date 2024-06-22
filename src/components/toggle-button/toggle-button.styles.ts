@@ -37,6 +37,7 @@ export const ButtonContainer = styled(motion.div)<{
     border-radius: 50px;
     background-color: ${({ isOn }) => (isOn ? 'var(--indigo-700)' : 'gray')};
     display: flex;
+    flex-shrink: 0;
     justify-content: flex-start;
     align-items: center;
     cursor: pointer;

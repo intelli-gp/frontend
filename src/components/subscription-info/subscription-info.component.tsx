@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
 
 import {
     NotificationSettingsRow,
     PayTime,
-    PlanButton,
 } from '../../pages/settings/settings.styles';
+import { EditButton } from '../../pages/settings/settings.styles';
 import { useCreateSubscriptionMutation } from '../../store/apis/subscriptionsApi';
 import { ReceivedSubscription } from '../../types/subscription';
+import { successToast } from '../../utils/toasts';
 import { Label } from '../input/input.styles';
 import ToggleButton from '../toggle-button/toggle-button.component';
 import {
@@ -43,9 +44,10 @@ const SubscriptionInfo = ({
         setToggleOn(!toggleOn);
     };
 
-    const saveChangesHandler = () => {
+    const saveChangesHandler = async () => {
         if (toggleOn) {
-            subscribeToPro({ interval: 'monthly' });
+            await subscribeToPro({ interval: 'monthly' });
+            successToast('Subscription renewed successfully');
         } else {
             handleCancelSubscription();
         }
@@ -104,18 +106,18 @@ const SubscriptionInfo = ({
                     <ToggleButton isOn={toggleOn} toggle={toggleHandler} />
                     <Label>Auto Renew </Label>
                 </NotificationSettingsRow>
-                <PlanButton
+                <EditButton
+                    title="Save Changes"
                     onClick={saveChangesHandler}
-                    select="success"
+                    select="secondary"
                     loading={
                         isCancellingSubscription ||
                         isSubscriptionCreationLoading
                     }
-                    outline={true}
                     disabled={buttonDisabled}
                 >
-                    Save Changes
-                </PlanButton>
+                    Save
+                </EditButton>
             </ButtonWrapper>
         </Container>
     );

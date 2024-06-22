@@ -62,10 +62,10 @@ export const BoldText = styled.div`
 `;
 
 export const ButtonWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 1.5rem;
+    display: grid;
+    place-items: end;
+    padding: 1rem;
+    margin-top: 1rem;
     width: 25%;
+    flex-shrink: 0;
 `;
