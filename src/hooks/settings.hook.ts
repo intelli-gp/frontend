@@ -16,39 +16,25 @@ type useNotificationsHookType = {
     commentsIsOn: boolean;
 };
 
-const MAX_ON_BUTTONS = 3;
-
 export const useNotificationsHook = ({}: Partial<useNotificationsHookType>) => {
     const dispatch = useDispatch();
 
-    const [messagesIsOn, setMessagesIsOn] = useState(true);
-    const [followIsOn, setFollowIsOn] = useState(true);
-    const [articlesIsOn, setArticlesIsOn] = useState(true);
-    const [allOn, setAllOn] = useState(true);
-    /**
-     * This is a counter to set allOn on when it
-     * reaches the maximum number of on buttons which currently is MAX_ON_BUTTONS.
-     * This logic may not work in dev environment because of React.Strict mode
-     * don't modify it unless you know what you are doing.
-     */
-    const [_counter, _setCounter] = useState(
-        +messagesIsOn + +followIsOn + +articlesIsOn, // This is a trick to convert boolean to number to count number of on buttons
-    );
-
     const { user, token } = useSelector((state: RootState) => state.auth);
+
+    const [messagesIsOn, setMessagesIsOn] = useState(true);
+    const [followIsOn, setFollowIsOn] = useState(
+        !!user.IsFollowNotificationsMuted,
+    );
+    const [articlesIsOn, setArticlesIsOn] = useState(
+        !!user.IsArticleNotificationsMuted,
+    );
+    const [allOn, setAllOn] = useState(!!user.IsAllNotificationsMuted);
 
     const [triggerUpdateNotifications, { isLoading }] =
         useUpdateNotificationsSettingsMutation();
 
     const getUpdateDiff = () => {
-        const diff: UserNotificationSettings = {
-            IsAllNotificationsMuted: false,
-            IsGroupNotificationsMuted: !!user.IsGroupNotificationsMuted,
-            IsArticleNotificationsMuted: !!user.IsAllNotificationsMuted,
-            IsFollowNotificationsMuted: !!user.IsFollowNotificationsMuted,
-        };
-
-        const originalCopy = { ...diff };
+        const diff: Partial<UserNotificationSettings> = {};
 
         if (user.IsGroupNotificationsMuted !== !messagesIsOn) {
             diff.IsGroupNotificationsMuted = !messagesIsOn;
@@ -58,10 +44,6 @@ export const useNotificationsHook = ({}: Partial<useNotificationsHookType>) => {
         }
         if (user.IsArticleNotificationsMuted !== !articlesIsOn) {
             diff.IsArticleNotificationsMuted = !articlesIsOn;
-        }
-
-        if (JSON.stringify(originalCopy) === JSON.stringify(diff)) {
-            return {} as UserNotificationSettings;
         }
 
         return diff;
@@ -101,65 +83,28 @@ export const useNotificationsHook = ({}: Partial<useNotificationsHookType>) => {
         setArticlesIsOn(!Boolean(user.IsArticleNotificationsMuted));
     }, [user]);
 
+    useEffect(() => {
+        if (messagesIsOn && followIsOn && articlesIsOn) {
+            setAllOn(true);
+        } else {
+            setAllOn(false);
+        }
+    }, [messagesIsOn, followIsOn, articlesIsOn]);
+
     const toggleMessages = () => {
         setMessagesIsOn((prev) => {
-            if (prev) {
-                /**
-                 * If we go from on to off, so the allOn button
-                 * should be off to adapt this change
-                 */
-                setAllOn(false);
-                _setCounter((prev) => prev - 1);
-            } else {
-                _setCounter((prev) => {
-                    if (prev + 1 === MAX_ON_BUTTONS) {
-                        setAllOn(true);
-                    }
-                    return prev + 1;
-                });
-            }
             return !prev;
         });
     };
 
     const toggleFollow = () => {
         setFollowIsOn((prev) => {
-            if (prev) {
-                /**
-                 * If we go from on to off, so the allOn button
-                 * should be off to adapt this change
-                 */
-                setAllOn(false);
-                _setCounter((prev) => prev - 1);
-            } else {
-                _setCounter((prev) => {
-                    if (prev + 1 === MAX_ON_BUTTONS) {
-                        setAllOn(true);
-                    }
-                    return prev + 1;
-                });
-            }
             return !prev;
         });
     };
 
     const toggleComments = () => {
         setArticlesIsOn((prev) => {
-            if (prev) {
-                /**
-                 * If we go from on to off, so the allOn button
-                 * should be off to adapt this change
-                 */
-                setAllOn(false);
-                _setCounter((prev) => prev - 1);
-            } else {
-                _setCounter((prev) => {
-                    if (prev + 1 === MAX_ON_BUTTONS) {
-                        setAllOn(true);
-                    }
-                    return prev + 1;
-                });
-            }
             return !prev;
         });
     };
