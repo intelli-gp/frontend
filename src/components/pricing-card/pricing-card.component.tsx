@@ -63,8 +63,8 @@ const PricingCard = ({
         if (isSubscribed && isUnique) {
             return (
                 <UpgradeButton
-                    select="danger"
-                    // outline
+                    select='success'
+                    outline
                     onClick={() => navigate(`/app/settings/#Billing`)}
                 >
                     Cancel Subscription

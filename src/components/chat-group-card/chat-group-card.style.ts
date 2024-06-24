@@ -75,7 +75,7 @@ export const ButtonsContainer = styled.div`
     margin-top: 0.75rem;
     padding-bottom: 1rem;
     & button {
-        border-radius: 99rem;
+        border-radius: 0.75rem;
         padding: 0.25rem 0;
         width: 90%;
         margin: 0 auto;

@@ -33,7 +33,7 @@ const WideArticleItem = ({
 }: WideArticleItemProps) => {
     return (
         <ArticleContainer onClick={onClick} title={title}>
-            <ArticleThumbnail src={CoverImage} alt={'thumbnail'} />
+            <ArticleThumbnail src={CoverImage} alt={'thumbnail'} fallbackType='article' transparentPlaceholder/>
             <div className="flex flex-col justify-between flex-1 overflow-hidden py-3">
                 <AuthorData>
                     <AuthorPicture

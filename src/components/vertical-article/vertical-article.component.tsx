@@ -48,7 +48,7 @@ const VerticalArticle = ({
 
     return (
         <CardContainer>
-            <CardImage src={CoverImage} alt={Title} />
+            <CardImage src={CoverImage} alt={Title} fallbackType='article' transparentPlaceholder/>
             <CardBody>
                 <ArticleTitle lines={2}>{Title}</ArticleTitle>
                 <ArticleText lines={4}>{articleText}</ArticleText>

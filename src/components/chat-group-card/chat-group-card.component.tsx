@@ -3,7 +3,6 @@ import { LuDot } from 'react-icons/lu';
 import { MdAdminPanelSettings } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
-import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
 import { useJoinGroupMutation } from '../../store';
 import { ReceivedGroup } from '../../types/group';
 import { errorToast } from '../../utils/toasts';
@@ -80,7 +79,7 @@ const GroupCard = ({
                 navigate(`/app/groups/${ID}`);
             }}
         >
-            <CardImage src={GroupCoverImage || defaultGroupImage} alt={title} />
+            <CardImage src={GroupCoverImage} alt={title} fallbackType='group'/>
             <GroupInfo>
                 <GroupTitle title={title}>{title}</GroupTitle>
                 <MembersCount>

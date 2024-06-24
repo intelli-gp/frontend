@@ -23,7 +23,11 @@ const UserCard = ({
 
     return (
         <CardContainer>
-            <UserImage src={ProfileImage} alt="user profile image" />
+            <UserImage
+                src={ProfileImage}
+                alt="user profile image"
+                fallbackType="user"
+            />
             <UserFullName to={profileURL(Username!)}>
                 {isMe ? 'You' : FullName}
             </UserFullName>

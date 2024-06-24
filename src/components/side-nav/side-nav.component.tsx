@@ -13,6 +13,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import {
     RootState,
+    appApi,
     clearCredentials,
     useFetchMessagesQuery,
     useFetchUserNotificationsQuery,
@@ -293,6 +294,7 @@ export default function SideNav() {
         } finally {
             dispatch(clearCredentials());
             navigate('/');
+            dispatch(appApi.util.resetApiState());
         }
     };
 
