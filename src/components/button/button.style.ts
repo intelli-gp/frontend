@@ -45,6 +45,15 @@ export const ButtonContainer = styled.button<ButtonProps>`
                             color: white;
                         }
                     `;
+                case 'primary700':
+                    return css`
+                        border-color: var(--indigo-700);
+                        color: var(--indigo-700);
+                        &:hover {
+                            background-color: var(--indigo-700);
+                            color: white;
+                        }
+                    `;
                 case 'secondary':
                     return css`
                         border-color: #718096;

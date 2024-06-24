@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -23,7 +24,7 @@ export const FollowButton = ({
     AnotherUserID,
     className,
 }: FollowButtonProps) => {
-    const [buttonType, setButtonType] = useState<ButtonVariant>('success');
+    const [buttonType, setButtonType] = useState<ButtonVariant>('primary700');
     const [buttonText, setButtonText] = useState('Follow');
     const [buttonTitle, setButtonTitle] = useState('Follow user');
     const [buttonOutline, setButtonOutline] = useState(true);
@@ -53,13 +54,13 @@ export const FollowButton = ({
         if (alreadyFollowing) {
             setButtonTitle('Unfollow user');
             setButtonText('Following');
-            setButtonType('primary');
+            setButtonType('primary700');
             setButtonOutline(true);
             return;
         }
         setButtonTitle('Follow user');
         setButtonText('Follow');
-        setButtonType('success');
+        setButtonType('primary700');
         setButtonOutline(false);
     }, [isMe, alreadyFollowing]);
 
@@ -107,6 +108,8 @@ export const FollowButton = ({
 
     const clickHandler = isMe ? navigateToProfile : handleToggleFollowUser;
 
+    const classes = classNames(className, '!rounded-xl', {});
+
     return (
         <Button
             select={buttonType}
@@ -114,7 +117,7 @@ export const FollowButton = ({
             title={buttonTitle}
             onMouseOver={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            className={className}
+            className={classes}
             loading={toggleFollowUserIsLoading}
             onClick={clickHandler}
         >
