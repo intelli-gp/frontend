@@ -29,10 +29,10 @@ const AddCreditCardForm: React.FC<Pick<ModalProps, 'setShowModal'>> = ({
 
     return (
         <FormContainer onSubmit={handleAddPaymentMethod}>
-            <span className="p-2 flex flex-col gap-2">
+            <div className="p-2 flex flex-col gap-2">
                 <Label>Credit or debit card:</Label>
                 <CardElement className="border px-2 py-4 rounded-lg" />
-            </span>
+            </div>
 
             <ButtonsContainer>
                 <Button select="danger" outline onClick={handleCancel}>
