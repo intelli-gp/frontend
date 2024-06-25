@@ -118,7 +118,7 @@ export const ArticleDate = styled.time`
 
 export const ArticleThumbnail = styled(EnhancedImage)`
     width: 200px;
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
     aspect-ratio: 1/1;
     @media (max-width: 768px) {
         width: 150px;
