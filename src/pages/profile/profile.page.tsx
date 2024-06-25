@@ -327,7 +327,7 @@ const ProfilePage = () => {
             offset: 0,
         });
 
-    const youMayKnow = usersRecommendation?.data?.Results as ReceivedUser[];
+    const youMayKnow = usersRecommendation?.data?.Results as ReceivedUser[] ?? [];
 
     const commonFollowers = followers?.filter((follower) => {
         return following?.find((follow) => follow.ID === follower.ID);
