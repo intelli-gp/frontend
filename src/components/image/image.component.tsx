@@ -1,5 +1,5 @@
 import articleFallback from '../../assets/imgs/article-fallback.svg';
-import groupFallback from '../../assets/imgs/fallback-group-2.png';
+import groupFallback from '../../assets/imgs/group-fallback.svg';
 import userFallback from '../../assets/imgs/user.jpg';
 import { Image, ImageContainer, Placeholder } from './image.styles';
 
