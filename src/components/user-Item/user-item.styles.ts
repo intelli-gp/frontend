@@ -36,6 +36,7 @@ export const UserItemImage = styled(EnhancedImage)`
     width: 42px;
     height: 42px;
     aspect-ratio: 1/1;
+    flex-shrink: 0;
     border-radius: 50%;
 `;
 
