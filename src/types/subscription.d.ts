@@ -5,18 +5,13 @@ export type CreateSubscriptionDto = {
 };
 
 export type ReceivedSubscription = {
+    Title: string;
     ID: string;
-
     Interval: 'monthly' | 'yearly';
-
-    StartDate: Date;
-
-    RenewalDate: Date;
-
+    StartDate: string;
+    RenewalDate: string;
     Price: number;
-
     Status: Stripe.Subscription.Status;
-
     IsCancelled: boolean;
 };
 
