@@ -65,7 +65,7 @@ export const AIServicePage = () => {
 
     return (
         <PageContainer {...BetweenPageAnimation}>
-            <PageTitle className="text-center">AI Service</PageTitle>
+            <PageTitle className="text-center">AI Lectures</PageTitle>
             <SearchBarContainer>
                 <AttachmentIcon size={18} />
                 <input

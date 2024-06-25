@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { BsFillPostcardFill, BsStars } from 'react-icons/bs';
 import { FiMenu } from 'react-icons/fi';
-import { GiBookshelf, GiRobotGolem, GiTomato, GiUpgrade } from 'react-icons/gi';
+import { GiBookshelf, GiTomato, GiUpgrade } from 'react-icons/gi';
 import { HiMiniUserGroup } from 'react-icons/hi2';
 import { IoIosSettings } from 'react-icons/io';
 import { IoPersonSharp } from 'react-icons/io5';
 import { LuListTodo, LuSearch } from 'react-icons/lu';
 import { MdLogout } from 'react-icons/md';
+import { PiVideoFill } from 'react-icons/pi';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -153,9 +154,9 @@ export default function SideNav() {
             id: 6,
         },
         {
-            icon: <GiRobotGolem />,
+            icon: <PiVideoFill />,
             path: '/app/ai-service',
-            text: 'AI Service',
+            text: 'AI Lectures',
             id: 7,
         },
         {

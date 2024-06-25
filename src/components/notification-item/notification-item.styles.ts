@@ -10,26 +10,27 @@ export const ItemContainer = styled.div<{ read: boolean }>`
     padding: 0.75rem;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px 0px;
     cursor: pointer;
-    background-color: ${({ read }) => (read ? 'white' : 'var(--indigo-100)')};
+    background-color: ${({ read }) => (read ? 'white' : 'var(--indigo-50)')};
     transition: all 0.2s ease-in-out;
     &:hover {
-        background-color: var(--indigo-50);
+        background-color: var(--indigo-100);
     }
 
     ${({ read }) => {
-        if (read) return '';
-        return css`
-            &:after {
-                content: '';
-                position: absolute;
-                top: 0;
-                right: 0;
-                width: 0.35rem;
-                height: 100%;
-                background-color: var(--indigo-500);
-                border-radius: 0 0.5rem 0.5rem 0;
-            }
-        `;
+        if (!read) {
+            return css`
+                &:after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 0.35rem;
+                    height: 100%;
+                    background-color: var(--indigo-500);
+                    border-radius: 0 0.5rem 0.5rem 0;
+                }
+            `;
+        }
     }}
 `;
 

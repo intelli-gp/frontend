@@ -329,28 +329,9 @@ const ProfilePage = () => {
 
     const youMayKnow = usersRecommendation?.data?.Results as ReceivedUser[];
 
-    const [CommonFollowers] = useState<any[]>([
-        {
-            FullName: 'Ahmed',
-            Username: 'ahmedali',
-            ProfileImage: defaultUserImage,
-        },
-        {
-            FullName: 'Ahmed',
-            Username: 'ahmedali',
-            ProfileImage: defaultUserImage,
-        },
-        {
-            FullName: 'Ahmed',
-            Username: 'ahmedali',
-            ProfileImage: defaultUserImage,
-        },
-        {
-            FullName: 'Ahmed',
-            Username: 'ahmedali',
-            ProfileImage: defaultUserImage,
-        },
-    ]);
+    const commonFollowers = followers?.filter((follower) => {
+        return following?.find((follow) => follow.ID === follower.ID);
+    });
 
     let groupsWithRole: GroupWithRole[] = userGroups?.map(
         (group: Partial<ReceivedGroup>) => {
@@ -524,6 +505,11 @@ const ProfilePage = () => {
                     );
                 })}
             </ul>
+            <div>
+                {youMayKnow?.length === 0 && (
+                    <EmptyContent className='text-center'>No recommendations found.</EmptyContent>
+                )}
+            </div>
         </YouMayNowSection>
     );
 
@@ -534,10 +520,15 @@ const ProfilePage = () => {
             </h1>
             <hr />
             <ul>
-                {CommonFollowers.map((user) => (
+                {commonFollowers?.map((user) => (
                     <UserItem {...user} />
                 ))}
             </ul>
+            <div>
+                {commonFollowers?.length === 0 && (
+                    <EmptyContent>No mutual followers.</EmptyContent>
+                )}
+            </div>
         </YouMayNowSection>
     );
 

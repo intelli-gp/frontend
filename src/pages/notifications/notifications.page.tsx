@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { IoIosSettings } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 
-import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
 import NotificationItem from '../../components/notification-item/notification-item.component';
 import {
     ARTICLE_NOTIFICATION_TYPES,
@@ -20,10 +19,6 @@ import { NotificationsContainer, PageContainer } from './notifications.styles';
 
 const NotificationsPage = () => {
     const navigate = useNavigate();
-    const [searchValue, setSearchValue] = useState('');
-    const handleSearchValueChange = (value: string) => {
-        setSearchValue(value);
-    };
 
     const { data: userNotifications } = useFetchUserNotificationsQuery({
         limit: 10,
@@ -103,11 +98,6 @@ const NotificationsPage = () => {
                     <IoIosSettings size={24} />
                 </EditButton>
             </div>
-            <ExplorePageHeader
-                WithoutButton
-                searchValue={searchValue}
-                onSearchValueChange={handleSearchValueChange}
-            />
             <NotificationsContainer>{notifications}</NotificationsContainer>
         </PageContainer>
     );
