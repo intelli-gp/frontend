@@ -1,13 +1,10 @@
 import _ from 'lodash';
 import { ChangeEvent, useLayoutEffect, useState } from 'react';
-import { MdOutlineAddCard } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 import Accordion from '../../components/accordion/accordion.component';
 import Button from '../../components/button/button.component';
-import CardsInfo from '../../components/card-info/cards-info.component';
-import AddCreditCardModal from '../../components/credit-card-modal/CreditCardModal';
+import CardsList from '../../components/card-info/cards-info.component';
 import { CustomInput } from '../../components/input/Input.component';
 import { Label } from '../../components/input/input.styles';
 import { Modal, ModalProps } from '../../components/modal/modal.component';
@@ -35,14 +32,11 @@ import {
 } from '../../store/apis/subscriptionsApi';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
-    AddCardContainer,
     EditButton,
     InlineInputsContainer,
-    NoContentHolder,
     NotificationSettingsContainer,
     NotificationSettingsRow,
     PageContainer,
-    PlanButton,
     QRCodeImg,
     QRCodeModalButtons,
     QRCodeText,
@@ -223,7 +217,6 @@ const Disable2faModal = ({
 
 export const SettingsPage = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const { user: storedUser, token: userToken } = useSelector(
         (state: RootState) => state.auth,
@@ -241,7 +234,6 @@ export const SettingsPage = () => {
     const [cancelSubscription, { isLoading: isCancellingSubscription }] =
         useCancelSubscriptionMutation();
 
-    const [addCreditCardIsOpen, setAddCreditCardIsOpen] = useState(false);
     const [enable2faIsOpen, setEnable2faIsOpen] = useState(false);
     const [disable2faIsOpen, setDisable2faIsOpen] = useState(false);
     const [QRCode, setQRCode] = useState('');
@@ -551,53 +543,16 @@ export const SettingsPage = () => {
             </Accordion>
 
             <Accordion title="Billing">
-                <div className="flex flex-col p-2">
-                    <SectionTitle>Current Plan</SectionTitle>
-                    {isSubscriptionDataLoading ? (
-                        <NoContentHolder>
-                            <p>Loading...</p>
-                        </NoContentHolder>
-                    ) : (
-                        !subscriptionData && (
-                            <div className="flex flex-col justify-between mb-6 p-2">
-                                <NoContentHolder>
-                                    <p>
-                                        You don’t have any active subscription.
-                                    </p>
-                                </NoContentHolder>
-                                <div className="flex justify-end gap-4 mt-6 w-full">
-                                    <PlanButton
-                                        onClick={() => navigate('/app/upgrade')}
-                                        select="secondary"
-                                    >
-                                        Upgrade
-                                    </PlanButton>
-                                </div>
-                            </div>
-                        )
-                    )}
-                    {subscriptionData && (
-                        <SubscriptionInfo
-                            subscriptionData={subscriptionData}
-                            isCancellingSubscription={isCancellingSubscription}
-                            handleCancelSubscription={handleCancelSubscription}
-                        />
-                    )}
-                    <SectionTitle>Payment Method</SectionTitle>
-                    <div className="flex flex-col justify-center items-center gap-4 p-2">
-                        <CardsInfo />
+                <SectionTitle>Current Plan</SectionTitle>
+                <SubscriptionInfo
+                    subscriptionData={subscriptionData}
+                    isCancellingSubscription={isCancellingSubscription}
+                    handleCancelSubscription={handleCancelSubscription}
+                    isLoading={isSubscriptionDataLoading}
+                />
 
-                        <span className="flex justify-end w-full">
-                            <AddCardContainer
-                                onClick={() => setAddCreditCardIsOpen(true)}
-                                select="secondary"
-                                title="Add credit card"
-                            >
-                                <MdOutlineAddCard size={26} />
-                            </AddCardContainer>
-                        </span>
-                    </div>
-                </div>
+                <SectionTitle>Payment Method</SectionTitle>
+                <CardsList />
             </Accordion>
 
             <Button outline select="danger" className="self-start mt-auto">
@@ -613,10 +568,6 @@ export const SettingsPage = () => {
             <Disable2faModal
                 isOpen={disable2faIsOpen}
                 setIsOpen={setDisable2faIsOpen}
-            />
-            <AddCreditCardModal
-                showModal={addCreditCardIsOpen}
-                setShowModal={setAddCreditCardIsOpen}
             />
         </PageContainer>
     );

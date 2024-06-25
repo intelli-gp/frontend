@@ -81,6 +81,7 @@ export default function StudyPlanner() {
         setID(ID);
         setEdit((prev) => !prev);
     };
+
     useEffect(() => {
         document.title = 'Study Planner | Mujedd';
         return () => {
@@ -120,12 +121,14 @@ export default function StudyPlanner() {
 
     const [viewState, setViewState] = useState<View>('week');
     const [date, setDate] = useState(new Date());
+    
     const onNavigate = useCallback(
         (newDate: Date) => {
             return setDate(newDate);
         },
         [setDate],
     );
+
     const CustomToolbar = (props: ToolbarProps) => {
         function addMonths(date: Date, months: number) {
             const d = date.getDate();

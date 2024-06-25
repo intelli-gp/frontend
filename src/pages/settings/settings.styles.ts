@@ -58,18 +58,6 @@ export const AddCard = styled(IoAddCircle)`
     color: var(--indigo-200);
 `;
 
-export const AddCardContainer = styled(Button)`
-    padding: 8px;
-    border-radius: 55px;
-`;
-
-export const CardsContainer = styled.div`
-    margin: 0 auto;
-    width: 100%;
-    gap: 1rem;
-    padding: 6px 8px;
-`;
-
 export const PlanButton = styled(Button)`
     width: 185px;
 `;
@@ -146,7 +134,7 @@ export const NotificationSettingsContainer = styled.div`
 
 export const NotificationSettingsRow = styled.div`
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
     align-items: center;
 `;
 
