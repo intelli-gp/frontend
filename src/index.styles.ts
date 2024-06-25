@@ -53,7 +53,7 @@ export const ModalTitle = styled.h2<{ fontSize?: 'sm' | 'md' | 'lg' | string }>`
 export const CSSTextLengthLimit = css<{ width?: string }>`
     overflow: hidden;
     text-overflow: ellipsis;
-    width: ${({ width }) => width || '100%'};
+    max-width: ${({ width }) => width || '100%'};
     white-space: nowrap;
 `;
 

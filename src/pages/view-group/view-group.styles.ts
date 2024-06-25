@@ -127,17 +127,10 @@ export const StatusTitle = styled.p`
 `;
 
 export const PeopleContainer = styled.div`
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    padding: 12px;
+    padding: 1rem;
+    display: flex;
     gap: 1rem;
     width: 100%;
-    @media (max-width: 1284px) {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    @media (max-width: 768px) {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
 `;
 
 export const EditButton = styled.button`
