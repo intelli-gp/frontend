@@ -8,7 +8,7 @@ export const PageContainer = styled(motion.div)`
     max-width: 900px;
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: 2rem;
     align-items: center;
 
     @media (max-width: 768px) {
