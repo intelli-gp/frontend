@@ -5,14 +5,13 @@ import { useNavigate } from 'react-router-dom';
 
 import checkout from '../../assets/imgs/checkout.svg';
 import Button from '../../components/button/button.component';
-import CardsInfo from '../../components/card-info/cards-info.component';
+import CardsList from '../../components/card-info/cards-info.component';
 import AddCreditCardModal from '../../components/credit-card-modal/CreditCardModal';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import { changeUserPlan } from '../../store';
 import { useCreateSubscriptionMutation } from '../../store/apis/subscriptionsApi';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
-    AddCardButton,
     ContentWrapper,
     FlexContainer,
     Image,
@@ -97,22 +96,18 @@ const CheckoutPage = () => {
             <div className="flex flex-col justify-center items-center w-[100%] lg:w-[60%]">
                 <motion.div
                     {...BetweenPageAnimation}
-                    className="flex flex-col justify-center lg:items-start items-center w-[90%] lg:w-[60%] py-8 gap-4"
+                    className="flex flex-col justify-center lg:items-start items-center w-[90%] lg:w-[60%] py-4 gap-8"
                 >
                     <PageTitle size="sm">Select default card </PageTitle>
                     <Line />
-                    <CardsInfo />
+                    <div className="flex-1 overflow-y-scroll !max-h-[400px] w-full flex flex-col p-4">
+                        <CardsList />
+                    </div>
 
-                    <div className="w-[100%] flex flex-col items-center gap-4">
-                        <AddCardButton
-                            onClick={() => setAddCreditCardIsOpen(true)}
-                            title="Add credit card"
-                        >
-                            Add a new card
-                        </AddCardButton>
+                    <div className="w-[100%] flex flex-col items-center gap-1">
                         <Button
                             type="submit"
-                            className="w-[100%] "
+                            className="w-[100%] h-[38.5px]"
                             loading={isSubscriptionCreationLoading}
                             onClick={handleCheckout}
                         >

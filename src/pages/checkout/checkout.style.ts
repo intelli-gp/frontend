@@ -35,7 +35,7 @@ export const AddCardButton = styled(Button)`
 `;
 export const FlexContainer = styled.div`
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
     width: 100%;
     flex-direction: row;
 
