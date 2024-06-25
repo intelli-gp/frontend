@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { BeatLoader } from 'react-spinners';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 import { PaymentIcon } from 'react-svg-credit-card-payment-icons/dist/index.mjs';
 
-import { CardsContainer } from '../../pages/settings/settings.styles';
 import {
     useFetchPaymentMethodsQuery,
     useSetPaymentMethodAsDefaultMutation,
@@ -10,9 +9,20 @@ import {
 import { useRemovePaymentMethodMutation } from '../../store/apis/paymentMethodsApi';
 import { errorToast, successToast } from '../../utils/toasts';
 import Button from '../button/button.component';
+import AddCreditCardModal from '../credit-card-modal/CreditCardModal';
 import DropdownMenu from '../menu/menu.component';
 import { Modal } from '../modal/modal.component';
-import { CardContainer, EditIcon, NoContentHolder } from './cards-info.style';
+import {
+    AddNewCardButton,
+    AddNewCardIcon,
+    AddNewCardText,
+    CardContainer,
+    CardNumber,
+    CardsContainer,
+    DefaultBadge,
+    EditButton,
+    ExpireDate,
+} from './cards-info.style';
 
 interface ModalProps {
     paymentMethodId: string;
@@ -45,28 +55,22 @@ const DeleteSectionModal: React.FC<ModalProps> = ({
             width="lg"
             title="Are you sure you want to delete this card?"
         >
-            <div className="flex flex-col gap-8">
-                <div className="flex gap-4 flex-row-reverse">
-                    <Button
-                        className="!px-8"
-                        select="danger"
-                        outline
-                        loading={isLoading}
-                        onClick={handleDeleteGroup}
-                    >
-                        Yes
-                    </Button>
-                    <Button
-                        className="!px-6"
-                        onClick={() => setShowModal(false)}
-                    >
-                        Cancel
-                    </Button>
-                </div>
+            <div className="flex gap-2 flex-row-reverse">
+                <Button
+                    className="w-[88.5px] h-[38px]"
+                    select="danger"
+                    outline
+                    loading={isLoading}
+                    onClick={handleDeleteGroup}
+                >
+                    Yes
+                </Button>
+                <Button onClick={() => setShowModal(false)}>Cancel</Button>
             </div>
         </Modal>
     );
 };
+
 type CardInfoProps = {
     paymentMethodId: string;
     LastFourDigits: string;
@@ -75,6 +79,7 @@ type CardInfoProps = {
     Brand: string;
     IsDefault?: boolean;
 };
+
 type CardType =
     | 'Alipay'
     | 'Amex'
@@ -93,7 +98,7 @@ type CardType =
     | 'Unionpay'
     | 'Visa';
 
-const CardInfo = ({
+const PaymentCard = ({
     paymentMethodId,
     LastFourDigits,
     ExpiryMonth,
@@ -107,10 +112,9 @@ const CardInfo = ({
         useSetPaymentMethodAsDefaultMutation();
 
     const cardType = Brand as CardType;
-    const maskedNumber = `**** **** **** ${LastFourDigits}`;
     const Expire = `${ExpiryMonth}/${ExpiryYear}`;
 
-    const CreditOptions = [
+    const CardOptions = [
         {
             option: 'Set default',
             handler: () => {
@@ -126,45 +130,36 @@ const CardInfo = ({
             },
         },
     ];
+
     return (
         <CardContainer>
-            <span className="flex justify-between w-[100%]">
-                <span className="flex gap-4">
+            <div className="flex w-full">
+                <div className="flex gap-4 items-center">
                     <PaymentIcon
                         type={cardType || 'Amex'}
                         format="flatRounded"
                         width={50}
                     />
-                    <p className="text-lg font-bold">{maskedNumber}</p>
-
-                    {IsDefault && (
-                        <span className="bg-[var(--indigo-25)] text-[var(--indigo-500)] font-bold rounded-full flex items-center px-2 py-1 text-xs">
-                            Default
-                        </span>
-                    )}
-                    <BeatLoader
-                        className="pt-2"
-                        loading={isLoading}
-                        size={5}
-                        color="var(--indigo-500)"
-                    />
-                </span>
+                    <CardNumber>{`XXXX XXXX XXXX ${LastFourDigits}`}</CardNumber>
+                </div>
                 <DropdownMenu
-                    options={CreditOptions}
+                    options={CardOptions}
                     top="70%"
                     right="10%"
                     left="auto"
                     bottom="auto"
-                    menuWidth="10rem"
+                    menuWidth="8rem"
+                    mainElementClassName="ml-auto"
                 >
-                    <div className="hover:bg-[var(--indigo-25)] p-[4px] flex items-center rounded-full">
-                        <EditIcon />
-                    </div>
+                    <EditButton loading={isLoading}>
+                        <BsThreeDotsVertical />
+                    </EditButton>
                 </DropdownMenu>
-            </span>
-            <p className="text-[var(--slate-500)] text-sm ">
-                Expires - {Expire}
-            </p>
+            </div>
+            <div className="flex items-center gap-4 w-full">
+                <ExpireDate>Expires - {Expire}</ExpireDate>
+                {IsDefault && <DefaultBadge>Default</DefaultBadge>}
+            </div>
             <DeleteSectionModal
                 paymentMethodId={paymentMethodId}
                 showModal={showDeleteModal}
@@ -173,14 +168,18 @@ const CardInfo = ({
         </CardContainer>
     );
 };
-const CardsInfo: React.FC = () => {
+
+const CardsList = () => {
+    const [addCreditCardIsOpen, setAddCreditCardIsOpen] = useState(false);
+
     const { data: paymentMethodResponse } = useFetchPaymentMethodsQuery();
     const PaymentMethodsData = paymentMethodResponse?.data || [];
-    return PaymentMethodsData.length > 0 ? (
-        <CardsContainer>
-            {PaymentMethodsData.map((paymentMethod, index: number) => (
-                <div className="w-[100%] flex flex-col gap-2" key={index}>
-                    <CardInfo
+
+    if (PaymentMethodsData?.length > 0) {
+        return (
+            <CardsContainer>
+                {PaymentMethodsData.map((paymentMethod) => (
+                    <PaymentCard
                         paymentMethodId={paymentMethod.PaymentMethodId}
                         LastFourDigits={paymentMethod.LastFourDigits}
                         ExpiryMonth={paymentMethod.ExpMonth}
@@ -188,13 +187,40 @@ const CardsInfo: React.FC = () => {
                         Brand={paymentMethod.Brand}
                         IsDefault={paymentMethod.IsDefault}
                     />
-                    {index !== PaymentMethodsData.length - 1 && <hr />}
-                </div>
-            ))}
-        </CardsContainer>
-    ) : (
-        <NoContentHolder>No Payment Methods Added.</NoContentHolder>
-    );
+                ))}
+
+                <AddNewCardButton
+                    title="Add New Card"
+                    onClick={() => setAddCreditCardIsOpen(true)}
+                >
+                    <AddNewCardIcon />
+                </AddNewCardButton>
+
+                <AddCreditCardModal
+                    showModal={addCreditCardIsOpen}
+                    setShowModal={setAddCreditCardIsOpen}
+                />
+            </CardsContainer>
+        );
+    } else {
+        return (
+            <div className="flex flex-col items-center">
+                <AddNewCardButton
+                    title="Add New Card"
+                    onClick={() => setAddCreditCardIsOpen(true)}
+                    className="!w-full"
+                >
+                    <AddNewCardText>
+                        No cards found. Click here to add a new card.
+                    </AddNewCardText>
+                </AddNewCardButton>
+                <AddCreditCardModal
+                    showModal={addCreditCardIsOpen}
+                    setShowModal={setAddCreditCardIsOpen}
+                />
+            </div>
+        );
+    }
 };
 
-export default CardsInfo;
+export default CardsList;
