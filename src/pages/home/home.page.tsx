@@ -1,6 +1,7 @@
 import { Variants } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Section2img from '../../assets/imgs/about-illustration1.svg';
@@ -13,7 +14,7 @@ import PricingCard from '../../components/pricing-card/pricing-card.component';
 import { SwiperSlider } from '../../components/swiper/swiper-slider.component';
 import VerticalArticle from '../../components/vertical-article/vertical-article.component';
 import { BetweenPageAnimation } from '../../index.styles';
-import { useGetArticlesQuery } from '../../store';
+import { RootState, useGetArticlesQuery } from '../../store';
 import { Plan } from '../../types/plan';
 import {
     AISection,
@@ -48,6 +49,11 @@ import {
 function Nav() {
     const [navbarOpen, setMenuOpen] = useState(false);
 
+    const isAuthenticated = useSelector(
+        (state: RootState) => state.auth.isAuthenticated,
+    );
+
+    console.log({ isAuthenticated });
     const toggleMobileNav = () => {
         setMenuOpen(!navbarOpen);
     };
@@ -147,8 +153,16 @@ function Nav() {
                             {link.value}
                         </StyledLink>
                     ))}
-                    <StyledLink to="/auth/signup">Sign up</StyledLink>
-                    <StyledLink to="/auth/login">Log in</StyledLink>
+                    {isAuthenticated ? (
+                        <StyledLink to="/app/search">Home</StyledLink>
+                    ) : (
+                        <>
+                            <StyledLink to="/auth/signup">
+                                Sign up Lol
+                            </StyledLink>
+                            <StyledLink to="/auth/login">Log in</StyledLink>
+                        </>
+                    )}
                 </HomeSideNavItemsContainer>
             </HomeSideNav>
 
@@ -172,10 +186,16 @@ function Nav() {
                             </NavLink>
                         ))}
 
-                        <NavLink to="/auth/signup" className="ml-10">
-                            Signup
-                        </NavLink>
-                        <NavLink to="/auth/login">Login</NavLink>
+                        {isAuthenticated ? (
+                            <NavLink to="/app/search"> Home</NavLink>
+                        ) : (
+                            <>
+                                <NavLink to="/auth/signup" className="ml-10">
+                                    Signup
+                                </NavLink>
+                                <NavLink to="/auth/login">Login</NavLink>
+                            </>
+                        )}
                     </HorizontalNavLinksContainer>
                     <AiOutlineMenu
                         size={24}
