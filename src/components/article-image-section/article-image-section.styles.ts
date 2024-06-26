@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import EnhancedImage from '../image/image.component';
 
-export const ImageSection = styled.img`
+export const ImageSection = styled(EnhancedImage)`
     object-fit: contain;
     min-height: 250px;
     max-height: 400px;
