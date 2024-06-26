@@ -9,7 +9,7 @@ import { LuListTodo, LuSearch } from 'react-icons/lu';
 import { MdLogout } from 'react-icons/md';
 import { PiVideoFill } from 'react-icons/pi';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import {
@@ -429,7 +429,9 @@ export default function SideNav() {
 function BrandComponent() {
     return (
         <BrandContainer>
-            <Brand>Mujedd</Brand>
+            <Link to="/">
+                <Brand>Mujedd</Brand>
+            </Link>
             <Separator />
         </BrandContainer>
     );

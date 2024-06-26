@@ -31,6 +31,7 @@ export const SideNavContainer = styled.aside<{ sideNavOpen: boolean }>`
 export const BrandContainer = styled.div``;
 
 export const Brand = styled.h1`
+    cursor: pointer;
     text-align: center;
     color: #ffffff;
     font-weight: 900;
