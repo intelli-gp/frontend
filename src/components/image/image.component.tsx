@@ -1,6 +1,7 @@
 import articleFallback from '../../assets/imgs/article-fallback.svg';
 import groupFallback from '../../assets/imgs/group-fallback.svg';
 import userFallback from '../../assets/imgs/user.jpg';
+import wideImageFallback from '../../assets/imgs/wide-image-placeholder.svg';
 import { Image, ImageContainer, Placeholder } from './image.styles';
 
 type EnhancedImageProps = {
@@ -26,7 +27,7 @@ type EnhancedImageProps = {
     /**
      * Fallback type for the image
      */
-    fallbackType?: 'user' | 'article' | 'group';
+    fallbackType?: 'user' | 'article' | 'group' | 'wide';
 };
 
 type ImageErrorEvent = React.SyntheticEvent<HTMLImageElement, Event>;
@@ -60,9 +61,10 @@ const EnhancedImage = ({
                         case 'group':
                             e.currentTarget.src = groupFallback;
                             break;
+                        case 'wide':
                         default:
-                            e.currentTarget.src =
-                                'https://via.placeholder.com/150';
+                            e.currentTarget.src = wideImageFallback;
+                            break;
                     }
                 }}
             />
