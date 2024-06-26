@@ -458,7 +458,7 @@ const ChatMessage = ({
             )}
 
             <MessageDate isMine={isMine}>
-                <span>{message?.IsEdited? 'Edited': ''}</span>
+                <span>{message?.IsEdited && 'Edited'}</span>
                 {new Date(message.CreatedAt ?? Date.now()).toLocaleString()}
             </MessageDate>
 

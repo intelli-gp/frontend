@@ -1,16 +1,10 @@
 function DateInput(): JSX.Element {
-    // const [inputValue, setInputValue] = useState('');
-
-    // const handleChange = (value: string): void => {
-    //     setInputValue(value);
-    // };
-
     return (
         <div className="relative mb-3">
             <div className="relative">
                 <input
                     type="date"
-                    className="peer bg-white-100 border border-gray-300 text-gray-500 text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block p-2.5 outline-none"
+                    className="peer bg-white-100 border border-[var(--gray-500)] text-[var(--gray-500)] text-md rounded-md focus:ring-blue-500 focus:border-blue-500 block p-2.5 outline-none"
                     placeholder="Select date"
                     id="dateInput"
                 />
