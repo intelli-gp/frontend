@@ -6,18 +6,18 @@ import { CSSTextLengthLimit } from '../../index.styles';
 import EnhancedImage from '../image/image.component';
 
 export const PersonContainer = styled.div`
-    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.1);
+    background-color: var(--indigo-25);
     border-radius: 0.75rem;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 1rem 0.5rem;
+    padding: 1rem 0.75rem 0.5rem 0.75rem;
     gap: 0.75rem;
     transition: background-color 0.2s ease-in-out;
     &:hover {
-        background: var(--indigo-25);
+        background-color: var(--indigo-50);
     }
 `;
 
