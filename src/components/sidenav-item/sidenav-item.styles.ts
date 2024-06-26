@@ -50,7 +50,7 @@ export const SubItemsContainer = styled(motion.div)`
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    border-left: 3px solid rgba(255, 255, 255, 0.25);
+    border-left: 2px solid rgba(255, 255, 255, 0.25);
     margin: 1rem 0.5rem;
 `;
 
