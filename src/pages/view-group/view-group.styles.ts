@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
+import EnhancedImage from '../../components/image/image.component';
+
 export const PageContainer = styled(motion.div)`
     display: flex;
     flex-direction: column;
@@ -27,7 +29,7 @@ export const GroupTitleHolder = styled.div`
         left: 3rem;
     }
 `;
-export const GroupCoverImage = styled.img`
+export const GroupCoverImage = styled(EnhancedImage)`
     width: 100%;
     height: 100%;
     object-fit: cover;
