@@ -61,6 +61,7 @@ const MarkdownEditor = ({ value, onChange, onDelete }: MarkdownEditorProps) => {
             value={value}
             onChange={onChange}
             extraCommands={extraCommands}
+            className="rounded-lg" // matters in create article page
         />
     );
 };

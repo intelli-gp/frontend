@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import EnhancedImage from '../image/image.component';
 
 export const ImageSection = styled(EnhancedImage)`
@@ -7,4 +8,5 @@ export const ImageSection = styled(EnhancedImage)`
     max-height: 400px;
     background-color: var(--indigo-50);
     cursor: pointer;
+    border-radius: 0.75rem;
 `;

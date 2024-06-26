@@ -64,7 +64,11 @@ const MarkdownEditor = lazy(
 const CreateArticlePage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     const addSectionButtonRef = useRef<HTMLDivElement>(null);
+    const { tags, sections, title, cover, deleteSectionModalIsOpen } =
+        useSelector((state: RootState) => state['article-creator']);
+
     const [removeArticle] = useDeleteArticleMutation();
     const [deleteArticleModalIsOpen, setDeleteArticleModalIsOpen] =
         useState(false);
@@ -76,15 +80,12 @@ const CreateArticlePage = () => {
         trigger: imageUploadTrigger,
         reset: imageUploadReset,
     } = useUploadImage();
-    const { tags, sections, title, cover, deleteSectionModalIsOpen } =
-        useSelector((state: RootState) => state['article-creator']);
 
     // These only used when editing an article
     const isEdit = new URL(window.location.href).pathname.includes('edit');
     const { articleId } = useParams();
     const [getArticle, { data }] = useLazyGetArticleQuery();
-    const articleBeforeEdit = (data as unknown as Response)
-        ?.data as ReceivedArticle;
+    const articleBeforeEdit = (data?.data as ReceivedArticle) ?? {};
     const [patchArticle] = useUpdateArticleMutation();
 
     const handleSectionEdit = (targetSectionId: number, newValue: string) => {
@@ -383,7 +384,7 @@ const CreateArticlePage = () => {
                 }}
                 availableTags={availableTagsRes?.data ?? []}
                 selectedTags={tags ?? []}
-                wrapperClassName="!border-[var(--gray-400)]"
+                wrapperClassName="!border-[var(--gray-400)] !resize-none !rounded-lg"
             />
         </div>
     );
@@ -405,6 +406,7 @@ const CreateArticlePage = () => {
                     }}
                     editButton
                     height="350px"
+                    radius="0.75rem"
                 />
             </ArticleCoverImageContainer>
 
@@ -460,7 +462,7 @@ const CreateArticlePage = () => {
                     right="90%"
                 >
                     <Button
-                        className="h-[50px] w-[50px] !rounded-full justify-center"
+                        className="h-[50px] w-[50px] !rounded-full justify-center !p-0"
                         title="Add New section"
                         ref={addSectionButtonRef}
                     >
@@ -470,7 +472,7 @@ const CreateArticlePage = () => {
 
                 <Button
                     select="success"
-                    className="h-[50px] w-[50px] !rounded-full items-center justify-center"
+                    className="h-[50px] w-[50px] !rounded-full items-center justify-center !p-0"
                     onClick={isEdit ? updateArticle : publishArticle}
                     loading={imageUploadIsLoading || isArticleCreating}
                     title={isEdit ? 'Save changes' : 'Publish article'}
@@ -480,7 +482,7 @@ const CreateArticlePage = () => {
                 {isEdit && (
                     <Button
                         select="danger"
-                        className="h-[50px] w-[50px] !rounded-full items-center justify-center"
+                        className="h-[50px] w-[50px] !rounded-full items-center justify-center !p-0"
                         onClick={() => setDeleteArticleModalIsOpen(true)}
                         loading={false}
                         title={'Delete this article'}

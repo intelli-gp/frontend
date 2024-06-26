@@ -30,8 +30,14 @@ export const OpenImage = ({
 }: OpenImageProps) => {
     const fileInput = useRef<HTMLInputElement>(null);
 
-    const openFileInput = () => {
+    const openFileInput = (e: React.MouseEvent) => {
+        e.stopPropagation();
         fileInput.current?.click();
+    };
+
+    const deleteHandler = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        onDelete!();
     };
 
     const handleImageSelection = (e: ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +53,7 @@ export const OpenImage = ({
             {editButton && (
                 <Button
                     select="warning"
-                    className="!p-2 !rounded-none !text-[var(--gray-800)]"
+                    className={`!p-2 !rounded-none`}
                     title="Click to choose an image"
                     onClick={openFileInput}
                 >
@@ -59,7 +65,7 @@ export const OpenImage = ({
                     select="danger"
                     title="Delete this section"
                     className="z-30 !p-2 !rounded-none"
-                    onClick={onDelete}
+                    onClick={deleteHandler}
                 >
                     <RiDeleteBinLine size={14} />
                 </Button>
