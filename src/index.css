@@ -57,6 +57,14 @@
     --gray-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
     --black-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
     --tag-shadow: rgb(30, 64, 175, 0.5) 0px 1px 4px;
+
+    --mobile-nav-height: 0px;
+}
+
+@media (max-width: 1024px) {
+    :root {
+        --mobile-nav-height: 60px;
+    }
 }
 
 * {
