@@ -3,6 +3,39 @@ import styled from 'styled-components';
 
 import EnhancedImage from '../../components/image/image.component';
 
+export const DefaultPromptsContainer = styled(motion.div)`
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    height: 100%;
+    justify-content: center;
+    margin-top: -5rem;
+`;
+
+
+export const DefaultPromptCardContainer = styled(motion.div)`
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    border: 0.1rem solid var(--indigo-200);
+    padding: 1.25rem;
+    border-radius: 1rem;
+    color: var(--indigo-400);
+    width: 25%;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--indigo-50);
+        border-color: var(--indigo-300);
+        color: var(--indigo-500);
+    }
+
+    span {
+        transform: scale(1.5)
+    }
+`;
+
 export const PageContainer = styled(motion.div)`
     padding: 0.5rem;
     display: flex;

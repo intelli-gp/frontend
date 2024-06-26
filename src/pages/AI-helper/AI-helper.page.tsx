@@ -1,5 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { ElementType, useEffect, useRef, useState } from 'react';
+import { FaCode } from 'react-icons/fa';
+import { HiAcademicCap } from 'react-icons/hi2';
+import { SiHtmlacademy } from 'react-icons/si';
 import { SlOptions } from 'react-icons/sl';
+import { TbWriting } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
 
 import AIimg from '../../assets/imgs/ai-icon.png';
@@ -19,6 +23,8 @@ import {
     ChatBody,
     ChatFooter,
     ChatHeader,
+    DefaultPromptCardContainer,
+    DefaultPromptsContainer,
     PageContainer,
 } from './AI-helper.style';
 
@@ -37,6 +43,60 @@ const ChatSkeleton = () => {
         });
 };
 
+const DefaultPromptCard = ({
+    Icon,
+    Prompt,
+    HandleClick,
+}: {
+    Icon: ElementType;
+    Prompt: string;
+    HandleClick: (prompt: string) => void;
+}) => {
+    const clickHandler = () => {
+        HandleClick(Prompt);
+    };
+    return (
+        <DefaultPromptCardContainer
+            onClick={clickHandler}
+            transition={{ duration: 0.3 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+        >
+            <span className="w-4">
+                <Icon />
+            </span>
+            <p>{Prompt}</p>
+        </DefaultPromptCardContainer>
+    );
+};
+
+const DefaultPrompts = ({
+    isMessagesEmpty,
+    defaultPrompts,
+    handleClickOnDefaultMessage,
+}: {
+    isMessagesEmpty: boolean;
+    defaultPrompts: { content: string; icon: ElementType }[];
+    handleClickOnDefaultMessage: (prompt: string) => void;
+}) => {
+    console.log('test', isMessagesEmpty);
+    if (isMessagesEmpty) return <></>;
+    return (
+        <DefaultPromptsContainer>
+            <h1 className="text-4xl text-center font-bold">Get Started</h1>
+            <div className="flex  gap-8 justify-center">
+                {defaultPrompts.map((prompt) => (
+                    <DefaultPromptCard
+                        Icon={prompt.icon}
+                        Prompt={prompt.content}
+                        HandleClick={handleClickOnDefaultMessage}
+                    />
+                ))}
+            </div>
+        </DefaultPromptsContainer>
+    );
+};
+
 const AIHelperPage = () => {
     const navigate = useNavigate();
 
@@ -45,6 +105,7 @@ const AIHelperPage = () => {
     const {
         data: _messages,
         isLoading: messagesIsLoading,
+        isFetching: messagesIsFetching,
         error,
     } = useGetAiMessagesQuery();
     const messages = _messages?.data ?? [];
@@ -54,6 +115,21 @@ const AIHelperPage = () => {
 
     const [message, setMessage] = useState('');
     const [forbiddenModalIsOpen, setForbiddenModalIsOpen] = useState(false);
+
+    const defaultPrompts = [
+        {
+            content: 'Explain docker containers for a three year old',
+            icon: HiAcademicCap,
+        },
+        {
+            content: 'Write a function to reverse a string',
+            icon: FaCode,
+        },
+        {
+            content: 'Recite The Raven by Edgar Allan Poe',
+            icon: TbWriting,
+        },
+    ];
 
     const MessageLoading = () => {
         if (messageIsSending) {
@@ -70,6 +146,18 @@ const AIHelperPage = () => {
             );
         } else {
             return <></>;
+        }
+    };
+
+    const handleDefaultMessagesClicks = async (prompt: string) => {
+        try {
+            setMessage(prompt);
+            await sendAiMessage({ Content: prompt });
+        } catch (error) {
+            errorToast('Error while sending your default message.');
+            console.error(error);
+        } finally {
+            setMessage('');
         }
     };
 
@@ -146,6 +234,16 @@ const AIHelperPage = () => {
                         <MessageLoading />
                     </>
                 )}
+                <DefaultPrompts
+                    isMessagesEmpty={
+                        messagesIsLoading ||
+                        messagesIsFetching ||
+                        messageIsSending ||
+                        messages.length !== 0
+                    }
+                    defaultPrompts={defaultPrompts}
+                    handleClickOnDefaultMessage={handleDefaultMessagesClicks}
+                />
             </ChatBody>
 
             <ChatFooter>
@@ -163,6 +261,7 @@ const AIHelperPage = () => {
                             handleSendMessages();
                         }
                     }}
+                    disabled={messageIsSending}
                 />
                 <SendIcon size={26} onClick={handleSendMessages} />
             </ChatFooter>
