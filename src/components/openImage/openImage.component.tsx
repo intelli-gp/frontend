@@ -2,7 +2,6 @@ import { ChangeEvent, useRef } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBinLine } from 'react-icons/ri';
 
-import defaultImage from '../../assets/imgs/transparent-camera.png';
 import Button from '../button/button.component';
 import { Image, OpenImageContainer } from './openImage.style';
 
@@ -69,7 +68,10 @@ export const OpenImage = ({
     );
 
     return (
-        <OpenImageContainer>
+        <OpenImageContainer
+            title="Click to change the image"
+            onClick={openFileInput}
+        >
             <div className="absolute top-0 right-0 z-30">{Buttons}</div>
             <input
                 type="file"
@@ -82,9 +84,7 @@ export const OpenImage = ({
                 width={width}
                 radius={radius}
                 cover={cover}
-                src={value || defaultImage}
-                title="Click to change the image"
-                onClick={openFileInput}
+                src={value}
             />
         </OpenImageContainer>
     );

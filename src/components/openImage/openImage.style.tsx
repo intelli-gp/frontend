@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import EnhancedImage from '../image/image.component';
 
-export const Image = styled.img<{
+export const Image = styled(EnhancedImage)<{
     height?: string;
     width?: string;
     radius?: string;
@@ -11,7 +12,7 @@ export const Image = styled.img<{
     cursor: pointer;
     height: ${({ height }) => height || '100%'};
     width: ${({ width }) => width || '100%'};
-    opacity: 0.9;
+    opacity: 0.95;
     transition: opacity 0.3s ease;
     border-radius: ${({ radius }) => radius || ''};
     &:hover {
