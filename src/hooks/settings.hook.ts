@@ -34,7 +34,9 @@ export const useNotificationsHook = ({}: Partial<useNotificationsHookType>) => {
         useUpdateNotificationsSettingsMutation();
 
     const getUpdateDiff = () => {
-        const diff: Partial<UserNotificationSettings> = {};
+        const diff: Partial<UserNotificationSettings> = {
+            IsAllNotificationsMuted: false,
+        };
 
         if (user.IsGroupNotificationsMuted !== !messagesIsOn) {
             diff.IsGroupNotificationsMuted = !messagesIsOn;
