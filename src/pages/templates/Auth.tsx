@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 
 import illustration from '../../assets/imgs/login-signup-illustration.svg';
+import EnhancedImage from '../../components/image/image.component';
 
 export default function AuthTemplatePage() {
     return (
@@ -17,10 +18,12 @@ export default function AuthTemplatePage() {
                             Education for future-proof career
                         </h2>
                     </div>
-                    <img
+                    <EnhancedImage
+                        transparentPlaceholder
                         src={illustration}
                         alt="todo: add description"
                         className="3xl:w-[28rem] lg:w-96 w-72"
+                        objectFit="contain"
                     />
                 </div>
             </div>
