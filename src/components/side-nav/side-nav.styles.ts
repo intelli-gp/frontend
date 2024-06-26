@@ -50,6 +50,9 @@ export const LinksContainer = styled.div`
     gap: 0.5rem;
     padding: 0 0.25rem;
     overflow-y: auto;
+    &::-webkit-scrollbar {
+        width: 0.25rem;
+    }
     &::-webkit-scrollbar-thumb {
         background: rgb(255, 255, 255, 0.1);
     }

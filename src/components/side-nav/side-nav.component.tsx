@@ -116,11 +116,17 @@ export default function SideNav() {
                     id: 4.1,
                 },
                 {
+                    path: '/app/articles/create',
+                    text: 'Create',
+                    active: false,
+                    id: 4.2,
+                },
+                {
                     // icon: <IoBookmark />,
                     path: '/app/articles/my-bookmarks',
                     text: 'Bookmarks',
                     active: false,
-                    id: 4.2,
+                    id: 4.3,
                 },
             ],
         },
