@@ -1,5 +1,6 @@
 import { AIMessageToSend, ReceivedAiMessage } from '../../types/ai';
 import { GenericResponse } from '../../types/response';
+import { errorToast } from '../../utils/toasts';
 import { appApi } from './appApi';
 
 const aiApi = appApi.injectEndpoints({
@@ -15,15 +16,20 @@ const aiApi = appApi.injectEndpoints({
             }),
         }),
         sendAiMessage: builder.mutation<
-            GenericResponse<ReceivedAiMessage[]>,
+            GenericResponse<ReceivedAiMessage>,
             AIMessageToSend
         >({
-            invalidatesTags: ['Ai Messages'],
             query: (message) => ({
                 url: '/ai-service/chat',
                 method: 'POST',
                 body: message,
             }),
+            onQueryStarted: async (message , {dispatch, queryFulfilled}) => {
+                    const {data} = await queryFulfilled;
+                    dispatch(aiApi.util.updateQueryData('getAiMessages', undefined, (draft) => {
+                        draft.data.push(data.data);
+                    }));
+            },
         }),
         generateAiVideo: builder.mutation<
             GenericResponse<{ Url: string }>,
