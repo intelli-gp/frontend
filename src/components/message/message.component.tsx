@@ -4,7 +4,7 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { MdDoNotDisturb } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 
-import AIBotImage from '../../assets/imgs/ai-icon.png';
+import AIBotImage from '../../assets/imgs/AI-helper.svg';
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import { RootState } from '../../store';
 import {

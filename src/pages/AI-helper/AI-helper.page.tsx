@@ -5,7 +5,7 @@ import { SlOptions } from 'react-icons/sl';
 import { TbWriting } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
 
-import AIimg from '../../assets/imgs/ai-icon.png';
+import AIimg from '../../assets/imgs/AI-helper.svg';
 import { ForbiddenModal } from '../../components/ForbiddenModal';
 import Skeleton from '../../components/Skeleton';
 import { CustomInput } from '../../components/input/Input.component';
