@@ -230,7 +230,7 @@ export function connectSSE(token?: string) {
         switch ((error as any).status) {
             case 401:
             case 403: {
-                console.log('Token expired, renewing token...')
+                console.log('Token expired, renewing token...');
                 const newToken = await getNewToken();
                 if (newToken) {
                     disconnectSSE();

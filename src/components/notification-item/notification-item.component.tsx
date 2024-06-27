@@ -78,7 +78,7 @@ const NotificationItem = ({
 
     return (
         <ItemContainer read={Read} onClick={clickHandler}>
-            <UserImage src={Image} alt="User" />
+            <UserImage src={Image} alt="User" fallbackType="user" />
             <ContentContainer>
                 <Username>@{username}</Username>
                 <p>{notificationText}</p>

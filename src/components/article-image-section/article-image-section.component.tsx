@@ -3,7 +3,6 @@ import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { useDispatch } from 'react-redux';
 
-import defaultSectionImage from '../../assets/imgs/camera2.png';
 import { SectionContainer } from '../../pages/create-article/create-article.styles';
 import { changeArticleSectionValue, setSectionToBeDeleted } from '../../store';
 import { ArticleSection } from '../../types/article.d';
@@ -65,11 +64,9 @@ export const ImageUploadSection = ({ section }: ImageUploadSectionProps) => {
                 onChange={handleImageSelection}
                 hidden
             />
-            <ImageSection
-                src={imageSrc || defaultSectionImage}
-                title="Click to change the image"
-                onClick={openFileInput}
-            />
+            <div title="Click to change the image" onClick={openFileInput}>
+                <ImageSection src={imageSrc} />
+            </div>
         </SectionContainer>
     );
 };

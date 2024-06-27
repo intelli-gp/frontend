@@ -10,6 +10,12 @@ body .w-md-editor-text-input {
     min-height: 100% !important;
 }
 
+.w-md-editor-toolbar{
+    border-top-left-radius: 0.75rem ;
+    border-top-right-radius: 0.75rem ;
+    padding: 0.5rem 0.75rem;
+}
+
 .w-md-editor-toolbar li.active > button:not(:disabled),
 .w-md-editor-toolbar li > button:hover:not(:disabled),
 .w-md-editor-toolbar li > button:focus:not(:disabled) {

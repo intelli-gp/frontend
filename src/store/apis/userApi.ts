@@ -74,7 +74,7 @@ const userApi = appApi.injectEndpoints({
         }),
         updateNotificationsSettings: builder.mutation<
             GenericResponse<{ updatedUser: ReceivedUser }>,
-            UserNotificationSettings
+            Partial<UserNotificationSettings>
         >({
             query: (settings) => {
                 return {

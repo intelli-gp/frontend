@@ -2,7 +2,6 @@ import moment from 'moment';
 import { IoCamera } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 
-import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
 import { MessagesNotification } from '../../types/notifications';
 import {
     CardContainer,
@@ -34,8 +33,9 @@ const ChatCard = ({
             }}
         >
             <CardImage
-                src={Group?.GroupCoverImage || defaultGroupImage}
+                src={Group?.GroupCoverImage}
                 alt={Group?.GroupTitle}
+                fallbackType="group"
             />
 
             <TypographyContainer>

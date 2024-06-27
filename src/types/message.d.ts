@@ -17,6 +17,7 @@ export type SerializedMessage = {
         >;
     }[];
     RepliedToMessage?: SerializedMessage;
+    IsEdited: boolean;
 };
 
 export type AIMessageType = {

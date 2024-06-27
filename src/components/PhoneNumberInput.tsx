@@ -36,14 +36,14 @@ function PhoneNumberInput({ value, onChange }: PhoneInputProps): JSX.Element {
                         country="eg"
                         inputStyle={{
                             width: '100%',
-                            height: '43.6px',
+                            height: '41px',
                             fontWeight: 'normal',
                             fontFamily: 'Lato',
-                            borderColor: '#64748b',
+                            borderColor: 'var(--gray-500)',
                         }}
                         buttonStyle={{
-                            height: '43.6px',
-                            borderColor: '#64748b',
+                            height: '41px',
+                            borderColor: 'var(--gray-500)',
                         }}
                         value={value}
                         onChange={handleChange}

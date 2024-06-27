@@ -1,22 +1,22 @@
 import { FaCrown } from 'react-icons/fa';
-import { IoIosArrowDown } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 
-import defaultUserImage from '../../assets/imgs/user.jpg';
 import { usePermissionGroupMutation } from '../../store';
 import { GroupUser } from '../../types/group';
 import { profileURL } from '../../utils/profileUrlBuilder';
 import { errorToast, successToast } from '../../utils/toasts';
 import DropdownMenu from '../menu/menu.component';
 import {
+    CardFooter,
     CrownHolder,
+    OptionsButton,
     PersonContainer,
     PersonImage,
     PersonName,
 } from './group-user.style';
 
 type GroupUserType = GroupUser & {
-    GroupID: string | undefined;
+    GroupID?: string;
     Admin?: boolean;
     IsMe?: boolean;
     Owner?: boolean;
@@ -66,6 +66,7 @@ const UserContainer = ({
             },
         },
     ];
+
     const statusOptionMember = [
         {
             option: 'View Profile',
@@ -74,48 +75,49 @@ const UserContainer = ({
             },
         },
     ];
+
+    const UserOptions = () => {
+        if (IsMe) return null;
+        return (
+            <DropdownMenu
+                options={
+                    Admin && !Owner ? statusOptionAdmin : statusOptionMember
+                }
+                right="10%"
+                top="100%"
+                left="auto"
+                bottom="auto"
+                menuWidth="10rem"
+            >
+                <OptionsButton />
+            </DropdownMenu>
+        );
+    };
+
     return (
         <PersonContainer>
-            {Owner ? (
+            {Owner && (
                 <CrownHolder>
-                    <FaCrown size={18} color="#FFBB48" />
+                    <FaCrown size={14} color="#FFBB48" />
                 </CrownHolder>
-            ) : (
-                <></>
             )}
-            <PersonImage alt="" src={ProfileImage ?? defaultUserImage} />
-            <span className="flex flex-row items-center gap-2 relative">
-                <PersonName title={FullName}>{FullName}</PersonName>
-                {IsMe ? (
-                    <></>
-                ) : Admin && !Owner ? (
-                    <>
-                        <DropdownMenu
-                            options={statusOptionAdmin}
-                            right="10%"
-                            top="100%"
-                            left="auto"
-                            bottom="auto"
-                            menuWidth="10rem"
-                        >
-                            <IoIosArrowDown />
-                        </DropdownMenu>
-                    </>
-                ) : (
-                    <>
-                        <DropdownMenu
-                            options={statusOptionMember}
-                            right="10%"
-                            top="100%"
-                            left="auto"
-                            bottom="auto"
-                            menuWidth="10rem"
-                        >
-                            <IoIosArrowDown />
-                        </DropdownMenu>
-                    </>
-                )}
-            </span>
+
+            <PersonImage
+                alt="group member profile"
+                src={ProfileImage}
+                fallbackType="user"
+            />
+
+            <CardFooter>
+                <PersonName
+                    title={FullName}
+                    width="13ch"
+                    to={profileURL(Username)}
+                >
+                    {IsMe ? 'You' : FullName}
+                </PersonName>
+                <UserOptions />
+            </CardFooter>
         </PersonContainer>
     );
 };

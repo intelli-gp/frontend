@@ -10,7 +10,7 @@ import ExplorePageHeader from '../../components/explore-page-header/explore-page
 import { SwiperSlider } from '../../components/swiper/swiper-slider.component';
 import UserCard from '../../components/user-card/user-card.component';
 import WideArticleItem from '../../components/wide-article-item/wide-article-item.component';
-import { BetweenPageAnimation } from '../../index.styles';
+import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
     RootState,
     changeSearchPageInitiated,
@@ -36,12 +36,43 @@ import {
     SectionTitle,
 } from './search.styles';
 
+export const UsersSkeleton = () => {
+    return (
+        <SwiperSlider>
+            {[...Array(10)].map((_, index) => {
+                return (
+                    <Skeleton
+                        key={index}
+                        className="w-[225px] h-[311.5px] rounded-[2rem]"
+                    />
+                );
+            })}
+        </SwiperSlider>
+    );
+};
+
+export const GroupsSkeleton = () => {
+    return (
+        <SwiperSlider>
+            {[...Array(10)].map((_, index) => {
+                return (
+                    <Skeleton
+                        key={index}
+                        className="w-[250px] h-[355px] rounded-[0.5rem]"
+                    />
+                );
+            })}
+        </SwiperSlider>
+    );
+};
+
 type SectionProps = {
     isLoading: boolean;
     searchResults: GeneralSearchData;
     recommendations: any[];
     searchInitiated: boolean;
 };
+
 const UsersSectionContent = ({
     isLoading,
     searchResults,
@@ -193,8 +224,8 @@ const SearchPage = () => {
     const searchHandler = async (searchTerm: string) => {
         if (searchTerm.trim().length === 0) return;
         try {
-            await triggerSearch({ searchTerm }).unwrap();
             dispatch(changeSearchPageInitiated(true));
+            await triggerSearch({ searchTerm }).unwrap();
         } catch (error) {
             errorToast('Error occurred while searching.');
             console.error(error);
@@ -210,7 +241,7 @@ const SearchPage = () => {
 
     useEffect(() => {
         if (searchInitiated) {
-            triggerSearch({ searchTerm });
+            searchHandler(searchTerm);
         } else {
             triggerGroupsRecommendation({});
             triggerArticleRecommendation({});
@@ -245,6 +276,7 @@ const SearchPage = () => {
             );
         }
     }, [
+        searchInitiated,
         generalSearchIsFetching,
         usersRecommendationsIsFetching,
         articlesRecommendationIsFetching,
@@ -261,6 +293,7 @@ const SearchPage = () => {
 
     return (
         <PageContainer {...BetweenPageAnimation}>
+            <PageTitle className="text-center">Search</PageTitle>
             <ExplorePageHeader
                 WithoutButton
                 searchValue={searchTerm}
@@ -326,36 +359,6 @@ const SearchPage = () => {
                 />
             </SearchPageSection>
         </PageContainer>
-    );
-};
-
-export const UsersSkeleton = () => {
-    return (
-        <SwiperSlider>
-            {[...Array(10)].map((_, index) => {
-                return (
-                    <Skeleton
-                        key={index}
-                        className="w-[225px] h-[312px] rounded-[2rem]"
-                    />
-                );
-            })}
-        </SwiperSlider>
-    );
-};
-
-export const GroupsSkeleton = () => {
-    return (
-        <SwiperSlider>
-            {[...Array(10)].map((_, index) => {
-                return (
-                    <Skeleton
-                        key={index}
-                        className="w-[250px] h-[355px] rounded-[0.5rem]"
-                    />
-                );
-            })}
-        </SwiperSlider>
     );
 };
 

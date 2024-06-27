@@ -9,7 +9,7 @@ export const PageContainer = styled(motion.div)`
     padding: 2rem;
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: 2rem;
 
     @media (max-width: 500px) {
         padding: 1rem;

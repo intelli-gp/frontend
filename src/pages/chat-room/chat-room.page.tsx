@@ -6,8 +6,6 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BeatLoader } from 'react-spinners';
 
-import defaultGroupImage from '../../assets/imgs/default-group-image.jpg';
-import defaultUserImage from '../../assets/imgs/user.jpg';
 import EnhancedImage from '../../components/image/image.component';
 import { CustomInput as MessageInput } from '../../components/input/Input.component';
 import DropdownMenu from '../../components/menu/menu.component';
@@ -221,7 +219,8 @@ export const ChatroomPage = () => {
             <LeftPart>
                 <ChatHeader>
                     <GroupImage
-                        src={groupData?.GroupCoverImage ?? defaultGroupImage}
+                        src={groupData?.GroupCoverImage}
+                        fallbackType="group"
                     />
                     <div className="flex flex-col">
                         <GroupName>
@@ -373,9 +372,10 @@ export const ChatroomPage = () => {
                             }}
                         >
                             <EnhancedImage
-                                className="!w-[48px] !h-[48px] rounded-full object-cover aspect-square"
+                                className="!w-[48px] !h-[48px] rounded-full shrink-0"
                                 alt="username"
-                                src={person?.ProfileImage ?? defaultUserImage}
+                                src={person?.ProfileImage}
+                                fallbackType="user"
                             />
                             <div className="overflow-hidden flex flex-col">
                                 <GroupUserFullName
@@ -406,7 +406,8 @@ export const ChatroomPage = () => {
                             <EnhancedImage
                                 className="!w-[48px] !h-[48px] rounded-full object-cover aspect-square"
                                 alt="username"
-                                src={person?.ProfileImage ?? defaultUserImage}
+                                src={person?.ProfileImage}
+                                fallbackType="user"
                             />
                             <div className="overflow-hidden">
                                 <GroupUserFullName

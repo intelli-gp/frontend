@@ -26,7 +26,7 @@ const usePaymentMethod = (onSuccess: () => void) => {
 
         if (error || !paymentMethod) {
             console.log('error: ', error);
-
+            setIsLoading(false);
             errorToast('Failed to create payment method');
             return;
         }
@@ -59,6 +59,7 @@ const usePaymentMethod = (onSuccess: () => void) => {
             infoToast('Payment method added successfully');
             onSuccess();
         }
+
         setIsLoading(false);
     };
 

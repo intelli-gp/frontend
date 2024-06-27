@@ -1,8 +1,8 @@
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { RootState } from '../../store';
+import { useGetSubscriptionQuery } from '../../store/apis/subscriptionsApi';
 import { Plan } from '../../types/plan';
+import { ReceivedSubscription } from '../../types/subscription';
 import {
     BenefitsList,
     CardContainer,
@@ -27,11 +27,14 @@ const PricingCard = ({
     withoutButton = false,
 }: PricingCardProps) => {
     const navigate = useNavigate();
-    const userPlan = useSelector(
-        (state: RootState) => state.auth.user.SubscriptionsPlan,
-    );
+
+    const { data: subscriptions } = useGetSubscriptionQuery();
+
+    const subscriptionsData = subscriptions?.data as ReceivedSubscription;
+    const isSubscribed =
+        subscriptionsData && subscriptionsData.Status !== 'canceled';
+
     const isUnique = title === 'premium';
-    const isSubscribed = userPlan === 2;
 
     console.log('isSubscribed', isSubscribed);
 
@@ -60,8 +63,8 @@ const PricingCard = ({
         if (isSubscribed && isUnique) {
             return (
                 <UpgradeButton
-                    select="danger"
-                    // outline
+                    select='success'
+                    outline
                     onClick={() => navigate(`/app/settings/#Billing`)}
                 >
                     Cancel Subscription

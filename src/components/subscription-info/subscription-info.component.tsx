@@ -1,102 +1,140 @@
-import { FaCheckCircle } from 'react-icons/fa';
+import moment from 'moment';
+import { useState } from 'react';
+import { PiInfinityBold } from 'react-icons/pi';
 
-import { PayTime, PlanButton } from '../../pages/settings/settings.styles';
+import { NotificationSettingsRow as ToggleWithLabel } from '../../pages/settings/settings.styles';
+import { EditButton } from '../../pages/settings/settings.styles';
+import { useCreateSubscriptionMutation } from '../../store/apis/subscriptionsApi';
+import { ReceivedSubscription } from '../../types/subscription';
+import { successToast } from '../../utils/toasts';
+import Skeleton from '../Skeleton';
+import { Label } from '../input/input.styles';
+import ToggleButton from '../toggle-button/toggle-button.component';
 import {
-    BoldText,
-    ButtonWrapper,
     Container,
-    DateWrapper,
-    Header,
     InfoSection,
-    Price,
-    PriceWrapper,
-    Status,
-    StatusWrapper,
-    Title,
+    PlanInterval,
+    PlanName,
+    PlanNameWrapper,
+    PlanStatus,
 } from './subscription-info.style';
 
-interface SubscriptionData {
-    Interval: 'monthly' | 'yearly';
-}
+type DateWithInfinityProps = {
+    /**
+     * Date to display
+     */
+    date?: string;
+    /**
+     * If true, will display the difference between the date and now
+     */
+    diff?: boolean;
+};
+const DateWithInfinity = ({ date, diff }: DateWithInfinityProps) => {
+    if (diff) {
+        return date ? (
+            <div>{moment(date).diff(moment(), 'days')}</div>
+        ) : (
+            <PiInfinityBold />
+        );
+    }
 
-interface SubscriptionResponse {
-    data: {
-        Price: number;
-        StartDate: Date;
-        RenewalDate: Date;
-    };
-}
+    return date ? (
+        <div>{moment(date).format('MMMM Do YYYY')}</div>
+    ) : (
+        <PiInfinityBold />
+    );
+};
 
-interface SubscriptionInfoProps {
-    subscriptionData: SubscriptionData;
-    subscriptionResponse?: SubscriptionResponse;
+type SubscriptionInfoProps = {
+    subscriptionData?: ReceivedSubscription;
     handleCancelSubscription: () => void;
     isCancellingSubscription: boolean;
-}
+    isLoading: boolean;
+};
 const SubscriptionInfo = ({
     subscriptionData,
-    subscriptionResponse,
     handleCancelSubscription,
     isCancellingSubscription,
-}: SubscriptionInfoProps) => (
-    <Container>
-        <InfoSection>
-            <Header>
-                <Title>Professional</Title>
-                <PayTime>{subscriptionData?.Interval}</PayTime>
-                <PriceWrapper>
-                    ${subscriptionResponse?.data?.Price}
-                    <Price>
-                        /
-                        {subscriptionData?.Interval === 'monthly'
-                            ? 'month'
-                            : 'year'}
-                    </Price>
-                </PriceWrapper>
-            </Header>
-            <StatusWrapper>
-                <p>Status:</p>
-                <Status>
-                    <FaCheckCircle color="green" />
-                    <p>Active</p>
-                </Status>
-            </StatusWrapper>
-            <DateWrapper>
-                <div>Joined:</div>
-                <BoldText>
-                    {new Date(
-                        subscriptionResponse?.data?.StartDate || '',
-                    ).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                    })}
-                </BoldText>
-            </DateWrapper>
-            <DateWrapper>
-                <p>Renew subscription by</p>
-                <BoldText>
-                    {new Date(
-                        subscriptionResponse?.data?.RenewalDate || '',
-                    ).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                    })}
-                </BoldText>
-            </DateWrapper>
-        </InfoSection>
-        <ButtonWrapper>
-            <PlanButton
-                onClick={handleCancelSubscription}
-                select="danger"
-                loading={isCancellingSubscription}
-                outline={true}
+    isLoading,
+}: SubscriptionInfoProps) => {
+    const [autoRenewalIsOn, setAutoRenewalIsOn] = useState(
+        !subscriptionData?.IsCancelled,
+    );
+
+    const buttonDisabled = autoRenewalIsOn === !subscriptionData?.IsCancelled;
+
+    const [subscribeToPro, { isLoading: isSubscriptionCreationLoading }] =
+        useCreateSubscriptionMutation();
+
+    const toggleHandler = () => {
+        setAutoRenewalIsOn(!autoRenewalIsOn);
+    };
+
+    const saveChangesHandler = async () => {
+        if (autoRenewalIsOn) {
+            await subscribeToPro({ interval: 'monthly' });
+            successToast('Auto renewal activated successfully');
+        } else {
+            handleCancelSubscription();
+        }
+    };
+
+    if (isLoading) {
+        return (
+            <Skeleton times={1} className="h-[180px] w-full rounded-[1.5rem]" />
+        );
+    }
+
+    return (
+        <Container>
+            <InfoSection isPremium={!!subscriptionData}>
+                <PlanNameWrapper>
+                    <PlanName>{subscriptionData?.Title ?? 'Starter'}</PlanName>
+                </PlanNameWrapper>
+                <ToggleWithLabel>
+                    <ToggleButton
+                        isOn={autoRenewalIsOn}
+                        toggle={toggleHandler}
+                    />
+                    <Label>Auto Renew</Label>
+                    <PlanInterval>
+                        {subscriptionData?.Interval || 'monthly'}
+                    </PlanInterval>
+                </ToggleWithLabel>
+
+                <Label>Status</Label>
+                <PlanStatus> {subscriptionData?.Status || 'active'}</PlanStatus>
+
+                <Label>Started at</Label>
+                <DateWithInfinity date={subscriptionData?.StartDate} />
+
+                <Label>
+                    {subscriptionData?.IsCancelled
+                        ? 'Expires at'
+                        : 'Renewal date'}
+                </Label>
+                <DateWithInfinity date={subscriptionData?.RenewalDate} />
+
+                <Label>Days left</Label>
+                <DateWithInfinity
+                    date={subscriptionData?.RenewalDate}
+                    diff={true}
+                />
+            </InfoSection>
+
+            <EditButton
+                title="Save Changes"
+                onClick={saveChangesHandler}
+                select="secondary"
+                loading={
+                    isCancellingSubscription || isSubscriptionCreationLoading
+                }
+                disabled={buttonDisabled}
             >
-                Cancel Plan
-            </PlanButton>
-        </ButtonWrapper>
-    </Container>
-);
+                Save
+            </EditButton>
+        </Container>
+    );
+};
 
 export default SubscriptionInfo;

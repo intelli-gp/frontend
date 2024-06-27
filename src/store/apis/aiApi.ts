@@ -4,7 +4,10 @@ import { appApi } from './appApi';
 
 const aiApi = appApi.injectEndpoints({
     endpoints: (builder) => ({
-        getAiMessages: builder.query<GenericResponse<ReceivedAiMessage[]>, void>({
+        getAiMessages: builder.query<
+            GenericResponse<ReceivedAiMessage[]>,
+            void
+        >({
             providesTags: ['Ai Messages'],
             query: () => ({
                 url: '/ai-service/chat',
@@ -12,17 +15,43 @@ const aiApi = appApi.injectEndpoints({
             }),
         }),
         sendAiMessage: builder.mutation<
-            GenericResponse<ReceivedAiMessage[]>,
+            GenericResponse<ReceivedAiMessage>,
             AIMessageToSend
         >({
-            invalidatesTags: ['Ai Messages'],
             query: (message) => ({
                 url: '/ai-service/chat',
                 method: 'POST',
                 body: message,
             }),
+            onQueryStarted: async (_message , {dispatch, queryFulfilled}) => {
+                    const {data} = await queryFulfilled;
+                    dispatch(aiApi.util.updateQueryData('getAiMessages', undefined, (draft) => {
+                        draft.data.push(data.data);
+                    }));
+            },
+        }),
+        generateAiVideo: builder.mutation<
+            GenericResponse<{ Url: string }>,
+            AIMessageToSend
+        >({
+            query: (message: AIMessageToSend) => ({
+                url: '/ai-service/video',
+                method: 'POST',
+                body: message,
+            }),
+        }),
+        testSubscription: builder.query<GenericResponse<boolean>, void>({
+            query: () => ({
+                url: '/auth/forbidden',
+                method: 'GET',
+            }),
         }),
     }),
 });
 
-export const { useGetAiMessagesQuery, useSendAiMessageMutation } = aiApi;
+export const {
+    useGetAiMessagesQuery,
+    useSendAiMessageMutation,
+    useGenerateAiVideoMutation,
+    useTestSubscriptionQuery,
+} = aiApi;

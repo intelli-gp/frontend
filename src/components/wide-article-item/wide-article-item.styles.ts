@@ -11,14 +11,14 @@ export const ArticleContainer = styled.article`
     background-color: white;
     cursor: pointer;
     border-radius: 1rem;
-    padding: 0.5rem;
+    padding: 0.25rem;
     padding-right: 1rem;
     display: flex;
     gap: 1.5rem;
     justify-content: space-between;
     background-color: white;
     transition: background-color 0.2s ease-in-out;
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px 0px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 10px 0px;
     &:hover {
         background-color: var(--indigo-25);
     }
@@ -118,7 +118,7 @@ export const ArticleDate = styled.time`
 
 export const ArticleThumbnail = styled(EnhancedImage)`
     width: 200px;
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
     aspect-ratio: 1/1;
     @media (max-width: 768px) {
         width: 150px;

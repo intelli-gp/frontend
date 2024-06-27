@@ -7,8 +7,6 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import coverImageCamera from '../../assets/imgs/coverImageCamera.png';
-import DeleteSectionModal from '../../components/DeleteGroupModal';
-import ExitModal from '../../components/ExitGroupModal';
 import Spinner from '../../components/Spinner';
 import Button from '../../components/button/button.component';
 import UserContainer from '../../components/group-user/group-user.component';
@@ -20,13 +18,15 @@ import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import { useUploadImage } from '../../hooks/uploadImage.hook';
 import { BetweenPageAnimation } from '../../index.styles';
 import {
+    RootState,
+    useDeleteGroupMutation,
     useGetAllTagsQuery,
     useGetGroupQuery,
     useJoinGroupMutation,
+    useLeaveGroupMutation,
     useUpdateGroupMutation,
 } from '../../store';
 import { GroupToSend, ReceivedGroup } from '../../types/group';
-import { ReceivedUser } from '../../types/user';
 import { errorToast, successToast } from '../../utils/toasts';
 import {
     EditButton,
@@ -51,8 +51,110 @@ enum Role {
     not_member = 'NOTHING',
 }
 
+type ExitGroupModalProps = {
+    id?: string;
+    showModal: boolean;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
+const ExitGroupModal = ({
+    id,
+    showModal,
+    setShowModal,
+}: ExitGroupModalProps) => {
+    const [leaveGroup, { isLoading }] = useLeaveGroupMutation();
+
+    const handleExitGroup = async () => {
+        try {
+            await leaveGroup(id!).unwrap();
+            successToast('Exited the group successfully!');
+        } catch (error) {
+            errorToast('Error occurred while exiting the group!');
+        } finally {
+            setShowModal(false);
+        }
+    };
+
+    return (
+        <Modal
+            isOpen={showModal}
+            setIsOpen={setShowModal}
+            title={'Are you sure you want to exit this group?'}
+            width="lg"
+        >
+            <div className="flex gap-2 flex-row-reverse">
+                <Button
+                    className="w-[88px] h-[38.5px]"
+                    select="danger"
+                    outline
+                    loading={isLoading}
+                    onClick={handleExitGroup}
+                >
+                    Yes
+                </Button>
+                <Button className="" onClick={() => setShowModal(false)}>
+                    Cancel
+                </Button>
+            </div>
+        </Modal>
+    );
+};
+
+type DeleteGroupModalProps = {
+    id?: string;
+    showModal: boolean;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
+const DeleteSectionModal = ({
+    id,
+    showModal,
+    setShowModal,
+}: DeleteGroupModalProps) => {
+    const navigate = useNavigate();
+
+    const [deleteGroup, { isLoading }] = useDeleteGroupMutation();
+
+    const handleDeleteGroup = async () => {
+        try {
+            await deleteGroup(id!).unwrap();
+            navigate('/app/groups');
+            successToast('Exit the group successfully!');
+        } catch (error) {
+            errorToast('Error occurred while deleting the group');
+        } finally {
+            setShowModal(false);
+        }
+    };
+
+    return (
+        <Modal
+            isOpen={showModal}
+            setIsOpen={setShowModal}
+            width="lg"
+            title="Are you sure you want to delete this group?"
+        >
+            <div className="flex flex-col gap-8">
+                <div className="flex gap-2 flex-row-reverse">
+                    <Button
+                        className="w-[75px] h-[38px]"
+                        select="danger"
+                        loading={isLoading}
+                        onClick={handleDeleteGroup}
+                        outline
+                    >
+                        Yes
+                    </Button>
+                    <Button onClick={() => setShowModal(false)}>Cancel</Button>
+                </div>
+            </div>
+        </Modal>
+    );
+};
+
 const ViewGroupPage = () => {
     const navigate = useNavigate();
+
+    const user = useSelector((state: RootState) => state.auth.user);
+
     const [isEditingInterest, setIsEditingInterest] = useState(false);
     const [isEditingDescription, setIsEditingDescription] = useState(false);
     const [showExitModal, setExitModal] = useState(false);
@@ -61,7 +163,6 @@ const ViewGroupPage = () => {
     const [description, setDescription] = useState('');
     const [coverImg, setCoverImg] = useState('');
 
-    const user = useSelector((state: any) => state.auth.user) as ReceivedUser;
     const { id: groupId } = useParams();
     const { data, isSuccess: isGroupDataFetched } = useGetGroupQuery(+groupId!);
     const { data: _allTags } = useGetAllTagsQuery();
@@ -227,12 +328,12 @@ const ViewGroupPage = () => {
 
     const chatRoomButton = (
         <Button
-            select="secondary"
+            select="warning"
             title="Go to chat room"
-            className="!absolute bottom-10 right-10 !rounded-full aspect-square"
+            className="!absolute bottom-10 right-10 gap-2 !rounded-xl"
             onClick={() => navigate(`/app/chat-room/${groupId}`)}
         >
-            <MdMessage size={24} />
+            Chat Room <MdMessage size={18} />
         </Button>
     );
 
@@ -250,9 +351,9 @@ const ViewGroupPage = () => {
 
     const joinButton = (
         <Button
-            select="secondary"
+            select="success"
             title="Join"
-            className="absolute bottom-8 right-8 px-4"
+            className="absolute bottom-8 right-8 !rounded-xl h-[36px] w-[100px] gap-2"
             loading={isGroupUpJoining}
             onClick={handleJoiningGroup}
         >
@@ -432,7 +533,7 @@ const ViewGroupPage = () => {
                 showModal={showDeleteModal}
                 setShowModal={setDeleteModal}
             />
-            <ExitModal
+            <ExitGroupModal
                 id={groupId}
                 showModal={showExitModal}
                 setShowModal={setExitModal}

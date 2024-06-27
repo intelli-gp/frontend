@@ -394,7 +394,9 @@ const ViewArticlePage = () => {
                     ))}
                 </SwiperSlider>
                 {recommendedArticles?.length === 0 && (
-                    <h2 className='mx-auto my-6 text-xl'>No suggestions found</h2>
+                    <h2 className="mx-auto my-6 text-xl">
+                        No suggestions found
+                    </h2>
                 )}
             </SuggestedArticlesContainer>
 

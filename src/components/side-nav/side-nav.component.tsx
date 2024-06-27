@@ -1,18 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { BsFillPostcardFill, BsStars } from 'react-icons/bs';
 import { FiMenu } from 'react-icons/fi';
-import { GiBookshelf, GiRobotGolem, GiTomato, GiUpgrade } from 'react-icons/gi';
+import { GiBookshelf, GiTomato, GiUpgrade } from 'react-icons/gi';
 import { HiMiniUserGroup } from 'react-icons/hi2';
 import { IoIosSettings } from 'react-icons/io';
 import { IoPersonSharp } from 'react-icons/io5';
 import { LuListTodo, LuSearch } from 'react-icons/lu';
 import { MdLogout } from 'react-icons/md';
+import { PiVideoFill } from 'react-icons/pi';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import defaultUserImage from '../../assets/imgs/user.jpg';
 import {
     RootState,
+    appApi,
     clearCredentials,
     useFetchMessagesQuery,
     useFetchUserNotificationsQuery,
@@ -114,11 +116,17 @@ export default function SideNav() {
                     id: 4.1,
                 },
                 {
+                    path: '/app/articles/create',
+                    text: 'Create',
+                    active: false,
+                    id: 4.2,
+                },
+                {
                     // icon: <IoBookmark />,
                     path: '/app/articles/my-bookmarks',
                     text: 'Bookmarks',
                     active: false,
-                    id: 4.2,
+                    id: 4.3,
                 },
             ],
         },
@@ -152,9 +160,9 @@ export default function SideNav() {
             id: 6,
         },
         {
-            icon: <GiRobotGolem />,
+            icon: <PiVideoFill />,
             path: '/app/ai-service',
-            text: 'AI Service',
+            text: 'AI Lectures',
             id: 7,
         },
         {
@@ -293,6 +301,7 @@ export default function SideNav() {
         } finally {
             dispatch(clearCredentials());
             navigate('/');
+            dispatch(appApi.util.resetApiState());
         }
     };
 
@@ -420,7 +429,9 @@ export default function SideNav() {
 function BrandComponent() {
     return (
         <BrandContainer>
-            <Brand>Mujedd</Brand>
+            <Link to="/">
+                <Brand>Mujedd</Brand>
+            </Link>
             <Separator />
         </BrandContainer>
     );

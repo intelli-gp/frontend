@@ -25,8 +25,7 @@ export const CardsContainer = styled.div`
 export const Line = styled.div`
     border-top: 2px solid var(--slate-200);
     width: 100%;
-
-`
+`;
 export const AddCardButton = styled(Button)`
     background-color: var(--slate-200);
     width: 100%;
@@ -36,7 +35,7 @@ export const AddCardButton = styled(Button)`
 `;
 export const FlexContainer = styled.div`
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
     width: 100%;
     flex-direction: row;
 

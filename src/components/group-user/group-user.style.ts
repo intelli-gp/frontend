@@ -1,40 +1,66 @@
+import { IoIosArrowDown } from 'react-icons/io';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-export const PersonName = styled.p`
-    margin: 0 !important;
-    font-size: 0.8rem;
-    max-width: 10ch;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-`;
+import { CSSTextLengthLimit } from '../../index.styles';
+import EnhancedImage from '../image/image.component';
 
 export const PersonContainer = styled.div`
+    background-color: var(--indigo-25);
+    border-radius: 0.75rem;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 12px;
-    gap: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-    min-width: 7.4rem;
+    padding: 1rem 0.75rem 0.5rem 0.75rem;
+    gap: 0.75rem;
+    transition: background-color 0.2s ease-in-out;
     &:hover {
-        background: var(--indigo-50);
-        border-radius: 6px;
+        background-color: var(--indigo-50);
     }
 `;
 
-export const PersonImage = styled.img`
+export const PersonName = styled(Link)<{ width?: string }>`
+    text-align: center;
+    display: block;
+    color: inherit;
+    font-size: 0.8rem;
+    flex-shrink: 1;
+    flex-grow: 0;
+    width: 100%;
+    &:hover {
+        text-decoration: underline;
+    }
+    ${CSSTextLengthLimit};
+`;
+
+export const PersonImage = styled(EnhancedImage)`
     height: 70px;
     width: 70px;
     border-radius: 50%;
-    object-fit: cover;
 `;
 
 export const CrownHolder = styled.div`
     position: absolute;
-    top: 0;
+    top: 5%;
     right: 10%;
+`;
+
+export const CardFooter = styled.div`
+    width: 100px;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+`;
+
+export const OptionsButton = styled(IoIosArrowDown)`
+    cursor: pointer;
+    border-radius: 50%;
+    padding: 0.375rem;
+    box-sizing: content-box;
+    transition: background-color 0.2s ease-in-out;
+    &:hover {
+        background-color: var(--indigo-100);
+    }
 `;

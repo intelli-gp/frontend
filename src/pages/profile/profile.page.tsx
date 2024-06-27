@@ -327,30 +327,12 @@ const ProfilePage = () => {
             offset: 0,
         });
 
-    const youMayKnow = usersRecommendation?.data?.Results as ReceivedUser[];
+    const youMayKnow =
+        (usersRecommendation?.data?.Results as ReceivedUser[]) ?? [];
 
-    const [CommonFollowers] = useState<any[]>([
-        {
-            FullName: 'Ahmed',
-            Username: 'ahmedali',
-            ProfileImage: defaultUserImage,
-        },
-        {
-            FullName: 'Ahmed',
-            Username: 'ahmedali',
-            ProfileImage: defaultUserImage,
-        },
-        {
-            FullName: 'Ahmed',
-            Username: 'ahmedali',
-            ProfileImage: defaultUserImage,
-        },
-        {
-            FullName: 'Ahmed',
-            Username: 'ahmedali',
-            ProfileImage: defaultUserImage,
-        },
-    ]);
+    const commonFollowers = followers?.filter((follower) => {
+        return following?.find((follow) => follow.ID === follower.ID);
+    });
 
     let groupsWithRole: GroupWithRole[] = userGroups?.map(
         (group: Partial<ReceivedGroup>) => {
@@ -524,6 +506,13 @@ const ProfilePage = () => {
                     );
                 })}
             </ul>
+            <div>
+                {youMayKnow?.length === 0 && (
+                    <EmptyContent className="text-center">
+                        No recommendations found.
+                    </EmptyContent>
+                )}
+            </div>
         </YouMayNowSection>
     );
 
@@ -533,11 +522,12 @@ const ProfilePage = () => {
                 Mutual Followers
             </h1>
             <hr />
-            <ul>
-                {CommonFollowers.map((user) => (
-                    <UserItem {...user} />
-                ))}
-            </ul>
+            <ul>{commonFollowers?.map((user) => <UserItem {...user} />)}</ul>
+            <div>
+                {commonFollowers?.length === 0 && (
+                    <EmptyContent>No mutual followers.</EmptyContent>
+                )}
+            </div>
         </YouMayNowSection>
     );
 
@@ -576,13 +566,7 @@ const ProfilePage = () => {
                         }`}
                         onClick={() => setCoverImageModalIsOpen(true)}
                     />
-                    <CoverImage
-                        src={
-                            userData?.CoverImage ??
-                            'https://cdn11.bigcommerce.com/s-9uf88xhege/images/stencil/1280x1280/products/1162/50750/montana-cans-montana-black-dark-indigo__66994.1657052664.jpg?c=1?imbypass=on'
-                        }
-                        alt=""
-                    />
+                    <CoverImage src={userData?.CoverImage} alt="" />
                 </CoverImageContainer>
 
                 <UserDataContainer>
