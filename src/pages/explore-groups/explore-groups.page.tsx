@@ -1,19 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import CreateGroupModal from '../../components/CreateGroupModal';
 import Skeleton from '../../components/Skeleton';
+import Button from '../../components/button/button.component';
 import GroupCard from '../../components/chat-group-card/chat-group-card.component';
 import EmptyPagePlaceholder from '../../components/empty-page-placeholder/empty-placeholder.component';
 import ExplorePageHeader from '../../components/explore-page-header/explore-page-header.component';
+import { CustomInput } from '../../components/input/Input.component';
+import { Modal } from '../../components/modal/modal.component';
+import OpenImage from '../../components/openImage/openImage.component';
 import BackendSupportedPagination from '../../components/pagination/pagination.components';
+import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
 import UpButton from '../../components/up-button/up-button.components';
+import { useUploadImage } from '../../hooks/uploadImage.hook';
 import { BetweenPageAnimation, PageTitle } from '../../index.styles';
 import {
     RootState,
     changeGroupsPagePaginationPageNumber,
     changeGroupsPageSearchInitiated,
     changeGroupsPageSearchQuery,
+    useAddGroupMutation,
+    useGetAllTagsQuery,
 } from '../../store';
 import { useLazyFetchGeneralGroupsRecommendationQuery } from '../../store/apis/recommendationApi';
 import {
@@ -21,10 +28,141 @@ import {
     usePrefetchSearch,
 } from '../../store/apis/searchApi';
 import { ReceivedGroup } from '../../types/group';
-import { errorToast } from '../../utils/toasts';
+import { errorToast, successToast } from '../../utils/toasts';
 import { GroupsGrid, PageContainer, SmallTitle } from './explore-groups.style';
 
 const PAGE_LIMIT = 30;
+
+type CreateGroupModalProps = {
+    isOpen: boolean;
+    setIsOpen: (open: boolean) => void;
+};
+const CreateGroupModal = ({ isOpen, setIsOpen }: CreateGroupModalProps) => {
+    const [groupName, setGroupName] = useState('');
+    const [groupDescription, setGroupDescription] = useState('');
+    const [groupImage, setGroupImage] = useState('');
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+    const [addGroup, { isLoading, reset: resetCreatingGroup }] =
+        useAddGroupMutation();
+    const { isLoading: isImageLoading, trigger: uploadImage } =
+        useUploadImage();
+    const { data: allTags } = useGetAllTagsQuery();
+    let tags = allTags?.data ?? [];
+
+    const resetForm = () => {
+        setGroupName('');
+        setGroupDescription('');
+        setGroupImage('');
+        setSelectedTags([]);
+    };
+
+    const validateGroupData = () => {
+        if (selectedTags.length === 0) {
+            return 'Please select at least one tag';
+        }
+        if (!groupImage) {
+            return 'Please add a group cover image';
+        }
+    };
+
+    const handleCreateGroup = async (
+        event: React.FormEvent<HTMLFormElement>,
+    ) => {
+        event.preventDefault();
+        let validationError = validateGroupData();
+        if (validationError) {
+            return errorToast(validationError);
+        }
+        try {
+            const imageURL = await uploadImage(groupImage);
+            await addGroup({
+                GroupTitle: groupName,
+                GroupDescription: groupDescription,
+                GroupTags: selectedTags,
+                GroupCoverImageUrl: imageURL,
+            }).unwrap();
+            successToast('Group created successfully');
+            resetForm();
+        } catch (err) {
+            errorToast('Error occurred while creating group');
+        } finally {
+            setIsOpen(false);
+            resetCreatingGroup();
+        }
+    };
+
+    return (
+        <Modal
+            className="flex flex-col gap-4"
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            title="Create New Group"
+            width="lg"
+        >
+            <OpenImage
+                height="250px"
+                width="100%"
+                radius="0.75rem"
+                value={groupImage}
+                onChange={(newImage) => setGroupImage(newImage)}
+                editButton
+            />
+            <form className="flex flex-col gap-4" onSubmit={handleCreateGroup}>
+                <CustomInput
+                    required
+                    label={'Group Name'}
+                    placeholder={'Enter group name...'}
+                    value={groupName}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setGroupName(e.target.value)
+                    }
+                />
+                <CustomInput
+                    required
+                    multiline
+                    limit={512}
+                    label={'Group Description'}
+                    placeholder={'Describe what this groups is about...'}
+                    maxLength={512}
+                    rows={5}
+                    value={groupDescription}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setGroupDescription(e.target.value)
+                    }
+                />
+                <TagsInput2
+                    label={'Tags'}
+                    availableTags={tags}
+                    selectedTags={selectedTags}
+                    updateSelectedTags={(tags) => {
+                        setSelectedTags(tags);
+                    }}
+                />
+                <div className="flex gap-2 mt-8 flex-row-reverse">
+                    <Button
+                        type="submit"
+                        loading={isImageLoading || isLoading}
+                        className="w-[90px] h-[39px]"
+                    >
+                        Create
+                    </Button>
+                    <Button
+                        select="danger"
+                        outline
+                        onClick={() => {
+                            resetForm();
+                            setIsOpen(false);
+                        }}
+                        title="Discard group creation"
+                    >
+                        Discard
+                    </Button>
+                </div>
+            </form>
+        </Modal>
+    );
+};
 
 const ExploreGroupsPage = () => {
     const dispatch = useDispatch();
@@ -218,7 +356,7 @@ export const GroupsSkeleton = () => {
             {[...Array(150)].map((_, index) => (
                 <Skeleton
                     key={index}
-                    className="w-[250px] h-[355px] rounded-[0.5rem]"
+                    className="w-[250px] h-[356.15px] rounded-[0.5rem]"
                 />
             ))}
         </GroupsGrid>
