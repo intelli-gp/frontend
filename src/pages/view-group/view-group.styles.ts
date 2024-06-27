@@ -6,35 +6,34 @@ import EnhancedImage from '../../components/image/image.component';
 export const PageContainer = styled(motion.div)`
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    height: 100%;
+    height: 100vh;
 `;
 
-export const GroupCoverImageContainer = styled.div`
-    height: 30vh;
-    position: relative;
+export const PageHeader = styled.header`
+    height: 35vh;
     width: 100%;
+    position: relative;
 `;
 
-export const GroupTitleHolder = styled.div`
+export const GroupTitle = styled.div`
     position: absolute;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 1.25rem;
     left: 4rem;
     top: 50%;
     transform: translateY(-50%);
     @media (max-width: 1024px) {
-        gap: 15px;
+        gap: 1rem;
         left: 3rem;
     }
 `;
+
 export const GroupCoverImage = styled(EnhancedImage)`
     width: 100%;
     height: 100%;
-    object-fit: cover;
     border: none;
-    filter: brightness(50%);
+    filter: brightness(35%);
 
     @media (max-width: 768px) {
         max-height: 300px;
@@ -48,7 +47,7 @@ export const PictureOverlay = styled.img`
     height: 100%;
     opacity: 0;
     position: absolute;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
     object-fit: cover;
 
     box-shadow: var(--black-shadow);
@@ -59,9 +58,9 @@ export const PictureOverlay = styled.img`
 `;
 
 export const GroupInfoContainer = styled.div`
-    flex: 1;
+    height: 65vh;
     display: grid;
-    grid-template-columns: 6fr 3fr;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     @media (max-width: 768px) {
         grid-template-columns: 1fr;
     }
@@ -111,28 +110,33 @@ export const EditableSectionBody = styled.div`
 `;
 
 export const RightPart = styled.div`
-    padding: 15px;
+    padding: 1rem;
     box-shadow: 0px 0px 60px 5px rgba(39, 31, 75, 0.07);
     background: white;
     height: 100%;
+    overflow-y: auto;
     @media (max-width: 768px) {
         padding: 1rem;
         grid-row: 1;
     }
 `;
 
-export const StatusTitle = styled.p`
-    margin: 0px 15px 0px 5px;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--gray-700);
+export const UsersSectionTitle = styled.p`
+    border-bottom: 1px solid var(--gray-100);
+    text-transform: capitalize;
 `;
 
-export const PeopleContainer = styled.div`
+export const UsersList = styled.div`
     padding: 1rem;
     display: flex;
-    gap: 1rem;
+    flex-wrap: wrap;
+    gap: 0.25rem;
     width: 100%;
+    height: 100%;
+`;
+
+export const UsersListContainer = styled.div`
+    max-height: 50%;
 `;
 
 export const EditButton = styled.button`

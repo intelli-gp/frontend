@@ -11,7 +11,7 @@ import Spinner from '../../components/Spinner';
 import Button from '../../components/button/button.component';
 import UserContainer from '../../components/group-user/group-user.component';
 import { CustomInput } from '../../components/input/Input.component';
-import { Modal } from '../../components/modal/modal.component';
+import { Modal, ModalProps } from '../../components/modal/modal.component';
 import OpenImage from '../../components/openImage/openImage.component';
 import Tag from '../../components/tag/tag.component';
 import TagsInput2 from '../../components/tagsInput2/tagsInput2.component';
@@ -27,22 +27,23 @@ import {
     useUpdateGroupMutation,
 } from '../../store';
 import { GroupToSend, ReceivedGroup } from '../../types/group';
-import { errorToast, successToast } from '../../utils/toasts';
+import { errorToast, infoToast, successToast } from '../../utils/toasts';
 import {
     EditButton,
     EditableSection,
     EditableSectionBody,
     EditableSectionHeader,
     GroupCoverImage,
-    GroupCoverImageContainer,
     GroupInfoContainer,
-    GroupTitleHolder,
+    GroupTitle,
     LeftPart,
     PageContainer,
-    PeopleContainer,
+    PageHeader,
     PictureOverlay,
     RightPart,
-    StatusTitle,
+    UsersList,
+    UsersListContainer,
+    UsersSectionTitle,
 } from './view-group.styles';
 
 enum Role {
@@ -150,6 +151,83 @@ const DeleteSectionModal = ({
     );
 };
 
+type UploadImageModalProps = Pick<ModalProps, 'isOpen' | 'setIsOpen'>;
+const UploadImageModal = ({ isOpen, setIsOpen }: UploadImageModalProps) => {
+    const { id: groupId } = useParams();
+
+    const { data: _groupData } = useGetGroupQuery(Number(groupId!));
+    const groupData: ReceivedGroup = _groupData?.data[0];
+    const [updateGroupData, { isLoading: groupIsUpdating }] =
+        useUpdateGroupMutation();
+
+    const [coverImage, setCoverImage] = useState('');
+
+    useEffect(() => {
+        setCoverImage(groupData?.GroupCoverImage);
+    }, [_groupData]);
+
+    const handleUpdateGroupImage = async () => {
+        if (coverImage === groupData?.GroupCoverImage) {
+            setIsOpen(false);
+            infoToast('No changes made!');
+            return;
+        }
+        const newCoverImageUrl = await uploadImage(coverImage);
+        if (newCoverImageUrl) {
+            try {
+                await updateGroupData({
+                    id: groupData?.ID,
+                    GroupCoverImageUrl: newCoverImageUrl,
+                }).unwrap();
+                successToast('Cover image updated successfully!');
+                setIsOpen(false);
+            } catch (error) {
+                errorToast('Error occurred while updating the cover image!');
+            }
+        }
+    };
+
+    const { isLoading: isImageLoading, trigger: uploadImage } =
+        useUploadImage();
+
+    return (
+        <Modal
+            className="flex flex-col gap-4"
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            width="lg"
+            title="Edit Cover Image"
+        >
+            <OpenImage
+                height="280px"
+                value={coverImage}
+                onChange={(newImage) => setCoverImage(newImage)}
+                radius="5px"
+            />
+            <div className="flex flex-row-reverse items-center gap-2">
+                <Button
+                    select="primary"
+                    loading={isImageLoading || groupIsUpdating}
+                    onClick={handleUpdateGroupImage}
+                    className="!w-[80px] !h-[39px]"
+                >
+                    Apply
+                </Button>
+                <Button
+                    select="danger"
+                    onClick={() => {
+                        setCoverImage(groupData.GroupCoverImage);
+                        setIsOpen(false);
+                    }}
+                    outline
+                >
+                    Cancel
+                </Button>
+            </div>
+        </Modal>
+    );
+};
+
 const ViewGroupPage = () => {
     const navigate = useNavigate();
 
@@ -161,7 +239,6 @@ const ViewGroupPage = () => {
     const [showDeleteModal, setDeleteModal] = useState(false);
     const [interests, setInterests] = useState(['']);
     const [description, setDescription] = useState('');
-    const [coverImg, setCoverImg] = useState('');
 
     const { id: groupId } = useParams();
     const { data, isSuccess: isGroupDataFetched } = useGetGroupQuery(+groupId!);
@@ -223,7 +300,6 @@ const ViewGroupPage = () => {
                 JSON.stringify(interests);
             const descriptionChanged =
                 groupData?.GroupDescription !== description;
-            const imageChanged = groupData?.GroupCoverImage !== coverImg;
             const updatedGroupData: Partial<GroupToSend> & { id: string } = {
                 id: groupData.ID,
             };
@@ -242,12 +318,7 @@ const ViewGroupPage = () => {
                         interests,
                     );
             }
-            if (imageChanged) {
-                const imageURL = await uploadImage(coverImg);
-                updatedGroupData.GroupCoverImageUrl = imageURL;
-                setImgModal(false);
-            }
-            if (descriptionChanged || tagsChanged || imageChanged) {
+            if (descriptionChanged || tagsChanged) {
                 await updateGroup(updatedGroupData).unwrap();
             }
         } catch (error) {
@@ -257,56 +328,16 @@ const ViewGroupPage = () => {
     };
 
     // Editing Cover Image
-    const { isLoading: isImageLoading, trigger: uploadImage } =
-        useUploadImage();
-    const [showImgModal, setImgModal] = useState(false);
+    const [coverImageModalIsOpen, setCoverImageModalIsOpen] = useState(false);
 
     const openImgModal = () => {
-        setImgModal((prev) => !prev);
+        setCoverImageModalIsOpen((prev) => !prev);
     };
-
-    const modalUploadImage = (
-        <Modal
-            className="flex flex-col gap-4"
-            isOpen={showImgModal}
-            setIsOpen={setImgModal}
-            width="lg"
-            title="Edit Cover Image"
-        >
-            <OpenImage
-                height="280px"
-                value={coverImg}
-                onChange={(newImage) => setCoverImg(newImage)}
-                radius="5px"
-            />
-            <div className="flex flex-row justify-end pt-6 items-center gap-2">
-                <Button
-                    select="primary"
-                    loading={isImageLoading}
-                    onClick={handleUpdateGroup}
-                >
-                    Apply
-                </Button>
-                <Button
-                    select="danger"
-                    onClick={() => {
-                        setCoverImg(groupData.GroupCoverImage);
-                        setImgModal(false);
-                    }}
-                    outline
-                    className="!border-transparent"
-                >
-                    Cancel
-                </Button>
-            </div>
-        </Modal>
-    );
 
     // Set the internal states with the fetched data
     useEffect(() => {
         setInterests(groupData?.GroupTags);
         setDescription(groupData?.GroupDescription);
-        setCoverImg(groupData?.GroupCoverImage);
     }, [isGroupDataFetched]);
 
     // Toasts handling
@@ -367,9 +398,8 @@ const ViewGroupPage = () => {
 
     return (
         <PageContainer {...BetweenPageAnimation}>
-            <GroupCoverImageContainer>
-                <GroupCoverImage src={coverImg} />
-
+            <PageHeader>
+                <GroupCoverImage src={groupData?.GroupCoverImage} />
                 {userType === Role.admin && (
                     <PictureOverlay
                         src={coverImageCamera}
@@ -377,20 +407,18 @@ const ViewGroupPage = () => {
                         onClick={openImgModal}
                     />
                 )}
-
-                <GroupTitleHolder>
+                <GroupTitle>
                     <h1 className="lg:text-5xl text-3xl text-white font-bold">
                         {groupData?.GroupTitle}
                     </h1>
                     <p className="lg:text-2xl text-md text-white ml-2">
                         {groupData?.GroupMembers?.length + ' Members'}
                     </p>
-                </GroupTitleHolder>
-
+                </GroupTitle>
                 {userType === Role.admin || userType === Role.member
                     ? chatRoomButton
                     : joinButton}
-            </GroupCoverImageContainer>
+            </PageHeader>
 
             <GroupInfoContainer>
                 <LeftPart>
@@ -497,37 +525,43 @@ const ViewGroupPage = () => {
                 </LeftPart>
 
                 <RightPart>
-                    <StatusTitle>ADMINS</StatusTitle>
-                    <PeopleContainer>
-                        {admins.map((admin) => {
-                            return (
-                                <UserContainer
-                                    Admin={userType === Role.admin}
-                                    IsMe={admin.ID === user.ID}
-                                    Owner={admin.ID === groupData.GroupOwner.ID}
-                                    GroupID={groupId}
-                                    {...admin}
-                                />
-                            );
-                        })}
-                    </PeopleContainer>
-                    <br />
-                    <StatusTitle>MEMBERS</StatusTitle>
-                    <PeopleContainer>
-                        {members.map((member) => {
-                            return (
-                                <UserContainer
-                                    IsMe={member.ID === user.ID}
-                                    Admin={userType === Role.admin}
-                                    GroupID={groupId}
-                                    {...member}
-                                />
-                            );
-                        })}
-                    </PeopleContainer>
+                    <UsersListContainer>
+                        <UsersSectionTitle>admins</UsersSectionTitle>
+                        <UsersList>
+                            {admins.map((admin) => {
+                                return (
+                                    <UserContainer
+                                        Admin={userType === Role.admin}
+                                        IsMe={admin.ID === user.ID}
+                                        Owner={
+                                            admin.ID === groupData.GroupOwner.ID
+                                        }
+                                        GroupID={groupId}
+                                        {...admin}
+                                    />
+                                );
+                            })}
+                        </UsersList>
+                    </UsersListContainer>
+                    <UsersListContainer>
+                        <UsersSectionTitle>members</UsersSectionTitle>
+                        <UsersList>
+                            {members.map((member) => {
+                                return (
+                                    <UserContainer
+                                        IsMe={member.ID === user.ID}
+                                        Admin={userType === Role.admin}
+                                        GroupID={groupId}
+                                        {...member}
+                                    />
+                                );
+                            })}
+                        </UsersList>
+                    </UsersListContainer>
                 </RightPart>
             </GroupInfoContainer>
 
+            {/* Modals */}
             <DeleteSectionModal
                 id={groupId}
                 showModal={showDeleteModal}
@@ -538,7 +572,10 @@ const ViewGroupPage = () => {
                 showModal={showExitModal}
                 setShowModal={setExitModal}
             />
-            {modalUploadImage}
+            <UploadImageModal
+                isOpen={coverImageModalIsOpen}
+                setIsOpen={setCoverImageModalIsOpen}
+            />
         </PageContainer>
     );
 };

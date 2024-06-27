@@ -63,6 +63,7 @@ const DropdownMenu = ({
     right,
     bottom,
     menuWidth,
+    menuFontSize,
     mainElementClassName,
     menuElementClassName,
     mainElementClassNameOpen,
@@ -123,7 +124,7 @@ const DropdownMenu = ({
                     >
                         {options.map(({ option, handler }, index) => {
                             return (
-                                <OptionElement key={index} onClick={handler}>
+                                <OptionElement key={index} onClick={handler} fontSize={menuFontSize}>
                                     {option}
                                 </OptionElement>
                             );

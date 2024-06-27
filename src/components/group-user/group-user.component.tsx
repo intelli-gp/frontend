@@ -54,7 +54,7 @@ const UserContainer = ({
 
     const statusOptionAdmin = [
         {
-            option: Type == 'MEMBER' ? 'Add an admin' : 'Dismiss an admin',
+            option: Type == 'MEMBER' ? 'Set as Admin' : 'Dismiss as Admin',
             handler: () => {
                 handleStatus();
             },
@@ -85,9 +85,9 @@ const UserContainer = ({
                 }
                 right="10%"
                 top="100%"
-                left="auto"
-                bottom="auto"
-                menuWidth="10rem"
+                menuWidth="8rem"
+                menuFontSize="0.75rem"
+                menuElementClassName='!px-1'
             >
                 <OptionsButton />
             </DropdownMenu>
