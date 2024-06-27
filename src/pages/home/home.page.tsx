@@ -154,12 +154,10 @@ function Nav() {
                         </StyledLink>
                     ))}
                     {isAuthenticated ? (
-                        <StyledLink to="/app/search">Home</StyledLink>
+                        <StyledLink to="/app/search">Get In</StyledLink>
                     ) : (
                         <>
-                            <StyledLink to="/auth/signup">
-                                Sign up Lol
-                            </StyledLink>
+                            <StyledLink to="/auth/signup">Signup</StyledLink>
                             <StyledLink to="/auth/login">Log in</StyledLink>
                         </>
                     )}
@@ -187,7 +185,7 @@ function Nav() {
                         ))}
 
                         {isAuthenticated ? (
-                            <NavLink to="/app/search"> Home</NavLink>
+                            <NavLink to="/app/search"> Get In</NavLink>
                         ) : (
                             <>
                                 <NavLink to="/auth/signup" className="ml-10">
