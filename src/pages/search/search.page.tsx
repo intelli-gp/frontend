@@ -224,8 +224,8 @@ const SearchPage = () => {
     const searchHandler = async (searchTerm: string) => {
         if (searchTerm.trim().length === 0) return;
         try {
-            await triggerSearch({ searchTerm }).unwrap();
             dispatch(changeSearchPageInitiated(true));
+            await triggerSearch({ searchTerm }).unwrap();
         } catch (error) {
             errorToast('Error occurred while searching.');
             console.error(error);
@@ -276,6 +276,7 @@ const SearchPage = () => {
             );
         }
     }, [
+        searchInitiated,
         generalSearchIsFetching,
         usersRecommendationsIsFetching,
         articlesRecommendationIsFetching,
@@ -292,7 +293,7 @@ const SearchPage = () => {
 
     return (
         <PageContainer {...BetweenPageAnimation}>
-            <PageTitle className='text-center'>Search</PageTitle>
+            <PageTitle className="text-center">Search</PageTitle>
             <ExplorePageHeader
                 WithoutButton
                 searchValue={searchTerm}
